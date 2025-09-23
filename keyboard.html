@@ -1,116 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Keyboard & Mouse Practice</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f2f2f2;
-    }
-
-    header {
-      background-color: #4CAF50;
-      color: white;
-      padding: 1rem;
-      text-align: center;
-    }
-
-    nav {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      margin: 1rem 0;
-    }
-
-    nav button {
-      padding: 0.5rem 1rem;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      background-color: #008CBA;
-      color: white;
-    }
-
-    nav button.active {
-      background-color: #005f73;
-    }
-
-    .container {
-      max-width: 900px;
-      margin: auto;
-      padding: 1rem;
-      background-color: white;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    }
-
-    .class-selection, .practice-area {
-      margin: 1rem 0;
-    }
-
-    .class-selection button {
-      margin: 0.3rem;
-      padding: 0.5rem 1rem;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      cursor: pointer;
-      background-color: #e7e7e7;
-    }
-
-    .class-selection button.active {
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-    }
-
-    .practice-area {
-      min-height: 200px;
-      padding: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      background-color: #fafafa;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .exercise-letter {
-      font-size: 1.8rem;
-      padding: 0.5rem 0.8rem;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      cursor: pointer;
-      background-color: #e7e7e7;
-      user-select: none;
-      transition: all 0.2s;
-    }
-
-    .exercise-letter.correct {
-      background-color: #4CAF50;
-      color: white;
-    }
-
-    .exercise-letter.incorrect {
-      background-color: #f44336;
-      color: white;
-    }
-
-    .score {
-      margin-top: 1rem;
-      font-weight: bold;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Year 1 Typing & Mouse Practice</title>
+<style>
+  body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f2f2f2; }
+  header { background:#4CAF50; color:white; padding:1rem; text-align:center; }
+  nav { display:flex; justify-content:center; gap:1rem; margin:1rem 0; }
+  nav button { padding:0.5rem 1rem; border:none; border-radius:5px; cursor:pointer; background:#008CBA; color:white; }
+  nav button.active { background:#005f73; }
+  .container { max-width:700px; margin:auto; padding:1rem; background:white; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.2);}
+  .practice-area { min-height:200px; padding:1rem; border:1px solid #ccc; border-radius:5px; background:#fafafa; display:flex; flex-wrap:wrap; gap:0.5rem; justify-content:center; align-items:center;}
+  .exercise-letter { font-size:2rem; padding:0.5rem 1rem; border:1px solid #ccc; border-radius:5px; cursor:pointer; background:#e7e7e7; user-select:none; transition:all 0.2s; }
+  .exercise-letter.correct { background:#4CAF50; color:white; }
+  .exercise-letter.incorrect { background:#f44336; color:white; }
+  .score { margin-top:1rem; font-weight:bold; text-align:center; }
+  .hidden { display:none; }
+</style>
 </head>
 <body>
 
 <header>
-  <h1>Keyboard & Mouse Practice</h1>
+  <h1>Year 1 Computer Practice</h1>
 </header>
 
 <nav>
@@ -120,21 +32,10 @@
 
 <div class="container">
 
-  <!-- Class/Stage Selection -->
-  <div class="class-selection">
-    <strong>Select Class/Stage:</strong>
-    <button class="class-btn active" data-class="1">Class 1</button>
-    <button class="class-btn" data-class="2">Class 2</button>
-    <button class="class-btn" data-class="3">Class 3</button>
-    <button class="class-btn" data-class="4">Class 4</button>
-  </div>
-
-  <!-- Practice Area -->
   <div class="practice-area" id="practiceArea">
-    <p>Welcome! Select a mode and class to start practicing.</p>
+    <p>Welcome! Click a mode to start practicing.</p>
   </div>
 
-  <!-- Score Display -->
   <div class="score" id="scoreDisplay">
     Score: 0
   </div>
@@ -142,117 +43,99 @@
 </div>
 
 <script>
-  const typingBtn = document.getElementById('typingBtn');
-  const mouseBtn = document.getElementById('mouseBtn');
-  const practiceArea = document.getElementById('practiceArea');
-  const scoreDisplay = document.getElementById('scoreDisplay');
+const typingBtn = document.getElementById('typingBtn');
+const mouseBtn = document.getElementById('mouseBtn');
+const practiceArea = document.getElementById('practiceArea');
+const scoreDisplay = document.getElementById('scoreDisplay');
 
-  let currentClass = 1;
-  let score = 0;
+let score = 0;
 
-  // Words per class
-  const wordsPerClass = {
-    1: ['cat', 'dog', 'sun', 'cup', 'bat'],
-    2: ['book', 'tree', 'fish', 'milk', 'rain'],
-    3: ['apple', 'chair', 'house', 'green', 'water'],
-    4: ['computer', 'orange', 'teacher', 'school', 'window']
-  };
+// Year 1 Home keys
+const homeKeys = ['A','S','D','F','J','K','L',';'];
+const twoLetterWords = ['AS','AD','FA','JK','KL','SD','LF','AJ'];
 
-  // Update score display
-  function updateScore() {
-    scoreDisplay.textContent = `Score: ${score}`;
-  }
+function updateScore() {
+  scoreDisplay.textContent = `Score: ${score}`;
+}
 
-  // Typing practice loader
-  function loadTyping() {
-    practiceArea.innerHTML = '';
-    const words = wordsPerClass[currentClass];
-    words.forEach(word => {
-      for (let char of word.toUpperCase()) {
-        const span = document.createElement('span');
-        span.classList.add('exercise-letter');
-        span.textContent = char;
-        practiceArea.appendChild(span);
-      }
-      // Space between words
-      const space = document.createElement('span');
-      space.style.width = '10px';
-      practiceArea.appendChild(space);
-    });
-    score = 0;
-    updateScore();
-  }
-
-  // Mouse practice loader (randomized positions)
-  function loadMouse() {
-    practiceArea.innerHTML = '';
-    const letters = wordsPerClass[currentClass].join('').toUpperCase().split('');
-    letters.sort(() => 0.5 - Math.random());
-    letters.forEach(letter => {
+// Load typing mode
+function loadTyping() {
+  practiceArea.innerHTML = '';
+  // Step 1: Individual key practice
+  homeKeys.forEach(key => {
+    const span = document.createElement('span');
+    span.classList.add('exercise-letter');
+    span.textContent = key;
+    practiceArea.appendChild(span);
+  });
+  // Step 2: Add two-letter words practice after a delay
+  setTimeout(() => {
+    practiceArea.innerHTML = '<p>Now try two-letter words from home keys!</p>';
+    twoLetterWords.forEach(word => {
       const span = document.createElement('span');
       span.classList.add('exercise-letter');
-      span.textContent = letter;
-      span.style.position = 'relative';
-      span.addEventListener('click', () => {
-        span.classList.add('correct');
-        score += 1;
-        updateScore();
-      });
+      span.textContent = word;
       practiceArea.appendChild(span);
     });
-    score = 0;
-    updateScore();
-  }
+  }, 5000); // 5 seconds for first step
+  score = 0;
+  updateScore();
+}
 
-  // Mode toggle
-  typingBtn.addEventListener('click', () => {
-    typingBtn.classList.add('active');
-    mouseBtn.classList.remove('active');
-    loadTyping();
-  });
-
-  mouseBtn.addEventListener('click', () => {
-    mouseBtn.classList.add('active');
-    typingBtn.classList.remove('active');
-    loadMouse();
-  });
-
-  // Class selection
-  const classButtons = document.querySelectorAll('.class-btn');
-  classButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      classButtons.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      currentClass = parseInt(btn.getAttribute('data-class'));
-      if (typingBtn.classList.contains('active')) {
-        loadTyping();
-      } else {
-        loadMouse();
-      }
+// Load mouse mode
+function loadMouse() {
+  practiceArea.innerHTML = '';
+  const letters = [...homeKeys];
+  letters.sort(() => 0.5 - Math.random());
+  letters.forEach(letter => {
+    const span = document.createElement('span');
+    span.classList.add('exercise-letter');
+    span.textContent = letter;
+    span.addEventListener('click', () => {
+      span.classList.add('correct');
+      score +=1;
+      updateScore();
     });
+    practiceArea.appendChild(span);
   });
+  score = 0;
+  updateScore();
+}
 
-  // Typing input listener
-  document.addEventListener('keydown', (e) => {
-    if (!typingBtn.classList.contains('active')) return;
-    const letters = document.querySelectorAll('.exercise-letter');
-    for (let span of letters) {
-      if (!span.classList.contains('correct')) {
-        if (e.key.toUpperCase() === span.textContent) {
-          span.classList.add('correct');
-          score += 1;
-        } else {
-          span.classList.add('incorrect');
-          setTimeout(() => span.classList.remove('incorrect'), 300);
-        }
-        updateScore();
-        break;
-      }
-    }
-  });
-
-  // Initial load
+// Mode toggle
+typingBtn.addEventListener('click', () => {
+  typingBtn.classList.add('active');
+  mouseBtn.classList.remove('active');
   loadTyping();
+});
+
+mouseBtn.addEventListener('click', () => {
+  mouseBtn.classList.add('active');
+  typingBtn.classList.remove('active');
+  loadMouse();
+});
+
+// Typing listener
+document.addEventListener('keydown', e => {
+  if (!typingBtn.classList.contains('active')) return;
+  const letters = document.querySelectorAll('.exercise-letter');
+  for (let span of letters) {
+    if (!span.classList.contains('correct')) {
+      if (e.key.toUpperCase() === span.textContent) {
+        span.classList.add('correct');
+        score +=1;
+      } else {
+        span.classList.add('incorrect');
+        setTimeout(() => span.classList.remove('incorrect'), 300);
+      }
+      updateScore();
+      break;
+    }
+  }
+});
+
+// Initial load
+loadTyping();
 </script>
 
 </body>
