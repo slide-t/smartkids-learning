@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Practice Modes</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>ICT Skills Practice</h1>
+    <nav>
+      <button id="typingModeBtn">Typing Practice</button>
+      <button id="mouseModeBtn">Mouse Practice</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Typing Practice Section -->
+    <section id="typingPractice" class="practice-mode">
+      <h2>Typing Practice</h2>
+      <div id="practiceArea" class="hidden">
+        <p id="stageTitle"></p>
+        <p id="stageDescription"></p>
+        <div id="targetChar"></div>
+        <div id="feedback"></div>
+        <div id="virtualKeyboard"></div>
+        <button id="nextBtn" class="hidden">Next Stage</button>
+        <button id="restartBtn">Restart</button>
+        <button id="homeBtn">Home</button>
+      </div>
+      <button id="startBtn">Start Typing Practice</button>
+    </section>
+
+    <!-- Mouse Practice Section -->
+    <section id="mousePractice" class="practice-mode hidden">
+      <h2>Mouse Practice</h2>
+      <div id="mouseArea" class="hidden">
+        <p id="mouseStageTitle"></p>
+        <p id="mouseStageDescription"></p>
+        <div id="mouseGameBoard"></div>
+        <div id="mouseFeedback"></div>
+        <button id="mouseNextBtn" class="hidden">Next Stage</button>
+        <button id="mouseRestartBtn">Restart</button>
+        <button id="mouseHomeBtn">Home</button>
+      </div>
+      <button id="mouseStartBtn">Start Mouse Practice</button>
+    </section>
+  </main>
+
+  <script src="keyboard.js"></script>
+  <script src="mouse.js"></script>
+</body>
+</html>
