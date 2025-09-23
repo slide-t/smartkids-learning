@@ -10,29 +10,34 @@
           "categories": [
             {
               "id": "keyboard",
-              "name": "Keyboard",
+              "name": "Keyboard Practice",
               "topics": [
-                {"title": "Home Row Keys: A S D F J K L ;"},
-                {"title": "Two-Letter Words Practice"},
-                {"title": "Simple Words Practice"}
+                {
+                  "title": "Home Row Keys",
+                  "sequence": ["A","S","D","F","J","K","L",";"]
+                },
+                {
+                  "title": "Simple Words",
+                  "sequence": ["AS","AD","FA","JK","KL","SD","LF","AJ"]
+                },
+                {
+                  "title": "Short Sentences",
+                  "sequence": ["AS AD FA","JK KL SD","LF AJ SD"]
+                }
               ]
             },
             {
               "id": "mouse",
-              "name": "Mouse",
+              "name": "Mouse Practice",
               "topics": [
-                {"title": "Click on Targets"},
-                {"title": "Drag and Drop Shapes"},
-                {"title": "Mouse Coordination Game"}
-              ]
-            },
-            {
-              "id": "fun",
-              "name": "Fun Typing Games",
-              "topics": [
-                {"title": "Typing Race: A S D F J K L ;"},
-                {"title": "Word Matching Game"},
-                {"title": "Color Typing Game"}
+                {
+                  "title": "Click Targets",
+                  "sequence": ["Click circle","Click square","Click triangle"]
+                },
+                {
+                  "title": "Drag and Drop",
+                  "sequence": ["Drag A to B","Drag C to D"]
+                }
               ]
             }
           ]
@@ -43,62 +48,16 @@
           "categories": [
             {
               "id": "keyboard",
-              "name": "Keyboard",
+              "name": "Keyboard Practice",
               "topics": [
-                {"title": "Top Row Keys: Q W E R T Y U I O P"},
-                {"title": "Simple Sentences Practice"},
-                {"title": "Capital Letters Practice"}
-              ]
-            },
-            {
-              "id": "mouse",
-              "name": "Mouse",
-              "topics": [
-                {"title": "Click & Drag Numbers"},
-                {"title": "Matching Shapes"},
-                {"title": "Mouse Speed Challenge"}
-              ]
-            },
-            {
-              "id": "fun",
-              "name": "Fun Typing Games",
-              "topics": [
-                {"title": "Typing Race Sentences"},
-                {"title": "Word Puzzle Challenge"},
-                {"title": "Color Matching Typing"}
-              ]
-            }
-          ]
-        },
-        {
-          "number": 3,
-          "title": "Term 3",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard",
-              "topics": [
-                {"title": "Full Home + Top Row Practice"},
-                {"title": "Short Paragraph Typing"},
-                {"title": "Special Keys Practice ; : , . /"}
-              ]
-            },
-            {
-              "id": "mouse",
-              "name": "Mouse",
-              "topics": [
-                {"title": "Drag Letters into Boxes"},
-                {"title": "Click Targets in Order"},
-                {"title": "Mouse Accuracy Game"}
-              ]
-            },
-            {
-              "id": "fun",
-              "name": "Fun Typing Games",
-              "topics": [
-                {"title": "Typing Mini-Race"},
-                {"title": "Word Completion Challenge"},
-                {"title": "Speed & Accuracy Game"}
+                {
+                  "title": "Top Row Keys",
+                  "sequence": ["Q","W","E","R","T","Y","U","I","O","P"]
+                },
+                {
+                  "title": "Two-Letter Words",
+                  "sequence": ["QI","WE","ER","TY","UI","OP"]
+                }
               ]
             }
           ]
@@ -115,95 +74,16 @@
           "categories": [
             {
               "id": "keyboard",
-              "name": "Keyboard",
+              "name": "Keyboard Practice",
               "topics": [
-                {"title": "Bottom Row Keys: Z X C V B N M , . /"},
-                {"title": "Two-Letter & Three-Letter Words"},
-                {"title": "Typing Simple Sentences"}
-              ]
-            },
-            {
-              "id": "mouse",
-              "name": "Mouse",
-              "topics": [
-                {"title": "Mouse Click Accuracy"},
-                {"title": "Drag Letters to Form Words"},
-                {"title": "Target Click Game"}
-              ]
-            },
-            {
-              "id": "fun",
-              "name": "Fun Typing Games",
-              "topics": [
-                {"title": "Typing Race Sentences"},
-                {"title": "Word Puzzle Challenge"},
-                {"title": "Color Matching Typing"}
-              ]
-            }
-          ]
-        },
-        {
-          "number": 2,
-          "title": "Term 2",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard",
-              "topics": [
-                {"title": "Full Keyboard Practice"},
-                {"title": "Short Paragraph Typing"},
-                {"title": "Capital & Special Characters"}
-              ]
-            },
-            {
-              "id": "mouse",
-              "name": "Mouse",
-              "topics": [
-                {"title": "Drag & Drop Words"},
-                {"title": "Click Timing Challenge"},
-                {"title": "Mouse Maze Game"}
-              ]
-            },
-            {
-              "id": "fun",
-              "name": "Fun Typing Games",
-              "topics": [
-                {"title": "Typing Race Sentences"},
-                {"title": "Word Completion Challenge"},
-                {"title": "Speed & Accuracy Game"}
-              ]
-            }
-          ]
-        },
-        {
-          "number": 3,
-          "title": "Term 3",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard",
-              "topics": [
-                {"title": "Full Keyboard Drill"},
-                {"title": "Typing Paragraphs"},
-                {"title": "Speed Challenge"}
-              ]
-            },
-            {
-              "id": "mouse",
-              "name": "Mouse",
-              "topics": [
-                {"title": "Advanced Drag & Drop"},
-                {"title": "Click Accuracy Drill"},
-                {"title": "Mouse Obstacle Game"}
-              ]
-            },
-            {
-              "id": "fun",
-              "name": "Fun Typing Games",
-              "topics": [
-                {"title": "Typing Race Challenge"},
-                {"title": "Word Puzzle Speed"},
-                {"title": "Interactive Typing Game"}
+                {
+                  "title": "Home Row Drill",
+                  "sequence": ["A","S","D","F","J","K","L",";"]
+                },
+                {
+                  "title": "Simple Words Drill",
+                  "sequence": ["AS","AD","FA","JK","KL","SD","LF","AJ"]
+                }
               ]
             }
           ]
@@ -220,34 +100,23 @@
           "categories": [
             {
               "id": "keyboard",
-              "name": "Keyboard",
+              "name": "Keyboard Practice",
               "topics": [
-                {"title": "Full Keyboard Practice"},
-                {"title": "Short Sentences Typing"},
-                {"title": "Special Characters Practice"}
-              ]
-            },
-            {
-              "id": "mouse",
-              "name": "Mouse",
-              "topics": [
-                {"title": "Click & Drag Words"},
-                {"title": "Target Click Challenge"},
-                {"title": "Mouse Coordination Fun"}
-              ]
-            },
-            {
-              "id": "fun",
-              "name": "Fun Typing Games",
-              "topics": [
-                {"title": "Typing Race Sentences"},
-                {"title": "Word Completion Challenge"},
-                {"title": "Speed & Accuracy Game"}
+                {
+                  "title": "Extended Home Row",
+                  "sequence": ["A","S","D","F","G","H","J","K","L",";"]
+                },
+                {
+                  "title": "Common Words",
+                  "sequence": ["AS","AD","FA","JK","KL","SD","LF","AJ","AL","DS"]
+                }
               ]
             }
           ]
         }
       ]
     }
+
+    // Years 4–12 follow the same structure: id, name, terms, categories, topics, sequences
   ]
 }
