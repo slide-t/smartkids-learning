@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smart Learning Kids - Game Board</title>
-<script src="https://cdn.tailwindcss.com"></script>
+<title>Year 1 Typing Practice - Home Keys & Words</title>
 <style>
   body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f2f2f2; display:flex; flex-direction:column; align-items:center;}
   header { background:#4CAF50; color:white; padding:1rem; width:100%; text-align:center; }
@@ -17,146 +16,97 @@
   .virtual-keyboard { display:flex; justify-content:center; flex-wrap:wrap; gap:5px; margin-top:15px; }
   .vk-key { width:50px; height:50px; line-height:50px; text-align:center; border-radius:5px; background:#ccc; user-select:none; cursor:pointer; }
   .score { font-weight:bold; margin-top:10px; }
-  .controls { display:flex; justify-content:space-between; margin-top:15px; }
-  .controls button { padding:0.5rem 1rem; border:none; border-radius:5px; background:#4CAF50; color:white; cursor:pointer; transition:0.2s; }
-  .controls button:disabled { background:#888; cursor:not-allowed; }
-  .timer { font-weight:bold; margin-top:10px; font-size:1.2rem; }
 </style>
 </head>
 <body>
 
-<header id="header">Loading...</header>
+<header><h1>Year 1 Typing Practice</h1></header>
 
 <div class="container">
   <div class="practice-area" id="practiceArea"></div>
   <div class="score" id="scoreDisplay">Score: 0</div>
-  <div class="timer" id="timerDisplay">Time: 0s</div>
   <div class="virtual-keyboard" id="virtualKeyboard"></div>
-  <div class="controls">
-    <button id="prevBtn">Previous</button>
-    <button id="nextBtn">Next</button>
-    <button id="restartBtn">Restart</button>
-  </div>
 </div>
 
 <script>
-const urlParams = new URLSearchParams(window.location.search);
-const classId = urlParams.get('classId');
-const termNumber = parseInt(urlParams.get('term'));
-const catId = urlParams.get('catId');
-let topicIndex = parseInt(urlParams.get('topic')) || 0;
-
 const practiceArea = document.getElementById('practiceArea');
 const scoreDisplay = document.getElementById('scoreDisplay');
 const virtualKeyboard = document.getElementById('virtualKeyboard');
-const header = document.getElementById('header');
-const timerDisplay = document.getElementById('timerDisplay');
-const prevBtn = document.getElementById('prevBtn');
-const nextBtn = document.getElementById('nextBtn');
-const restartBtn = document.getElementById('restartBtn');
 
-let currentSequence = [];
+let score = 0;
+let stage = 0; // 0 = individual keys, 1 = two-letter words
 let currentIndex = 0;
 let currentLetterIndex = 0;
-let score = 0;
-let timer = null;
-let timeRemaining = 0;
 
-let topics = [];
+const homeKeys = ['A','S','D','F','J','K','L',';'];
+const twoLetterWords = ['AS','AD','FA','JK','KL','SD','LF','AJ']; // Year 1 words
 
-async function loadTopic() {
-  try {
-    const res = await fetch('data/classes.json');
-    const data = await res.json();
-    const classes = Array.isArray(data) ? data : data.classes;
-    const cls = classes.find(c => c.id == classId);
-    if(!cls) throw new Error("Class not found");
-    const term = cls.terms.find(t => t.number == termNumber);
-    if(!term) throw new Error("Term not found");
-    const category = term.categories.find(cat => cat.id == catId);
-    if(!category) throw new Error("Category not found");
+let currentSequence = [...homeKeys];
 
-    topics = category.topics || [];
-    if(topics.length===0) throw new Error("No topics found");
-    loadPractice(topicIndex);
-  } catch(err) {
-    console.error(err);
-    practiceArea.innerHTML = `<p class="text-red-500">⚠️ ${err.message}</p>`;
+// Build virtual keyboard
+homeKeys.forEach(key=>{
+  const vk = document.createElement('div');
+  vk.classList.add('vk-key');
+  vk.textContent = key;
+  virtualKeyboard.appendChild(vk);
+  // Click event
+  vk.addEventListener('click', ()=>{
+    handleInput(key);
+  });
+});
+
+// Highlight virtual key
+function highlightVK(keyChar,type='reset'){
+  const vkKeys = document.querySelectorAll('.vk-key');
+  vkKeys.forEach(vk=>{ vk.classList.remove('vk-active','correct','wrong'); vk.style.backgroundColor='#ccc'; });
+  const vk = Array.from(vkKeys).find(k=>k.textContent===keyChar);
+  if(vk){
+    vk.classList.add('vk-active');
+    if(type==='correct') vk.style.backgroundColor='#4CAF50';
+    if(type==='wrong') vk.style.backgroundColor='#f44336';
   }
 }
 
-function loadPractice(index){
-  if(index<0 || index>=topics.length) return;
-  topicIndex = index;
-  currentIndex = 0;
-  currentLetterIndex = 0;
-  score = 0;
-  scoreDisplay.textContent = `Score: ${score}`;
-  clearInterval(timer);
-
-  const topic = topics[topicIndex];
-  header.textContent = `${topic.title} (${topic.type})`;
-
-  // sequence
-  currentSequence = topic.sequence || [];
-  timeRemaining = topic.timeLimit || 180;
-  timerDisplay.textContent = `Time: ${timeRemaining}s`;
-  startTimer();
-
-  // build virtual keyboard for keyboard/mouse types
-  virtualKeyboard.innerHTML = '';
-  if(topic.type==='keyboard' || topic.type==='mouse'){
-    currentSequence.flat().forEach(k=>{
-      const vk = document.createElement('div');
-      vk.classList.add('vk-key');
-      vk.textContent = k;
-      virtualKeyboard.appendChild(vk);
-      vk.addEventListener('click', ()=> handleInput(k));
-    });
-  }
-
-  showCurrentLetter();
-  updateControls();
-}
-
-function startTimer(){
-  timerDisplay.textContent = `Time: ${timeRemaining}s`;
-  timer = setInterval(()=>{
-    timeRemaining--;
-    timerDisplay.textContent = `Time: ${timeRemaining}s`;
-    if(timeRemaining<=0){
-      clearInterval(timer);
-      alert("Time's up!");
-    }
-  },1000);
-}
-
+// Show current letter/key
 function showCurrentLetter(){
   if(currentIndex>=currentSequence.length){
-    practiceArea.innerHTML = '<p>Well done! Practice finished.</p>';
-    highlightVK('');
-    return;
+    if(stage===0){
+      // move to two-letter words
+      stage=1;
+      currentSequence = [...twoLetterWords];
+      currentIndex=0;
+      currentLetterIndex=0;
+      showCurrentLetter();
+      return;
+    } else {
+      practiceArea.innerHTML='<p>Well done! You finished Year 1 set.</p>';
+      highlightVK('');
+      return;
+    }
   }
-  practiceArea.innerHTML = '';
-  const currentWord = currentSequence[currentIndex];
+  practiceArea.innerHTML='';
   const keyDiv = document.createElement('div');
   keyDiv.classList.add('key');
-  keyDiv.textContent = currentWord[currentLetterIndex] || currentWord;
+  keyDiv.textContent = currentSequence[currentIndex][currentLetterIndex] || currentSequence[currentIndex];
   practiceArea.appendChild(keyDiv);
   highlightVK(keyDiv.textContent,'reset');
 }
 
+// Handle input (keyboard or virtual)
 function handleInput(input){
   if(currentIndex>=currentSequence.length) return;
   const currentWord = currentSequence[currentIndex];
   const expectedLetter = currentWord[currentLetterIndex];
   const keyDiv = document.querySelector('.key');
-  if(input.toUpperCase()===expectedLetter.toUpperCase()){
+  let pressed = input;
+  if(expectedLetter===';') pressed=input;
+  if(pressed.toUpperCase()===expectedLetter.toUpperCase()){
     keyDiv.classList.add('correct');
     highlightVK(expectedLetter,'correct');
     score++;
     currentLetterIndex++;
     if(currentLetterIndex>=currentWord.length){
+      // move to next word
       currentLetterIndex=0;
       currentIndex++;
       setTimeout(()=>{
@@ -164,6 +114,7 @@ function handleInput(input){
         showCurrentLetter();
       },400);
     } else {
+      // next letter of same word
       setTimeout(()=>{
         keyDiv.classList.add('flip');
         showCurrentLetter();
@@ -177,32 +128,16 @@ function handleInput(input){
       showCurrentLetter();
     },400);
   }
-  scoreDisplay.textContent = `Score: ${score}`;
+  scoreDisplay.textContent=`Score: ${score}`;
 }
 
-function highlightVK(keyChar,type='reset'){
-  const vkKeys = document.querySelectorAll('.vk-key');
-  vkKeys.forEach(vk=>{ vk.classList.remove('vk-active','correct','wrong'); vk.style.backgroundColor='#ccc'; });
-  const vk = Array.from(vkKeys).find(k=>k.textContent===keyChar);
-  if(vk){
-    vk.classList.add('vk-active');
-    if(type==='correct') vk.style.backgroundColor='#4CAF50';
-    if(type==='wrong') vk.style.backgroundColor='#f44336';
-  }
-}
+// Capture real keyboard
+document.addEventListener('keydown', e=>{
+  handleInput(e.key);
+});
 
-document.addEventListener('keydown', e=> handleInput(e.key));
-
-function updateControls(){
-  prevBtn.disabled = topicIndex===0;
-  nextBtn.disabled = topicIndex===topics.length-1;
-}
-
-prevBtn.addEventListener('click', ()=> loadPractice(topicIndex-1));
-nextBtn.addEventListener('click', ()=> loadPractice(topicIndex+1));
-restartBtn.addEventListener('click', ()=> loadPractice(topicIndex));
-
-loadTopic();
+window.focus();
+showCurrentLetter();
 </script>
 
 </body>
