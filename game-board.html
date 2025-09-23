@@ -3,110 +3,207 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Practice Game</title>
+<title>Smart Learning Kids - Game Board</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-  .timer { font-size: 1.5rem; font-weight: bold; }
+  body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f2f2f2; display:flex; flex-direction:column; align-items:center;}
+  header { background:#4CAF50; color:white; padding:1rem; width:100%; text-align:center; }
+  .container { max-width:700px; margin-top:20px; padding:1rem; background:white; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.2); text-align:center;}
+  .practice-area { min-height:150px; padding:1rem; border:1px solid #ccc; border-radius:5px; background:#fafafa; display:flex; justify-content:center; align-items:center; font-size:3rem; perspective:1000px; margin-bottom:15px;}
+  .key { width:60px; height:60px; line-height:60px; margin:0.3rem; text-align:center; border:2px solid #ccc; border-radius:10px; background:#e7e7e7; transform-style:preserve-3d; transition: transform 0.4s, background 0.3s;}
+  .key.correct { background:#4CAF50; color:white; }
+  .key.wrong { background:#f44336; color:white; }
+  .flip { transform: rotateY(90deg); }
+  .virtual-keyboard { display:flex; justify-content:center; flex-wrap:wrap; gap:5px; margin-top:15px; }
+  .vk-key { width:50px; height:50px; line-height:50px; text-align:center; border-radius:5px; background:#ccc; user-select:none; cursor:pointer; }
+  .score { font-weight:bold; margin-top:10px; }
+  .controls { display:flex; justify-content:space-between; margin-top:15px; }
+  .controls button { padding:0.5rem 1rem; border:none; border-radius:5px; background:#4CAF50; color:white; cursor:pointer; transition:0.2s; }
+  .controls button:disabled { background:#888; cursor:not-allowed; }
+  .timer { font-weight:bold; margin-top:10px; font-size:1.2rem; }
 </style>
 </head>
-<body class="bg-gray-50 text-gray-900 font-sans">
-  <header class="bg-blue-600 text-white p-4 fixed top-0 left-0 w-full z-50">
-    <h1 class="text-xl font-bold">Smart Learning Kids - Practice</h1>
-  </header>
+<body>
 
-  <main class="pt-24 max-w-4xl mx-auto px-4">
-    <div id="topicInfo" class="mb-6"></div>
-    <div id="practiceBoard" class="bg-white p-6 rounded-xl shadow-md mb-4"></div>
-    <div class="flex justify-between mt-4">
-      <button id="backBtn" class="px-4 py-2 bg-gray-200 rounded-lg">Back</button>
-      <button id="restartBtn" class="px-4 py-2 bg-yellow-300 rounded-lg">Restart</button>
-      <button id="nextBtn" class="px-4 py-2 bg-blue-600 text-white rounded-lg">Next</button>
-    </div>
-    <p class="mt-4 timer text-center">Time Left: <span id="timeLeft">03:00</span></p>
-  </main>
+<header id="header">Loading...</header>
+
+<div class="container">
+  <div class="practice-area" id="practiceArea"></div>
+  <div class="score" id="scoreDisplay">Score: 0</div>
+  <div class="timer" id="timerDisplay">Time: 0s</div>
+  <div class="virtual-keyboard" id="virtualKeyboard"></div>
+  <div class="controls">
+    <button id="prevBtn">Previous</button>
+    <button id="nextBtn">Next</button>
+    <button id="restartBtn">Restart</button>
+  </div>
+</div>
 
 <script>
 const urlParams = new URLSearchParams(window.location.search);
-const classId = urlParams.get("class");
-const termNum = urlParams.get("term");
-const categoryId = urlParams.get("category");
-const topicId = urlParams.get("topic");
+const classId = urlParams.get('classId');
+const termNumber = parseInt(urlParams.get('term'));
+const catId = urlParams.get('catId');
+let topicIndex = parseInt(urlParams.get('topic')) || 0;
 
-let currentPractice = 0;
-let timer;
-let timeLimit = 3 * 60; // 3 minutes
+const practiceArea = document.getElementById('practiceArea');
+const scoreDisplay = document.getElementById('scoreDisplay');
+const virtualKeyboard = document.getElementById('virtualKeyboard');
+const header = document.getElementById('header');
+const timerDisplay = document.getElementById('timerDisplay');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const restartBtn = document.getElementById('restartBtn');
 
-async function loadPractices() {
-  const res = await fetch('data/classes.json');
-  const data = await res.json();
-  const classes = data.classes || data;
+let currentSequence = [];
+let currentIndex = 0;
+let currentLetterIndex = 0;
+let score = 0;
+let timer = null;
+let timeRemaining = 0;
 
-  const cls = classes.find(c => c.id == classId);
-  if(!cls) return alert("Class not found");
-  const term = cls.terms.find(t => t.number == termNum);
-  if(!term) return alert("Term not found");
-  const category = term.categories.find(cat => cat.id == categoryId);
-  if(!category) return alert("Category not found");
-  const topic = category.topics.find(t => t.id == topicId);
-  if(!topic) return alert("Topic not found");
+let topics = [];
 
-  // Show topic info
-  document.getElementById('topicInfo').innerHTML = `
-    <h2 class="text-xl font-bold mb-2">${cls.name} - ${term.title}</h2>
-    <h3 class="text-lg font-semibold mb-2">${category.name} - ${topic.title}</h3>
-  `;
+async function loadTopic() {
+  try {
+    const res = await fetch('data/classes.json');
+    const data = await res.json();
+    const classes = Array.isArray(data) ? data : data.classes;
+    const cls = classes.find(c => c.id == classId);
+    if(!cls) throw new Error("Class not found");
+    const term = cls.terms.find(t => t.number == termNumber);
+    if(!term) throw new Error("Term not found");
+    const category = term.categories.find(cat => cat.id == catId);
+    if(!category) throw new Error("Category not found");
 
-  return topic.practices; // Array of practices
+    topics = category.topics || [];
+    if(topics.length===0) throw new Error("No topics found");
+    loadPractice(topicIndex);
+  } catch(err) {
+    console.error(err);
+    practiceArea.innerHTML = `<p class="text-red-500">⚠️ ${err.message}</p>`;
+  }
 }
 
-function startTimer() {
-  let time = timeLimit;
-  const display = document.getElementById("timeLeft");
+function loadPractice(index){
+  if(index<0 || index>=topics.length) return;
+  topicIndex = index;
+  currentIndex = 0;
+  currentLetterIndex = 0;
+  score = 0;
+  scoreDisplay.textContent = `Score: ${score}`;
   clearInterval(timer);
-  timer = setInterval(() => {
-    const minutes = String(Math.floor(time / 60)).padStart(2,'0');
-    const seconds = String(time % 60).padStart(2,'0');
-    display.textContent = `${minutes}:${seconds}`;
-    if(time <= 0){
+
+  const topic = topics[topicIndex];
+  header.textContent = `${topic.title} (${topic.type})`;
+
+  // sequence
+  currentSequence = topic.sequence || [];
+  timeRemaining = topic.timeLimit || 180;
+  timerDisplay.textContent = `Time: ${timeRemaining}s`;
+  startTimer();
+
+  // build virtual keyboard for keyboard/mouse types
+  virtualKeyboard.innerHTML = '';
+  if(topic.type==='keyboard' || topic.type==='mouse'){
+    currentSequence.flat().forEach(k=>{
+      const vk = document.createElement('div');
+      vk.classList.add('vk-key');
+      vk.textContent = k;
+      virtualKeyboard.appendChild(vk);
+      vk.addEventListener('click', ()=> handleInput(k));
+    });
+  }
+
+  showCurrentLetter();
+  updateControls();
+}
+
+function startTimer(){
+  timerDisplay.textContent = `Time: ${timeRemaining}s`;
+  timer = setInterval(()=>{
+    timeRemaining--;
+    timerDisplay.textContent = `Time: ${timeRemaining}s`;
+    if(timeRemaining<=0){
       clearInterval(timer);
       alert("Time's up!");
     }
-    time--;
-  }, 1000);
+  },1000);
 }
 
-function showPractice(practices) {
-  if(currentPractice >= practices.length) {
-    alert("You've completed all practices!");
-    window.location.href = "classes.html";
+function showCurrentLetter(){
+  if(currentIndex>=currentSequence.length){
+    practiceArea.innerHTML = '<p>Well done! Practice finished.</p>';
+    highlightVK('');
     return;
   }
-  const practice = practices[currentPractice];
-  document.getElementById('practiceBoard').innerHTML = `<h4 class="text-lg font-semibold">${practice.title}</h4>
-  <p class="mt-2">${practice.description || ""}</p>`;
-  startTimer();
+  practiceArea.innerHTML = '';
+  const currentWord = currentSequence[currentIndex];
+  const keyDiv = document.createElement('div');
+  keyDiv.classList.add('key');
+  keyDiv.textContent = currentWord[currentLetterIndex] || currentWord;
+  practiceArea.appendChild(keyDiv);
+  highlightVK(keyDiv.textContent,'reset');
 }
 
-document.getElementById("nextBtn").addEventListener("click", () => {
-  currentPractice++;
-  showPractice(window.currentPractices);
-});
-
-document.getElementById("backBtn").addEventListener("click", () => {
-  if(currentPractice > 0){
-    currentPractice--;
-    showPractice(window.currentPractices);
+function handleInput(input){
+  if(currentIndex>=currentSequence.length) return;
+  const currentWord = currentSequence[currentIndex];
+  const expectedLetter = currentWord[currentLetterIndex];
+  const keyDiv = document.querySelector('.key');
+  if(input.toUpperCase()===expectedLetter.toUpperCase()){
+    keyDiv.classList.add('correct');
+    highlightVK(expectedLetter,'correct');
+    score++;
+    currentLetterIndex++;
+    if(currentLetterIndex>=currentWord.length){
+      currentLetterIndex=0;
+      currentIndex++;
+      setTimeout(()=>{
+        keyDiv.classList.add('flip');
+        showCurrentLetter();
+      },400);
+    } else {
+      setTimeout(()=>{
+        keyDiv.classList.add('flip');
+        showCurrentLetter();
+      },400);
+    }
+  } else {
+    keyDiv.classList.add('wrong');
+    highlightVK(expectedLetter,'wrong');
+    setTimeout(()=>{
+      keyDiv.classList.add('flip');
+      showCurrentLetter();
+    },400);
   }
-});
+  scoreDisplay.textContent = `Score: ${score}`;
+}
 
-document.getElementById("restartBtn").addEventListener("click", () => {
-  showPractice(window.currentPractices);
-});
+function highlightVK(keyChar,type='reset'){
+  const vkKeys = document.querySelectorAll('.vk-key');
+  vkKeys.forEach(vk=>{ vk.classList.remove('vk-active','correct','wrong'); vk.style.backgroundColor='#ccc'; });
+  const vk = Array.from(vkKeys).find(k=>k.textContent===keyChar);
+  if(vk){
+    vk.classList.add('vk-active');
+    if(type==='correct') vk.style.backgroundColor='#4CAF50';
+    if(type==='wrong') vk.style.backgroundColor='#f44336';
+  }
+}
 
-(async () => {
-  window.currentPractices = await loadPractices();
-  showPractice(window.currentPractices);
-})();
+document.addEventListener('keydown', e=> handleInput(e.key));
+
+function updateControls(){
+  prevBtn.disabled = topicIndex===0;
+  nextBtn.disabled = topicIndex===topics.length-1;
+}
+
+prevBtn.addEventListener('click', ()=> loadPractice(topicIndex-1));
+nextBtn.addEventListener('click', ()=> loadPractice(topicIndex+1));
+restartBtn.addEventListener('click', ()=> loadPractice(topicIndex));
+
+loadTopic();
 </script>
+
 </body>
 </html>
