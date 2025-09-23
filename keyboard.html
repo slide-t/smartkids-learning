@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Year 1 Typing Practice</title>
+<title>Year 1 Typing Practice - Home Keys & Words</title>
 <style>
   body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f2f2f2; display:flex; flex-direction:column; align-items:center;}
   header { background:#4CAF50; color:white; padding:1rem; width:100%; text-align:center; }
@@ -34,8 +34,14 @@ const scoreDisplay = document.getElementById('scoreDisplay');
 const virtualKeyboard = document.getElementById('virtualKeyboard');
 
 let score = 0;
+let stage = 0; // 0 = individual keys, 1 = two-letter words
 let currentIndex = 0;
+let currentLetterIndex = 0;
+
 const homeKeys = ['A','S','D','F','J','K','L',';'];
+const twoLetterWords = ['AS','AD','FA','JK','KL','SD','LF','AJ']; // Year 1 words
+
+let currentSequence = [...homeKeys];
 
 // Build virtual keyboard
 homeKeys.forEach(key=>{
@@ -43,7 +49,7 @@ homeKeys.forEach(key=>{
   vk.classList.add('vk-key');
   vk.textContent = key;
   virtualKeyboard.appendChild(vk);
-  // Add click/tap event
+  // Click event
   vk.addEventListener('click', ()=>{
     handleInput(key);
   });
@@ -61,42 +67,68 @@ function highlightVK(keyChar,type='reset'){
   }
 }
 
-// Show current key
-function showCurrentKey(){
-  if(currentIndex>=homeKeys.length){
-    practiceArea.innerHTML='<p>Well done! You finished the set.</p>';
-    highlightVK('');
-    return;
+// Show current letter/key
+function showCurrentLetter(){
+  if(currentIndex>=currentSequence.length){
+    if(stage===0){
+      // move to two-letter words
+      stage=1;
+      currentSequence = [...twoLetterWords];
+      currentIndex=0;
+      currentLetterIndex=0;
+      showCurrentLetter();
+      return;
+    } else {
+      practiceArea.innerHTML='<p>Well done! You finished Year 1 set.</p>';
+      highlightVK('');
+      return;
+    }
   }
   practiceArea.innerHTML='';
   const keyDiv = document.createElement('div');
   keyDiv.classList.add('key');
-  keyDiv.textContent = homeKeys[currentIndex];
+  keyDiv.textContent = currentSequence[currentIndex][currentLetterIndex] || currentSequence[currentIndex];
   practiceArea.appendChild(keyDiv);
-  highlightVK(homeKeys[currentIndex],'reset');
+  highlightVK(keyDiv.textContent,'reset');
 }
 
-// Handle input (keyboard or virtual click)
+// Handle input (keyboard or virtual)
 function handleInput(input){
-  if(currentIndex>=homeKeys.length) return;
-  const expected = homeKeys[currentIndex];
+  if(currentIndex>=currentSequence.length) return;
+  const currentWord = currentSequence[currentIndex];
+  const expectedLetter = currentWord[currentLetterIndex];
   const keyDiv = document.querySelector('.key');
   let pressed = input;
-  if(expected===';') pressed=input; // semicolon special case
-  if(pressed.toUpperCase()===expected.toUpperCase()){
+  if(expectedLetter===';') pressed=input;
+  if(pressed.toUpperCase()===expectedLetter.toUpperCase()){
     keyDiv.classList.add('correct');
-    highlightVK(expected,'correct');
+    highlightVK(expectedLetter,'correct');
     score++;
+    currentLetterIndex++;
+    if(currentLetterIndex>=currentWord.length){
+      // move to next word
+      currentLetterIndex=0;
+      currentIndex++;
+      setTimeout(()=>{
+        keyDiv.classList.add('flip');
+        showCurrentLetter();
+      },400);
+    } else {
+      // next letter of same word
+      setTimeout(()=>{
+        keyDiv.classList.add('flip');
+        showCurrentLetter();
+      },400);
+    }
   } else {
     keyDiv.classList.add('wrong');
-    highlightVK(expected,'wrong');
+    highlightVK(expectedLetter,'wrong');
+    setTimeout(()=>{
+      keyDiv.classList.add('flip');
+      showCurrentLetter();
+    },400);
   }
   scoreDisplay.textContent=`Score: ${score}`;
-  setTimeout(()=>{
-    keyDiv.classList.add('flip');
-    currentIndex++;
-    showCurrentKey();
-  },400);
 }
 
 // Capture real keyboard
@@ -104,9 +136,8 @@ document.addEventListener('keydown', e=>{
   handleInput(e.key);
 });
 
-// Focus for key capture
 window.focus();
-showCurrentKey();
+showCurrentLetter();
 </script>
 
 </body>
