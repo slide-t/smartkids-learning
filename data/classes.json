@@ -10,19 +10,18 @@
           "categories": [
             {
               "id": "keyboard",
-              "name": "Keyboard",
+              "name": "Keyboard Practice",
               "topics": [
-                { "title": "Home Row Practice" },
-                { "title": "Simple Words" },
-                { "title": "Finger Stretch Practice" }
+                { "title": "Home Row Keys: A S D F J K L ;" },
+                { "title": "Simple Two-letter Words" }
               ]
             },
             {
               "id": "mouse",
-              "name": "Mouse",
+              "name": "Mouse Practice",
               "topics": [
-                { "title": "Click Practice" },
-                { "title": "Drag & Drop" }
+                { "title": "Click & Drag Shapes" },
+                { "title": "Point & Click Accuracy" }
               ]
             }
           ]
@@ -33,18 +32,18 @@
           "categories": [
             {
               "id": "keyboard",
-              "name": "Keyboard",
+              "name": "Keyboard Practice",
               "topics": [
-                { "title": "Two-letter Words" },
-                { "title": "Short Sentences" }
+                { "title": "Top Row Keys: Q W E R T Y U I O P" },
+                { "title": "Simple Words & Home Row Practice" }
               ]
             },
             {
               "id": "mouse",
-              "name": "Mouse",
+              "name": "Mouse Practice",
               "topics": [
-                { "title": "Double Click Practice" },
-                { "title": "Mouse Maze" }
+                { "title": "Drag & Drop Letters" },
+                { "title": "Mouse Accuracy Games" }
               ]
             }
           ]
@@ -61,18 +60,48 @@
           "categories": [
             {
               "id": "keyboard",
-              "name": "Keyboard",
+              "name": "Keyboard Practice",
               "topics": [
-                { "title": "Home Row Review" },
-                { "title": "Easy Sentences" }
+                { "title": "Bottom Row Keys: Z X C V B N M , . /" },
+                { "title": "Common Words Typing" },
+                { "title": "Typing Simple Sentences" }
               ]
             },
             {
               "id": "mouse",
-              "name": "Mouse",
+              "name": "Mouse Practice",
               "topics": [
-                { "title": "Precision Clicking" },
-                { "title": "Mouse Coordination" }
+                { "title": "Click & Drag Simple Shapes" },
+                { "title": "Point & Click Fast" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "year3",
+      "name": "Year 3",
+      "terms": [
+        {
+          "number": 1,
+          "title": "Term 1",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard Practice",
+              "topics": [
+                { "title": "Typing Paragraphs" },
+                { "title": "Typing Speed Drills" },
+                { "title": "Typing Fun Games" }
+              ]
+            },
+            {
+              "id": "mouse",
+              "name": "Mouse Practice",
+              "topics": [
+                { "title": "Mouse Maze Games" },
+                { "title": "Click Accuracy Challenges" }
               ]
             }
           ]
