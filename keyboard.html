@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Year 1 Typing & Mouse Practice</title>
+<title>Year 1 Typing Practice</title>
 <style>
   body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f2f2f2; }
   header { background:#4CAF50; color:white; padding:1rem; text-align:center; }
@@ -11,18 +11,21 @@
   nav button { padding:0.5rem 1rem; border:none; border-radius:5px; cursor:pointer; background:#008CBA; color:white; }
   nav button.active { background:#005f73; }
   .container { max-width:700px; margin:auto; padding:1rem; background:white; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.2);}
-  .practice-area { min-height:200px; padding:1rem; border:1px solid #ccc; border-radius:5px; background:#fafafa; display:flex; flex-wrap:wrap; gap:0.5rem; justify-content:center; align-items:center;}
-  .exercise-letter { font-size:2rem; padding:0.5rem 1rem; border:1px solid #ccc; border-radius:5px; cursor:pointer; background:#e7e7e7; user-select:none; transition:all 0.2s; }
-  .exercise-letter.correct { background:#4CAF50; color:white; }
-  .exercise-letter.incorrect { background:#f44336; color:white; }
+  .practice-area { min-height:150px; padding:1rem; border:1px solid #ccc; border-radius:5px; background:#fafafa; display:flex; justify-content:center; align-items:center; font-size:3rem; perspective:1000px;}
+  .key { display:inline-block; width:60px; height:60px; line-height:60px; margin:0.3rem; text-align:center; border:2px solid #ccc; border-radius:10px; background:#e7e7e7; cursor:pointer; transform-style:preserve-3d; transition: transform 0.5s, background 0.3s;}
+  .key.correct { background:#4CAF50; color:white; }
+  .key.wrong { background:#f44336; color:white; }
+  .flip { transform: rotateY(90deg); }
+  .virtual-keyboard { margin-top:20px; display:flex; justify-content:center; flex-wrap:wrap; gap:5px; }
+  .vk-key { width:50px; height:50px; line-height:50px; text-align:center; border-radius:5px; background:#ccc; user-select:none; }
+  .vk-active { background:#FFA500 !important; }
   .score { margin-top:1rem; font-weight:bold; text-align:center; }
-  .hidden { display:none; }
 </style>
 </head>
 <body>
 
 <header>
-  <h1>Year 1 Computer Practice</h1>
+  <h1>Year 1 Typing Practice</h1>
 </header>
 
 <nav>
@@ -33,109 +36,89 @@
 <div class="container">
 
   <div class="practice-area" id="practiceArea">
-    <p>Welcome! Click a mode to start practicing.</p>
   </div>
 
-  <div class="score" id="scoreDisplay">
-    Score: 0
-  </div>
+  <div class="score" id="scoreDisplay">Score: 0</div>
+
+  <div class="virtual-keyboard" id="virtualKeyboard"></div>
 
 </div>
 
 <script>
-const typingBtn = document.getElementById('typingBtn');
-const mouseBtn = document.getElementById('mouseBtn');
 const practiceArea = document.getElementById('practiceArea');
 const scoreDisplay = document.getElementById('scoreDisplay');
+const virtualKeyboard = document.getElementById('virtualKeyboard');
 
 let score = 0;
+const homeKeys = ['A','S','D','F','J','K','L',';']; // Year 1 keys
+let currentIndex = 0;
 
-// Year 1 Home keys
-const homeKeys = ['A','S','D','F','J','K','L',';'];
-const twoLetterWords = ['AS','AD','FA','JK','KL','SD','LF','AJ'];
-
-function updateScore() {
-  scoreDisplay.textContent = `Score: ${score}`;
-}
-
-// Load typing mode
-function loadTyping() {
-  practiceArea.innerHTML = '';
-  // Step 1: Individual key practice
-  homeKeys.forEach(key => {
-    const span = document.createElement('span');
-    span.classList.add('exercise-letter');
-    span.textContent = key;
-    practiceArea.appendChild(span);
-  });
-  // Step 2: Add two-letter words practice after a delay
-  setTimeout(() => {
-    practiceArea.innerHTML = '<p>Now try two-letter words from home keys!</p>';
-    twoLetterWords.forEach(word => {
-      const span = document.createElement('span');
-      span.classList.add('exercise-letter');
-      span.textContent = word;
-      practiceArea.appendChild(span);
-    });
-  }, 5000); // 5 seconds for first step
-  score = 0;
-  updateScore();
-}
-
-// Load mouse mode
-function loadMouse() {
-  practiceArea.innerHTML = '';
-  const letters = [...homeKeys];
-  letters.sort(() => 0.5 - Math.random());
-  letters.forEach(letter => {
-    const span = document.createElement('span');
-    span.classList.add('exercise-letter');
-    span.textContent = letter;
-    span.addEventListener('click', () => {
-      span.classList.add('correct');
-      score +=1;
-      updateScore();
-    });
-    practiceArea.appendChild(span);
-  });
-  score = 0;
-  updateScore();
-}
-
-// Mode toggle
-typingBtn.addEventListener('click', () => {
-  typingBtn.classList.add('active');
-  mouseBtn.classList.remove('active');
-  loadTyping();
+// Build virtual keyboard
+homeKeys.forEach(key => {
+  const vk = document.createElement('div');
+  vk.classList.add('vk-key');
+  vk.textContent = key;
+  virtualKeyboard.appendChild(vk);
 });
 
-mouseBtn.addEventListener('click', () => {
-  mouseBtn.classList.add('active');
-  typingBtn.classList.remove('active');
-  loadMouse();
-});
-
-// Typing listener
-document.addEventListener('keydown', e => {
-  if (!typingBtn.classList.contains('active')) return;
-  const letters = document.querySelectorAll('.exercise-letter');
-  for (let span of letters) {
-    if (!span.classList.contains('correct')) {
-      if (e.key.toUpperCase() === span.textContent) {
-        span.classList.add('correct');
-        score +=1;
-      } else {
-        span.classList.add('incorrect');
-        setTimeout(() => span.classList.remove('incorrect'), 300);
-      }
-      updateScore();
-      break;
+// Highlight virtual key
+function highlightVK(keyChar, type) {
+  const vkKeys = document.querySelectorAll('.vk-key');
+  vkKeys.forEach(vk => vk.classList.remove('vk-active'));
+  vkKeys.forEach(vk => {
+    if(vk.textContent === keyChar){
+      vk.classList.add('vk-active');
+      if(type==='correct') vk.style.backgroundColor = '#4CAF50';
+      if(type==='wrong') vk.style.backgroundColor = '#f44336';
+      if(type==='reset') vk.style.backgroundColor = '#ccc';
     }
+  });
+}
+
+// Drop next key
+function dropKey() {
+  if(currentIndex >= homeKeys.length) return;
+  practiceArea.innerHTML = '';
+  const span = document.createElement('div');
+  span.classList.add('key');
+  span.textContent = homeKeys[currentIndex];
+  practiceArea.appendChild(span);
+  highlightVK(homeKeys[currentIndex],'reset');
+}
+
+function nextKey(correct) {
+  const span = document.querySelector('.key');
+  if(correct){
+    span.classList.add('correct');
+    highlightVK(homeKeys[currentIndex],'correct');
+  } else {
+    span.classList.add('wrong');
+    highlightVK(homeKeys[currentIndex],'wrong');
+  }
+  // flip out after delay
+  setTimeout(()=>{
+    span.classList.add('flip');
+    currentIndex++;
+    score += correct?1:0;
+    updateScore();
+    dropKey();
+  }, 400);
+}
+
+function updateScore(){ scoreDisplay.textContent = `Score: ${score}`; }
+
+// Initial drop
+dropKey();
+
+// Listen for key presses
+document.addEventListener('keydown', e=>{
+  if(currentIndex >= homeKeys.length) return;
+  if(e.key.toUpperCase() === homeKeys[currentIndex]){
+    nextKey(true);
+  } else {
+    nextKey(false);
   }
 });
-
-// Initial load
-loadTyping();
 </script>
 
 </body>
