@@ -1,47 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Learning Kids - Practice</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practice Game</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  .timer { font-size: 1.5rem; font-weight: bold; }
+</style>
 </head>
 <body class="bg-gray-50 text-gray-900 font-sans">
-
-  <!-- Header -->
-  <header class="bg-blue-600 text-white shadow-md fixed top-0 left-0 w-full z-50">
-    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-      <h1 class="text-2xl font-bold">Smart Learning Kids</h1>
-      <a href="classes.html" class="bg-white text-blue-600 px-4 py-2 rounded-lg font-medium shadow hover:bg-blue-100 transition">Back to Classes</a>
-    </div>
+  <header class="bg-blue-600 text-white p-4 fixed top-0 left-0 w-full z-50">
+    <h1 class="text-xl font-bold">Smart Learning Kids - Practice</h1>
   </header>
 
-  <!-- Main Game Container -->
   <main class="pt-24 max-w-4xl mx-auto px-4">
-    <div id="topic-container" class="bg-white p-6 rounded-xl shadow-md">
-      <h2 id="topic-title" class="text-3xl font-bold mb-4 text-center">Loading...</h2>
-      <p id="topic-description" class="text-gray-700 mb-6 text-center"></p>
-
-      <!-- Timer -->
-      <div class="text-center mb-4">
-        <span class="font-bold text-lg">Time Left: </span>
-        <span id="timer" class="text-red-600 font-bold">00:00</span>
-      </div>
-
-      <!-- Game/Practice Area -->
-      <div id="game-area" class="mb-6 text-center">
-        <p class="text-gray-500">Practice will appear here</p>
-      </div>
-
-      <!-- Controls -->
-      <div class="flex justify-between space-x-2">
-        <button id="prev-btn" class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-900 px-4 py-2 rounded-lg font-semibold shadow">← Previous</button>
-        <button id="restart-btn" class="flex-1 bg-yellow-400 hover:bg-yellow-500 text-white px-4 py-2 rounded-lg font-semibold shadow">Restart</button>
-        <button id="next-btn" class="flex-1 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-semibold shadow">Next →</button>
-      </div>
+    <div id="topicInfo" class="mb-6"></div>
+    <div id="practiceBoard" class="bg-white p-6 rounded-xl shadow-md mb-4"></div>
+    <div class="flex justify-between mt-4">
+      <button id="backBtn" class="px-4 py-2 bg-gray-200 rounded-lg">Back</button>
+      <button id="restartBtn" class="px-4 py-2 bg-yellow-300 rounded-lg">Restart</button>
+      <button id="nextBtn" class="px-4 py-2 bg-blue-600 text-white rounded-lg">Next</button>
     </div>
+    <p class="mt-4 timer text-center">Time Left: <span id="timeLeft">03:00</span></p>
   </main>
 
-  <script src="game-board.js"></script>
+<script>
+const urlParams = new URLSearchParams(window.location.search);
+const classId = urlParams.get("class");
+const termNum = urlParams.get("term");
+const categoryId = urlParams.get("category");
+const topicId = urlParams.get("topic");
+
+let currentPractice = 0;
+let timer;
+let timeLimit = 3 * 60; // 3 minutes
+
+async function loadPractices() {
+  const res = await fetch('data/classes.json');
+  const data = await res.json();
+  const classes = data.classes || data;
+
+  const cls = classes.find(c => c.id == classId);
+  if(!cls) return alert("Class not found");
+  const term = cls.terms.find(t => t.number == termNum);
+  if(!term) return alert("Term not found");
+  const category = term.categories.find(cat => cat.id == categoryId);
+  if(!category) return alert("Category not found");
+  const topic = category.topics.find(t => t.id == topicId);
+  if(!topic) return alert("Topic not found");
+
+  // Show topic info
+  document.getElementById('topicInfo').innerHTML = `
+    <h2 class="text-xl font-bold mb-2">${cls.name} - ${term.title}</h2>
+    <h3 class="text-lg font-semibold mb-2">${category.name} - ${topic.title}</h3>
+  `;
+
+  return topic.practices; // Array of practices
+}
+
+function startTimer() {
+  let time = timeLimit;
+  const display = document.getElementById("timeLeft");
+  clearInterval(timer);
+  timer = setInterval(() => {
+    const minutes = String(Math.floor(time / 60)).padStart(2,'0');
+    const seconds = String(time % 60).padStart(2,'0');
+    display.textContent = `${minutes}:${seconds}`;
+    if(time <= 0){
+      clearInterval(timer);
+      alert("Time's up!");
+    }
+    time--;
+  }, 1000);
+}
+
+function showPractice(practices) {
+  if(currentPractice >= practices.length) {
+    alert("You've completed all practices!");
+    window.location.href = "classes.html";
+    return;
+  }
+  const practice = practices[currentPractice];
+  document.getElementById('practiceBoard').innerHTML = `<h4 class="text-lg font-semibold">${practice.title}</h4>
+  <p class="mt-2">${practice.description || ""}</p>`;
+  startTimer();
+}
+
+document.getElementById("nextBtn").addEventListener("click", () => {
+  currentPractice++;
+  showPractice(window.currentPractices);
+});
+
+document.getElementById("backBtn").addEventListener("click", () => {
+  if(currentPractice > 0){
+    currentPractice--;
+    showPractice(window.currentPractices);
+  }
+});
+
+document.getElementById("restartBtn").addEventListener("click", () => {
+  showPractice(window.currentPractices);
+});
+
+(async () => {
+  window.currentPractices = await loadPractices();
+  showPractice(window.currentPractices);
+})();
+</script>
 </body>
 </html>
