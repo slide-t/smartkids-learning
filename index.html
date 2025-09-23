@@ -1,1 +1,237 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Learning Kids</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-b from-sky-50 via-white to-sky-100 text-slate-900 font-sans">
+  <!-- Header -->
+  <header class="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-sm shadow-md z-40">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- Logo + Title -->
+        <div class="flex items-center space-x-4">
+          <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-500 to-sky-400 flex items-center justify-center text-white font-bold">SLK</div>
+          <div class="hidden sm:block">
+            <h1 class="text-lg font-semibold">Smart Learning Kids</h1>
+            <p class="text-xs text-slate-500">Coding, Computer Literacy & Games for Schools</p>
+          </div>
+        </div>
+
+        <!-- Desktop Menu -->
+        <nav class="hidden md:flex items-center gap-6 text-sm">
+          <a href="features.html" class="hover:underline">Features</a>
+          <a href="games.html" class="hover:underline">Games</a>
+          <a href="resources.html" class="hover:underline">Resources</a>
+          <a href="about.html" class="hover:underline">About</a>
+       <a href="classes.html" class="block"> Class</a>
+  
+        </nav>
+
+        <!-- Right side -->
+        <div class="flex items-center gap-3">
+          <!-- Hamburger (mobile only) -->
+          <button id="menu-btn" class="md:hidden flex flex-col gap-1.5 px-3 py-2 border rounded-lg">
+            <span class="block w-5 h-0.5 bg-slate-800"></span>
+            <span class="block w-5 h-0.5 bg-slate-800"></span>
+            <span class="block w-5 h-0.5 bg-slate-800"></span>
+          </button>
+
+          <!-- Download -->
+          <a href="worksheets.html" class="hidden sm:inline-block px-4 py-2 border rounded-full text-sm bg-white">Download Worksheets</a>
+          
+          <!-- Start Learning -->
+          <a href="lessons.html" class="inline-block px-4 py-2 rounded-full bg-indigo-600 text-white text-sm shadow-sm hover:bg-indigo-700">Start Learning</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden flex-col space-y-3 px-6 py-4 bg-white shadow-md transition-all ease-in-out duration-300">
+      <a href="features.html" class="block">Features</a>
+      <a href="games.html" class="block">Games</a>
+      <a href="resources.html" class="block">Resources</a>
+      <a href="#about" class="block">About</a>
+      <a href="worksheets.html" class="block">Download Worksheets</a>
+      <a href="lessons.html" class="block">Start Learning</a>
+      <a href="classes.html" class="block">Class</a>
+  
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <main class="pt-28">
+    <!-- Keep your hero and other sections as before -->
+  </main>
+<!-- About Smart Learning Kids Section -->
+<section class="py-12 px-6 max-w-5xl mx-auto" id="about">
+  <h2 class="text-3xl md:text-4xl font-bold text-center mb-6">About Smart Learning Kids</h2>
+  <p class="text-lg md:text-xl text-gray-700 leading-relaxed text-center mb-8">
+    Smart Learning Kids is a modern learning platform designed for children in primary and secondary schools. 
+    It focuses on developing <span class="font-semibold">computer literacy</span>, 
+    <span class="font-semibold">keyboard and mouse skills</span>, 
+    <span class="font-semibold">understanding hardware and software</span>, 
+    <span class="font-semibold">safe internet use</span>, and a 
+    progressive introduction to <span class="font-semibold">coding and programming</span>.
+  </p>
+  <p class="text-lg md:text-xl text-gray-700 leading-relaxed text-center mb-10">
+    Students will engage in interactive lessons, fun games, and practical exercises. 
+    Navigation is simple: use the <span class="font-semibold">menu</span> to access your class lessons, 
+    explore topics step-by-step, and practice through activities. 
+    This course helps build the foundation for digital literacy, preparing children for the future.
+  </p>
+
+  <!-- Accordion -->
+  <div class="space-y-4">
+    <!-- Vision -->
+    <div class="border rounded-2xl shadow-md overflow-hidden">
+      <button class="w-full flex justify-between items-center px-6 py-4 bg-blue-50 hover:bg-blue-100 transition-all accordion-btn">
+        <span class="text-xl font-semibold">Our Vision</span>
+        <svg class="w-6 h-6 transition-transform transform accordion-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
+        </svg>
+      </button>
+      <div class="px-6 py-4 text-gray-600 hidden accordion-content">
+        To create a generation of children who are confident with technology, 
+        understand its role in daily life, and can use it to solve problems creatively.
+      </div>
+    </div>
+
+    <!-- Mission -->
+    <div class="border rounded-2xl shadow-md overflow-hidden">
+      <button class="w-full flex justify-between items-center px-6 py-4 bg-blue-50 hover:bg-blue-100 transition-all accordion-btn">
+        <span class="text-xl font-semibold">Our Mission</span>
+        <svg class="w-6 h-6 transition-transform transform accordion-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
+        </svg>
+      </button>
+      <div class="px-6 py-4 text-gray-600 hidden accordion-content">
+        To provide interactive, engaging, and accessible digital education for kids in schools and at home, 
+        equipping them with essential computer and coding skills.
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Accordion toggle
+  document.querySelectorAll(".accordion-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const content = btn.nextElementSibling;
+      const icon = btn.querySelector(".accordion-icon");
+
+      content.classList.toggle("hidden");
+      icon.classList.toggle("rotate-180");
+    });
+  });
+</script>
+
+  
+  <!-- Footer -->
+  <footer class="border-t bg-white/70 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row justify-between gap-6">
+      <div>
+        <h4 class="font-bold">Smart Learning Kids</h4>
+        <p class="text-sm text-slate-600 max-w-xs">Teaching practical computer skills & coding to children across Nigeria and beyond.</p>
+      </div>
+      <div class="flex gap-6 items-start">
+        <div>
+          <h5 class="font-semibold">Contact</h5>
+          <p class="text-sm text-slate-600">hello@smartlearningkids.org</p>
+        </div>
+        <div>
+          <h5 class="font-semibold">Follow</h5>
+          <p class="text-sm text-slate-600">Twitter • Facebook • Instagram</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    document.addEventListener("DOMContentLoaded", () => {
+      const btn = document.getElementById("menu-btn");
+      const menu = document.getElementById("mobile-menu");
+
+      btn.addEventListener("click", () => {
+        menu.classList.toggle("hidden");
+      });
+
+      // Close menu when clicking a link
+      menu.querySelectorAll("a").forEach(link => {
+        link.addEventListener("click", () => {
+          menu.classList.add("hidden");
+        });
+      });
+    });
+  </script>
+
+<!-- Refresh update button (hidden by default) -->
+<button id="update-app" style="
+  display:none;
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  padding:10px 16px;
+  background:#6a5acd;
+  color:#fff;
+  border:none;
+  border-radius:8px;
+  font-size:14px;
+  cursor:pointer;
+  box-shadow:0 4px 6px rgba(0,0,0,0.2);
+  z-index:1000;
+">
+  🔄 Refresh to update
+</button>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker
+        .register('/service-worker.js')
+        .then((registration) => {
+          console.log('[SW] Registered:', registration);
+
+          // Show update button if a new SW is waiting
+          function showUpdateButton(worker) {
+            const btn = document.getElementById('update-app');
+            btn.style.display = 'block';
+            btn.addEventListener('click', () => {
+              worker.postMessage({ type: 'SKIP_WAITING' });
+            });
+          }
+
+          if (registration.waiting) {
+            showUpdateButton(registration.waiting);
+          }
+
+          registration.addEventListener('updatefound', () => {
+            const newWorker = registration.installing;
+            if (newWorker) {
+              newWorker.addEventListener('statechange', () => {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                  showUpdateButton(newWorker);
+                }
+              });
+            }
+          });
+
+          // Reload page when SW activates
+          navigator.serviceWorker.addEventListener('controllerchange', () => {
+            window.location.reload();
+          });
+        })
+        .catch((error) => {
+          console.error('[SW] Registration failed:', error);
+        });
+    });
+  }
+</script>
+
+  
+</body>
+</html>
