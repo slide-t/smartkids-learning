@@ -1,30 +1,22 @@
-{
-  "classes": [
-    {
-      "id": "class1",
-      "name": "Class 1",
-      "terms": [
-        {
-          "number": 1,
-          "title": "Term 1",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard",
-              "topics": [
-                {
-                  "id": "home_row",
-                  "title": "Home Row",
-                  "practices": [
-                    { "title": "Practice 1", "time": 180, "sequence": "asdf jkl;" },
-                    { "title": "Practice 2", "time": 180, "sequence": "fdsa lkj;" }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ]
-}
+[
+  {
+    "id": "year1",
+    "name": "Year 1",
+    "terms": [
+      {
+        "number": 1,
+        "title": "Term 1",
+        "categories": [
+          {
+            "id": "keyboard",
+            "name": "Keyboard",
+            "topics": [
+              { "title": "Home Row" },
+              { "title": "Words AS DF" }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]
