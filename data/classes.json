@@ -10,7 +10,7 @@
           "categories": [
             {
               "id": "keyboard",
-              "name": "Keyboard Practice",
+              "name": "Keyboard",
               "topics": [
                 {
                   "title": "Home Row Keys",
@@ -21,22 +21,22 @@
                   "sequence": ["AS","AD","FA","JK","KL","SD","LF","AJ"]
                 },
                 {
-                  "title": "Short Sentences",
-                  "sequence": ["AS AD FA","JK KL SD","LF AJ SD"]
+                  "title": "Basic Sentences",
+                  "sequence": ["ASAD","FAJK","KLSD","LFAD"]
                 }
               ]
             },
             {
               "id": "mouse",
-              "name": "Mouse Practice",
+              "name": "Mouse",
               "topics": [
                 {
-                  "title": "Click Targets",
-                  "sequence": ["Click circle","Click square","Click triangle"]
+                  "title": "Click Practice",
+                  "sequence": []
                 },
                 {
                   "title": "Drag and Drop",
-                  "sequence": ["Drag A to B","Drag C to D"]
+                  "sequence": []
                 }
               ]
             }
@@ -48,15 +48,15 @@
           "categories": [
             {
               "id": "keyboard",
-              "name": "Keyboard Practice",
+              "name": "Keyboard",
               "topics": [
                 {
                   "title": "Top Row Keys",
                   "sequence": ["Q","W","E","R","T","Y","U","I","O","P"]
                 },
                 {
-                  "title": "Two-Letter Words",
-                  "sequence": ["QI","WE","ER","TY","UI","OP"]
+                  "title": "Simple Words with Top Row",
+                  "sequence": ["QW","ER","TY","UI","OP"]
                 }
               ]
             }
@@ -74,15 +74,15 @@
           "categories": [
             {
               "id": "keyboard",
-              "name": "Keyboard Practice",
+              "name": "Keyboard",
               "topics": [
                 {
-                  "title": "Home Row Drill",
-                  "sequence": ["A","S","D","F","J","K","L",";"]
+                  "title": "Home + Top Row Keys",
+                  "sequence": ["A","S","D","F","J","K","L",";","Q","W","E","R","T","Y","U","I","O","P"]
                 },
                 {
-                  "title": "Simple Words Drill",
-                  "sequence": ["AS","AD","FA","JK","KL","SD","LF","AJ"]
+                  "title": "Simple Words",
+                  "sequence": ["QW","ER","AS","AD","FA","JK"]
                 }
               ]
             }
@@ -100,15 +100,225 @@
           "categories": [
             {
               "id": "keyboard",
-              "name": "Keyboard Practice",
+              "name": "Keyboard",
               "topics": [
                 {
-                  "title": "Extended Home Row",
-                  "sequence": ["A","S","D","F","G","H","J","K","L",";"]
+                  "title": "Full Alphabet Drill",
+                  "sequence": ["A","S","D","F","J","K","L",";","Q","W","E","R","T","Y","U","I","O","P","Z","X","C","V","B","N","M"]
                 },
                 {
-                  "title": "Common Words",
-                  "sequence": ["AS","AD","FA","JK","KL","SD","LF","AJ","AL","DS"]
+                  "title": "Short Words Drill",
+                  "sequence": ["AS","AD","FA","JK","KL","SD","LF","AJ","QW","ER","TY","UI"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "year4",
+      "name": "Year 4",
+      "terms": [
+        {
+          "number": 1,
+          "title": "Term 1",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Keyboard Speed Drill",
+                  "sequence": ["AS","AD","FA","JK","KL","SD","LF","AJ","QW","ER","TY","UI","ZX","CV","BN","NM"]
+                },
+                {
+                  "title": "Mouse Navigation",
+                  "sequence": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "year5",
+      "name": "Year 5",
+      "terms": [
+        {
+          "number": 1,
+          "title": "Term 1",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Speed Words",
+                  "sequence": ["FAST","JUMP","LAND","SAD","AD","FAJK"]
+                },
+                {
+                  "title": "Short Sentences",
+                  "sequence": ["ASAD FAJK KLSD LFAD"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "year6",
+      "name": "Year 6",
+      "terms": [
+        {
+          "number": 1,
+          "title": "Term 1",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Keyboard Accuracy Drill",
+                  "sequence": ["ABCDEFGHIJKLMNOPQRSTUVWXYZ"]
+                },
+                {
+                  "title": "Typing Practice Sentences",
+                  "sequence": ["THE QUICK BROWN FOX","JUMPS OVER THE LAZY DOG"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "year7",
+      "name": "Year 7",
+      "terms": [
+        {
+          "number": 1,
+          "title": "Term 1",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Keyboard Sentences",
+                  "sequence": ["SAMPLE TEXT FOR PRACTICE","LEARN TYPING FAST"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "year8",
+      "name": "Year 8",
+      "terms": [
+        {
+          "number": 1,
+          "title": "Term 1",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Typing Speed Drill",
+                  "sequence": ["THE QUICK BROWN FOX JUMPS","OVER THE LAZY DOG FAST"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "year9",
+      "name": "Year 9",
+      "terms": [
+        {
+          "number": 1,
+          "title": "Term 1",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Advanced Sentences",
+                  "sequence": ["PRACTICE MAKES PERFECT","TYPING SPEED AND ACCURACY"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "year10",
+      "name": "Year 10",
+      "terms": [
+        {
+          "number": 1,
+          "title": "Term 1",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Full Keyboard Sentences",
+                  "sequence": ["ABCDEFGHIJKLMNOPQRSTUVWXYZ","THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "year11",
+      "name": "Year 11",
+      "terms": [
+        {
+          "number": 1,
+          "title": "Term 1",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Typing Mastery",
+                  "sequence": ["ADVANCED TYPING PRACTICE","KEYBOARD FLUENCY DRILL"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "year12",
+      "name": "Year 12",
+      "terms": [
+        {
+          "number": 1,
+          "title": "Term 1",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Typing Competency",
+                  "sequence": ["FINAL YEAR TYPING CHALLENGE","PERFECT ACCURACY AND SPEED"]
                 }
               ]
             }
@@ -116,7 +326,5 @@
         }
       ]
     }
-
-    // Years 4–12 follow the same structure: id, name, terms, categories, topics, sequences
   ]
 }
