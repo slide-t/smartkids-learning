@@ -14,8 +14,7 @@
   .key.wrong { background:#f44336; color:white; }
   .flip { transform: rotateY(90deg); }
   .virtual-keyboard { display:flex; justify-content:center; flex-wrap:wrap; gap:5px; margin-top:15px; }
-  .vk-key { width:50px; height:50px; line-height:50px; text-align:center; border-radius:5px; background:#ccc; user-select:none; }
-  .vk-active { background:#FFA500 !important; }
+  .vk-key { width:50px; height:50px; line-height:50px; text-align:center; border-radius:5px; background:#ccc; user-select:none; cursor:pointer; }
   .score { font-weight:bold; margin-top:10px; }
 </style>
 </head>
@@ -44,6 +43,10 @@ homeKeys.forEach(key=>{
   vk.classList.add('vk-key');
   vk.textContent = key;
   virtualKeyboard.appendChild(vk);
+  // Add click/tap event
+  vk.addEventListener('click', ()=>{
+    handleInput(key);
+  });
 });
 
 // Highlight virtual key
@@ -73,14 +76,14 @@ function showCurrentKey(){
   highlightVK(homeKeys[currentIndex],'reset');
 }
 
-// Handle key press
-document.addEventListener('keydown', e=>{
+// Handle input (keyboard or virtual click)
+function handleInput(input){
   if(currentIndex>=homeKeys.length) return;
   const expected = homeKeys[currentIndex];
   const keyDiv = document.querySelector('.key');
-  let pressed = e.key.toUpperCase();
-  if(expected===';') pressed=e.key; // handle semicolon
-  if(pressed===expected){
+  let pressed = input;
+  if(expected===';') pressed=input; // semicolon special case
+  if(pressed.toUpperCase()===expected.toUpperCase()){
     keyDiv.classList.add('correct');
     highlightVK(expected,'correct');
     score++;
@@ -94,9 +97,14 @@ document.addEventListener('keydown', e=>{
     currentIndex++;
     showCurrentKey();
   },400);
+}
+
+// Capture real keyboard
+document.addEventListener('keydown', e=>{
+  handleInput(e.key);
 });
 
-// Focus to capture key presses reliably
+// Focus for key capture
 window.focus();
 showCurrentKey();
 </script>
