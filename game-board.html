@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Year 1 Typing Practice - Home Keys & Words</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Smart Learning Kids - Typing Practice</title>
 <style>
   body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f2f2f2; display:flex; flex-direction:column; align-items:center;}
   header { background:#4CAF50; color:white; padding:1rem; width:100%; text-align:center; }
@@ -14,48 +14,48 @@
   .key.wrong { background:#f44336; color:white; }
   .flip { transform: rotateY(90deg); }
   .virtual-keyboard { display:flex; justify-content:center; flex-wrap:wrap; gap:5px; margin-top:15px; }
-  .vk-key { width:50px; height:50px; line-height:50px; text-align:center; border-radius:5px; background:#ccc; user-select:none; cursor:pointer; }
+  .vk-key { width:50px; height:50px; line-height:50px; text-align:center; border-radius:5px; background:#ccc; user-select:none; cursor:pointer; opacity:0.5; }
+  .vk-key.active { opacity:1; cursor:pointer; background:#ddd; }
   .score { font-weight:bold; margin-top:10px; }
+  .nav-buttons { margin-top:15px; display:flex; justify-content:space-between; }
+  .nav-buttons button { padding:0.5rem 1rem; border:none; border-radius:5px; background:#4CAF50; color:white; cursor:pointer; }
 </style>
 </head>
 <body>
 
-<header><h1>Year 1 Typing Practice</h1></header>
+<header><h1>Typing Practice</h1></header>
 
 <div class="container">
   <div class="practice-area" id="practiceArea"></div>
   <div class="score" id="scoreDisplay">Score: 0</div>
   <div class="virtual-keyboard" id="virtualKeyboard"></div>
+  <div class="nav-buttons">
+    <button id="prevBtn">Previous</button>
+    <button id="nextBtn">Next</button>
+  </div>
 </div>
 
 <script>
 const practiceArea = document.getElementById('practiceArea');
 const scoreDisplay = document.getElementById('scoreDisplay');
 const virtualKeyboard = document.getElementById('virtualKeyboard');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
 
 let score = 0;
-let stage = 0; // 0 = individual keys, 1 = two-letter words
 let currentIndex = 0;
 let currentLetterIndex = 0;
+let currentSequence = [];
+let activeKeys = [];
 
-const homeKeys = ['A','S','D','F','J','K','L',';'];
-const twoLetterWords = ['AS','AD','FA','JK','KL','SD','LF','AJ']; // Year 1 words
+const params = new URLSearchParams(window.location.search);
+const classId = params.get('classId');
+const termNumber = parseInt(params.get('term'));
+const catId = params.get('catId');
+let topicIndex = parseInt(params.get('topic'));
 
-let currentSequence = [...homeKeys];
+let classesData = [];
 
-// Build virtual keyboard
-homeKeys.forEach(key=>{
-  const vk = document.createElement('div');
-  vk.classList.add('vk-key');
-  vk.textContent = key;
-  virtualKeyboard.appendChild(vk);
-  // Click event
-  vk.addEventListener('click', ()=>{
-    handleInput(key);
-  });
-});
-
-// Highlight virtual key
 function highlightVK(keyChar,type='reset'){
   const vkKeys = document.querySelectorAll('.vk-key');
   vkKeys.forEach(vk=>{ vk.classList.remove('vk-active','correct','wrong'); vk.style.backgroundColor='#ccc'; });
@@ -67,22 +67,11 @@ function highlightVK(keyChar,type='reset'){
   }
 }
 
-// Show current letter/key
 function showCurrentLetter(){
   if(currentIndex>=currentSequence.length){
-    if(stage===0){
-      // move to two-letter words
-      stage=1;
-      currentSequence = [...twoLetterWords];
-      currentIndex=0;
-      currentLetterIndex=0;
-      showCurrentLetter();
-      return;
-    } else {
-      practiceArea.innerHTML='<p>Well done! You finished Year 1 set.</p>';
-      highlightVK('');
-      return;
-    }
+    practiceArea.innerHTML='<p>Well done! You finished this topic.</p>';
+    highlightVK('');
+    return;
   }
   practiceArea.innerHTML='';
   const keyDiv = document.createElement('div');
@@ -92,9 +81,10 @@ function showCurrentLetter(){
   highlightVK(keyDiv.textContent,'reset');
 }
 
-// Handle input (keyboard or virtual)
 function handleInput(input){
   if(currentIndex>=currentSequence.length) return;
+  if(!activeKeys.includes(input.toUpperCase())) return; // ignore inactive keys
+
   const currentWord = currentSequence[currentIndex];
   const expectedLetter = currentWord[currentLetterIndex];
   const keyDiv = document.querySelector('.key');
@@ -106,27 +96,16 @@ function handleInput(input){
     score++;
     currentLetterIndex++;
     if(currentLetterIndex>=currentWord.length){
-      // move to next word
       currentLetterIndex=0;
       currentIndex++;
-      setTimeout(()=>{
-        keyDiv.classList.add('flip');
-        showCurrentLetter();
-      },400);
+      setTimeout(()=>{ keyDiv.classList.add('flip'); showCurrentLetter(); },400);
     } else {
-      // next letter of same word
-      setTimeout(()=>{
-        keyDiv.classList.add('flip');
-        showCurrentLetter();
-      },400);
+      setTimeout(()=>{ keyDiv.classList.add('flip'); showCurrentLetter(); },400);
     }
   } else {
     keyDiv.classList.add('wrong');
     highlightVK(expectedLetter,'wrong');
-    setTimeout(()=>{
-      keyDiv.classList.add('flip');
-      showCurrentLetter();
-    },400);
+    setTimeout(()=>{ keyDiv.classList.add('flip'); showCurrentLetter(); },400);
   }
   scoreDisplay.textContent=`Score: ${score}`;
 }
@@ -136,8 +115,68 @@ document.addEventListener('keydown', e=>{
   handleInput(e.key);
 });
 
-window.focus();
-showCurrentLetter();
+function buildVirtualKeyboard(){
+  virtualKeyboard.innerHTML='';
+  const allKeys = "ABCDEFGHIJKLMNOPQRSTUVWXYZ;".split('');
+  allKeys.forEach(k=>{
+    const vk = document.createElement('div');
+    vk.classList.add('vk-key');
+    vk.textContent = k;
+    if(activeKeys.includes(k)) vk.classList.add('active');
+    vk.addEventListener('click',()=>handleInput(k));
+    virtualKeyboard.appendChild(vk);
+  });
+}
+
+function loadTopic(){
+  const cls = classesData.find(c=>c.id===classId);
+  if(!cls){ practiceArea.innerHTML='<p style="color:red;">Class not found</p>'; return; }
+  const term = cls.terms.find(t=>t.number===termNumber);
+  if(!term){ practiceArea.innerHTML='<p style="color:red;">Term not found</p>'; return; }
+  const category = term.categories.find(c=>c.id===catId);
+  if(!category){ practiceArea.innerHTML='<p style="color:red;">Category not found</p>'; return; }
+  const topic = category.topics[topicIndex];
+  if(!topic){ practiceArea.innerHTML='<p style="color:red;">Topic not found</p>'; return; }
+
+  // For demo, use topic title to define sequences
+  if(topic.title.toLowerCase().includes('home row')) currentSequence = ['A','S','D','F','J','K','L',';'];
+  else if(topic.title.toLowerCase().includes('simple words')) currentSequence = ['AS','AD','FA','JK','KL','SD','LF','AJ'];
+  else currentSequence = ['A','S','D','F','J','K','L',';'];
+
+  // Set active keys
+  activeKeys = [...new Set(currentSequence.join('').toUpperCase().split(''))];
+
+  buildVirtualKeyboard();
+  currentIndex=0;
+  currentLetterIndex=0;
+  score=0;
+  scoreDisplay.textContent=`Score: ${score}`;
+  showCurrentLetter();
+}
+
+// Navigation
+prevBtn.addEventListener('click', ()=>{
+  if(topicIndex>0){ topicIndex--; loadTopic(); }
+});
+nextBtn.addEventListener('click', ()=>{
+  const cls = classesData.find(c=>c.id===classId);
+  const term = cls.terms.find(t=>t.number===termNumber);
+  const category = term.categories.find(c=>c.id===catId);
+  if(topicIndex<category.topics.length-1){ topicIndex++; loadTopic(); }
+});
+
+// Fetch JSON
+fetch('data/classes.json')
+  .then(res=>res.json())
+  .then(data=>{
+    classesData = Array.isArray(data)? data : data.classes;
+    loadTopic();
+  })
+  .catch(err=>{
+    practiceArea.innerHTML = `<p style="color:red;">Failed to load classes.json</p>`;
+    console.error(err);
+  });
+
 </script>
 
 </body>
