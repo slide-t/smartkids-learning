@@ -1,8 +1,8 @@
 {
   "classes": [
     {
-      "id": "year1",
-      "name": "Year 1",
+      "id": "class1",
+      "name": "Class 1",
       "terms": [
         {
           "number": 1,
@@ -12,15 +12,14 @@
               "id": "keyboard",
               "name": "Keyboard",
               "topics": [
-                { "title": "Home Row Practice", "description": "Practice ASDF JKL;", "type": "keyboard", "time": 180 },
-                { "title": "Top Row Practice", "description": "Practice QWERTY UIOP", "type": "keyboard", "time": 180 }
-              ]
-            },
-            {
-              "id": "mouse",
-              "name": "Mouse",
-              "topics": [
-                { "title": "Click Practice", "description": "Click the circles as they appear", "type": "mouse", "time": 120 }
+                {
+                  "id": "home_row",
+                  "title": "Home Row",
+                  "practices": [
+                    { "title": "Practice 1", "time": 180, "sequence": "asdf jkl;" },
+                    { "title": "Practice 2", "time": 180, "sequence": "fdsa lkj;" }
+                  ]
+                }
               ]
             }
           ]
