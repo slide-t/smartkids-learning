@@ -1,14 +1,80 @@
 {
-  "id": "year1",
-  "name": "Year 1",
-  "terms": [
+  "classes": [
     {
-      "number": 1,
-      "categories": [
+      "id": "year1",
+      "name": "Year 1",
+      "terms": [
         {
-          "id": "keyboard",
-          "topics": [
-            { "title": "Home Row", "practice": ["A","S","D","F","J","K","L",";"] }
+          "number": 1,
+          "title": "Term 1",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                { "title": "Home Row Practice" },
+                { "title": "Simple Words" },
+                { "title": "Finger Stretch Practice" }
+              ]
+            },
+            {
+              "id": "mouse",
+              "name": "Mouse",
+              "topics": [
+                { "title": "Click Practice" },
+                { "title": "Drag & Drop" }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "title": "Term 2",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                { "title": "Two-letter Words" },
+                { "title": "Short Sentences" }
+              ]
+            },
+            {
+              "id": "mouse",
+              "name": "Mouse",
+              "topics": [
+                { "title": "Double Click Practice" },
+                { "title": "Mouse Maze" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "year2",
+      "name": "Year 2",
+      "terms": [
+        {
+          "number": 1,
+          "title": "Term 1",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                { "title": "Home Row Review" },
+                { "title": "Easy Sentences" }
+              ]
+            },
+            {
+              "id": "mouse",
+              "name": "Mouse",
+              "topics": [
+                { "title": "Precision Clicking" },
+                { "title": "Mouse Coordination" }
+              ]
+            }
           ]
         }
       ]
