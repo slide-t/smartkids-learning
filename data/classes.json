@@ -12,32 +12,17 @@
               "id": "keyboard",
               "name": "Keyboard",
               "topics": [
-                {
-                  "title": "Home Row Keys",
-                  "sequence": ["A","S","D","F","J","K","L",";"]
-                },
-                {
-                  "title": "Simple Words",
-                  "sequence": ["AS","AD","FA","JK","KL","SD","LF","AJ"]
-                },
-                {
-                  "title": "Basic Sentences",
-                  "sequence": ["ASAD","FAJK","KLSD","LFAD"]
-                }
+                {"title": "Home Row Keys", "sequence": ["A","S","D","F","J","K","L",";"]},
+                {"title": "Two Letter Words", "sequence": ["AS","AD","FA","JK","KL","SD","LF","AJ"]},
+                {"title": "Three Letter Words", "sequence": ["FAD","JAK","SAL","ASK","LAD"]}
               ]
             },
             {
               "id": "mouse",
               "name": "Mouse",
               "topics": [
-                {
-                  "title": "Click Practice",
-                  "sequence": []
-                },
-                {
-                  "title": "Drag and Drop",
-                  "sequence": []
-                }
+                {"title": "Mouse Clicks", "sequence": ["Left Click","Right Click","Double Click"]},
+                {"title": "Drag and Drop", "sequence": ["Drag Box","Drop Box","Drag Image"]}
               ]
             }
           ]
@@ -50,14 +35,8 @@
               "id": "keyboard",
               "name": "Keyboard",
               "topics": [
-                {
-                  "title": "Top Row Keys",
-                  "sequence": ["Q","W","E","R","T","Y","U","I","O","P"]
-                },
-                {
-                  "title": "Simple Words with Top Row",
-                  "sequence": ["QW","ER","TY","UI","OP"]
-                }
+                {"title": "Simple Words", "sequence": ["CAT","DOG","FUN","SUN","HAT"]},
+                {"title": "Common Sentences", "sequence": ["I am happy","You are good","We like fun"]}
               ]
             }
           ]
@@ -76,14 +55,28 @@
               "id": "keyboard",
               "name": "Keyboard",
               "topics": [
-                {
-                  "title": "Home + Top Row Keys",
-                  "sequence": ["A","S","D","F","J","K","L",";","Q","W","E","R","T","Y","U","I","O","P"]
-                },
-                {
-                  "title": "Simple Words",
-                  "sequence": ["QW","ER","AS","AD","FA","JK"]
-                }
+                {"title": "Home Row Drill", "sequence": ["A","S","D","F","J","K","L",";"]},
+                {"title": "Two & Three Letter Words", "sequence": ["AND","SAD","FUN","JAM","LAD"]}
+              ]
+            },
+            {
+              "id": "mouse",
+              "name": "Mouse",
+              "topics": [
+                {"title": "Precision Clicks", "sequence": ["Left Click","Double Click","Right Click"]}
+              ]
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "title": "Term 2",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {"title": "Typing Short Sentences", "sequence": ["I like cake","You are nice","We play together"]}
               ]
             }
           ]
@@ -102,14 +95,28 @@
               "id": "keyboard",
               "name": "Keyboard",
               "topics": [
-                {
-                  "title": "Full Alphabet Drill",
-                  "sequence": ["A","S","D","F","J","K","L",";","Q","W","E","R","T","Y","U","I","O","P","Z","X","C","V","B","N","M"]
-                },
-                {
-                  "title": "Short Words Drill",
-                  "sequence": ["AS","AD","FA","JK","KL","SD","LF","AJ","QW","ER","TY","UI"]
-                }
+                {"title": "Home Row Speed Drill", "sequence": ["A","S","D","F","J","K","L",";"]},
+                {"title": "Simple Words Practice", "sequence": ["SUN","FUN","HAT","CAT","DOG"]}
+              ]
+            },
+            {
+              "id": "mouse",
+              "name": "Mouse",
+              "topics": [
+                {"title": "Clicking Games", "sequence": ["Left Click","Right Click","Double Click","Drag"]}
+              ]
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "title": "Term 2",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {"title": "Typing Sentences", "sequence": ["The sun is bright","I love coding","We play games"]}
               ]
             }
           ]
@@ -128,14 +135,21 @@
               "id": "keyboard",
               "name": "Keyboard",
               "topics": [
-                {
-                  "title": "Keyboard Speed Drill",
-                  "sequence": ["AS","AD","FA","JK","KL","SD","LF","AJ","QW","ER","TY","UI","ZX","CV","BN","NM"]
-                },
-                {
-                  "title": "Mouse Navigation",
-                  "sequence": []
-                }
+                {"title": "All Rows Drill", "sequence": ["Q","W","E","R","T","Y","U","I","O","P","A","S","D","F","G","H","J","K","L","Z","X","C","V","B","N","M"]},
+                {"title": "Words Practice", "sequence": ["FUN","CAT","DOG","HAT","SUN"]}
+              ]
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "title": "Term 2",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {"title": "Short Sentences", "sequence": ["I love coding","We play games","Coding is fun"]}
               ]
             }
           ]
@@ -154,14 +168,7 @@
               "id": "keyboard",
               "name": "Keyboard",
               "topics": [
-                {
-                  "title": "Speed Words",
-                  "sequence": ["FAST","JUMP","LAND","SAD","AD","FAJK"]
-                },
-                {
-                  "title": "Short Sentences",
-                  "sequence": ["ASAD FAJK KLSD LFAD"]
-                }
+                {"title": "All Rows Words", "sequence": ["HELLO","WORLD","TYPING","GAMES","FUN"]}
               ]
             }
           ]
@@ -180,14 +187,7 @@
               "id": "keyboard",
               "name": "Keyboard",
               "topics": [
-                {
-                  "title": "Keyboard Accuracy Drill",
-                  "sequence": ["ABCDEFGHIJKLMNOPQRSTUVWXYZ"]
-                },
-                {
-                  "title": "Typing Practice Sentences",
-                  "sequence": ["THE QUICK BROWN FOX","JUMPS OVER THE LAZY DOG"]
-                }
+                {"title": "Typing Sentences", "sequence": ["I enjoy coding","Typing is fun","Practice daily"]}
               ]
             }
           ]
@@ -206,10 +206,7 @@
               "id": "keyboard",
               "name": "Keyboard",
               "topics": [
-                {
-                  "title": "Keyboard Sentences",
-                  "sequence": ["SAMPLE TEXT FOR PRACTICE","LEARN TYPING FAST"]
-                }
+                {"title": "Typing Paragraphs", "sequence": ["Typing improves your skills","Practice makes perfect","Stay focused while typing"]}
               ]
             }
           ]
@@ -228,10 +225,7 @@
               "id": "keyboard",
               "name": "Keyboard",
               "topics": [
-                {
-                  "title": "Typing Speed Drill",
-                  "sequence": ["THE QUICK BROWN FOX JUMPS","OVER THE LAZY DOG FAST"]
-                }
+                {"title": "Advanced Sentences", "sequence": ["Computers are useful","Learning coding is fun","Stay sharp while typing"]}
               ]
             }
           ]
@@ -250,10 +244,7 @@
               "id": "keyboard",
               "name": "Keyboard",
               "topics": [
-                {
-                  "title": "Advanced Sentences",
-                  "sequence": ["PRACTICE MAKES PERFECT","TYPING SPEED AND ACCURACY"]
-                }
+                {"title": "Typing Practice", "sequence": ["Consistency is key","Accuracy matters","Practice makes perfect"]}
               ]
             }
           ]
@@ -272,10 +263,7 @@
               "id": "keyboard",
               "name": "Keyboard",
               "topics": [
-                {
-                  "title": "Full Keyboard Sentences",
-                  "sequence": ["ABCDEFGHIJKLMNOPQRSTUVWXYZ","THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG"]
-                }
+                {"title": "Typing Essays", "sequence": ["Essay writing helps improve typing speed","Focus on accuracy and speed","Practice daily to master"]}
               ]
             }
           ]
@@ -294,10 +282,7 @@
               "id": "keyboard",
               "name": "Keyboard",
               "topics": [
-                {
-                  "title": "Typing Mastery",
-                  "sequence": ["ADVANCED TYPING PRACTICE","KEYBOARD FLUENCY DRILL"]
-                }
+                {"title": "Typing Longer Paragraphs", "sequence": ["Typing longer paragraphs develops fluency","Accuracy is important","Speed comes with practice"]}
               ]
             }
           ]
@@ -316,10 +301,7 @@
               "id": "keyboard",
               "name": "Keyboard",
               "topics": [
-                {
-                  "title": "Typing Competency",
-                  "sequence": ["FINAL YEAR TYPING CHALLENGE","PERFECT ACCURACY AND SPEED"]
-                }
+                {"title": "Advanced Typing", "sequence": ["Prepare for exams","Type complex sentences","Practice makes perfect"]}
               ]
             }
           ]
