@@ -12,7 +12,7 @@
   nav button.active { background:#005f73; }
   .container { max-width:700px; margin:auto; padding:1rem; background:white; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.2);}
   .practice-area { min-height:150px; padding:1rem; border:1px solid #ccc; border-radius:5px; background:#fafafa; display:flex; justify-content:center; align-items:center; font-size:3rem; perspective:1000px;}
-  .key { display:inline-block; width:60px; height:60px; line-height:60px; margin:0.3rem; text-align:center; border:2px solid #ccc; border-radius:10px; background:#e7e7e7; cursor:pointer; transform-style:preserve-3d; transition: transform 0.5s, background 0.3s;}
+  .key { display:inline-block; width:60px; height:60px; line-height:60px; margin:0.3rem; text-align:center; border:2px solid #ccc; border-radius:10px; background:#e7e7e7; cursor:pointer; transform-style:preserve-3d; transition: transform 0.4s, background 0.3s;}
   .key.correct { background:#4CAF50; color:white; }
   .key.wrong { background:#f44336; color:white; }
   .flip { transform: rotateY(90deg); }
@@ -30,7 +30,6 @@
 
 <nav>
   <button id="typingBtn" class="active">Typing Practice</button>
-  <button id="mouseBtn">Mouse Practice</button>
 </nav>
 
 <div class="container">
@@ -50,8 +49,8 @@ const scoreDisplay = document.getElementById('scoreDisplay');
 const virtualKeyboard = document.getElementById('virtualKeyboard');
 
 let score = 0;
-const homeKeys = ['A','S','D','F','J','K','L',';']; // Year 1 keys
 let currentIndex = 0;
+const homeKeys = ['A','S','D','F','J','K','L',';'];
 
 // Build virtual keyboard
 homeKeys.forEach(key => {
@@ -62,63 +61,64 @@ homeKeys.forEach(key => {
 });
 
 // Highlight virtual key
-function highlightVK(keyChar, type) {
+function highlightVK(keyChar, type='reset') {
   const vkKeys = document.querySelectorAll('.vk-key');
-  vkKeys.forEach(vk => vk.classList.remove('vk-active'));
   vkKeys.forEach(vk => {
-    if(vk.textContent === keyChar){
-      vk.classList.add('vk-active');
-      if(type==='correct') vk.style.backgroundColor = '#4CAF50';
-      if(type==='wrong') vk.style.backgroundColor = '#f44336';
-      if(type==='reset') vk.style.backgroundColor = '#ccc';
-    }
+    vk.classList.remove('vk-active','correct','wrong');
+    vk.style.backgroundColor = '#ccc';
   });
+  const vk = Array.from(vkKeys).find(k=>k.textContent===keyChar);
+  if(vk){
+    vk.classList.add('vk-active');
+    if(type==='correct') vk.style.backgroundColor = '#4CAF50';
+    if(type==='wrong') vk.style.backgroundColor = '#f44336';
+  }
 }
 
-// Drop next key
-function dropKey() {
-  if(currentIndex >= homeKeys.length) return;
+// Show current key
+function showCurrentKey() {
+  if(currentIndex >= homeKeys.length){
+    practiceArea.innerHTML = '<p>Well done! You finished the set.</p>';
+    highlightVK('');
+    return;
+  }
   practiceArea.innerHTML = '';
-  const span = document.createElement('div');
-  span.classList.add('key');
-  span.textContent = homeKeys[currentIndex];
-  practiceArea.appendChild(span);
+  const keyDiv = document.createElement('div');
+  keyDiv.classList.add('key');
+  keyDiv.textContent = homeKeys[currentIndex];
+  practiceArea.appendChild(keyDiv);
   highlightVK(homeKeys[currentIndex],'reset');
 }
 
-function nextKey(correct) {
-  const span = document.querySelector('.key');
-  if(correct){
-    span.classList.add('correct');
-    highlightVK(homeKeys[currentIndex],'correct');
+// Handle key press
+document.addEventListener('keydown', e=>{
+  if(currentIndex >= homeKeys.length) return;
+  const expectedKey = homeKeys[currentIndex];
+  const keyDiv = document.querySelector('.key');
+  let pressedKey = e.key.toUpperCase();
+  // Special handling for ';'
+  if(expectedKey === ';') pressedKey = e.key;
+  if(pressedKey === expectedKey){
+    keyDiv.classList.add('correct');
+    highlightVK(expectedKey,'correct');
+    score++;
   } else {
-    span.classList.add('wrong');
-    highlightVK(homeKeys[currentIndex],'wrong');
+    keyDiv.classList.add('wrong');
+    highlightVK(expectedKey,'wrong');
   }
-  // flip out after delay
+  updateScore();
+  // Flip out key after 400ms, then show next
   setTimeout(()=>{
-    span.classList.add('flip');
+    keyDiv.classList.add('flip');
     currentIndex++;
-    score += correct?1:0;
-    updateScore();
-    dropKey();
-  }, 400);
-}
+    showCurrentKey();
+  },400);
+});
 
 function updateScore(){ scoreDisplay.textContent = `Score: ${score}`; }
 
-// Initial drop
-dropKey();
-
-// Listen for key presses
-document.addEventListener('keydown', e=>{
-  if(currentIndex >= homeKeys.length) return;
-  if(e.key.toUpperCase() === homeKeys[currentIndex]){
-    nextKey(true);
-  } else {
-    nextKey(false);
-  }
-});
+// Initial key
+showCurrentKey();
 </script>
 
 </body>
