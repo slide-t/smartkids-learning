@@ -1,22 +1,17 @@
-[
-  {
-    "id": "year1",
-    "name": "Year 1",
-    "terms": [
-      {
-        "number": 1,
-        "title": "Term 1",
-        "categories": [
-          {
-            "id": "keyboard",
-            "name": "Keyboard",
-            "topics": [
-              { "title": "Home Row" },
-              { "title": "Words AS DF" }
-            ]
-          }
-        ]
-      }
-    ]
-  }
-]
+{
+  "id": "year1",
+  "name": "Year 1",
+  "terms": [
+    {
+      "number": 1,
+      "categories": [
+        {
+          "id": "keyboard",
+          "topics": [
+            { "title": "Home Row", "practice": ["A","S","D","F","J","K","L",";"] }
+          ]
+        }
+      ]
+    }
+  ]
+}
