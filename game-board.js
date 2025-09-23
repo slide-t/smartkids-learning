@@ -1,111 +1,74 @@
-document.addEventListener("DOMContentLoaded", async () => {
-  const urlParams = new URLSearchParams(window.location.search);
-  const year = parseInt(urlParams.get("year")) || 1;
-  const termNumber = parseInt(urlParams.get("term")) || 1;
-  const categoryId = urlParams.get("category") || "keyboard";
-  let topicIndex = parseInt(urlParams.get("topicIndex")) || 0;
-
-  const topicTitleEl = document.getElementById("topic-title");
-  const topicDescEl = document.getElementById("topic-description");
-  const gameArea = document.getElementById("game-area");
-  const timerEl = document.getElementById("timer");
-
-  const prevBtn = document.getElementById("prev-btn");
-  const restartBtn = document.getElementById("restart-btn");
-  const nextBtn = document.getElementById("next-btn");
-
-  let classesData, currentTopic, timerInterval;
-
-  try {
-    const res = await fetch("data/classes.json");
-    const data = await res.json();
-    classesData = Array.isArray(data) ? data : data.classes;
-
-    loadTopic();
-
-  } catch (err) {
-    console.error("Failed to load JSON:", err);
-    topicTitleEl.textContent = "Error loading topic.";
+function renderGameArea(topic) {
+  if (topic.type === "keyboard") {
+    renderKeyboardPractice(topic);
+  } else if (topic.type === "mouse") {
+    renderMousePractice(topic);
+  } else {
+    gameArea.innerHTML = `<p class="text-gray-600 font-medium">${topic.description}</p>`;
   }
+}
 
-  function loadTopic() {
-    clearInterval(timerInterval);
+// --- Keyboard Practice ---
+function renderKeyboardPractice(topic) {
+  const keys = topic.title.toLowerCase().includes("home row") ? ["a","s","d","f","j","k","l",";"] : ["q","w","e","r","t","y","u","i","o","p"];
+  gameArea.innerHTML = `
+    <p class="mb-4 text-lg font-semibold">Type the following letters repeatedly:</p>
+    <div id="key-display" class="text-2xl font-bold mb-4">${keys.join(" ")}</div>
+    <input id="keyboard-input" class="border rounded p-2 w-full text-center text-xl" autofocus placeholder="Type here..." />
+    <div id="feedback" class="mt-2 text-green-600 font-bold"></div>
+  `;
 
-    const cls = classesData.find(c => c.id === `year${year}` || c.name.toLowerCase().includes(`year ${year}`));
-    if (!cls) return showError();
+  const input = document.getElementById("keyboard-input");
+  const display = document.getElementById("key-display");
+  const feedback = document.getElementById("feedback");
+  let pos = 0;
 
-    const term = (cls.terms || []).find(t => t.number === termNumber);
-    if (!term) return showError();
+  input.value = "";
+  input.focus();
 
-    const category = (term.categories || []).find(cat => cat.id === categoryId);
-    if (!category) return showError();
+  input.addEventListener("input", () => {
+    const val = input.value.trim().toLowerCase();
+    const currentKey = keys[pos];
 
-    if (topicIndex < 0) topicIndex = 0;
-    if (topicIndex >= (category.topics || []).length) topicIndex = category.topics.length -1;
-
-    currentTopic = category.topics[topicIndex];
-
-    topicTitleEl.textContent = currentTopic.title;
-    topicDescEl.textContent = currentTopic.description || "Practice this topic";
-
-    gameArea.innerHTML = `<p class="text-gray-600 font-medium">Start practicing: ${currentTopic.title}</p>`;
-
-    startTimer(currentTopic.time || 180); // default 3 min
-
-    updateButtons(category.topics.length);
-  }
-
-  function startTimer(seconds) {
-    let remaining = seconds;
-    timerEl.textContent = formatTime(remaining);
-
-    timerInterval = setInterval(() => {
-      remaining--;
-      timerEl.textContent = formatTime(remaining);
-
-      if (remaining <= 0) {
-        clearInterval(timerInterval);
-        alert("Time's up! Restart or go to next practice.");
-      }
-    }, 1000);
-  }
-
-  function formatTime(sec) {
-    const m = String(Math.floor(sec / 60)).padStart(2, "0");
-    const s = String(sec % 60).padStart(2, "0");
-    return `${m}:${s}`;
-  }
-
-  function updateButtons(topicCount) {
-    prevBtn.disabled = topicIndex === 0;
-    nextBtn.disabled = topicIndex === topicCount - 1;
-  }
-
-  prevBtn.addEventListener("click", () => {
-    topicIndex--;
-    loadTopic();
-    updateUrl();
+    if (val.slice(-1) === currentKey) {
+      pos++;
+      feedback.textContent = `Good! Next key: ${keys[pos] || "Completed!"}`;
+      if (pos >= keys.length) pos = 0; // Loop
+    } else {
+      feedback.textContent = `Oops! Try again.`;
+    }
   });
+}
 
-  nextBtn.addEventListener("click", () => {
-    topicIndex++;
-    loadTopic();
-    updateUrl();
-  });
+// --- Mouse Practice ---
+function renderMousePractice(topic) {
+  gameArea.innerHTML = `
+    <p class="mb-4 text-lg font-semibold">Click the circles as they appear!</p>
+    <div id="mouse-area" class="relative w-full h-64 border rounded bg-gray-100 overflow-hidden"></div>
+    <div id="score" class="mt-2 text-green-600 font-bold">Score: 0</div>
+  `;
 
-  restartBtn.addEventListener("click", () => {
-    loadTopic();
-  });
+  const area = document.getElementById("mouse-area");
+  const scoreEl = document.getElementById("score");
+  let score = 0;
 
-  function updateUrl() {
-    const newUrl = `game-board.html?year=${year}&term=${termNumber}&category=${categoryId}&topicIndex=${topicIndex}`;
-    window.history.replaceState({}, "", newUrl);
+  function spawnCircle() {
+    const circle = document.createElement("div");
+    circle.className = "absolute bg-blue-500 rounded-full w-10 h-10 cursor-pointer";
+    const maxX = area.clientWidth - 40;
+    const maxY = area.clientHeight - 40;
+    circle.style.left = Math.floor(Math.random() * maxX) + "px";
+    circle.style.top = Math.floor(Math.random() * maxY) + "px";
+
+    circle.addEventListener("click", () => {
+      score++;
+      scoreEl.textContent = `Score: ${score}`;
+      area.removeChild(circle);
+      spawnCircle(); // Spawn next
+    });
+
+    area.appendChild(circle);
   }
 
-  function showError() {
-    topicTitleEl.textContent = "Topic not found";
-    gameArea.innerHTML = "";
-    timerEl.textContent = "00:00";
-  }
-
-});
+  spawnCircle();
+}
