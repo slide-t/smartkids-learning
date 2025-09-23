@@ -1,0 +1,31 @@
+{
+  "classes": [
+    {
+      "id": "year1",
+      "name": "Year 1",
+      "terms": [
+        {
+          "number": 1,
+          "title": "Term 1",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                { "title": "Home Row Practice", "description": "Practice ASDF JKL;", "type": "keyboard", "time": 180 },
+                { "title": "Top Row Practice", "description": "Practice QWERTY UIOP", "type": "keyboard", "time": 180 }
+              ]
+            },
+            {
+              "id": "mouse",
+              "name": "Mouse",
+              "topics": [
+                { "title": "Click Practice", "description": "Click the circles as they appear", "type": "mouse", "time": 120 }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
