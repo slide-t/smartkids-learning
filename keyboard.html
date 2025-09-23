@@ -3,52 +3,244 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Practice Modes</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>Keyboard & Mouse Practice</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f2f2f2;
+    }
+
+    header {
+      background-color: #4CAF50;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+
+    nav button {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: #008CBA;
+      color: white;
+    }
+
+    nav button.active {
+      background-color: #005f73;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 1rem;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    .class-selection, .practice-area {
+      margin: 1rem 0;
+    }
+
+    .class-selection button {
+      margin: 0.3rem;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      cursor: pointer;
+      background-color: #e7e7e7;
+    }
+
+    .class-selection button.active {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+    }
+
+    .practice-area {
+      min-height: 200px;
+      padding: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: #fafafa;
+    }
+
+    .exercise-letter {
+      font-size: 2rem;
+      margin: 0.5rem;
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: #e7e7e7;
+    }
+
+    .exercise-letter.correct {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    .exercise-letter.incorrect {
+      background-color: #f44336;
+      color: white;
+    }
+
+    .score {
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
-  <header>
-    <h1>ICT Skills Practice</h1>
-    <nav>
-      <button id="typingModeBtn">Typing Practice</button>
-      <button id="mouseModeBtn">Mouse Practice</button>
-    </nav>
-  </header>
 
-  <main>
-    <!-- Typing Practice Section -->
-    <section id="typingPractice" class="practice-mode">
-      <h2>Typing Practice</h2>
-      <div id="practiceArea" class="hidden">
-        <p id="stageTitle"></p>
-        <p id="stageDescription"></p>
-        <div id="targetChar"></div>
-        <div id="feedback"></div>
-        <div id="virtualKeyboard"></div>
-        <button id="nextBtn" class="hidden">Next Stage</button>
-        <button id="restartBtn">Restart</button>
-        <button id="homeBtn">Home</button>
-      </div>
-      <button id="startBtn">Start Typing Practice</button>
-    </section>
+<header>
+  <h1>Keyboard & Mouse Practice</h1>
+</header>
 
-    <!-- Mouse Practice Section -->
-    <section id="mousePractice" class="practice-mode hidden">
-      <h2>Mouse Practice</h2>
-      <div id="mouseArea" class="hidden">
-        <p id="mouseStageTitle"></p>
-        <p id="mouseStageDescription"></p>
-        <div id="mouseGameBoard"></div>
-        <div id="mouseFeedback"></div>
-        <button id="mouseNextBtn" class="hidden">Next Stage</button>
-        <button id="mouseRestartBtn">Restart</button>
-        <button id="mouseHomeBtn">Home</button>
-      </div>
-      <button id="mouseStartBtn">Start Mouse Practice</button>
-    </section>
-  </main>
+<nav>
+  <button id="typingBtn" class="active">Typing Practice</button>
+  <button id="mouseBtn">Mouse Practice</button>
+</nav>
 
-  <script src="keyboard.js"></script>
-  <script src="mouse.js"></script>
+<div class="container">
+
+  <!-- Class/Stage Selection -->
+  <div class="class-selection">
+    <strong>Select Class/Stage:</strong>
+    <button class="class-btn active" data-class="1">Class 1</button>
+    <button class="class-btn" data-class="2">Class 2</button>
+    <button class="class-btn" data-class="3">Class 3</button>
+    <button class="class-btn" data-class="4">Class 4</button>
+  </div>
+
+  <!-- Practice Area -->
+  <div class="practice-area" id="practiceArea">
+    <p>Welcome! Select a mode and class to start practicing.</p>
+  </div>
+
+  <!-- Score Display -->
+  <div class="score" id="scoreDisplay">
+    Score: 0
+  </div>
+
+</div>
+
+<script>
+  const typingBtn = document.getElementById('typingBtn');
+  const mouseBtn = document.getElementById('mouseBtn');
+  const practiceArea = document.getElementById('practiceArea');
+  const scoreDisplay = document.getElementById('scoreDisplay');
+
+  let currentClass = 1;
+  let score = 0;
+
+  const lettersPerClass = {
+    1: ['A','S','D','F','J','K','L',';'],
+    2: ['Q','W','E','R','T','Y','U','I','O','P'],
+    3: ['Z','X','C','V','B','N','M'],
+    4: ['1','2','3','4','5','6','7','8','9','0']
+  };
+
+  // Update score
+  function updateScore() {
+    scoreDisplay.textContent = `Score: ${score}`;
+  }
+
+  // Load typing practice
+  function loadTyping() {
+    const letters = lettersPerClass[currentClass];
+    practiceArea.innerHTML = '';
+    letters.forEach(letter => {
+      const span = document.createElement('span');
+      span.classList.add('exercise-letter');
+      span.textContent = letter;
+      practiceArea.appendChild(span);
+    });
+    score = 0;
+    updateScore();
+  }
+
+  // Load mouse practice (click targets)
+  function loadMouse() {
+    const letters = lettersPerClass[currentClass];
+    practiceArea.innerHTML = '';
+    letters.forEach(letter => {
+      const span = document.createElement('span');
+      span.classList.add('exercise-letter');
+      span.textContent = letter;
+      practiceArea.appendChild(span);
+      span.addEventListener('click', () => {
+        span.classList.add('correct');
+        score += 1;
+        updateScore();
+      });
+    });
+    score = 0;
+    updateScore();
+  }
+
+  // Event listeners for mode toggle
+  typingBtn.addEventListener('click', () => {
+    typingBtn.classList.add('active');
+    mouseBtn.classList.remove('active');
+    loadTyping();
+  });
+
+  mouseBtn.addEventListener('click', () => {
+    mouseBtn.classList.add('active');
+    typingBtn.classList.remove('active');
+    loadMouse();
+  });
+
+  // Class selection
+  const classButtons = document.querySelectorAll('.class-btn');
+  classButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      classButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentClass = parseInt(btn.getAttribute('data-class'));
+      if (typingBtn.classList.contains('active')) {
+        loadTyping();
+      } else {
+        loadMouse();
+      }
+    });
+  });
+
+  // Typing input listener
+  document.addEventListener('keydown', (e) => {
+    if (!typingBtn.classList.contains('active')) return;
+    const letters = document.querySelectorAll('.exercise-letter');
+    letters.forEach(span => {
+      if (!span.classList.contains('correct')) {
+        if (e.key.toUpperCase() === span.textContent) {
+          span.classList.add('correct');
+          score += 1;
+        } else {
+          span.classList.add('incorrect');
+          setTimeout(() => span.classList.remove('incorrect'), 500);
+        }
+        updateScore();
+        return;
+      }
+    });
+  });
+
+  // Initial load
+  loadTyping();
+
+</script>
+
 </body>
 </html>
