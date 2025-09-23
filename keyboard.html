@@ -5,42 +5,28 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Year 1 Typing Practice</title>
 <style>
-  body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f2f2f2; }
-  header { background:#4CAF50; color:white; padding:1rem; text-align:center; }
-  nav { display:flex; justify-content:center; gap:1rem; margin:1rem 0; }
-  nav button { padding:0.5rem 1rem; border:none; border-radius:5px; cursor:pointer; background:#008CBA; color:white; }
-  nav button.active { background:#005f73; }
-  .container { max-width:700px; margin:auto; padding:1rem; background:white; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.2);}
-  .practice-area { min-height:150px; padding:1rem; border:1px solid #ccc; border-radius:5px; background:#fafafa; display:flex; justify-content:center; align-items:center; font-size:3rem; perspective:1000px;}
-  .key { display:inline-block; width:60px; height:60px; line-height:60px; margin:0.3rem; text-align:center; border:2px solid #ccc; border-radius:10px; background:#e7e7e7; cursor:pointer; transform-style:preserve-3d; transition: transform 0.4s, background 0.3s;}
+  body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f2f2f2; display:flex; flex-direction:column; align-items:center;}
+  header { background:#4CAF50; color:white; padding:1rem; width:100%; text-align:center; }
+  .container { max-width:700px; margin-top:20px; padding:1rem; background:white; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.2); text-align:center;}
+  .practice-area { min-height:150px; padding:1rem; border:1px solid #ccc; border-radius:5px; background:#fafafa; display:flex; justify-content:center; align-items:center; font-size:3rem; perspective:1000px; margin-bottom:15px;}
+  .key { width:60px; height:60px; line-height:60px; margin:0.3rem; text-align:center; border:2px solid #ccc; border-radius:10px; background:#e7e7e7; transform-style:preserve-3d; transition: transform 0.4s, background 0.3s;}
   .key.correct { background:#4CAF50; color:white; }
   .key.wrong { background:#f44336; color:white; }
   .flip { transform: rotateY(90deg); }
-  .virtual-keyboard { margin-top:20px; display:flex; justify-content:center; flex-wrap:wrap; gap:5px; }
+  .virtual-keyboard { display:flex; justify-content:center; flex-wrap:wrap; gap:5px; margin-top:15px; }
   .vk-key { width:50px; height:50px; line-height:50px; text-align:center; border-radius:5px; background:#ccc; user-select:none; }
   .vk-active { background:#FFA500 !important; }
-  .score { margin-top:1rem; font-weight:bold; text-align:center; }
+  .score { font-weight:bold; margin-top:10px; }
 </style>
 </head>
 <body>
 
-<header>
-  <h1>Year 1 Typing Practice</h1>
-</header>
-
-<nav>
-  <button id="typingBtn" class="active">Typing Practice</button>
-</nav>
+<header><h1>Year 1 Typing Practice</h1></header>
 
 <div class="container">
-
-  <div class="practice-area" id="practiceArea">
-  </div>
-
+  <div class="practice-area" id="practiceArea"></div>
   <div class="score" id="scoreDisplay">Score: 0</div>
-
   <div class="virtual-keyboard" id="virtualKeyboard"></div>
-
 </div>
 
 <script>
@@ -53,7 +39,7 @@ let currentIndex = 0;
 const homeKeys = ['A','S','D','F','J','K','L',';'];
 
 // Build virtual keyboard
-homeKeys.forEach(key => {
+homeKeys.forEach(key=>{
   const vk = document.createElement('div');
   vk.classList.add('vk-key');
   vk.textContent = key;
@@ -61,28 +47,25 @@ homeKeys.forEach(key => {
 });
 
 // Highlight virtual key
-function highlightVK(keyChar, type='reset') {
+function highlightVK(keyChar,type='reset'){
   const vkKeys = document.querySelectorAll('.vk-key');
-  vkKeys.forEach(vk => {
-    vk.classList.remove('vk-active','correct','wrong');
-    vk.style.backgroundColor = '#ccc';
-  });
+  vkKeys.forEach(vk=>{ vk.classList.remove('vk-active','correct','wrong'); vk.style.backgroundColor='#ccc'; });
   const vk = Array.from(vkKeys).find(k=>k.textContent===keyChar);
   if(vk){
     vk.classList.add('vk-active');
-    if(type==='correct') vk.style.backgroundColor = '#4CAF50';
-    if(type==='wrong') vk.style.backgroundColor = '#f44336';
+    if(type==='correct') vk.style.backgroundColor='#4CAF50';
+    if(type==='wrong') vk.style.backgroundColor='#f44336';
   }
 }
 
 // Show current key
-function showCurrentKey() {
-  if(currentIndex >= homeKeys.length){
-    practiceArea.innerHTML = '<p>Well done! You finished the set.</p>';
+function showCurrentKey(){
+  if(currentIndex>=homeKeys.length){
+    practiceArea.innerHTML='<p>Well done! You finished the set.</p>';
     highlightVK('');
     return;
   }
-  practiceArea.innerHTML = '';
+  practiceArea.innerHTML='';
   const keyDiv = document.createElement('div');
   keyDiv.classList.add('key');
   keyDiv.textContent = homeKeys[currentIndex];
@@ -92,22 +75,20 @@ function showCurrentKey() {
 
 // Handle key press
 document.addEventListener('keydown', e=>{
-  if(currentIndex >= homeKeys.length) return;
-  const expectedKey = homeKeys[currentIndex];
+  if(currentIndex>=homeKeys.length) return;
+  const expected = homeKeys[currentIndex];
   const keyDiv = document.querySelector('.key');
-  let pressedKey = e.key.toUpperCase();
-  // Special handling for ';'
-  if(expectedKey === ';') pressedKey = e.key;
-  if(pressedKey === expectedKey){
+  let pressed = e.key.toUpperCase();
+  if(expected===';') pressed=e.key; // handle semicolon
+  if(pressed===expected){
     keyDiv.classList.add('correct');
-    highlightVK(expectedKey,'correct');
+    highlightVK(expected,'correct');
     score++;
   } else {
     keyDiv.classList.add('wrong');
-    highlightVK(expectedKey,'wrong');
+    highlightVK(expected,'wrong');
   }
-  updateScore();
-  // Flip out key after 400ms, then show next
+  scoreDisplay.textContent=`Score: ${score}`;
   setTimeout(()=>{
     keyDiv.classList.add('flip');
     currentIndex++;
@@ -115,9 +96,8 @@ document.addEventListener('keydown', e=>{
   },400);
 });
 
-function updateScore(){ scoreDisplay.textContent = `Score: ${score}`; }
-
-// Initial key
+// Focus to capture key presses reliably
+window.focus();
 showCurrentKey();
 </script>
 
