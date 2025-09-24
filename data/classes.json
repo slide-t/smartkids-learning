@@ -329,7 +329,7 @@
                   "samples": [
                     "The sun shines in the morning.",
                     "Children play games in the park.",
-                    "I love typing because it is fun."
+                    "I love typing because it is fun."]
                   
                 }
               ]
@@ -488,7 +488,7 @@
                   "samples": [
                     "The boy plays in the garden every day.",
                     "Our class is learning to use the computer.",
-                    "Typing fast helps us finish work quickly."
+                    "Typing fast helps us finish work quickly."]
                   
                 }
               ]
@@ -562,7 +562,7 @@
                   "samples": [
                     "Typing skills help us in school and beyond.",
                     "We must practice daily to improve our speed.",
-                    "Accuracy is more important than rushing."
+                    "Accuracy is more important than rushing."]
                   
                 }
               ]
@@ -633,7 +633,7 @@
                   "samples": [
                     "My school is a place where I learn and play.",
                     "Typing helps me complete assignments faster.",
-                    "Computers are very useful in the modern world."
+                    "Computers are very useful in the modern world."]
                   
                 }
               ]
@@ -702,7 +702,7 @@
                   "instruction": "Type these structured reports neatly.",
                   "samples": [
                     "Title: My Holiday\nI visited the beach with my family.",
-                    "Title: School Project\nWe worked on a science fair project together."
+                    "Title: School Project\nWe worked on a science fair project together."]
                   
                 }
               ]
