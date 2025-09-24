@@ -154,8 +154,20 @@ function highlightVK(keyChar,type='reset'){
 
 // Show current word/sentence
 function showCurrentSample(){
-  if(currentIndex>=currentSequence.length){
-    practiceArea.innerHTML='<p>🎉 Well done! You finished this topic.</p>';
+  if(currentIndex >= currentSequence.length){
+    // Finished this topic
+    const cls = classesData.find(c=>c.id===classId);
+    const term = cls.terms.find(t=>t.number===termNumber);
+    const category = term.categories.find(c=>c.id===catId);
+
+    if(topicIndex < category.topics.length - 1){
+      // More topics remain
+      practiceArea.innerHTML='<p>🎉 Well done! You finished this topic. You can restart to practice again or click Next to continue.</p>';
+    } else {
+      // Last topic completed
+      practiceArea.innerHTML='<p>🎊 Congratulations! You finished all topics in this category. You can restart for more practice.</p>';
+    }
+
     highlightVK('');
     restartBtn.style.display = "inline-block";
     restartBtn.classList.add('bounce');
@@ -163,9 +175,34 @@ function showCurrentSample(){
     return;
   }
 
+  // Reset and show current sample
   restartBtn.style.display = "none"; 
   const sample = currentSequence[currentIndex];
   practiceArea.innerHTML='';
+
+  const wrapper = document.createElement('div');
+  wrapper.style.display="inline-block";
+
+  sample.split('').forEach((char,idx)=>{
+    const span=document.createElement('span');
+    span.textContent=char;
+    span.style.padding="0 2px";
+
+    if(idx===currentLetterIndex){
+      span.style.background="#ffeb3b"; 
+    }
+
+    if(currentLetterIndex < sample.length && idx < currentLetterIndex){
+      span.style.color="green";
+    }
+
+    wrapper.appendChild(span);
+  });
+
+  practiceArea.appendChild(wrapper);
+  highlightVK(sample[currentLetterIndex],'reset');
+}
+                                                
 
   // Build word container
   const wrapper = document.createElement('div');
@@ -242,7 +279,7 @@ function showTooltip(message){
   setTimeout(()=>{ tooltip.classList.remove('show'); },4000);
 }
 
-// Load topic
+// Load topic (merged with timer start)
 function loadTopic(){
   const cls = classesData.find(c=>c.id===classId);
   if(!cls){ practiceArea.innerHTML='<p style="color:red;">Class not found</p>'; return; }
@@ -263,7 +300,10 @@ function loadTopic(){
   scoreDisplay.textContent=`Score: ${score}`;
   showCurrentSample();
   showTooltip(topic.instruction || `Practice: ${topic.title}`);
+
+  startTimer(); // ⏳ Always start timer when topic loads
 }
+  
 
 // Navigation
 prevBtn.addEventListener('click', ()=>{
