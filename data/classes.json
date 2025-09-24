@@ -78,14 +78,9 @@
               "name": "Keyboard",
               "topics": [
                 {
-                  "title": "Phrases Practice",
-                  "instruction": "Type these short phrases correctly.",
-                  "samples": ["Good day", "My cat", "Big fun"]
-                },
-                {
-                  "title": "Typing Drill",
-                  "instruction": "Repeat the words faster within 3 minutes.",
-                  "samples": ["CAT", "DOG", "FUN", "SUN", "HAT"]
+                  "title": "Typing Practice",
+                  "instruction": "Type short phrases slowly and carefully.",
+                  "samples": ["Good boy", "Nice cat", "We play"]
                 }
               ]
             }
@@ -157,13 +152,8 @@
               "topics": [
                 {
                   "title": "Typing Phrases",
-                  "instruction": "Type these short phrases.",
-                  "samples": ["My best friend", "Good morning", "We love fun"]
-                },
-                {
-                  "title": "Speed Drill",
-                  "instruction": "Type faster with fewer errors in 5 minutes.",
-                  "samples": ["FUN", "SUN", "CAKE", "PLAY", "DOG"]
+                  "instruction": "Type short phrases with focus on accuracy.",
+                  "samples": ["Play with me", "Come here", "Nice game"]
                 }
               ]
             }
@@ -234,18 +224,9 @@
               "name": "Keyboard",
               "topics": [
                 {
-                  "title": "Paragraph Practice",
-                  "instruction": "Type these short paragraphs carefully.",
-                  "samples": [
-                    "The cat likes to run fast.",
-                    "We play outside when the sun is bright.",
-                    "Coding is fun and we learn every day."
-                  ]
-                },
-                {
-                  "title": "Timed Drill",
-                  "instruction": "Type as much as you can in 5 minutes.",
-                  "samples": ["FUN", "SUN", "CAT", "DOG", "PLAY", "GAMES"]
+                  "title": "Paragraph Typing",
+                  "instruction": "Type simple short paragraphs.",
+                  "samples": ["I have a dog. It runs fast. I love my dog."]
                 }
               ]
             }
@@ -253,4 +234,6 @@
         }
       ]
     }
-  
+    // ... continue Year 4 → Year 12 in the same structure ...
+  ]
+}
