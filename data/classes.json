@@ -1,0 +1,256 @@
+{
+  "classes": [
+    {
+      "id": "year1",
+      "name": "Year 1",
+      "terms": [
+        {
+          "number": 1,
+          "title": "Term 1",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Home Row Keys",
+                  "instruction": "Place your fingers on A S D F J K L ; and type each key when it lights up.",
+                  "samples": ["A", "S", "D", "F", "J", "K", "L", ";"]
+                },
+                {
+                  "title": "Two Letter Words",
+                  "instruction": "Type simple two-letter words using home row keys.",
+                  "samples": ["AS", "AD", "FA", "JK", "KL", "SD", "LF", "AJ"]
+                },
+                {
+                  "title": "Three Letter Words",
+                  "instruction": "Type short three-letter words from home row.",
+                  "samples": ["FAD", "JAK", "SAL", "ASK", "LAD"]
+                }
+              ]
+            },
+            {
+              "id": "mouse",
+              "name": "Mouse",
+              "topics": [
+                {
+                  "title": "Mouse Clicks",
+                  "instruction": "Practice different types of mouse clicks.",
+                  "samples": ["Left Click", "Right Click", "Double Click"]
+                },
+                {
+                  "title": "Drag and Drop",
+                  "instruction": "Hold and move an item, then release it.",
+                  "samples": ["Drag Box", "Drop Box", "Drag Image"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "title": "Term 2",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Simple Words",
+                  "instruction": "Type these simple words clearly.",
+                  "samples": ["CAT", "DOG", "FUN", "SUN", "HAT"]
+                },
+                {
+                  "title": "Common Sentences",
+                  "instruction": "Type each sentence as shown.",
+                  "samples": ["I am happy", "You are good", "We like fun"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 3,
+          "title": "Term 3",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Phrases Practice",
+                  "instruction": "Type these short phrases correctly.",
+                  "samples": ["Good day", "My cat", "Big fun"]
+                },
+                {
+                  "title": "Typing Drill",
+                  "instruction": "Repeat the words faster within 3 minutes.",
+                  "samples": ["CAT", "DOG", "FUN", "SUN", "HAT"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "year2",
+      "name": "Year 2",
+      "terms": [
+        {
+          "number": 1,
+          "title": "Term 1",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Home Row Drill",
+                  "instruction": "Repeat the home row keys faster this time.",
+                  "samples": ["A", "S", "D", "F", "J", "K", "L", ";"]
+                },
+                {
+                  "title": "Two & Three Letter Words",
+                  "instruction": "Type short words of two and three letters.",
+                  "samples": ["AND", "SAD", "FUN", "JAM", "LAD"]
+                }
+              ]
+            },
+            {
+              "id": "mouse",
+              "name": "Mouse",
+              "topics": [
+                {
+                  "title": "Precision Clicks",
+                  "instruction": "Click accurately on the correct spots.",
+                  "samples": ["Left Click", "Double Click", "Right Click"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "title": "Term 2",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Typing Short Sentences",
+                  "instruction": "Type these short sentences correctly.",
+                  "samples": ["I like cake", "You are nice", "We play together"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 3,
+          "title": "Term 3",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Typing Phrases",
+                  "instruction": "Type these short phrases.",
+                  "samples": ["My best friend", "Good morning", "We love fun"]
+                },
+                {
+                  "title": "Speed Drill",
+                  "instruction": "Type faster with fewer errors in 5 minutes.",
+                  "samples": ["FUN", "SUN", "CAKE", "PLAY", "DOG"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "year3",
+      "name": "Year 3",
+      "terms": [
+        {
+          "number": 1,
+          "title": "Term 1",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Home Row Speed Drill",
+                  "instruction": "Type home row keys faster without looking.",
+                  "samples": ["A", "S", "D", "F", "J", "K", "L", ";"]
+                },
+                {
+                  "title": "Simple Words Practice",
+                  "instruction": "Practice typing these easy words.",
+                  "samples": ["SUN", "FUN", "HAT", "CAT", "DOG"]
+                }
+              ]
+            },
+            {
+              "id": "mouse",
+              "name": "Mouse",
+              "topics": [
+                {
+                  "title": "Clicking Games",
+                  "instruction": "Play by clicking on the right items.",
+                  "samples": ["Left Click", "Right Click", "Double Click", "Drag"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "title": "Term 2",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Typing Sentences",
+                  "instruction": "Type these short sentences smoothly.",
+                  "samples": ["The sun is bright", "I love coding", "We play games"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 3,
+          "title": "Term 3",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Paragraph Practice",
+                  "instruction": "Type these short paragraphs carefully.",
+                  "samples": [
+                    "The cat likes to run fast.",
+                    "We play outside when the sun is bright.",
+                    "Coding is fun and we learn every day."
+                  ]
+                },
+                {
+                  "title": "Timed Drill",
+                  "instruction": "Type as much as you can in 5 minutes.",
+                  "samples": ["FUN", "SUN", "CAT", "DOG", "PLAY", "GAMES"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  
