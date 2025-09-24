@@ -233,7 +233,68 @@
           ]
         }
       ]
+    },
+    {
+      "id": "year4",
+      "name": "Year 4",
+      "terms": [
+        {
+          "number": 1,
+          "title": "Term 1",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Top Row Keys",
+                  "instruction": "Learn the top row keys and practice typing them.",
+                  "samples": ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"]
+                },
+                {
+                  "title": "Word Building",
+                  "instruction": "Type words formed from top and home rows.",
+                  "samples": ["TREE", "WORD", "QUIZ", "JUMP", "FROG"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "title": "Term 2",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Sentences Practice",
+                  "instruction": "Type these sentences correctly.",
+                  "samples": ["The dog runs fast", "We love to play", "Coding is fun"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 3,
+          "title": "Term 3",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Paragraph Practice",
+                  "instruction": "Type short paragraphs with punctuation.",
+                  "samples": ["My name is Tola. I like school. I play football."]
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
-    // ... continue Year 4 → Year 12 in the same structure ...
   ]
 }
