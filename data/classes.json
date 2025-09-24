@@ -964,10 +964,6 @@
 
   },
 
-        
-              
-    // ... Years 5, 6, 7, 8 go here (from your existing JSON) ...
-
     {
       "id": "year9",
       "name": "Year 9",
@@ -1017,17 +1013,283 @@
     {
       "id": "year10",
       "name": "Year 10",
-      "terms": [ /* same structured format */ ]
+      "terms": [ {
+        "number": 1,
+        "title": "Term 1",
+        "categories": [
+          {
+            "id": "keyboard",
+            "name": "Keyboard Skills",
+            "topics": [
+              {
+                "title": "Thesis Practice",
+                "type": "thesis",
+                "description": "Practice drafting thesis sections.",
+                "items": ["Thesis draft sample"]
+              }
+            ]
+          },
+          {
+            "id": "mouse",
+            "name": "Mouse Skills",
+            "topics": [
+              {
+                "title": "Advanced Navigation",
+                "type": "navigation",
+                "description": "Navigate documents, folders, and menus efficiently.",
+                "items": ["Open nested folders.","Use right-click options."]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "number": 2,
+        "title": "Term 2",
+        "categories": [
+          {
+            "id": "keyboard",
+            "name": "Keyboard Skills",
+            "topics": [
+              {
+                "title": "Project Writing",
+                "type": "projects",
+                "description": "Complex project typing and formatting.",
+                "items": ["Project full draft"]
+              }
+            ]
+          },
+          {
+            "id": "mouse",
+            "name": "Mouse Skills",
+            "topics": [
+              {
+                "title": "Drag & Organize Multimedia",
+                "type": "drag-drop",
+                "description": "Move and organize images, shapes, and text boxes.",
+                "items": ["Arrange slides in presentation.","Organize images on canvas."]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "number": 3,
+        "title": "Term 3",
+        "categories": [
+          {
+            "id": "keyboard",
+            "name": "Keyboard Skills",
+            "topics": [
+              {
+                "title": "Final Submission Prep",
+                "type": "finals",
+                "description": "Prepare final projects for submission.",
+                "items": ["Final edits & polish"]
+              }
+            ]
+          },
+          {
+            "id": "mouse",
+            "name": "Mouse Skills",
+            "topics": [
+              {
+                "title": "Precision Dragging & Selection",
+                "type": "drag-select",
+                "description": "Select and organize multiple objects accurately.",
+                "items": ["Select multiple text boxes.","Align images on page."]
+              }
+            ]
+          }
+        ]
+      }
+      ]
     },
     {
       "id": "year11",
       "name": "Year 11",
-      "terms": [ /* same structured format */ ]
+      "terms": [      {
+        "number": 1,
+        "title": "Term 1",
+        "categories": [
+          {
+            "id": "keyboard",
+            "name": "Keyboard Skills",
+            "topics": [
+              {
+                "title": "Advanced Projects",
+                "type": "projects",
+                "description": "Plan and type large-scale projects.",
+                "items": ["Project plan & write"]
+              }
+            ]
+          },
+          {
+            "id": "mouse",
+            "name": "Mouse Skills",
+            "topics": [
+              {
+                "title": "Complex Drag & Drop",
+                "type": "drag-drop",
+                "description": "Move multiple items with precision.",
+                "items": ["Organize slides.","Arrange diagrams accurately."]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "number": 2,
+        "title": "Term 2",
+        "categories": [
+          {
+            "id": "keyboard",
+            "name": "Keyboard Skills",
+            "topics": [
+              {
+                "title": "Theses & Dissertations",
+                "type": "thesis",
+                "description": "Long thesis drafting and formatting practice.",
+                "items": ["Long draft sample"]
+              }
+            ]
+          },
+          {
+            "id": "mouse",
+            "name": "Mouse Skills",
+            "topics": [
+              {
+                "title": "Interactive Mouse Work",
+                "type": "precision",
+                "description": "Complete interactive assignments using mouse efficiently.",
+                "items": ["Click, drag, and drop accurately.","Use right-click menus for tasks."]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "number": 3,
+        "title": "Term 3",
+        "categories": [
+          {
+            "id": "keyboard",
+            "name": "Keyboard Skills",
+            "topics": [
+              {
+                "title": "Final Projects",
+                "type": "finals",
+                "description": "Complete final projects with advanced formatting.",
+                "items": ["Final project writing"]
+              }
+            ]
+          },
+          {
+            "id": "mouse",
+            "name": "Mouse Skills",
+            "topics": [
+              {
+                "title": "Drag & Drop Mastery",
+                "type": "drag-drop",
+                "description": "Organize multi-component projects efficiently.",
+                "items": ["Arrange charts, images, and text.","Manage layout in complex documents."]
+              }
+            ]
+          }
+        ]
+      }
+      ]
     },
     {
       "id": "year12",
       "name": "Year 12",
-      "terms": [ /* same structured format */ ]
+      "terms": [ {
+        "number": 1,
+        "title": "Term 1",
+        "categories": [
+          {
+            "id": "keyboard",
+            "name": "Keyboard Skills",
+            "topics": [
+              {
+                "title": "Dissertations",
+                "type": "thesis",
+                "description": "Long dissertation drafting practice.",
+                "items": ["Dissertation draft"]
+              }
+            ]
+          },
+          {
+            "id": "mouse",
+            "name": "Mouse Skills",
+            "topics": [
+              {
+                "title": "Advanced Navigation & Clicks",
+                "type": "navigation",
+                "description": "Master navigation, selecting, and dragging efficiently.",
+                "items": ["Navigate complex folders.","Select multiple items quickly."]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "number": 2,
+        "title": "Term 2",
+        "categories": [
+          {
+            "id": "keyboard",
+            "name": "Keyboard Skills",
+            "topics": [
+              {
+                "title": "Final Projects",
+                "type": "finals",
+                "description": "Complete year-long final projects.",
+                "items": ["Project final"]
+              }
+            ]
+          },
+          {
+            "id": "mouse",
+            "name": "Mouse Skills",
+            "topics": [
+              {
+                "title": "Drag & Arrange Complex Documents",
+                "type": "drag-drop",
+                "description": "Organize multiple pages, charts, and diagrams.",
+                "items": ["Reorder pages.","Align images and tables."]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "number": 3,
+        "title": "Term 3",
+        "categories": [
+          {
+            "id": "keyboard",
+            "name": "Keyboard Skills",
+            "topics": [
+              {
+                "title": "Publication & Presentation",
+                "type": "presentation",
+                "description": "Prepare documents for publication and presentations.",
+                "items": ["Prepare presentation"]
+              }
+            ]
+          },
+          {
+            "id": "mouse",
+            "name": "Mouse Skills",
+            "topics": [
+              {
+                "title": "Mastery Drag & Drop",
+                "type": "drag-drop",
+                "description": "Complete advanced tasks with precision mouse control.",
+                "items": ["Organize multimedia projects.","Manage layouts efficiently."]
+              }
+            ]
     }
   ]
 }
