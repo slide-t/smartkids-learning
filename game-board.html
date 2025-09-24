@@ -6,94 +6,45 @@
 <title>Typing Practice - Smart Kids Learning</title>
 <style>
   body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f0f4f8; display:flex; flex-direction:column; align-items:center;}
+  
   header { background:#0d3b66; color:white; padding:1rem; width:100%; text-align:center; display:flex; justify-content:space-between; align-items:center;}
   header a { color:white; text-decoration:none; background:#0d3b66; padding:0.5rem 1rem; border-radius:5px; border:1px solid white; }
+
   .container { max-width:750px; margin-top:20px; padding:1rem; background:white; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.2); text-align:center;}
-  .practice-area { min-height:150px; padding:1rem; border:1px solid #ccc; border-radius:5px; background:#fafafa; display:flex; justify-content:center; align-items:center; font-size:2rem; perspective:1000px; margin-bottom:15px;}
- 
+
+  .practice-area { min-height:150px; padding:1rem; border:1px solid #ccc; border-radius:5px; background:#fafafa; display:flex; justify-content:center; align-items:center; font-size:2rem; perspective:1000px; margin-bottom:15px; flex-wrap:wrap; word-spacing:8px; letter-spacing:2px; text-align:center; }
+
   .key { width:45px; height:45px; line-height:45px; margin:0.2rem; text-align:center; border:2px solid #ccc; border-radius:5px; background:#e7e7e7; transform-style:preserve-3d; transition: transform 0.3s, background 0.3s; font-weight:bold;}
   .key.correct { background:#4CAF50; color:white; }
   .key.wrong { background:#f44336; color:white; }
   .flip { transform: rotateY(90deg); }
+
   .virtual-keyboard { display:flex; flex-direction:column; justify-content:center; align-items:center; margin-top:15px; }
   .vk-row { display:flex; justify-content:center; margin-bottom:3px; }
   .vk-key { width:45px; height:45px; line-height:45px; text-align:center; border-radius:5px; background:#ccc; user-select:none; cursor:pointer; opacity:0.3; font-weight:bold; margin:0.1rem;}
   .vk-key.active { opacity:1; background:#ddd; cursor:pointer; }
+
   .score { font-weight:bold; margin-top:10px; color:#0d3b66; }
   .nav-buttons { margin-top:15px; display:flex; justify-content:space-between; }
   .nav-buttons button { padding:0.5rem 1rem; border:none; border-radius:5px; background:#0d3b66; color:white; cursor:pointer; transition:0.3s;}
   .nav-buttons button:hover { background:#144e8c; }
 
-  #practice-area {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;   /* Center horizontally */
-  align-items: center;
-  width: 100%;
-  min-height: 60px;
-  font-size: 1.2rem;
-  letter-spacing: 2px;
-  word-spacing: 8px;
-  white-space: normal;   /* Let words wrap naturally */
-  overflow-wrap: break-word;
-  text-align: center;    /* Center text inside */
-}
-  /* Tooltip */
-  .tooltip { 
-    position:absolute; top:90px; background:#0d3b66; color:white; 
-    padding:0.5rem 1rem; border-radius:5px; font-size:0.9rem; 
-    opacity:0; transition:opacity 0.5s ease-in-out;
-  }
+  .tooltip { position:absolute; top:90px; background:#0d3b66; color:white; padding:0.5rem 1rem; border-radius:5px; font-size:0.9rem; opacity:0; transition:opacity 0.5s ease-in-out; }
   .tooltip.show { opacity:1; }
 
-/* Bounce animation for Restart button */
-@keyframes bounceIn {
-  0% { transform: scale(0.5); opacity: 0; }
-  60% { transform: scale(1.2); opacity: 1; }
-  80% { transform: scale(0.9); }
-  100% { transform: scale(1); }
-}
+  @keyframes bounceIn {
+    0% { transform: scale(0.5); opacity: 0; }
+    60% { transform: scale(1.2); opacity: 1; }
+    80% { transform: scale(0.9); }
+    100% { transform: scale(1); }
+  }
+  #restartBtn.bounce { animation: bounceIn 0.6s ease; }
 
-#restartBtn.bounce {
-  animation: bounceIn 0.6s ease;
-}
-
-/* Timer styles */
-.timer-container {
-  position: relative;
-  width: 100px;
-  height: 100px;
-  margin: 15px auto;
-}
-
-svg circle {
-  fill: none;
-  stroke-width: 10;
-  transform: rotate(-90deg);
-  transform-origin: 50% 50%;
-}
-
-.timer-bg {
-  stroke: #ccc; /* grey background */
-}
-
-.timer-progress {
-  stroke: lightblue; /* progress */
-  stroke-linecap: round;
-  stroke-dasharray: 283; /* 2 * π * radius (45) */
-  stroke-dashoffset: 283;
-  transition: stroke-dashoffset 1s linear;
-}
-
-.timer-text {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-weight: bold;
-  font-size: 1.2rem;
-  color: #0d3b66;
-}
+  .timer-container { position: relative; width: 100px; height: 100px; margin: 15px auto; }
+  svg circle { fill: none; stroke-width: 10; transform: rotate(-90deg); transform-origin: 50% 50%; }
+  .timer-bg { stroke: #ccc; }
+  .timer-progress { stroke: lightblue; stroke-linecap: round; stroke-dasharray: 283; stroke-dashoffset: 283; transition: stroke-dashoffset 1s linear; }
+  .timer-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-weight: bold; font-size: 1.2rem; color: #0d3b66; }
 
 </style>
 </head>
@@ -103,6 +54,7 @@ svg circle {
   <h1>Smart Kids Typing Practice</h1>
   <a href="classes.html">Home</a>
 </header>
+
 <div class="timer-container">
   <svg width="100" height="100">
     <circle class="timer-bg" cx="50" cy="50" r="45"></circle>
@@ -110,6 +62,7 @@ svg circle {
   </svg>
   <div class="timer-text" id="timerText">60</div>
 </div>
+
 <div class="tooltip" id="tooltip"></div>
 
 <div class="container">
@@ -117,434 +70,15 @@ svg circle {
   <div class="score" id="scoreDisplay">Score: 0</div>
   <div class="virtual-keyboard" id="virtualKeyboard"></div>
   <div class="nav-buttons">
-  <button id="prevBtn">Previous</button>
-  <button id="nextBtn">Next</button>
-  <button id="restartBtn" style="display:none;">Restart</button>
+    <button id="prevBtn">Previous</button>
+    <button id="nextBtn">Next</button>
+    <button id="restartBtn" style="display:none;">Restart</button>
+  </div>
 </div>
-</div>
+
 <script>
-let currentClassIndex = 0;
-let currentTermIndex = 0;
-let currentCategoryIndex = 0;
-let currentTopicIndex = 0;
-let currentSampleIndex = 0;
-let currentLetterIndex = 0;
-let currentSamples = [];
-let timerInterval;
-
-// Elements
-const practiceArea = document.getElementById("practice-area");
-const inputArea = document.getElementById("input-area");
-const message = document.getElementById("message");
-const restartBtn = document.getElementById("restartBtn");
-const timerCircle = document.getElementById("timer-circle");
-const timerText = document.getElementById("timer-text");
-
-const RADIUS = 45;
-const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
-timerCircle.style.strokeDasharray = CIRCUMFERENCE;
-
-function startTimer(duration = 30) {
-  clearInterval(timerInterval);
-  let timeLeft = duration;
-  updateTimer(timeLeft, duration);
-  timerInterval = setInterval(() => {
-    timeLeft--;
-    updateTimer(timeLeft, duration);
-    if (timeLeft <= 0) {
-      clearInterval(timerInterval);
-      message.textContent = "⏰ Time's up! Try again.";
-      restartBtn.style.display = "inline-block";
-      inputArea.disabled = true;
-    }
-  }, 1000);
-}
-
-function updateTimer(timeLeft, duration) {
-  timerText.textContent = timeLeft;
-  const offset = CIRCUMFERENCE - (timeLeft / duration) * CIRCUMFERENCE;
-  timerCircle.style.strokeDashoffset = offset;
-}
-
-// Show the current sample on the board
-function showCurrentSample() {
-  practiceArea.innerHTML = "";
-  const sample = currentSamples[currentSampleIndex];
-
-  const wrapper = document.createElement("div");
-  wrapper.style.display = "inline-block";
-
-  sample.split("").forEach((char, idx) => {
-    const span = document.createElement("span");
-    span.textContent = char;
-    span.style.padding = "0 2px";
-
-    if (idx === currentLetterIndex) {
-      span.style.background = "#add8e6"; // light blue highlight
-    }
-    if (currentLetterIndex > idx) {
-      span.style.color = "green"; // correctly typed letters tinted
-    }
-
-    wrapper.appendChild(span);
-  });
-
-  practiceArea.appendChild(wrapper);
-  highlightVK(sample[currentLetterIndex], "reset");
-}
-
-// Load a topic
-function loadTopic() {
-  const cls = curriculum.classes[currentClassIndex];
-  const term = cls.terms[currentTermIndex];
-  const category = term.categories[currentCategoryIndex];
-  const topic = category.topics[currentTopicIndex];
-
-  currentSamples = topic.items;
-  currentSampleIndex = 0;
-  currentLetterIndex = 0;
-
-  inputArea.value = "";
-  inputArea.disabled = false;
-  message.textContent = "";
-  restartBtn.style.display = "none";
-
-  showCurrentSample();
-  startTimer(30);
-}
-
-// Handle typing input
-inputArea.addEventListener("input", () => {
-  const sample = currentSamples[currentSampleIndex];
-  const typed = inputArea.value;
-
-  if (typed === sample.slice(0, typed.length)) {
-    currentLetterIndex = typed.length;
-    showCurrentSample();
-
-    if (typed === sample) {
-      currentSampleIndex++;
-      inputArea.value = "";
-      currentLetterIndex = 0;
-
-      if (currentSampleIndex < currentSamples.length) {
-        showCurrentSample();
-      } else {
-        clearInterval(timerInterval);
-        message.textContent = "🎉 Congratulations! You're done with this topic.";
-        restartBtn.style.display = "inline-block";
-        inputArea.disabled = true;
-      }
-    }
-  } else {
-    message.textContent = "❌ Typo! Try again.";
-  }
-});
-
-// Restart button handler
-restartBtn.addEventListener("click", () => {
-  loadTopic();
-  restartBtn.style.display = "none";
-  startTimer(30);
-});
-
-// Initial load
-loadTopic();
+/* --------- Script here (copy the final unified script I provided above) --------- */
 </script>
 
-
-
-  <!--
-<script>
-const practiceArea = document.getElementById('practiceArea');
-const scoreDisplay = document.getElementById('scoreDisplay');
-const virtualKeyboard = document.getElementById('virtualKeyboard');
-const prevBtn = document.getElementById('prevBtn');
-const nextBtn = document.getElementById('nextBtn');
-const restartBtn = document.getElementById('restartBtn');
-const tooltip = document.getElementById('tooltip');
-
-let score = 0;
-let currentIndex = 0;
-let currentLetterIndex = 0;
-let currentSequence = [];
-let activeKeys = [];
-
-const params = new URLSearchParams(window.location.search);
-const classId = params.get('classId');
-const termNumber = parseInt(params.get('term'));
-const catId = params.get('catId');
-let topicIndex = parseInt(params.get('topic'));
-
-let classesData = [];
-
-// Keyboard rows
-const keyboardRows = [
-  ['Q','W','E','R','T','Y','U','I','O','P'],
-  ['A','S','D','F','G','H','J','K','L',';'],
-  ['Z','X','C','V','B','N','M',' ',',','.']
-];
-
-// Highlight virtual key
-function highlightVK(keyChar,type='reset'){
-  const vkKeys = document.querySelectorAll('.vk-key');
-  vkKeys.forEach(vk=>{ 
-    vk.classList.remove('vk-active','correct','wrong'); 
-    vk.style.backgroundColor='#ccc'; 
-  });
-  const vk = Array.from(vkKeys).find(k=>k.textContent===keyChar.toUpperCase());
-  if(vk){
-    vk.classList.add('vk-active');
-    if(type==='correct') vk.style.backgroundColor='#4CAF50';
-    if(type==='wrong') vk.style.backgroundColor='#f44336';
-  }
-}
-
-// Show current word/sentence
-function showCurrentSample(){
-  if(currentIndex >= currentSequence.length){
-    // Finished this topic
-    const cls = classesData.find(c=>c.id===classId);
-    const term = cls.terms.find(t=>t.number===termNumber);
-    const category = term.categories.find(c=>c.id===catId);
-
-    if(topicIndex < category.topics.length - 1){
-      // More topics remain
-      practiceArea.innerHTML='<p>🎉 Well done! You finished this topic. You can restart to practice again or click Next to continue.</p>';
-    } else {
-      // Last topic completed
-      practiceArea.innerHTML='<p>🎊 Congratulations! You finished all topics in this category. You can restart for more practice.</p>';
-    }
-
-    highlightVK('');
-    restartBtn.style.display = "inline-block";
-    restartBtn.classList.add('bounce');
-    setTimeout(()=> restartBtn.classList.remove('bounce'), 700);
-    return;
-  }
-
-  // Reset and show current sample
-  restartBtn.style.display = "none"; 
-  const sample = currentSequence[currentIndex];
-  practiceArea.innerHTML='';
-
-  const wrapper = document.createElement('div');
-  wrapper.style.display="inline-block";
-
-  sample.split('').forEach((char,idx)=>{
-    const span=document.createElement('span');
-    span.textContent=char;
-    span.style.padding="0 2px";
-
-    if(idx===currentLetterIndex){
-      span.style.background="#ffeb3b"; 
-    }
-
-    if(currentLetterIndex < sample.length && idx < currentLetterIndex){
-      span.style.color="green";
-    }
-
-    wrapper.appendChild(span);
-  });
-
-  practiceArea.appendChild(wrapper);
-  highlightVK(sample[currentLetterIndex],'reset');
-}
-                                                
-
-  // Build word container
-  const wrapper = document.createElement('div');
-  wrapper.style.display="inline-block";
-
-  sample.split('').forEach((char,idx)=>{
-    const span=document.createElement('span');
-    span.textContent=char;
-    span.style.padding="0 2px";
-
-    // highlight smoothly per letter
-    if(idx===currentLetterIndex){
-      span.style.background="#ffeb3b"; 
-    }
-
-    // tint the whole word while inside it
-    if(currentLetterIndex < sample.length && idx < currentLetterIndex){
-      span.style.color="green";
-    }
-
-    wrapper.appendChild(span);
-  });
-
-  practiceArea.appendChild(wrapper);
-  highlightVK(sample[currentLetterIndex],'reset');
-}
-
-// Handle input
-function handleInput(input){
-  if(currentIndex>=currentSequence.length) return;
-  const currentSample=currentSequence[currentIndex];
-  const expectedChar=currentSample[currentLetterIndex] || '';
-
-  if(input===expectedChar){
-    score++;
-    currentLetterIndex++;
-    if(currentLetterIndex>=currentSample.length){
-      currentLetterIndex=0;
-      currentIndex++;
-    }
-    showCurrentSample();
-  }
-  scoreDisplay.textContent=`Score: ${score}`;
-}
-
-// Real keyboard
-document.addEventListener('keydown', e=>{
-  if(e.key.length===1 || e.key===" "){
-    handleInput(e.key);
-  }
-});
-
-// Virtual keyboard
-function buildVirtualKeyboard(){
-  virtualKeyboard.innerHTML='';
-  keyboardRows.forEach(row=>{
-    const rowDiv = document.createElement('div');
-    rowDiv.classList.add('vk-row');
-    row.forEach(k=>{
-      const vk = document.createElement('div');
-      vk.classList.add('vk-key');
-      vk.textContent = k;
-      vk.addEventListener('click',()=>handleInput(k));
-      rowDiv.appendChild(vk);
-    });
-    virtualKeyboard.appendChild(rowDiv);
-  });
-}
-
-// Tooltip
-function showTooltip(message){
-  tooltip.textContent=message;
-  tooltip.classList.add('show');
-  setTimeout(()=>{ tooltip.classList.remove('show'); },4000);
-}
-
-// Load topic (merged with timer start)
-function loadTopic(){
-  const cls = classesData.find(c=>c.id===classId);
-  if(!cls){ practiceArea.innerHTML='<p style="color:red;">Class not found</p>'; return; }
-  const term = cls.terms.find(t=>t.number===termNumber);
-  if(!term){ practiceArea.innerHTML='<p style="color:red;">Term not found</p>'; return; }
-  const category = term.categories.find(c=>c.id===catId);
-  if(!category){ practiceArea.innerHTML='<p style="color:red;">Category not found</p>'; return; }
-  const topic = category.topics[topicIndex];
-  if(!topic){ practiceArea.innerHTML='<p style="color:red;">Topic not found</p>'; return; }
-
-  currentSequence = topic.samples || [];
-  activeKeys = [...new Set(currentSequence.join('').toUpperCase().split(''))];
-
-  buildVirtualKeyboard();
-  currentIndex=0;
-  currentLetterIndex=0;
-  score=0;
-  scoreDisplay.textContent=`Score: ${score}`;
-  showCurrentSample();
-  showTooltip(topic.instruction || `Practice: ${topic.title}`);
-
-  startTimer(); // ⏳ Always start timer when topic loads
-}
-  
-
-// Navigation
-prevBtn.addEventListener('click', ()=>{
-  if(topicIndex>0){ topicIndex--; loadTopic(); }
-});
-nextBtn.addEventListener('click', ()=>{
-  const cls = classesData.find(c=>c.id===classId);
-  const term = cls.terms.find(t=>t.number===termNumber);
-  const category = term.categories.find(c=>c.id===catId);
-  if(topicIndex<category.topics.length-1){ topicIndex++; loadTopic(); }
-});
-
-// Restart logic
-restartBtn.addEventListener('click', ()=>{
-  loadTopic();
-  restartBtn.style.display = "none"; 
-});
-
-// Fetch JSON
-fetch('data/classes.json')
-  .then(res=>res.json())
-  .then(data=>{
-    classesData = Array.isArray(data)? data : data.classes;
-    loadTopic();
-  })
-  .catch(err=>{
-    practiceArea.innerHTML = `<p style="color:red;">Failed to load classes.json</p>`;
-    console.error(err);
-  });
-
-// Timer logic
-let timerDuration = 60; // seconds
-let timeLeft = timerDuration;
-let timerInterval;
-
-const timerText = document.getElementById('timerText');
-const timerProgress = document.querySelector('.timer-progress');
-const circleLength = 2 * Math.PI * 45; // circumference (r=45)
-timerProgress.style.strokeDasharray = circleLength;
-
-function startTimer() {
-  clearInterval(timerInterval);
-  timeLeft = timerDuration;
-  timerText.textContent = timeLeft;
-  timerProgress.style.strokeDashoffset = circleLength;
-
-  timerInterval = setInterval(() => {
-    timeLeft--;
-    if (timeLeft < 0) {
-      clearInterval(timerInterval);
-      practiceArea.innerHTML = `<p style="color:red;">⏰ Time's up! Practice again.</p>`;
-      restartBtn.style.display = "inline-block";
-      return;
-    }
-    timerText.textContent = timeLeft;
-    const progress = (timeLeft / timerDuration) * circleLength;
-    timerProgress.style.strokeDashoffset = progress;
-  }, 1000);
-}
-
-// Restart also resets timer
-restartBtn.addEventListener('click', ()=>{
-  loadTopic();
-  restartBtn.style.display = "none";
-  startTimer();
-});
-
-// Start timer with topic
-function loadTopic(){
-  const cls = classesData.find(c=>c.id===classId);
-  if(!cls){ practiceArea.innerHTML='<p style="color:red;">Class not found</p>'; return; }
-  const term = cls.terms.find(t=>t.number===termNumber);
-  if(!term){ practiceArea.innerHTML='<p style="color:red;">Term not found</p>'; return; }
-  const category = term.categories.find(c=>c.id===catId);
-  if(!category){ practiceArea.innerHTML='<p style="color:red;">Category not found</p>'; return; }
-  const topic = category.topics[topicIndex];
-  if(!topic){ practiceArea.innerHTML='<p style="color:red;">Topic not found</p>'; return; }
-
-  currentSequence = topic.samples || [];
-  activeKeys = [...new Set(currentSequence.join('').toUpperCase().split(''))];
-
-  buildVirtualKeyboard();
-  currentIndex=0;
-  currentLetterIndex=0;
-  score=0;
-  scoreDisplay.textContent=`Score: ${score}`;
-  showCurrentSample();
-  showTooltip(topic.instruction || `Practice: ${topic.title}`);
-
-  startTimer(); // ⏳ Start timer whenever topic loads
-}
-  
-</script>
--->
 </body>
 </html>
