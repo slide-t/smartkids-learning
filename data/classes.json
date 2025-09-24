@@ -496,8 +496,223 @@
           ]
         }
       ]
+    },
+
+{
+  "classes": [
+    {
+      "id": "year7",
+      "name": "Year 7",
+      "terms": [
+        {
+          "number": 1,
+          "title": "Term 1",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Advanced Home Row Practice",
+                  "instruction": "Type faster and maintain correct finger positions.",
+                  "samples": ["ASDF JKL;", "AS DF JK", "FJ DK LA"]
+                },
+                {
+                  "title": "Number Keys",
+                  "instruction": "Practice the top number keys in sequence.",
+                  "samples": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "title": "Term 2",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Typing Phrases",
+                  "instruction": "Type these short phrases correctly.",
+                  "samples": ["Good morning", "How are you", "I like reading"]
+                },
+                {
+                  "title": "Mixed Words Speed Drill",
+                  "instruction": "Type the given words as quickly as possible.",
+                  "samples": ["HOUSE", "FRIEND", "SCHOOL", "BOOKS", "TEACHER"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 3,
+          "title": "Term 3",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Paragraph Drill",
+                  "instruction": "Type each paragraph smoothly with accuracy.",
+                  "samples": [
+                    "Typing skills help us in school and beyond.",
+                    "We must practice daily to improve our speed.",
+                    "Accuracy is more important than rushing."
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "year8",
+      "name": "Year 8",
+      "terms": [
+        {
+          "number": 1,
+          "title": "Term 1",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Symbols & Special Characters",
+                  "instruction": "Practice typing common special characters.",
+                  "samples": ["!", "@", "#", "$", "%", "^", "&", "*", "(", ")"]
+                },
+                {
+                  "title": "Numbers & Symbols Mix",
+                  "instruction": "Type numbers combined with symbols.",
+                  "samples": ["1!", "2@", "3#", "4$", "5%"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "title": "Term 2",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Sentence Drill",
+                  "instruction": "Type each sentence carefully with punctuation.",
+                  "samples": ["Hello, how are you?", "I love to type!", "Do you like coding?"]
+                },
+                {
+                  "title": "Speed Paragraph",
+                  "instruction": "Type the paragraph as fast as possible.",
+                  "samples": ["Typing improves when we practice every day."]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 3,
+          "title": "Term 3",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Essay Typing",
+                  "instruction": "Type a short essay without looking at the keyboard.",
+                  "samples": [
+                    "My school is a place where I learn and play.",
+                    "Typing helps me complete assignments faster.",
+                    "Computers are very useful in the modern world."
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "year9",
+      "name": "Year 9",
+      "terms": [
+        {
+          "number": 1,
+          "title": "Term 1",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Numbers & Special Keys",
+                  "instruction": "Practice typing numbers with shift and symbols.",
+                  "samples": ["1!", "2@", "3#", "4$", "5%", "6^", "7&", "8*", "9(", "0)"]
+                },
+                {
+                  "title": "Typing Data Sets",
+                  "instruction": "Type numbers and words like data entry practice.",
+                  "samples": ["Name: John", "Age: 12", "Class: 9", "Score: 89"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "title": "Term 2",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Complex Sentences",
+                  "instruction": "Type these complex sentences with punctuation.",
+                  "samples": [
+                    "Although it rained, we played football.",
+                    "She studied hard, so she passed her exams.",
+                    "Typing skills require focus and practice."
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 3,
+          "title": "Term 3",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Report Typing",
+                  "instruction": "Type these structured reports neatly.",
+                  "samples": [
+                    "Title: My Holiday\nI visited the beach with my family.",
+                    "Title: School Project\nWe worked on a science fair project together."
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }
+    
   
 
