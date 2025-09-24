@@ -252,6 +252,252 @@
           ]
         }
       ]
+    },
+
+    {
+  "classes": [
+    {
+      "id": "year4",
+      "name": "Year 4",
+      "terms": [
+        {
+          "number": 1,
+          "title": "Term 1",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Upper Row Keys",
+                  "instruction": "Practice typing the upper row letters quickly.",
+                  "samples": ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"]
+                },
+                {
+                  "title": "Short Words with Upper Row",
+                  "instruction": "Type short words using upper row keys.",
+                  "samples": ["TOP", "PET", "WET", "RIP", "TIP"]
+                }
+              ]
+            },
+            {
+              "id": "mouse",
+              "name": "Mouse",
+              "topics": [
+                {
+                  "title": "Drag Shapes",
+                  "instruction": "Drag shapes to match the outlines.",
+                  "samples": ["Circle", "Square", "Triangle"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "title": "Term 2",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Typing Sentences",
+                  "instruction": "Type these longer sentences accurately.",
+                  "samples": ["The dog ran fast", "I love my school", "Typing is fun"]
+                },
+                {
+                  "title": "Speed Words",
+                  "instruction": "Type these words quickly in 3 minutes.",
+                  "samples": ["FAST", "LOVE", "SCHOOL", "DOG", "FUN"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 3,
+          "title": "Term 3",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Paragraph Practice",
+                  "instruction": "Type these short paragraphs with focus on accuracy.",
+                  "samples": [
+                    "The sun shines in the morning.",
+                    "Children play games in the park.",
+                    "I love typing because it is fun."
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "year5",
+      "name": "Year 5",
+      "terms": [
+        {
+          "number": 1,
+          "title": "Term 1",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Lower Row Keys",
+                  "instruction": "Practice typing the lower row letters.",
+                  "samples": ["Z", "X", "C", "V", "B", "N", "M", ",", ".", "/"]
+                },
+                {
+                  "title": "Mixed Row Words",
+                  "instruction": "Type words using lower and home rows together.",
+                  "samples": ["CAN", "MAN", "VAN", "BOX", "ZOO"]
+                }
+              ]
+            },
+            {
+              "id": "mouse",
+              "name": "Mouse",
+              "topics": [
+                {
+                  "title": "Click Challenge",
+                  "instruction": "Click on the moving targets as quickly as possible.",
+                  "samples": ["Target 1", "Target 2", "Target 3"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "title": "Term 2",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Sentence Drill",
+                  "instruction": "Type these sentences without errors.",
+                  "samples": ["Typing helps us write", "Practice makes perfect", "We love our class"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 3,
+          "title": "Term 3",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Paragraph Practice",
+                  "instruction": "Type these practice paragraphs carefully.",
+                  "samples": [
+                    "Typing is a good skill for school work.",
+                    "We can write essays faster with practice.",
+                    "It helps us become better at using computers."
+                  ]
+                },
+                {
+                  "title": "Timed Typing Drill",
+                  "instruction": "Type as much as possible in 5 minutes.",
+                  "samples": ["CAN", "PEN", "DOG", "RUN", "HAT", "BOOK", "LOVE"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "year6",
+      "name": "Year 6",
+      "terms": [
+        {
+          "number": 1,
+          "title": "Term 1",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "All Rows Practice",
+                  "instruction": "Practice letters across all keyboard rows.",
+                  "samples": ["Q", "W", "E", "A", "S", "D", "Z", "X", "C", "M"]
+                },
+                {
+                  "title": "Word Mix",
+                  "instruction": "Type words that combine letters from all rows.",
+                  "samples": ["GAME", "QUIZ", "CAMP", "ZONE", "WAVE"]
+                }
+              ]
+            },
+            {
+              "id": "mouse",
+              "name": "Mouse",
+              "topics": [
+                {
+                  "title": "Drag & Match",
+                  "instruction": "Drag items to match with their correct pair.",
+                  "samples": ["Apple-Red", "Sun-Yellow", "Sky-Blue"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "title": "Term 2",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Sentence Typing",
+                  "instruction": "Type these longer sentences carefully.",
+                  "samples": ["Learning to type is very useful", "We practice daily", "The quick brown fox jumps"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 3,
+          "title": "Term 3",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Story Typing",
+                  "instruction": "Type these short stories word for word.",
+                  "samples": [
+                    "The boy plays in the garden every day.",
+                    "Our class is learning to use the computer.",
+                    "Typing fast helps us finish work quickly."
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }
+  
+
