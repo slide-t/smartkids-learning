@@ -3,105 +3,53 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Typing Practice Game</title>
+<title>Typing Practice</title>
 <style>
-  body {
-    font-family: Arial, sans-serif;
-    background: #f3f3f3;
-    color: #333;
-    padding: 20px;
-  }
-  #practiceArea {
-    min-height: 150px;
-    background: #fff;
-    border: 2px solid #4CAF50;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    padding: 20px;
-    font-size: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    word-break: break-word;
-  }
-  #virtualKeyboard {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    margin-bottom: 20px;
-  }
-  .vk-row {
-    display: flex;
-    justify-content: center;
-    gap: 5px;
-  }
-  .vk-key {
-    background: #ccc;
-    border-radius: 5px;
-    padding: 15px 10px;
-    font-size: 18px;
-    cursor: pointer;
+  body { font-family: Arial, sans-serif; padding: 20px; background:#f0f0f0; }
+  #practiceArea { font-size: 24px; margin-bottom: 20px; min-height:50px; }
+  #virtualKeyboard { margin-top: 20px; }
+  .vk-row { display: flex; justify-content: center; margin-bottom:5px; }
+  .vk-key { 
+    border: 1px solid #999; 
+    border-radius: 4px; 
+    padding: 10px 12px; 
+    margin: 2px; 
+    cursor: pointer; 
     user-select: none;
-    transition: 0.2s;
+    background:#ccc;
+    text-align:center;
+    width:40px;
   }
-  .vk-key.vk-active { background: #ffeb3b; }
-  #controls {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 20px;
+  .vk-active { border:2px solid #000; }
+  #scoreDisplay, #timerDisplay { font-weight: bold; margin: 10px 0; }
+  button { padding:8px 12px; margin:5px; cursor:pointer; }
+  #tooltip { 
+    position: fixed; top:10px; right:10px; background:#333; color:#fff; padding:10px 15px; 
+    border-radius:5px; opacity:0; transition: opacity 0.3s; 
   }
-  button {
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    border: none;
-    border-radius: 5px;
-    background: #4CAF50;
-    color: #fff;
-    transition: 0.2s;
-  }
-  button:hover { background: #45a049; }
-  #tooltip {
-    text-align: center;
-    margin-bottom: 10px;
-    font-style: italic;
-    color: #555;
-    min-height: 20px;
-  }
-  #scoreDisplay, #timerDisplay {
-    font-size: 18px;
-    text-align: center;
-    margin-bottom: 10px;
-  }
-  .bounce {
-    animation: bounce 0.7s;
-  }
-  @keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-  }
+  #tooltip.show { opacity:1; }
 </style>
 </head>
 <body>
 
-<h1>Typing Practice Game</h1>
+<h1>Typing Practice</h1>
 
-<div id="tooltip"></div>
 <div id="scoreDisplay">Score: 0</div>
 <div id="timerDisplay">Time: 0s</div>
+
 <div id="practiceArea">Loading...</div>
 
 <div id="virtualKeyboard"></div>
 
-<div id="controls">
+<div style="margin-top:20px;">
   <button id="prevBtn">Previous Topic</button>
   <button id="nextBtn">Next Topic</button>
   <button id="restartBtn" style="display:none;">Restart Topic</button>
 </div>
 
-<!-- Include the updated JS script here -->
-<script src="typingGame.js"></script>
+<div id="tooltip"></div>
+
+<script src="practice.js"></script> <!-- your JS code saved as practice.js -->
 
 </body>
 </html>
