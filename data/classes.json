@@ -103,6 +103,7 @@
       "terms": [
         {
           "number": 1,
+          "title": "Term 1",
           "categories": [
             {
               "id": "advanced-words",
@@ -116,6 +117,7 @@
         },
         {
           "number": 2,
+          "title": "Term 2",
           "categories": [
             {
               "id": "short-sentences",
@@ -129,6 +131,7 @@
         },
         {
           "number": 3,
+          "title": "Term 3",
           "categories": [
             {
               "id": "paragraphs",
@@ -148,6 +151,7 @@
       "terms": [
         {
           "number": 1,
+          "title": "Term 1",
           "categories": [
             {
               "id": "speed",
@@ -161,6 +165,7 @@
         },
         {
           "number": 2,
+          "title": "Term 2",
           "categories": [
             {
               "id": "accuracy",
@@ -174,6 +179,7 @@
         },
         {
           "number": 3,
+          "title": "Term 3",
           "categories": [
             {
               "id": "story",
