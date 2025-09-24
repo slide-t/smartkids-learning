@@ -9,7 +9,7 @@
           "categories": [
             {
               "id": "letters",
-              "title": "Learning Letters",
+              "name": "Learning Letters",
               "topics": [
                 { "title": "Home Row Keys", "description": "Practice the home row keys", "items": ["a", "s", "d", "f", "j", "k", "l", ";"] },
                 { "title": "Upper Row Keys", "description": "Practice the upper row letters", "items": ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"] },
@@ -23,7 +23,7 @@
           "categories": [
             {
               "id": "words",
-              "title": "Typing Words",
+              "name": "Typing Words",
               "topics": [
                 { "title": "Two-Letter Words", "description": "Practice typing simple two-letter words", "items": ["at", "in", "on", "it", "up", "to"] },
                 { "title": "Three-Letter Words", "description": "Practice typing simple three-letter words", "items": ["cat", "dog", "sun", "pen", "bag"] }
@@ -36,7 +36,7 @@
           "categories": [
             {
               "id": "sentences",
-              "title": "Typing Sentences",
+              "name": "Typing Sentences",
               "topics": [
                 { "title": "Short Sentences", "description": "Practice typing short sentences", "items": ["I am a boy.", "The sun is hot.", "It is fun."] },
                 { "title": "Longer Sentences", "description": "Practice typing longer sentences", "items": ["The dog is running fast.", "I like to play with my toys."] }
@@ -55,7 +55,7 @@
           "categories": [
             {
               "id": "review",
-              "title": "Review Letters & Words",
+              "name": "Review Letters & Words",
               "topics": [
                 { "title": "Review Home Row", "description": "Review the home row letters", "items": ["a", "s", "d", "f", "j", "k", "l", ";"] },
                 { "title": "Two & Three Letter Words", "description": "Practice small words", "items": ["and", "the", "run", "sit", "man"] }
@@ -68,7 +68,7 @@
           "categories": [
             {
               "id": "phrases",
-              "title": "Typing Phrases",
+              "name": "Typing Phrases",
               "topics": [
                 { "title": "Simple Phrases", "description": "Practice typing phrases", "items": ["good boy", "big cat", "red sun"] },
                 { "title": "Action Phrases", "description": "Typing phrases with action words", "items": ["run fast", "sit down", "stand up"] }
@@ -81,7 +81,7 @@
           "categories": [
             {
               "id": "sentences2",
-              "title": "Typing Sentences",
+              "name": "Typing Sentences",
               "topics": [
                 { "title": "Everyday Sentences", "description": "Practice simple sentences", "items": ["I go to school.", "We play football.", "She eats rice."] },
                 { "title": "Practice Longer Sentences", "description": "Get better at long sentences", "items": ["My father drives a big car.", "I like to read my story book."] }
@@ -100,7 +100,7 @@
           "categories": [
             {
               "id": "advanced-words",
-              "title": "Advanced Words",
+              "name": "Advanced Words",
               "topics": [
                 { "title": "Four-Letter Words", "description": "Type four-letter words", "items": ["ball", "fish", "duck", "lamp", "door"] },
                 { "title": "Five-Letter Words", "description": "Type five-letter words", "items": ["apple", "house", "table", "chair", "bread"] }
@@ -113,7 +113,7 @@
           "categories": [
             {
               "id": "short-sentences",
-              "title": "Short Sentences",
+              "name": "Short Sentences",
               "topics": [
                 { "title": "Simple Practice", "description": "Short and simple sentences", "items": ["I like milk.", "The cat is fat.", "It is my bag."] },
                 { "title": "Practice With Action", "description": "Sentences with action words", "items": ["He runs fast.", "She sings well.", "We jump high."] }
@@ -126,7 +126,7 @@
           "categories": [
             {
               "id": "paragraphs",
-              "title": "Typing Paragraphs",
+              "name": "Typing Paragraphs",
               "topics": [
                 { "title": "Short Paragraphs", "description": "Type short paragraphs", "items": ["My name is John. I am seven years old. I like to play football."] },
                 { "title": "Longer Paragraphs", "description": "Type longer paragraphs", "items": ["I have a pet cat. It is white with black spots. It likes to drink milk and sleep in my bed."] }
@@ -145,7 +145,7 @@
           "categories": [
             {
               "id": "speed",
-              "title": "Typing Speed",
+              "name": "Typing Speed",
               "topics": [
                 { "title": "Typing Simple Words Fast", "description": "Increase typing speed", "items": ["ball", "fish", "home", "book", "lamp"] },
                 { "title": "Speed with Sentences", "description": "Practice fast typing of sentences", "items": ["I like my school.", "We are friends.", "She can read."] }
@@ -158,7 +158,7 @@
           "categories": [
             {
               "id": "accuracy",
-              "title": "Typing Accuracy",
+              "name": "Typing Accuracy",
               "topics": [
                 { "title": "Accurate Words", "description": "Type carefully with no mistakes", "items": ["apple", "chair", "green", "river", "train"] },
                 { "title": "Accurate Sentences", "description": "Type sentences with accuracy", "items": ["I will do my homework.", "The teacher is kind to us."] }
@@ -171,7 +171,7 @@
           "categories": [
             {
               "id": "story",
-              "title": "Typing Stories",
+              "name": "Typing Stories",
               "topics": [
                 { "title": "Short Stories", "description": "Type short simple stories", "items": ["Once upon a time, there was a little boy who liked to play football."] },
                 { "title": "Longer Stories", "description": "Type longer stories", "items": ["A girl named Ada lived in a small village. She went to school every day and loved reading books."] }
