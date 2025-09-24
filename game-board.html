@@ -41,7 +41,44 @@
 #restartBtn.bounce {
   animation: bounceIn 0.6s ease;
 }
-  
+
+/* Timer styles */
+.timer-container {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  margin: 15px auto;
+}
+
+svg circle {
+  fill: none;
+  stroke-width: 10;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+}
+
+.timer-bg {
+  stroke: #ccc; /* grey background */
+}
+
+.timer-progress {
+  stroke: lightblue; /* progress */
+  stroke-linecap: round;
+  stroke-dasharray: 283; /* 2 * π * radius (45) */
+  stroke-dashoffset: 283;
+  transition: stroke-dashoffset 1s linear;
+}
+
+.timer-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #0d3b66;
+}
+
 </style>
 </head>
 <body>
@@ -50,7 +87,13 @@
   <h1>Smart Kids Typing Practice</h1>
   <a href="classes.html">Home</a>
 </header>
-
+<div class="timer-container">
+  <svg width="100" height="100">
+    <circle class="timer-bg" cx="50" cy="50" r="45"></circle>
+    <circle class="timer-progress" cx="50" cy="50" r="45"></circle>
+  </svg>
+  <div class="timer-text" id="timerText">60</div>
+</div>
 <div class="tooltip" id="tooltip"></div>
 
 <div class="container">
@@ -238,6 +281,69 @@ fetch('data/classes.json')
     practiceArea.innerHTML = `<p style="color:red;">Failed to load classes.json</p>`;
     console.error(err);
   });
+
+// Timer logic
+let timerDuration = 60; // seconds
+let timeLeft = timerDuration;
+let timerInterval;
+
+const timerText = document.getElementById('timerText');
+const timerProgress = document.querySelector('.timer-progress');
+const circleLength = 2 * Math.PI * 45; // circumference (r=45)
+timerProgress.style.strokeDasharray = circleLength;
+
+function startTimer() {
+  clearInterval(timerInterval);
+  timeLeft = timerDuration;
+  timerText.textContent = timeLeft;
+  timerProgress.style.strokeDashoffset = circleLength;
+
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    if (timeLeft < 0) {
+      clearInterval(timerInterval);
+      practiceArea.innerHTML = `<p style="color:red;">⏰ Time's up! Practice again.</p>`;
+      restartBtn.style.display = "inline-block";
+      return;
+    }
+    timerText.textContent = timeLeft;
+    const progress = (timeLeft / timerDuration) * circleLength;
+    timerProgress.style.strokeDashoffset = progress;
+  }, 1000);
+}
+
+// Restart also resets timer
+restartBtn.addEventListener('click', ()=>{
+  loadTopic();
+  restartBtn.style.display = "none";
+  startTimer();
+});
+
+// Start timer with topic
+function loadTopic(){
+  const cls = classesData.find(c=>c.id===classId);
+  if(!cls){ practiceArea.innerHTML='<p style="color:red;">Class not found</p>'; return; }
+  const term = cls.terms.find(t=>t.number===termNumber);
+  if(!term){ practiceArea.innerHTML='<p style="color:red;">Term not found</p>'; return; }
+  const category = term.categories.find(c=>c.id===catId);
+  if(!category){ practiceArea.innerHTML='<p style="color:red;">Category not found</p>'; return; }
+  const topic = category.topics[topicIndex];
+  if(!topic){ practiceArea.innerHTML='<p style="color:red;">Topic not found</p>'; return; }
+
+  currentSequence = topic.samples || [];
+  activeKeys = [...new Set(currentSequence.join('').toUpperCase().split(''))];
+
+  buildVirtualKeyboard();
+  currentIndex=0;
+  currentLetterIndex=0;
+  score=0;
+  scoreDisplay.textContent=`Score: ${score}`;
+  showCurrentSample();
+  showTooltip(topic.instruction || `Practice: ${topic.title}`);
+
+  startTimer(); // ⏳ Start timer whenever topic loads
+}
+  
 </script>
 
 
