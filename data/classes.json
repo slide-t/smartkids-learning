@@ -330,7 +330,7 @@
                     "The sun shines in the morning.",
                     "Children play games in the park.",
                     "I love typing because it is fun."
-                  ]
+                  
                 }
               ]
             }
@@ -489,7 +489,7 @@
                     "The boy plays in the garden every day.",
                     "Our class is learning to use the computer.",
                     "Typing fast helps us finish work quickly."
-                  ]
+                  
                 }
               ]
             }
@@ -563,7 +563,7 @@
                     "Typing skills help us in school and beyond.",
                     "We must practice daily to improve our speed.",
                     "Accuracy is more important than rushing."
-                  ]
+                  
                 }
               ]
             }
@@ -634,7 +634,7 @@
                     "My school is a place where I learn and play.",
                     "Typing helps me complete assignments faster.",
                     "Computers are very useful in the modern world."
-                  ]
+                  
                 }
               ]
             }
@@ -703,9 +703,209 @@
                   "samples": [
                     "Title: My Holiday\nI visited the beach with my family.",
                     "Title: School Project\nWe worked on a science fair project together."
-                  ]
+                  
                 }
               ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+  "id": "year10",
+  "name": "Year 10",
+  "terms": [
+    {
+      "number": 1,
+      "title": "Term 1",
+      "categories": [
+        {
+          "id": "keyboard",
+          "name": "Keyboard",
+          "topics": [
+            {
+              "title": "Typing Accuracy Challenge",
+              "instruction": "Type longer words and sentences with 95% accuracy.",
+              "samples": ["programming", "development", "accuracy is important", "coding improves skills"]
+            },
+            {
+              "title": "Essay Typing",
+              "instruction": "Type a 150-word essay about technology in your life.",
+              "samples": ["Write about how you use computers daily."]
+            }
+          ]
+        },
+        {
+          "id": "mouse",
+          "name": "Mouse",
+          "topics": [
+            {
+              "title": "Graphic Design Basics",
+              "instruction": "Use mouse to create and adjust digital drawings.",
+              "samples": ["Draw shapes", "Color fill", "Resize objects"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "title": "Term 2",
+      "categories": [
+        {
+          "id": "keyboard",
+          "name": "Keyboard",
+          "topics": [
+            {
+              "title": "Formal Writing",
+              "instruction": "Type formal letters with correct formatting.",
+              "samples": ["Application Letter", "Invitation Letter"]
+            },
+            {
+              "title": "Typing Test",
+              "instruction": "Achieve 25–30 words per minute with no more than 3 errors.",
+              "samples": ["Speed typing challenge for 5 minutes."]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+},
+
+    {
+  "id": "year11",
+  "name": "Year 11",
+  "terms": [
+    {
+      "number": 1,
+      "title": "Term 1",
+      "categories": [
+        {
+          "id": "keyboard",
+          "name": "Keyboard",
+          "topics": [
+            {
+              "title": "Research & Typing",
+              "instruction": "Type researched articles into structured essays.",
+              "samples": ["Summarize a topic in 200 words."]
+            },
+            {
+              "title": "Code Typing Practice",
+              "instruction": "Type simple programming code snippets correctly.",
+              "samples": ["print('Hello World')", "for i in range(5): print(i)"]
+            }
+          ]
+        },
+        {
+          "id": "mouse",
+          "name": "Mouse",
+          "topics": [
+            {
+              "title": "Photo Editing",
+              "instruction": "Use the mouse to crop, resize, and adjust images.",
+              "samples": ["Crop photo", "Resize image", "Apply filter"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "title": "Term 2",
+      "categories": [
+        {
+          "id": "keyboard",
+          "name": "Keyboard",
+          "topics": [
+            {
+              "title": "Presentation Preparation",
+              "instruction": "Type content for slides clearly and neatly.",
+              "samples": ["Slide title", "Bullet points", "Summary notes"]
+            }
+          ]
+        },
+        {
+          "id": "mouse",
+          "name": "Mouse",
+          "topics": [
+            {
+              "title": "Interactive Projects",
+              "instruction": "Use mouse skills in design and web navigation.",
+              "samples": ["Navigate menus", "Click links", "Drag elements"]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+},
+
+    {
+  "id": "year12",
+  "name": "Year 12",
+  "terms": [
+    {
+      "number": 1,
+      "title": "Term 1",
+      "categories": [
+        {
+          "id": "keyboard",
+          "name": "Keyboard",
+          "topics": [
+            {
+              "title": "Professional Typing",
+              "instruction": "Type business reports and resumes with proper formatting.",
+              "samples": ["Curriculum Vitae", "Project Report"]
+            },
+            {
+              "title": "Advanced Coding Typing",
+              "instruction": "Type structured programming tasks without mistakes.",
+              "samples": ["HTML template", "Python function", "CSS styling"]
+            }
+          ]
+        },
+        {
+          "id": "mouse",
+          "name": "Mouse",
+          "topics": [
+            {
+              "title": "UI/UX Precision",
+              "instruction": "Use the mouse to align, arrange, and adjust user interface components.",
+              "samples": ["Align text box", "Resize panels", "Drag widgets"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "title": "Term 2",
+      "categories": [
+        {
+          "id": "keyboard",
+          "name": "Keyboard",
+          "topics": [
+            {
+              "title": "Final Speed Test",
+              "instruction": "Achieve 40+ words per minute with 98% accuracy.",
+              "samples": ["Timed test for 10 minutes."]
+            },
+            {
+              "title": "Project Documentation",
+              "instruction": "Type a full project report with headings, subheadings, and conclusion.",
+              "samples": ["Introduction", "Body", "Conclusion"]
+            }
+          ]
+        },
+        {
+          "id": "mouse",
+          "name": "Mouse",
+          "topics": [
+            {
+              "title": "Advanced Design Projects",
+              "instruction": "Use the mouse for advanced drawing and editing in design software.",
+              "samples": ["Poster design", "Logo creation", "Infographic editing"]
             }
           ]
         }
@@ -713,6 +913,7 @@
     }
   ]
 }
+  
     
   
 
