@@ -6,9 +6,10 @@
       "terms": [
         {
           "number": 1,
+          "title": "Term 1",
           "categories": [
             {
-              "id": "letters",
+              "id": "keyboard",
               "name": "Learning Letters",
               "topics": [
                 { "title": "Home Row Keys", "description": "Practice the home row keys", "items": ["a", "s", "d", "f", "j", "k", "l", ";"] },
@@ -20,9 +21,10 @@
         },
         {
           "number": 2,
+          "title": "Term 2",
           "categories": [
             {
-              "id": "words",
+              "id": "keyboard",
               "name": "Typing Words",
               "topics": [
                 { "title": "Two-Letter Words", "description": "Practice typing simple two-letter words", "items": ["at", "in", "on", "it", "up", "to"] },
@@ -33,9 +35,10 @@
         },
         {
           "number": 3,
+          "title": "Term 3",
           "categories": [
             {
-              "id": "sentences",
+              "id": "keyboard",
               "name": "Typing Sentences",
               "topics": [
                 { "title": "Short Sentences", "description": "Practice typing short sentences", "items": ["I am a boy.", "The sun is hot.", "It is fun."] },
@@ -52,9 +55,10 @@
       "terms": [
         {
           "number": 1,
+          "title": "Term 1",
           "categories": [
             {
-              "id": "review",
+              "id": "keyboard",
               "name": "Review Letters & Words",
               "topics": [
                 { "title": "Review Home Row", "description": "Review the home row letters", "items": ["a", "s", "d", "f", "j", "k", "l", ";"] },
@@ -65,9 +69,10 @@
         },
         {
           "number": 2,
+          "title": "Term 2",
           "categories": [
             {
-              "id": "phrases",
+              "id": "keyboard",
               "name": "Typing Phrases",
               "topics": [
                 { "title": "Simple Phrases", "description": "Practice typing phrases", "items": ["good boy", "big cat", "red sun"] },
@@ -78,19 +83,20 @@
         },
         {
           "number": 3,
+          "title": "Term 3",
           "categories": [
             {
-              "id": "sentences2",
+              "id": "keyboard",
               "name": "Typing Sentences",
               "topics": [
-                { "title": "Everyday Sentences", "description": "Practice simple sentences", "items": ["I go to school.", "We play football.", "She eats rice."] },
-                { "title": "Practice Longer Sentences", "description": "Get better at long sentences", "items": ["My father drives a big car.", "I like to read my story book."] }
+                { "title": "Short Practice Sentences", "description": "Type easy practice sentences", "items": ["I can run.", "The cat is big.", "We play games."] },
+                { "title": "Longer Practice Sentences", "description": "Type longer practice sentences", "items": ["The man is reading a book.", "My mother is cooking rice."] }
               ]
             }
           ]
         }
       ]
-    },
+    },   
     {
       "id": "year3",
       "name": "Year 3",
