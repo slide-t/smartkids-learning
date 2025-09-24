@@ -10,6 +10,7 @@
   header a { color:white; text-decoration:none; background:#0d3b66; padding:0.5rem 1rem; border-radius:5px; border:1px solid white; }
   .container { max-width:750px; margin-top:20px; padding:1rem; background:white; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.2); text-align:center;}
   .practice-area { min-height:150px; padding:1rem; border:1px solid #ccc; border-radius:5px; background:#fafafa; display:flex; justify-content:center; align-items:center; font-size:2rem; perspective:1000px; margin-bottom:15px;}
+ 
   .key { width:45px; height:45px; line-height:45px; margin:0.2rem; text-align:center; border:2px solid #ccc; border-radius:5px; background:#e7e7e7; transform-style:preserve-3d; transition: transform 0.3s, background 0.3s; font-weight:bold;}
   .key.correct { background:#4CAF50; color:white; }
   .key.wrong { background:#f44336; color:white; }
@@ -22,6 +23,21 @@
   .nav-buttons { margin-top:15px; display:flex; justify-content:space-between; }
   .nav-buttons button { padding:0.5rem 1rem; border:none; border-radius:5px; background:#0d3b66; color:white; cursor:pointer; transition:0.3s;}
   .nav-buttons button:hover { background:#144e8c; }
+
+  #practice-area {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;   /* Center horizontally */
+  align-items: center;
+  width: 100%;
+  min-height: 60px;
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+  word-spacing: 8px;
+  white-space: normal;   /* Let words wrap naturally */
+  overflow-wrap: break-word;
+  text-align: center;    /* Center text inside */
+}
   /* Tooltip */
   .tooltip { 
     position:absolute; top:90px; background:#0d3b66; color:white; 
@@ -106,7 +122,139 @@ svg circle {
   <button id="restartBtn" style="display:none;">Restart</button>
 </div>
 </div>
+<script>
+let currentClassIndex = 0;
+let currentTermIndex = 0;
+let currentCategoryIndex = 0;
+let currentTopicIndex = 0;
+let currentSampleIndex = 0;
+let currentLetterIndex = 0;
+let currentSamples = [];
+let timerInterval;
 
+// Elements
+const practiceArea = document.getElementById("practice-area");
+const inputArea = document.getElementById("input-area");
+const message = document.getElementById("message");
+const restartBtn = document.getElementById("restartBtn");
+const timerCircle = document.getElementById("timer-circle");
+const timerText = document.getElementById("timer-text");
+
+const RADIUS = 45;
+const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
+timerCircle.style.strokeDasharray = CIRCUMFERENCE;
+
+function startTimer(duration = 30) {
+  clearInterval(timerInterval);
+  let timeLeft = duration;
+  updateTimer(timeLeft, duration);
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    updateTimer(timeLeft, duration);
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      message.textContent = "⏰ Time's up! Try again.";
+      restartBtn.style.display = "inline-block";
+      inputArea.disabled = true;
+    }
+  }, 1000);
+}
+
+function updateTimer(timeLeft, duration) {
+  timerText.textContent = timeLeft;
+  const offset = CIRCUMFERENCE - (timeLeft / duration) * CIRCUMFERENCE;
+  timerCircle.style.strokeDashoffset = offset;
+}
+
+// Show the current sample on the board
+function showCurrentSample() {
+  practiceArea.innerHTML = "";
+  const sample = currentSamples[currentSampleIndex];
+
+  const wrapper = document.createElement("div");
+  wrapper.style.display = "inline-block";
+
+  sample.split("").forEach((char, idx) => {
+    const span = document.createElement("span");
+    span.textContent = char;
+    span.style.padding = "0 2px";
+
+    if (idx === currentLetterIndex) {
+      span.style.background = "#add8e6"; // light blue highlight
+    }
+    if (currentLetterIndex > idx) {
+      span.style.color = "green"; // correctly typed letters tinted
+    }
+
+    wrapper.appendChild(span);
+  });
+
+  practiceArea.appendChild(wrapper);
+  highlightVK(sample[currentLetterIndex], "reset");
+}
+
+// Load a topic
+function loadTopic() {
+  const cls = curriculum.classes[currentClassIndex];
+  const term = cls.terms[currentTermIndex];
+  const category = term.categories[currentCategoryIndex];
+  const topic = category.topics[currentTopicIndex];
+
+  currentSamples = topic.items;
+  currentSampleIndex = 0;
+  currentLetterIndex = 0;
+
+  inputArea.value = "";
+  inputArea.disabled = false;
+  message.textContent = "";
+  restartBtn.style.display = "none";
+
+  showCurrentSample();
+  startTimer(30);
+}
+
+// Handle typing input
+inputArea.addEventListener("input", () => {
+  const sample = currentSamples[currentSampleIndex];
+  const typed = inputArea.value;
+
+  if (typed === sample.slice(0, typed.length)) {
+    currentLetterIndex = typed.length;
+    showCurrentSample();
+
+    if (typed === sample) {
+      currentSampleIndex++;
+      inputArea.value = "";
+      currentLetterIndex = 0;
+
+      if (currentSampleIndex < currentSamples.length) {
+        showCurrentSample();
+      } else {
+        clearInterval(timerInterval);
+        message.textContent = "🎉 Congratulations! You're done with this topic.";
+        restartBtn.style.display = "inline-block";
+        inputArea.disabled = true;
+      }
+    }
+  } else {
+    message.textContent = "❌ Typo! Try again.";
+  }
+});
+
+// Restart button handler
+restartBtn.addEventListener("click", () => {
+  loadTopic();
+  restartBtn.style.display = "none";
+  startTimer(30);
+});
+
+// Initial load
+loadTopic();
+</script>
+
+
+
+  <!--
 <script>
 const practiceArea = document.getElementById('practiceArea');
 const scoreDisplay = document.getElementById('scoreDisplay');
@@ -397,6 +545,6 @@ function loadTopic(){
 }
   
 </script>
-
+-->
 </body>
 </html>
