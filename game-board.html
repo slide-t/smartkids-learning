@@ -106,7 +106,7 @@ svg circle {
   <button id="restartBtn" style="display:none;">Restart</button>
 </div>
 </div>
-
+<!--
 <script>
 const practiceArea = document.getElementById('practiceArea');
 const scoreDisplay = document.getElementById('scoreDisplay');
@@ -294,11 +294,11 @@ fetch('data/classes.json')
     console.error(err);
   });
 </script>
-
+-->
 
   
 <script>
-/*const practiceArea = document.getElementById('practiceArea');
+const practiceArea = document.getElementById('practiceArea');
 const scoreDisplay = document.getElementById('scoreDisplay');
 const virtualKeyboard = document.getElementById('virtualKeyboard');
 const prevBtn = document.getElementById('prevBtn');
@@ -471,7 +471,7 @@ fetch('data/classes.json')
     practiceArea.innerHTML = `<p style="color:red;">Failed to load classes.json</p>`;
     console.error(err);
   });
-*/
+
 // Timer logic
 let timerDuration = 60; // seconds
 let timeLeft = timerDuration;
