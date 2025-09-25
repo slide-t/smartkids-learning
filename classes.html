@@ -28,6 +28,79 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
+  const container = document.getElementById("classes-container");
+
+  try {
+    const response = await fetch("data/classes.json");
+    const years = await response.json();
+
+    // Render each year
+    years.forEach((year) => {
+      // Normalize: accept both "year1" and "yearyear1"
+      let cleanId = year.id.replace(/^year/, ""); // remove "year" prefix if present
+      let normalizedId = "year" + cleanId; // always in form "yearX"
+
+      const yearDiv = document.createElement("div");
+      yearDiv.className = "mb-4 border rounded";
+
+      const yearHeader = document.createElement("button");
+      yearHeader.className =
+        "w-full text-left px-4 py-2 bg-gray-200 font-bold";
+      yearHeader.textContent = year.name;
+      yearHeader.dataset.target = normalizedId;
+
+      const subjectsDiv = document.createElement("div");
+      subjectsDiv.id = normalizedId;
+      subjectsDiv.className = "hidden px-4 py-2 bg-gray-50";
+
+      year.subjects.forEach((subject) => {
+        const subjectDiv = document.createElement("div");
+        subjectDiv.className = "mb-2";
+
+        const subjectTitle = document.createElement("h3");
+        subjectTitle.className = "font-semibold";
+        subjectTitle.textContent = subject.name;
+
+        const topicsList = document.createElement("ul");
+        subject.topics.forEach((topic) => {
+          const topicItem = document.createElement("li");
+          topicItem.className = "ml-4 list-disc";
+
+          const topicLink = document.createElement("a");
+          topicLink.href = topic.detailsPage;
+          topicLink.className = "text-blue-600 hover:underline";
+          topicLink.textContent = topic.title;
+
+          topicItem.appendChild(topicLink);
+          topicsList.appendChild(topicItem);
+        });
+
+        subjectDiv.appendChild(subjectTitle);
+        subjectDiv.appendChild(topicsList);
+        subjectsDiv.appendChild(subjectDiv);
+      });
+
+      yearDiv.appendChild(yearHeader);
+      yearDiv.appendChild(subjectsDiv);
+      container.appendChild(yearDiv);
+
+      // Accordion toggle
+      yearHeader.addEventListener("click", () => {
+        subjectsDiv.classList.toggle("hidden");
+      });
+    });
+  } catch (err) {
+    console.error("Error loading classes:", err);
+    container.innerHTML =
+      "<p class='text-red-500'>Failed to load classes.</p>";
+  }
+});
+</script>
+
+
+  <!--
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
   const container = document.getElementById("accordion");
   const today = new Date();
   const termUnlockDates = { 2: new Date("2026-01-04"), 3: new Date("2026-04-20") };
@@ -113,5 +186,6 @@ if ('serviceWorker' in navigator) {
   });
 }
 </script>
+  -->
 </body>
 </html>
