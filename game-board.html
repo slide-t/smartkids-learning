@@ -142,7 +142,84 @@ document.addEventListener('keydown', e=>{
   const key = e.key.length===1 ? e.key : ''; // ignore Shift etc.
   handleInput(key);
 });
-// === FETCH JSON TOPIC DATA ===
+
+
+  // === FETCH JSON TOPIC DATA ===
+ async function buildAccordion() {
+  try {
+    const res = await fetch("data/classes.json");
+    if (!res.ok) throw new Error("Could not load classes.json");
+    const data = await res.json();
+
+    const container = document.getElementById("accordion");
+    container.innerHTML = ""; // reset
+
+    data.classes.forEach(year => {
+      // Year header
+      const yearDiv = document.createElement("div");
+      yearDiv.classList.add("year");
+
+      const yearBtn = document.createElement("button");
+      yearBtn.classList.add("accordion-btn");
+      yearBtn.textContent = year.name;
+      yearBtn.addEventListener("click", () => {
+        yearBtn.classList.toggle("active");
+        yearPanel.classList.toggle("show");
+      });
+
+      const yearPanel = document.createElement("div");
+      yearPanel.classList.add("accordion-panel");
+
+      // Terms inside each year
+      year.terms.forEach(term => {
+        const termDiv = document.createElement("div");
+        termDiv.classList.add("term");
+
+        const termHeader = document.createElement("h4");
+        termHeader.textContent = `Term ${term.number}`;
+        termDiv.appendChild(termHeader);
+
+        // Categories + topics
+        term.categories.forEach(cat => {
+          const catTitle = document.createElement("p");
+          catTitle.classList.add("category-title");
+          catTitle.textContent = cat.name;
+          termDiv.appendChild(catTitle);
+
+          const topicList = document.createElement("ul");
+          cat.topics.forEach(topic => {
+            const li = document.createElement("li");
+            li.textContent = topic.title;
+
+            // On click → load practice
+            li.addEventListener("click", () => {
+              loadPractice(year.id, term.number, topic.title);
+            });
+
+            topicList.appendChild(li);
+          });
+          termDiv.appendChild(topicList);
+        });
+
+        yearPanel.appendChild(termDiv);
+      });
+
+      yearDiv.appendChild(yearBtn);
+      yearDiv.appendChild(yearPanel);
+      container.appendChild(yearDiv);
+    });
+  } catch (err) {
+    console.error(err);
+    document.getElementById("accordion").innerHTML =
+      `<p style="color:red">${err.message}</p>`;
+  }
+}
+
+// Call this once at startup
+buildAccordion(); 
+  
+  
+/*  // === FETCH JSON TOPIC DATA ===
 async function loadPractice(yearId, termNumber, topicTitle) {
   try {
     const res = await fetch('data/classes.json');
