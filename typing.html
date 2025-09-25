@@ -3,1650 +3,801 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Typing Tutor — All Lessons</title>
+  <title>EduKids Typing Tutor — Sample (Year 1 & 2)</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* Small additions beyond Tailwind */
-    .chev { transition: transform .25s ease; }
-    .lesson-active { background: linear-gradient(90deg,#fff7ed,#fffaf0); border-left:4px solid #fb923c; }
-    .kbd-key { min-width:34px; min-height:34px; display:inline-flex; align-items:center; justify-content:center; border-radius:6px; border:1px solid #e5e7eb; margin:2px; font-weight:700; background:#fff; }
-    .kbd-key.active { background:#ffedd5; box-shadow: 0 6px 18px rgba(249,115,22,0.08); transform: translateY(-2px); }
-    .sample-char.correct { color:#147E24; }
-    .sample-char.incorrect { background:#fee2e2; color:#9b1c1c; }
-    .scrollbar-thin::-webkit-scrollbar { height:8px; width:8px; }
-    .scrollbar-thin::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:8px; }
+    /* extra styles */
+    :root{
+      --navy:#07315a;
+      --dark-orange:#fb852b;
+      --muted-gray:#f3f4f6;
+    }
+    .slide-in { transform: translateX(0); transition: transform .28s ease; }
+    .slide-out { transform: translateX(-110%); transition: transform .28s ease; }
+    .kbd-key { min-width:36px; min-height:36px; display:inline-flex;align-items:center;justify-content:center;border-radius:6px;border:1px solid #e5e7eb;margin:2px;font-weight:700;background:white; }
+    .kbd-key.home { background: #fff7ed; border-color: rgba(251,133,43,0.25); box-shadow: 0 6px 18px rgba(251,133,43,0.08); }
+    .kbd-key.active { background:#ffedd5; transform: translateY(-3px); box-shadow:0 8px 24px rgba(11,49,90,0.06); }
+    .char-correct { color:#166534; } /* green */
+    .char-wrong { background:#fee2e2; color:#9b1c1c; }
+    .chev { transition: transform .2s ease; }
+    .encourage { color: var(--navy); font-weight:700; }
+    .scroll-smooth { scroll-behavior: smooth; }
   </style>
 </head>
-<body class="bg-gray-50 text-gray-900 font-sans min-h-screen">
+<body class="bg-white text-gray-900 font-sans min-h-screen">
 
-  <!-- Header -->
-  <header class="fixed top-0 left-0 right-0 bg-white shadow z-40">
-    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+  <!-- HEADER -->
+  <header class="bg-[color:var(--navy)] text-white fixed top-0 left-0 right-0 z-40">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <div class="w-12 h-12 rounded-full bg-orange-400 flex items-center justify-center text-white font-bold">KT</div>
-        <div>
-          <h1 class="text-lg font-bold">Typing Tutor — All Lessons</h1>
-          <p class="text-xs text-gray-500">Year/Term/Category → Topics — Click any topic to begin</p>
+        <button id="menuToggle" class="p-2 rounded-md bg-white/10 hover:bg-white/20 focus:ring-2 focus:ring-white">
+          <!-- hamburger -->
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-full bg-[color:var(--dark-orange)] flex items-center justify-center font-bold text-white">KT</div>
+          <div>
+            <h1 class="text-lg font-bold">EduKids Typing Tutor</h1>
+            <p class="text-xs opacity-90">Fun keyboard & mouse drills — Year 1 & 2 sample</p>
+          </div>
         </div>
       </div>
+
       <div class="flex items-center gap-3">
-        <a href="classes.html" class="text-sm px-3 py-2 rounded bg-white border shadow-sm hover:bg-orange-50">← Back to Classes</a>
-        <div class="text-xs text-gray-600">Embedded lessons</div>
+        <div class="text-sm px-3 py-1 rounded bg-white/10">Navy • Grey • Dark Orange</div>
       </div>
     </div>
   </header>
 
-  <div class="pt-24 max-w-7xl mx-auto px-4 grid grid-cols-12 gap-6">
-    <!-- Sidebar -->
-    <aside class="col-span-4 lg:col-span-3 bg-white rounded-2xl shadow p-4 h-[75vh] overflow-auto scrollbar-thin">
-      <div class="mb-3 flex items-center justify-between">
-        <h2 class="font-semibold text-gray-800">Lessons</h2>
-        <button id="collapseAll" class="text-xs text-gray-500 hover:text-orange-600">Collapse All</button>
+  <!-- LAYOUT -->
+  <div class="pt-20 max-w-6xl mx-auto px-4 grid grid-cols-12 gap-6">
+    <!-- SIDEBAR (slide-in) -->
+    <aside id="sidebar" class="col-span-12 md:col-span-4 lg:col-span-3 fixed md:relative left-0 top-20 bottom-0 z-50 bg-gray-50 border-r p-4 overflow-auto slide-out w-[86vw] md:w-auto">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="font-semibold text-[color:var(--navy)]">Lessons (Year 1 & 2)</h2>
+        <button id="closeSidebar" class="md:hidden text-gray-600">Close</button>
       </div>
-      <nav id="sidebar" class="space-y-2 text-sm"></nav>
+
+      <div id="sidebarContent" class="space-y-4">
+        <!-- Class selector & nested terms will be built by JS -->
+      </div>
     </aside>
 
-    <!-- Main -->
-    <main class="col-span-8 lg:col-span-9">
-      <div class="bg-white rounded-2xl shadow p-6 min-h-[60vh]">
-        <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-          <div>
-            <h2 id="topicTitle" class="text-2xl font-bold">Select a lesson from the left</h2>
-            <p id="topicMeta" class="text-sm text-gray-500 mt-1"></p>
+    <!-- MAIN -->
+    <main class="col-span-12 md:col-span-8 lg:col-span-9">
+      <div id="pageContent" class="bg-white rounded-2xl shadow p-6 min-h-[60vh]">
+        <!-- top controls: class select / practice type -->
+        <div class="mb-4 grid grid-cols-1 md:grid-cols-3 gap-3 items-end">
+          <div class="md:col-span-1">
+            <label class="block text-sm text-gray-600 mb-1">Class</label>
+            <select id="classSelect" class="w-full p-3 rounded border focus:ring-2 focus:ring-[color:var(--dark-orange)]">
+              <option value="">Select Year</option>
+            </select>
           </div>
-          <div class="flex items-center gap-3">
-            <div class="text-right">
-              <div class="text-xs text-gray-500">Accuracy</div>
-              <div id="accDisplay" class="text-lg font-bold">0%</div>
-            </div>
-            <div class="text-right">
-              <div class="text-xs text-gray-500">Speed</div>
-              <div id="wpmDisplay" class="text-lg font-bold">0 WPM</div>
-            </div>
-            <div class="text-right">
-              <div class="text-xs text-gray-500">Progress</div>
-              <div id="progDisplay" class="text-lg font-bold">0 / 0</div>
-            </div>
-            <div class="text-right">
-              <div class="text-xs text-gray-500">Timer</div>
-              <div id="timerDisplay" class="text-lg font-bold">—</div>
-            </div>
+          <div class="md:col-span-1">
+            <label class="block text-sm text-gray-600 mb-1">Practice Type</label>
+            <select id="practiceSelect" class="w-full p-3 rounded border focus:ring-2 focus:ring-[color:var(--dark-orange)]" disabled>
+              <option value="">Choose practice</option>
+              <option value="keyboard">Keyboard Drill</option>
+              <option value="mouse">Mouse Practice</option>
+            </select>
           </div>
-        </div>
-
-        <div class="mt-5 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div class="md:col-span-2">
-            <!-- Instruction -->
-            <div class="bg-orange-50 border border-orange-100 p-3 rounded mb-3">
-              <div id="instructionText" class="text-sm text-orange-800"></div>
-            </div>
-
-            <!-- Sample area -->
-            <div id="sampleArea" class="bg-gray-100 rounded p-4 min-h-[140px] text-xl leading-relaxed break-words">
-              <div id="sampleLine" class="select-none"></div>
-            </div>
-
-            <!-- Typing box -->
-            <textarea id="typingInput" rows="4"
-              class="mt-4 w-full p-3 rounded-lg border border-gray-300 text-lg focus:ring-2 focus:ring-orange-300 focus:outline-none"
-              placeholder="Start typing here..." disabled></textarea>
-
-            <!-- Controls -->
-            <div class="mt-4 flex items-center gap-2">
-              <button id="prevBtn" class="px-4 py-2 rounded bg-white border hover:bg-orange-50">◀ Prev</button>
-              <button id="nextBtn" class="px-4 py-2 rounded bg-white border hover:bg-orange-50 ml-auto">Next ▶</button>
-              <button id="restartBtn" class="px-4 py-2 rounded bg-white border hover:bg-orange-50">Restart</button>
-            </div>
-          </div>
-
-          <!-- Right column: mini keyboard + list of samples -->
-          <div>
-            <div class="bg-white border rounded p-3 mb-3 shadow-sm">
-              <div class="text-sm text-gray-600 mb-2">On-screen keyboard</div>
-              <div id="keyboard" class="flex flex-wrap"></div>
-            </div>
-
-            <div class="bg-white border rounded p-3 shadow-sm">
-              <div class="text-sm text-gray-600 mb-2">Samples</div>
-              <ol id="samplesList" class="list-decimal pl-4 text-sm max-h-[28vh] overflow-auto"></ol>
-            </div>
+          <div class="md:col-span-1">
+            <label class="block text-sm text-gray-600 mb-1">Topic</label>
+            <select id="topicSelect" class="w-full p-3 rounded border focus:ring-2 focus:ring-[color:var(--dark-orange)]" disabled>
+              <option value="">Pick a topic</option>
+            </select>
           </div>
         </div>
+
+        <div class="mb-4">
+          <button id="beginBtn" class="w-full hidden bg-[color:var(--dark-orange)] hover:bg-orange-500 text-white font-semibold py-3 rounded-lg shadow">Click here to begin training</button>
+        </div>
+
+        <!-- tutor area -->
+        <section id="tutorArea" class="hidden">
+          <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+            <div>
+              <h2 id="topicTitle" class="text-2xl font-bold text-[color:var(--navy)]">Topic Title</h2>
+              <p id="topicInfo" class="text-sm text-gray-600 mt-1"></p>
+            </div>
+            <div class="flex items-center gap-4">
+              <div class="text-center">
+                <div class="text-xs text-gray-500">Accuracy</div>
+                <div id="acc" class="text-xl font-bold">0%</div>
+              </div>
+              <div class="text-center">
+                <div class="text-xs text-gray-500">WPM</div>
+                <div id="wpm" class="text-xl font-bold">0</div>
+              </div>
+              <div class="text-center">
+                <div class="text-xs text-gray-500">Errors</div>
+                <div id="errors" class="text-xl font-bold">0</div>
+              </div>
+              <div class="text-center">
+                <div class="text-xs text-gray-500">Timer</div>
+                <div id="timer" class="text-xl font-bold">—</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 bg-gray-100 rounded p-4 min-h-[140px]">
+            <div id="instructionBox" class="text-sm text-[color:var(--navy)] font-medium mb-3"></div>
+            <div id="sampleBox" class="text-2xl font-mono leading-relaxed break-words select-none"></div>
+          </div>
+
+          <textarea id="inputBox" class="mt-4 w-full p-3 rounded border border-gray-300 text-lg focus:ring-2 focus:ring-[color:var(--dark-orange)]" rows="4" placeholder="Start typing here..." disabled></textarea>
+
+          <div class="mt-4 flex gap-2 items-center">
+            <button id="prevBtn" class="px-4 py-2 bg-white border rounded hover:bg-gray-50" disabled>◀ Previous</button>
+            <button id="nextBtn" class="px-4 py-2 bg-white border rounded hover:bg-gray-50 ml-auto" disabled>Next ▶</button>
+            <button id="restartBtn" class="px-4 py-2 bg-white border rounded hover:bg-gray-50">Restart</button>
+          </div>
+
+          <!-- virtual keyboard (for keyboard drills) -->
+          <div id="keyboardWrap" class="mt-6 bg-white border rounded p-4 hidden">
+            <div class="text-sm text-gray-600 mb-2">On-screen Keyboard (home-row highlighted)</div>
+            <div id="virtualKeyboard" class="flex flex-wrap"></div>
+          </div>
+
+          <div id="encourage" class="mt-4 text-sm"></div>
+        </section>
 
       </div>
     </main>
   </div>
 
-  <!-- Embedded CLASSES JSON: merged from user Batch1 + Batch2 -->
+  <!-- Embedded small CLASSES (Year 1 & 2) -->
   <script>
   const CLASSES = {
-  "classes": [
-    {
-      "id": "year1",
-      "name": "Year 1",
-      "terms": [
-        {
-          "number": 1,
-          "title": "Term 1",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard",
-              "topics": [
-                {
-                  "title": "Home Row Keys",
-                  "instruction": "Place your fingers on A S D F J K L ; and press each key when prompted.",
-                  "samples": ["A", "S", "D", "F", "J", "K", "L", ";"]
-                },
-                {
-                  "title": "Two Letter Words",
-                  "instruction": "Type simple two-letter words using home-row letters.",
-                  "samples": ["AS", "AD", "FA", "JK", "KL"]
-                },
-                {
-                  "title": "Three Letter Words",
-                  "instruction": "Type these three-letter words slowly and correctly.",
-                  "samples": ["CAT", "DOG", "SUN", "HAT", "FUN"]
-                }
-              ]
-            },
-            {
-              "id": "mouse",
-              "name": "Mouse",
-              "topics": [
-                {
-                  "title": "Mouse Clicks",
-                  "instruction": "Practice left click, right click, and double-click on targets.",
-                  "samples": ["Left Click", "Right Click", "Double Click"]
-                },
-                {
-                  "title": "Drag and Drop",
-                  "instruction": "Drag small shapes to their matching outlines.",
-                  "samples": ["Drag Circle", "Drag Square", "Drop Triangle"]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "number": 2,
-          "title": "Term 2",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard",
-              "topics": [
-                {
-                  "title": "Simple Words",
-                  "instruction": "Type these simple 3–4 letter words clearly.",
-                  "samples": ["BIRD", "FISH", "TREE", "STAR", "BALL"]
-                },
-                {
-                  "title": "Common Sentences",
-                  "instruction": "Type each sentence exactly as shown, including spaces.",
-                  "samples": ["I am happy", "You are good", "We like to play", "It is sunny", "I can run"]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "number": 3,
-          "title": "Term 3",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard",
-              "topics": [
-                {
-                  "title": "Phrases Practice",
-                  "instruction": "Type short simple phrases; watch spacing and capitals.",
-                  "samples": ["Good day", "My cat", "Big fun", "Play now", "Nice hat"]
-                },
-                {
-                  "title": "Timed Drill (3 min)",
-                  "instruction": "Type the listed words as many times as you can in 3 minutes.",
-                  "samples": ["CAT", "DOG", "FUN", "SUN", "HAT"]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "year2",
-      "name": "Year 2",
-      "terms": [
-        {
-          "number": 1,
-          "title": "Term 1",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard",
-              "topics": [
-                {
-                  "title": "Home Row Drill",
-                  "instruction": "Repeat the home row letters, build speed and accuracy.",
-                  "samples": ["A", "S", "D", "F", "J", "K", "L", ";"]
-                },
-                {
-                  "title": "Two & Three Letter Words",
-                  "instruction": "Type mixed 2–3 letter words using the home row.",
-                  "samples": ["AND", "SAD", "FUN", "JAM", "LAD"]
-                },
-                {
-                  "title": "Five Short Words",
-                  "instruction": "Type these five short words clearly.",
-                  "samples": ["MAP", "PEN", "CUP", "RAT", "BAG"]
-                }
-              ]
-            },
-            {
-              "id": "mouse",
-              "name": "Mouse",
-              "topics": [
-                {
-                  "title": "Precision Clicks",
-                  "instruction": "Click accurately on small targets, practice double-click speed.",
-                  "samples": ["Left Click", "Double Click", "Right Click"]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "number": 2,
-          "title": "Term 2",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard",
-              "topics": [
-                {
-                  "title": "Typing Short Sentences",
-                  "instruction": "Type short sentences, paying attention to capitalization and spacing.",
-                  "samples": ["I like cake", "You are nice", "We play together", "She can sing", "He has a ball"]
-                },
-                {
-                  "title": "Simple Phrases",
-                  "instruction": "Type the phrases slowly and accurately.",
-                  "samples": ["Come here", "Sit down", "Good job", "Well done", "Try again"]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "number": 3,
-          "title": "Term 3",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard",
-              "topics": [
-                {
-                  "title": "Longer Words (5 letters)",
-                  "instruction": "Practice typing five-letter words to grow vocabulary.",
-                  "samples": ["APPLE", "HOUSE", "SCHOOL", "WATER", "PLANT"]
-                },
-                {
-                  "title": "Speed Drill (5 min)",
-                  "instruction": "Type the supplied words and short phrases repeatedly for 5 minutes.",
-                  "samples": ["APPLE", "HOUSE", "PLAY", "SCHOOL", "FRIEND"]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "year3",
-      "name": "Year 3",
-      "terms": [
-        {
-          "number": 1,
-          "title": "Term 1",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard",
-              "topics": [
-                {
-                  "title": "Home Row Speed Drill",
-                  "instruction": "Type home row letters with more speed and less looking.",
-                  "samples": ["A", "S", "D", "F", "J", "K", "L", ";"]
-                },
-                {
-                  "title": "Simple Words Practice",
-                  "instruction": "Type common easy words accurately.",
-                  "samples": ["SUN", "FUN", "HAT", "CAT", "DOG"]
-                },
-                {
-                  "title": "Five 5-letter Words",
-                  "instruction": "Type these 5-letter words to expand vocabulary and finger control.",
-                  "samples": ["BRING", "SMILE", "PLANT", "RIVER", "LIGHT"]
-                }
-              ]
-            },
-            {
-              "id": "mouse",
-              "name": "Mouse",
-              "topics": [
-                {
-                  "title": "Clicking Games",
-                  "instruction": "Click targets accurately and practice drag interactions.",
-                  "samples": ["Left Click", "Right Click", "Double Click", "Drag"]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "number": 2,
-          "title": "Term 2",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard",
-              "topics": [
-                {
-                  "title": "Typing Sentences",
-                  "instruction": "Type short sentences smoothly, including punctuation.",
-                  "samples": ["The sun is bright.", "I love coding.", "We play games.", "She likes books.", "They run fast."]
-                },
-                {
-                  "title": "Phrases & Clauses",
-                  "instruction": "Type phrases and short clauses correctly.",
-                  "samples": ["in the park", "on the table", "under the tree", "with a friend", "after class"]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "number": 3,
-          "title": "Term 3",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard",
-              "topics": [
-                {
-                  "title": "Paragraph Typing",
-                  "instruction": "Type a short paragraph word-for-word, watch punctuation.",
-                  "samples": ["I have a dog. It runs fast. I love my dog.", "We went to the park and played all afternoon.", "My favorite food is rice and beans."]
-                },
-                {
-                  "title": "Timed Accuracy Drill",
-                  "instruction": "Type as many items correctly in 5 minutes as possible.",
-                  "samples": ["BRING", "SMILE", "PLANT", "RIVER", "LIGHT", "APPLE", "HOUSE"]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "year4",
-      "name": "Year 4",
-      "terms": [
-        {
-          "number": 1,
-          "title": "Term 1",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard",
-              "topics": [
-                {
-                  "title": "Top Row Keys",
-                  "instruction": "Practice the top row letters (Q–P) with accuracy.",
-                  "samples": ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"]
-                },
-                {
-                  "title": "Word Building",
-                  "instruction": "Form and type words using top & home rows.",
-                  "samples": ["TREE", "WORD", "QUIZ", "JUMP", "FROG"]
-                },
-                {
-                  "title": "Five 6-letter Words",
-                  "instruction": "Type these 6-letter words to build typing stamina.",
-                  "samples": ["ORANGE", "BUTTER", "FLOWER", "STREET", "GARDEN"]
-                }
-              ]
-            },
-            {
-              "id": "mouse",
-              "name": "Mouse",
-              "topics": [
-                {
-                  "title": "Drag Shapes",
-                  "instruction": "Drag shapes to their matching outlines with precision.",
-                  "samples": ["Circle", "Square", "Triangle", "Star", "Heart"]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "number": 2,
-          "title": "Term 2",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard",
-              "topics": [
-                {
-                  "title": "Sentences Practice",
-                  "instruction": "Type the sentences accurately; include punctuation.",
-                  "samples": ["The dog runs fast.", "We love to play.", "Coding is fun.", "She reads daily.", "He writes well."]
-                },
-                {
-                  "title": "Speed Words (3 min)",
-                  "instruction": "Type these words quickly over multiple rounds.",
-                  "samples": ["FAST", "LOVE", "SCHOOL", "DOG", "FUN"]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "number": 3,
-          "title": "Term 3",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard",
-              "topics": [
-                {
-                  "title": "Paragraph Practice",
-                  "instruction": "Type short paragraphs focusing on punctuation and capitals.",
-                  "samples": ["My name is Tola. I like school. I play football.", "Every morning I walk to school with friends.", "We study and then we play games."]
-                },
-                {
-                  "title": "Comprehension Typing",
-                  "instruction": "Read short passage, then type summary sentences.",
-                  "samples": ["The cat climbed the tall tree. It could not get down.", "A farmer grows crops to feed his family and sell the rest."]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "year5",
-      "name": "Year 5",
-      "terms": [
-        {
-          "number": 1,
-          "title": "Term 1",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard",
-              "topics": [
-                {
-                  "title": "Lower Row Keys",
-                  "instruction": "Practice lower-row letters and punctuation , . / with control.",
-                  "samples": ["Z", "X", "C", "V", "B", "N", "M", ",", ".", "/"]
-                },
-                {
-                  "title": "Mixed Row Words",
-                  "instruction": "Type words that use multiple rows together.",
-                  "samples": ["CAMP", "MANOR", "VOLUME", "BRICK", "ZEBRA"]
-                },
-                {
-                  "title": "Five 7-letter Words",
-                  "instruction": "Build strength by typing 7-letter words.",
-                  "samples": ["ANIMALIA", "PORTRAY", "CAPABLE", "BALANCE", "FREIGHT"]
-                }
-              ]
-            },
-            {
-              "id": "mouse",
-              "name": "Mouse",
-              "topics": [
-                {
-                  "title": "Click Challenge",
-                  "instruction": "Click on moving targets quickly and accurately.",
-                  "samples": ["Target 1", "Target 2", "Target 3", "Target 4", "Target 5"]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "number": 2,
-          "title": "Term 2",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard",
-              "topics": [
-                {
-                  "title": "Sentence Drill",
-                  "instruction": "Type sentences focusing on punctuation and flow.",
-                  "samples": ["Typing helps us write better.", "Practice makes perfect.", "We learn faster with drills.", "Write neatly every time.", "Use correct capital letters."]
-                },
-                {
-                  "title": "Phrases & Idioms",
-                  "instruction": "Type common phrases and short idioms to expand language.",
-                  "samples": ["time flies", "break the ice", "hold on", "come back", "carry on"]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "number": 3,
-          "title": "Term 3",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard",
-              "topics": [
-                {
-                  "title": "Paragraph Practice",
-                  "instruction": "Type multi-sentence paragraphs carefully and accurately.",
-                  "samples": ["Typing is a good skill for school work. We practice often to improve speed and accuracy.", "Good handwriting helps when you plan and type your work."]
-                },
-                {
-                  "title": "Timed Typing Drill",
-                  "instruction": "Type as many provided words as possible in 5 minutes.",
-                  "samples": ["CAN", "PEN", "DOG", "RUN", "HAT", "BOOK", "LOVE"]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "year6",
-      "name": "Year 6",
-      "terms": [
-        {
-          "number": 1,
-          "title": "Term 1",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard",
-              "topics": [
-                {
-                  "title": "All Rows Practice",
-                  "instruction": "Practice letters across all rows to build accuracy.",
-                  "samples": ["Q", "W", "E", "A", "S", "D", "Z", "X", "C", "M"]
-                },
-                {
-                  "title": "Word Mix",
-                  "instruction": "Type mixed words that use letters from all rows.",
-                  "samples": ["GAME", "QUIZ", "CAMP", "ZONE", "WAVE"]
-                },
-                {
-                  "title": "Seven-Letter Words",
-                  "instruction": "Type longer single words to improve reach and speed.",
-                  "samples": ["SPRINGY", "CAPTURE", "JOURNEY", "ANCIENT", "BALANCE"]
-                }
-              ]
-            },
-            {
-              "id": "mouse",
-              "name": "Mouse",
-              "topics": [
-                {
-                  "title": "Drag & Match",
-                  "instruction": "Drag each item to its matching partner correctly.",
-                  "samples": ["Apple-Red", "Sun-Yellow", "Sky-Blue"]
-                },
-                {
-                  "title": "Right-Click Menu Use",
-                  "instruction": "Practice right-clicking to access context menus and options.",
-                  "samples": ["Copy", "Paste", "Rename", "Delete", "Properties"]
-                }
-              ]
-            }
-          ]
-        },
-        {
-      "number": 2,
-      "title": "Term 2",
-      "categories": [
-        {
-          "id": "keyboard",
-          "name": "Keyboard",
-          "topics": [
-            {
-              "title": "Sentence Typing",
-              "instruction": "Type longer sentences accurately with punctuation.",
-              "samples": ["Learning to type is very useful.", "We practice daily to improve our speed.", "The quick brown fox jumps over the lazy dog."]
-            },
-            {
-              "title": "Creative Writing (short)",
-              "instruction": "Type short story sentences ensuring correct grammar.",
-              "samples": ["Once upon a time a child found a small box.", "The box held a map to a hidden garden."]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "number": 3,
-      "title": "Term 3",
-      "categories": [
-        {
-          "id": "keyboard",
-          "name": "Keyboard",
-          "topics": [
-            {
-              "title": "Story Typing",
-              "instruction": "Type short stories word for word for fluency practice.",
-              "samples": ["The boy plays in the garden every day.", "Our class is learning to use the computer.", "Typing fast helps us finish work quickly."]
-            },
-            {
-              "title": "Final Timed Drill",
-              "instruction": "Complete the timed drill focus on accuracy for 5 minutes.",
-              "samples": ["SPRINGY", "CAPTURE", "JOURNEY", "ANCIENT", "BALANCE", "GAME", "QUIZ"]
-            }
-          ]
-        }
-      ]
-    }
+    "classes": [
+      {
+        "id": "year1",
+        "name": "Year 1",
+        "terms": [
+          {
+            "number": 1,
+            "title": "Term 1",
+            "categories": [
+              {
+                "id": "keyboard",
+                "name": "Keyboard",
+                "topics": [
+                  {
+                    "title": "Home Row Keys",
+                    "instruction": "Place your fingers on A S D F J K L ; and press each key when prompted.",
+                    "samples": ["A", "S", "D", "F", "J", "K", "L", ";"]
+                  },
+                  {
+                    "title": "Two Letter Words",
+                    "instruction": "Type simple two-letter words using home-row letters.",
+                    "samples": ["AS", "AD", "FA", "JK", "KL"]
+                  },
+                  {
+                    "title": "Three Letter Words",
+                    "instruction": "Type these three-letter words slowly and correctly.",
+                    "samples": ["CAT", "DOG", "SUN", "HAT", "FUN"]
+                  }
+                ]
+              },
+              {
+                "id": "mouse",
+                "name": "Mouse",
+                "topics": [
+                  {
+                    "title": "Mouse Clicks",
+                    "instruction": "Practice left click, right click, and double-click on targets.",
+                    "samples": ["Left Click", "Right Click", "Double Click"]
+                  },
+                  {
+                    "title": "Drag and Drop",
+                    "instruction": "Drag small shapes to their matching outlines.",
+                    "samples": ["Drag Circle", "Drag Square", "Drop Triangle"]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "number": 2,
+            "title": "Term 2",
+            "categories": [
+              {
+                "id": "keyboard",
+                "name": "Keyboard",
+                "topics": [
+                  {
+                    "title": "Simple Words",
+                    "instruction": "Type these simple 3–4 letter words clearly.",
+                    "samples": ["BIRD", "FISH", "TREE", "STAR", "BALL"]
+                  },
+                  {
+                    "title": "Common Sentences",
+                    "instruction": "Type each sentence exactly as shown, including spaces.",
+                    "samples": ["I am happy", "You are good", "We like to play", "It is sunny", "I can run"]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "year2",
+        "name": "Year 2",
+        "terms": [
+          {
+            "number": 1,
+            "title": "Term 1",
+            "categories": [
+              {
+                "id": "keyboard",
+                "name": "Keyboard",
+                "topics": [
+                  {
+                    "title": "Home Row Drill",
+                    "instruction": "Repeat the home row letters, build speed and accuracy.",
+                    "samples": ["A", "S", "D", "F", "J", "K", "L", ";"]
+                  },
+                  {
+                    "title": "Two & Three Letter Words",
+                    "instruction": "Type mixed 2–3 letter words using the home row.",
+                    "samples": ["AND", "SAD", "FUN", "JAM", "LAD"]
+                  },
+                  {
+                    "title": "Five Short Words",
+                    "instruction": "Type these five short words clearly.",
+                    "samples": ["MAP", "PEN", "CUP", "RAT", "BAG"]
+                  }
+                ]
+              },
+              {
+                "id": "mouse",
+                "name": "Mouse",
+                "topics": [
+                  {
+                    "title": "Precision Clicks",
+                    "instruction": "Click accurately on small targets, practice double-click speed.",
+                    "samples": ["Left Click", "Double Click", "Right Click"]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "number": 2,
+            "title": "Term 2",
+            "categories": [
+              {
+                "id": "keyboard",
+                "name": "Keyboard",
+                "topics": [
+                  {
+                    "title": "Typing Short Sentences",
+                    "instruction": "Type short sentences, paying attention to capitalization and spacing.",
+                    "samples": ["I like cake", "You are nice", "We play together", "She can sing", "He has a ball"]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
     ]
-    },
-    {
-      "id": "year7",
-      "name": "Year 7",
-      "terms": [
-        {
-          "number": 1,
-          "title": "Term 1",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard",
-              "topics": [
-                {
-                  "title": "Advanced Home Row Practice",
-                  "instruction": "Maintain correct finger positions while increasing speed.",
-                  "samples": ["ASDF JKL;", "AS DF JK", "FJ DK LA", "ASDFAS", "JKL;JK"]
-                },
-                {
-                  "title": "Number Keys",
-                  "instruction": "Practice typing the number row with and without shift.",
-                  "samples": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
-                }
-              ]
-            },
-            {
-              "id": "mouse",
-              "name": "Mouse",
-              "topics": [
-                {
-                  "title": "Precision Navigation",
-                  "instruction": "Use the mouse to navigate menus and small UI elements.",
-                  "samples": ["Open Menu", "Click Submenu", "Select Option"]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "number": 2,
-          "title": "Term 2",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard",
-              "topics": [
-                {
-                  "title": "Typing Phrases",
-                  "instruction": "Type common phrases paying attention to punctuation.",
-                  "samples": ["Good morning", "How are you", "I like reading", "See you soon", "Thank you"]
-                },
-                {
-                  "title": "Mixed Words Speed Drill",
-                  "instruction": "Type longer vocabulary words quickly and accurately.",
-                  "samples": ["HOUSE", "FRIEND", "SCHOOL", "BOOKS", "TEACHER"]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "number": 3,
-          "title": "Term 3",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard",
-              "topics": [
-                {
-                  "title": "Paragraph Drill",
-                  "instruction": "Type given paragraphs smoothly with accuracy.",
-                  "samples": ["Typing skills help us in school and beyond.", "We must practice daily to improve our speed."]
-                },
-                {
-                  "title": "Short Essay Starters",
-                  "instruction": "Type introductory sentences for essays to practice flow.",
-                  "samples": ["Technology has changed the way we live.", "Education is the key to success."]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "year8",
-      "name": "Year 8",
-      "terms": [
-        {
-          "number": 1,
-          "title": "Term 1",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard",
-              "topics": [
-                {
-                  "title": "Symbols & Special Characters",
-                  "instruction": "Practice common symbols used in writing and code.",
-                  "samples": ["!", "@", "#", "$", "%", "^", "&", "*", "(", ")"]
-                },
-                {
-                  "title": "Numbers & Symbols Mix",
-                  "instruction": "Type number-symbol combinations quickly.",
-                  "samples": ["1!", "2@", "3#", "4$", "5%"]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "number": 2,
-          "title": "Term 2",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard",
-              "topics": [
-                {
-                  "title": "Sentence Drill",
-                  "instruction": "Type sentences including commas and question marks.",
-                  "samples": ["Hello, how are you?", "I love to type!", "Do you like coding?", "When will you come?", "Let's begin now."]
-                },
-                {
-                  "title": "Speed Paragraph",
-                  "instruction": "Type the paragraph as fast and accurately as possible.",
-                  "samples": ["Typing improves when we practice every day."]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "number": 3,
-          "title": "Term 3",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard",
-              "topics": [
-                {
-                  "title": "Essay Typing",
-                  "instruction": "Type a short essay of several paragraphs without looking at the keys.",
-                  "samples": ["My school is a place where I learn and play.", "Typing helps me complete assignments faster."]
-                },
-                {
-                  "title": "Report Snippets",
-                  "instruction": "Type report-style sentences and headings.",
-                  "samples": ["Title: School Fair", "Objective: Raise funds", "Outcome: Successful event"]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "year9",
-      "name": "Year 9",
-      "terms": [
-        {
-          "number": 1,
-          "title": "Term 1",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard",
-              "topics": [
-                {
-                  "title": "Numbers & Special Keys",
-                  "instruction": "Type numbers with shifted symbols for practice.",
-                  "samples": ["1!", "2@", "3#", "4$", "5%", "6^", "7&", "8*", "9(", "0)"]
-                },
-                {
-                  "title": "Typing Data Sets",
-                  "instruction": "Practice typing short structured data lines.",
-                  "samples": ["Name: John", "Age: 12", "Class: 9", "Score: 89", "Date: 2025-01-01"]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "number": 2,
-          "title": "Term 2",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard",
-              "topics": [
-                {
-                  "title": "Complex Sentences",
-                  "instruction": "Type complex sentences including commas and conjunctions.",
-                  "samples": ["Although it rained, we played football.", "She studied hard, so she passed her exams.", "Typing skills require focus and practice."]
-                },
-                {
-                  "title": "Summaries",
-                  "instruction": "Type short summaries from passage notes.",
-                  "samples": ["The passage explains how photosynthesis works.", "The story is about a boy who learns responsibility."]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "number": 3,
-          "title": "Term 3",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard",
-              "topics": [
-                {
-                  "title": "Report Typing",
-                  "instruction": "Type report-style paragraphs with headings and short contents.",
-                  "samples": ["Title: My Holiday\nI visited the beach with my family.", "Title: School Project\nWe worked on a science fair project."]
-                },
-                {
-                  "title": "Research Snippets",
-                  "instruction": "Type sentences that summarize research findings.",
-                  "samples": ["Findings indicate improved performance after training.", "Students who practice daily show better accuracy."]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "year10",
-      "name": "Year 10",
-      "terms": [
-        {
-          "number": 1,
-          "title": "Term 1",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard",
-              "topics": [
-                {
-                  "title": "Typing Accuracy Challenge",
-                  "instruction": "Type longer words and sentences targeting 95% accuracy.",
-                  "samples": ["programming", "development", "accuracy is important", "coding improves skills", "structured practice"]
-                },
-                {
-                  "title": "Essay Practice",
-                  "instruction": "Type a short 150-word essay or provided prompt.",
-                  "samples": ["Write about how you use computers daily.", "The role of technology in education."]
-                }
-              ]
-            },
-            {
-              "id": "mouse",
-              "name": "Mouse",
-              "topics": [
-                {
-                  "title": "Graphic Design Basics",
-                  "instruction": "Use the mouse to create and adjust simple graphics.",
-                  "samples": ["Draw a banner", "Resize an image", "Apply color fill"]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "number": 2,
-          "title": "Term 2",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard",
-              "topics": [
-                {
-                  "title": "Formal Writing",
-                  "instruction": "Type formal letters and format them correctly.",
-                  "samples": ["Application Letter", "Invitation Letter", "Formal email: Dear Sir/Madam,"]
-                },
-                {
-                  "title": "Typing Test",
-                  "instruction": "Achieve 25–30 WPM with minimal errors in a timed test.",
-                  "samples": ["Speed typing challenge for 5 minutes", "Focus on accuracy"]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "number": 3,
-          "title": "Term 3",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard",
-              "topics": [
-                {
-                  "title": "Project Reports",
-                  "instruction": "Type structured project reports including headings and conclusion.",
-                  "samples": ["The experiment proved that...", "Findings indicate a positive trend."]
-                },
-                {
-                  "title": "Comparative Essays",
-                  "instruction": "Type essays comparing two topics with clear structure.",
-                  "samples": ["Compare rural and urban lifestyles.", "Contrast traditional and modern medicine."]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "year11",
-      "name": "Year 11",
-      "terms": [
-        {
-          "number": 1,
-          "title": "Term 1",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard",
-              "topics": [
-                {
-                  "title": "Literature Essays",
-                  "instruction": "Type literary analysis paragraphs with correct citations.",
-                  "samples": ["Shakespeare explores themes of fate in Macbeth.", "The novel reflects the society of its time."]
-                },
-                {
-                  "title": "Code Typing Practice",
-                  "instruction": "Type short code snippets correctly (syntax-focused).",
-                  "samples": ["print('Hello World')", "for i in range(5): print(i)", "if (x > 0) { console.log(x); }"]
-                }
-              ]
-            },
-            {
-              "id": "mouse",
-              "name": "Mouse",
-              "topics": [
-                {
-                  "title": "Photo Editing",
-                  "instruction": "Use the mouse to crop, resize and apply simple edits.",
-                  "samples": ["Crop photo", "Resize image", "Apply filter"]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "number": 2,
-          "title": "Term 2",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard",
-              "topics": [
-                {
-                  "title": "Presentation Preparation",
-                  "instruction": "Type clear slide contents and speaker notes.",
-                  "samples": ["Slide title", "Bullet points", "Summary notes"]
-                },
-                {
-                  "title": "Research Essays",
-                  "instruction": "Type research-based essays summarizing findings.",
-                  "samples": ["Global warming affects biodiversity.", "Renewable energy is the future of power."]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "number": 3,
-          "title": "Term 3",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard",
-              "topics": [
-                {
-                  "title": "Debate & Case Studies",
-                  "instruction": "Type debate points and case study summaries clearly.",
-                  "samples": ["The company improved sales after the campaign.", "The community grew stronger after the project."]
-                },
-                {
-                  "title": "Evaluation Writing",
-                  "instruction": "Type evaluations noting strengths and weaknesses.",
-                  "samples": ["The experiment was successful but had flaws.", "The book was informative yet complex."]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "year12",
-      "name": "Year 12",
-      "terms": [
-        {
-          "number": 1,
-          "title": "Term 1",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard",
-              "topics": [
-                {
-                  "title": "Thesis Writing",
-                  "instruction": "Type thesis-style paragraphs with clear argumentation.",
-                  "samples": ["The research aims to investigate the impact of technology on learning.", "This study focuses on the effects of social media."]
-                },
-                {
-                  "title": "Academic Essays",
-                  "instruction": "Type academic-level essays focusing on structure and clarity.",
-                  "samples": ["Education reforms are essential for development.", "Technology influences modern communication."]
-                }
-              ]
-            },
-            {
-              "id": "mouse",
-              "name": "Mouse",
-              "topics": [
-                {
-                  "title": "UI/UX Precision",
-                  "instruction": "Use mouse to align and adjust interface elements precisely.",
-                  "samples": ["Align text box", "Resize panels", "Drag widgets"]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "number": 2,
-          "title": "Term 2",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard",
-              "topics": [
-                {
-                  "title": "Final Speed Test",
-                  "instruction": "Complete a timed test aiming for 40+ WPM with high accuracy.",
-                  "samples": ["Timed test: type the passages as fast and accurately as possible."]
-                },
-                {
-                  "title": "Project Documentation",
-                  "instruction": "Type full technical or project documentation with headings.",
-                  "samples": ["Introduction", "Methodology", "Results", "Conclusion"]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "number": 3,
-          "title": "Term 3",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard",
-              "topics": [
-                {
-                  "title": "Final Year Essays",
-                  "instruction": "Type longer critical essays and prepare for publication style.",
-                  "samples": ["The impact of colonialism in African literature.", "The future of artificial intelligence."]
-                },
-                {
-                  "title": "Professional Reports",
-                  "instruction": "Type business-style reports with clear structure.",
-                  "samples": ["Executive Summary", "Findings", "Recommendations"]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ]
   };
   </script>
 
-  <!-- App logic -->
+  <!-- App JS -->
   <script>
   (function(){
-    // --- Helpers ---
-    const $ = (sel, el = document) => el.querySelector(sel);
-    const $$ = (sel, el = document) => Array.from(el.querySelectorAll(sel));
+    // Helpers
+    const $ = (s, el = document) => el.querySelector(s);
+    const $$ = (s, el = document) => Array.from(el.querySelectorAll(s));
 
     // DOM refs
     const sidebar = $('#sidebar');
-    const collapseAllBtn = $('#collapseAll');
+    const sidebarContent = $('#sidebarContent');
+    const menuToggle = $('#menuToggle');
+    const closeSidebar = $('#closeSidebar');
+    const classSelect = $('#classSelect');
+    const practiceSelect = $('#practiceSelect');
+    const topicSelect = $('#topicSelect');
+    const beginBtn = $('#beginBtn');
+    const tutorArea = $('#tutorArea');
     const topicTitle = $('#topicTitle');
-    const topicMeta = $('#topicMeta');
-    const instructionText = $('#instructionText');
-    const sampleLine = $('#sampleLine');
-    const typingInput = $('#typingInput');
-    const accDisplay = $('#accDisplay');
-    const wpmDisplay = $('#wpmDisplay');
-    const progDisplay = $('#progDisplay');
-    const timerDisplay = $('#timerDisplay');
+    const topicInfo = $('#topicInfo');
+    const instructionBox = $('#instructionBox');
+    const sampleBox = $('#sampleBox');
+    const inputBox = $('#inputBox');
     const prevBtn = $('#prevBtn');
     const nextBtn = $('#nextBtn');
     const restartBtn = $('#restartBtn');
-    const keyboardEl = $('#keyboard');
-    const samplesList = $('#samplesList');
+    const keyboardWrap = $('#keyboardWrap');
+    const virtualKeyboard = $('#virtualKeyboard');
+    const acc = $('#acc');
+    const wpm = $('#wpm');
+    const errors = $('#errors');
+    const timerEl = $('#timer');
+    const encourage = $('#encourage');
 
-    // on-screen keyboard layout
-    const KB = [
-      ['`','1','2','3','4','5','6','7','8','9','0','-','=', 'Back'],
+    // initial UI state
+    let sidebarOpen = false;
+    function setSidebar(open){
+      sidebarOpen = open;
+      if(open){
+        sidebar.classList.remove('slide-out'); sidebar.classList.add('slide-in');
+      } else {
+        sidebar.classList.remove('slide-in'); sidebar.classList.add('slide-out');
+      }
+    }
+    setSidebar(false);
+
+    menuToggle.addEventListener('click', ()=> setSidebar(!sidebarOpen));
+    closeSidebar.addEventListener('click', ()=> setSidebar(false));
+
+    // Build class select from CLASSES
+    const classes = CLASSES.classes || [];
+    classes.forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = c.id; opt.textContent = c.name;
+      classSelect.appendChild(opt);
+    });
+
+    // Sidebar nested listing (Year -> Term -> Category -> Topic)
+    function buildSidebarContent(){
+      sidebarContent.innerHTML = '';
+      classes.forEach(c => {
+        const yr = document.createElement('div');
+        yr.className = 'mb-4';
+        const head = document.createElement('button');
+        head.className = 'w-full flex items-center justify-between px-2 py-2 rounded hover:bg-[color:var(--muted-gray)]';
+        head.innerHTML = `<span class="font-semibold">${c.name}</span><svg class="w-4 h-4 chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+        yr.appendChild(head);
+
+        const yrBody = document.createElement('div'); yrBody.className = 'pl-3 mt-2 hidden';
+        c.terms.forEach(t => {
+          const tHead = document.createElement('button');
+          tHead.className = 'w-full text-left px-2 py-1 rounded hover:bg-[color:var(--muted-gray)] text-sm text-blue-700';
+          tHead.innerHTML = `<span class="font-medium">${t.title}</span><svg class="w-3 h-3 chev inline-block ml-2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+          yrBody.appendChild(tHead);
+
+          const tBody = document.createElement('div'); tBody.className = 'pl-3 mt-1 hidden';
+          t.categories.forEach(cat => {
+            const cHead = document.createElement('button');
+            cHead.className = 'w-full text-left px-2 py-1 rounded hover:bg-[color:var(--muted-gray)] text-sm text-purple-600';
+            cHead.textContent = cat.name;
+            tBody.appendChild(cHead);
+
+            const catBody = document.createElement('div'); catBody.className = 'pl-3 mt-1 hidden';
+            const ul = document.createElement('ul'); ul.className = 'space-y-1';
+            cat.topics.forEach((topic, idx) => {
+              const li = document.createElement('li');
+              const a = document.createElement('button');
+              a.className = 'w-full text-left px-2 py-1 rounded hover:bg-white text-sm';
+              a.textContent = topic.title;
+              a.addEventListener('click', () => {
+                // choose class and topic in selects for quick start
+                classSelect.value = c.id;
+                onClassChange();
+                practiceSelect.value = cat.id;
+                onPracticeChange();
+                // find index in topicSelect matching topic title
+                for (let i=0;i<topicSelect.options.length;i++){
+                  if (topicSelect.options[i].dataset.title === topic.title) {
+                    topicSelect.selectedIndex = i; break;
+                  }
+                }
+                // show begin button
+                beginBtn.classList.remove('hidden');
+                setSidebar(false);
+                encourage.textContent = '';
+              });
+              li.appendChild(a); ul.appendChild(li);
+            });
+            catBody.appendChild(ul);
+            tBody.appendChild(catBody);
+
+            cHead.addEventListener('click', ()=> {
+              const open = catBody.classList.contains('hidden');
+              // collapse siblings
+              tBody.querySelectorAll(':scope > div').forEach(d=> d.classList.add('hidden'));
+              if (open) catBody.classList.remove('hidden');
+            });
+          });
+
+          tHead.addEventListener('click', ()=> {
+            const open = tBody.classList.contains('hidden');
+            // collapse siblings
+            yrBody.querySelectorAll(':scope > div').forEach(d=> d.classList.add('hidden'));
+            if (open) tBody.classList.remove('hidden');
+          });
+        });
+
+        head.addEventListener('click', ()=> {
+          const open = yrBody.classList.contains('hidden');
+          // collapse other years
+          sidebarContent.querySelectorAll(':scope > div > div.pl-3').forEach(d => d.classList.add('hidden'));
+          if (open) yrBody.classList.remove('hidden');
+        });
+
+        yr.appendChild(yrBody);
+        sidebarContent.appendChild(yr);
+      });
+    }
+    buildSidebarContent();
+
+    // When class changes, populate practice type & topicSelect
+    function onClassChange(){
+      const cId = classSelect.value;
+      practiceSelect.disabled = !cId;
+      topicSelect.innerHTML = '<option value="">Pick a topic</option>';
+      topicSelect.disabled = true;
+      beginBtn.classList.add('hidden');
+      tutorArea.classList.add('hidden');
+      keyboardWrap.classList.add('hidden');
+      encourage.textContent = '';
+      if (!cId) return;
+      // gather practice options available for that class (keyboard / mouse)
+      const cls = classes.find(x=>x.id===cId);
+      const types = new Set();
+      (cls.terms||[]).forEach(t=> (t.categories||[]).forEach(cat=> types.add(cat.id)));
+      // enable practiceSelect options accordingly
+      $$('option', practiceSelect).forEach(opt => {
+        if (!opt.value) return;
+        opt.disabled = !types.has(opt.value);
+        opt.hidden = !types.has(opt.value);
+      });
+    }
+    classSelect.addEventListener('change', onClassChange);
+
+    // When practice type changes, fill topicSelect with topics for that class & type
+    function onPracticeChange(){
+      const cId = classSelect.value;
+      const type = practiceSelect.value;
+      topicSelect.innerHTML = '<option value="">Pick a topic</option>';
+      topicSelect.disabled = true;
+      beginBtn.classList.add('hidden');
+      tutorArea.classList.add('hidden');
+      keyboardWrap.classList.add('hidden');
+      encourage.textContent = '';
+      if (!cId || !type) return;
+      const cls = classes.find(x=>x.id===cId);
+      const topicsFlat = [];
+      (cls.terms||[]).forEach(t=>{
+        (t.categories||[]).forEach(cat=>{
+          if (cat.id === type) {
+            (cat.topics||[]).forEach((topic, idx)=>{
+              const opt = document.createElement('option');
+              opt.value = JSON.stringify({term: t.number, cat: cat.id, idx: idx});
+              opt.textContent = `${t.title} • ${cat.name} • ${topic.title}`;
+              opt.dataset.title = topic.title;
+              topicSelect.appendChild(opt);
+            });
+          }
+        });
+      });
+      topicSelect.disabled = false;
+      beginBtn.classList.remove('hidden');
+    }
+    practiceSelect.addEventListener('change', onPracticeChange);
+
+    // Topic selection shows begin button (already shown by onPracticeChange)
+    topicSelect.addEventListener('change', ()=>{
+      beginBtn.classList.toggle('hidden', !topicSelect.value);
+      tutorArea.classList.add('hidden');
+      keyboardWrap.classList.add('hidden');
+      encourage.textContent = '';
+    });
+
+    // Flattened navigation list for next/prev
+    function gatherTopicsForSelection(cId, type){
+      const list = [];
+      const cls = classes.find(x=>x.id===cId);
+      if (!cls) return list;
+      cls.terms.forEach(t=>{
+        t.categories.forEach(cat=>{
+          if (cat.id === type) {
+            cat.topics.forEach((topic, idx)=>{
+              list.push({term: t.number, catId: cat.id, idx, topic});
+            });
+          }
+        });
+      });
+      return list;
+    }
+
+    // Virtual keyboard layout and build
+    const KB_LAYOUT = [
+      ['`','1','2','3','4','5','6','7','8','9','0','-','=','Back'],
       ['Tab','q','w','e','r','t','y','u','i','o','p','[',']','\\'],
       ['Caps','a','s','d','f','g','h','j','k','l',';','\'','Enter'],
       ['Shift','z','x','c','v','b','n','m',',','.','/','Shift']
     ];
-
-    // build keyboard UI
-    function buildKeyboard(){
-      keyboardEl.innerHTML = '';
-      KB.forEach(row=>{
+    function buildVirtualKeyboard(){
+      virtualKeyboard.innerHTML = '';
+      KB_LAYOUT.forEach(row=>{
         const rowDiv = document.createElement('div');
         rowDiv.className = 'mb-2';
         row.forEach(k=>{
-          const btn = document.createElement('div');
-          btn.className = 'kbd-key';
-          btn.dataset.key = k.toLowerCase();
-          btn.textContent = k.length > 2 && k !== 'Tab' && k !== 'Back' && k !== 'Caps' && k !== 'Enter' && k !== 'Shift' ? k : k;
-          rowDiv.appendChild(btn);
+          const key = document.createElement('div');
+          key.className = 'kbd-key';
+          key.dataset.key = (k.length === 1)? k.toLowerCase() : k.toLowerCase();
+          key.textContent = k;
+          // home-row highlight
+          if (['a','s','d','f','j','k','l',';'].includes((k+'').toLowerCase())) key.classList.add('home');
+          rowDiv.appendChild(key);
         });
-        keyboardEl.appendChild(rowDiv);
+        virtualKeyboard.appendChild(rowDiv);
       });
     }
-    buildKeyboard();
+    buildVirtualKeyboard();
 
-    // --- Data flattening and traversal ---
-    const classes = CLASSES.classes || [];
-    // We'll build an array of topic references for next/prev traversal
-    const topicsIndex = []; // {yearId, termNum, catId, topicIndex, label}
-
-    function buildSidebar(){
-      sidebar.innerHTML = '';
-      classes.forEach(year=>{
-        const yearDiv = document.createElement('div');
-        yearDiv.className = 'border-b pb-2 mb-2';
-
-        const head = document.createElement('button');
-        head.className = 'w-full flex items-center justify-between px-2 py-2 rounded hover:bg-orange-50';
-        head.innerHTML = `<span class="font-semibold">${year.name}</span><svg class="chev w-4 h-4 text-gray-500" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-        yearDiv.appendChild(head);
-
-        const yearBody = document.createElement('div');
-        yearBody.className = 'pl-3 mt-2 hidden';
-        yearDiv.appendChild(yearBody);
-
-        // terms
-        (year.terms || []).forEach(term=>{
-          const tHead = document.createElement('button');
-          tHead.className = 'w-full flex items-center justify-between px-2 py-1 text-sm rounded hover:bg-orange-50';
-          tHead.innerHTML = `<span class="text-blue-700 font-medium">${term.title}</span><svg class="chev w-3 h-3 text-gray-400" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-          yearBody.appendChild(tHead);
-
-          const termBody = document.createElement('div');
-          termBody.className = 'pl-4 mt-1 hidden';
-          yearBody.appendChild(termBody);
-
-          // categories
-          (term.categories || []).forEach(cat=>{
-            const cHead = document.createElement('button');
-            cHead.className = 'w-full flex items-center justify-between px-2 py-1 text-sm text-purple-600 rounded hover:bg-orange-50';
-            cHead.innerHTML = `<span class="font-medium">${cat.name}</span><svg class="chev w-3 h-3 text-gray-400" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-            termBody.appendChild(cHead);
-
-            const catBody = document.createElement('div');
-            catBody.className = 'pl-4 mt-1 hidden';
-            termBody.appendChild(catBody);
-
-            // topics
-            const ul = document.createElement('ul');
-            ul.className = 'space-y-1';
-            (cat.topics || []).forEach((topic, idx)=>{
-              const li = document.createElement('li');
-              const a = document.createElement('button');
-              a.className = 'w-full text-left px-2 py-1 rounded hover:bg-orange-50 transition text-sm';
-              a.textContent = topic.title;
-              a.dataset.year = year.id;
-              a.dataset.term = term.number;
-              a.dataset.cat = cat.id;
-              a.dataset.topic = idx;
-              a.addEventListener('click', ()=> {
-                const meta = { yearId: year.id, termNum: term.number, catId: cat.id, topicIndex: idx };
-                loadTopic(meta, true);
-              });
-
-              li.appendChild(a);
-              ul.appendChild(li);
-
-              // push to flat traversal index
-              topicsIndex.push({
-                yearId: year.id,
-                termNum: term.number,
-                catId: cat.id,
-                topicIndex: idx,
-                label: `${year.name} › ${term.title} › ${cat.name} › ${topic.title}`
-              });
-            });
-            catBody.appendChild(ul);
-          });
-
-          // toggle category body
-          cHead.addEventListener('click', ()=> {
-            const opened = !catBody.classList.contains('hidden');
-            // collapse siblings in this termBody
-            termBody.querySelectorAll(':scope > div').forEach(d=> d.classList.add('hidden'));
-            if (!opened) catBody.classList.remove('hidden');
-            // rotate icon
-            termBody.querySelectorAll('.chev').forEach(s => s.style.transform = 'rotate(0deg)');
-            if (!opened) cHead.querySelector('.chev').style.transform = 'rotate(180deg)';
-          });
-        });
-
-        // toggle term body
-        tHead.addEventListener('click', ()=> {
-          const opened = !termBody.classList.contains('hidden');
-          // collapse other terms inside this year
-          yearBody.querySelectorAll(':scope > div').forEach(d=> d.classList.add('hidden'));
-          if (!opened) termBody.classList.remove('hidden');
-          yearBody.querySelectorAll('.chev').forEach(s => s.style.transform = 'rotate(0deg)');
-          if (!opened) tHead.querySelector('.chev').style.transform = 'rotate(180deg)';
-        });
-
-        // toggle year body
-        head.addEventListener('click', ()=> {
-          const opened = !yearBody.classList.contains('hidden');
-          // collapse other years
-          sidebar.querySelectorAll('> div > div.pl-3').forEach(d=> d.classList.add('hidden'));
-          if (!opened) yearBody.classList.remove('hidden');
-          sidebar.querySelectorAll('.chev').forEach(s => s.style.transform = 'rotate(0deg)');
-          if (!opened) head.querySelector('.chev').style.transform = 'rotate(180deg)';
-        });
-
-        sidebar.appendChild(yearDiv);
-      });
+    // Helper: parse selected topic to get object
+    function getSelectedTopicObject(){
+      const cId = classSelect.value;
+      const sel = topicSelect.value;
+      if (!cId || !sel) return null;
+      const parsed = JSON.parse(sel); // {term, cat, idx}
+      const cls = classes.find(x=>x.id===cId);
+      const term = cls.terms.find(t=>t.number === parsed.term);
+      const cat = term.categories.find(cc=>cc.id === parsed.cat);
+      const topic = cat.topics[parsed.idx];
+      return { cls, term, cat, topic, idx: parsed.idx };
     }
 
-    buildSidebar();
-
-    // collapse all handler
-    collapseAllBtn.addEventListener('click', ()=>{
-      sidebar.querySelectorAll('.pl-3, .pl-4, .pl-4.mt-1').forEach(el => el.classList.add('hidden'));
-      sidebar.querySelectorAll('.chev').forEach(c => c.style.transform = 'rotate(0deg)');
-    });
-
-    // --- Topic loader and practice logic ---
-    let currentTopicRef = null; // {yearId,termNum,catId,topicIndex}
-    let currentTopicObj = null;
-    let samples = []; // array of strings for this topic
-    let samplePointer = 0;
-    let charPointer = 0;
+    // Practice state
+    let currentSamples = []; // array of strings
+    let curIndex = 0; // which sample in currentSamples
+    let correctChars = 0;
+    let typedChars = 0;
     let startTime = null;
-    let totalTyped = 0;
-    let totalCorrect = 0;
-    let timer = null;
-    let timerEndsAt = null;
-    let isTimed = false;
-    let timedSeconds = 0;
+    let timed = false; let timerID = null; let timerEnd = null; let timerSeconds = 0;
+    let topicsList = []; // used for next/prev navigation within class+type
 
-    function findTopic(ref){
-      const year = classes.find(y => y.id === ref.yearId);
-      if (!year) return null;
-      const term = (year.terms || []).find(t => t.number === ref.termNum);
-      if (!term) return null;
-      const cat = (term.categories || []).find(c => c.id === ref.catId);
-      if (!cat) return null;
-      const topic = (cat.topics || [])[ref.topicIndex];
-      if (!topic) return null;
-      return { year, term, cat, topic };
-    }
-
-    function isTopicTimed(topic){
-      const keys = (topic.title || '') + ' ' + (topic.instruction || '');
-      if (/timed|min(ute)?s?/i.test(keys)) {
-        // try parse minutes like "3 minutes" or "(3 min)" or "5 minutes"
-        const m = keys.match(/(\d{1,2})\s*(min|minute|minutes)/i) || keys.match(/\((\d{1,2})\s*min/i);
-        if (m) return parseInt(m[1],10);
-        // otherwise default guess for 'Timed Drill' — 3 minutes
-        return 3;
-      }
+    // Helpers: detect timed minutes in topic
+    function detectTimedMinutes(topic){
+      const text = (topic.title || '') + ' ' + (topic.instruction || '');
+      const m = text.match(/(\d{1,2})\s*(min|minute|minutes|min\))/i);
+      if (m) return parseInt(m[1],10);
+      if (/timed/i.test(text) && /5/.test(text)) return 5; // fallback
       return 0;
     }
 
-    function resetPracticeState(){
-      samplePointer = 0;
-      charPointer = 0;
-      startTime = null;
-      totalTyped = 0;
-      totalCorrect = 0;
-      clearInterval(timer);
-      timer = null;
-      timerEndsAt = null;
-      timerDisplay.textContent = '—';
-      isTimed = false;
-      timedSeconds = 0;
-      typingInput.value = '';
-      typingInput.disabled = true;
-      sampleLine.innerHTML = '';
-      accDisplay.textContent = '0%';
-      wpmDisplay.textContent = '0 WPM';
-      progDisplay.textContent = '0 / 0';
-      samplesList.innerHTML = '';
+    function resetStats(){
+      correctChars = 0; typedChars = 0; startTime = null;
+      acc.textContent = '0%'; wpm.textContent = '0'; errors.textContent = '0';
+      timerEl.textContent = '—';
+      encourage.textContent = '';
+      if (timerID) { clearInterval(timerID); timerID = null; }
     }
 
-    // render current sample into DOM with char spans
-    function renderSample(){
-      const text = samples[samplePointer] || '';
-      sampleLine.innerHTML = '';
-      for (let i=0;i<text.length;i++){
+    // Render a sample string into sampleBox with span per char
+    function renderCurrentSample(){
+      const s = currentSamples[curIndex] || '';
+      sampleBox.innerHTML = '';
+      for (let i=0;i<s.length;i++){
         const sp = document.createElement('span');
-        sp.className = 'sample-char';
-        sp.textContent = text[i];
+        sp.textContent = s[i];
         sp.dataset.pos = i;
-        sampleLine.appendChild(sp);
+        sp.className = '';
+        sampleBox.appendChild(sp);
       }
-      // update samples list
-      samplesList.innerHTML = '';
-      samples.forEach((s, idx)=> {
-        const li = document.createElement('li');
-        li.className = idx === samplePointer ? 'font-semibold text-orange-600' : '';
-        li.textContent = s;
-        samplesList.appendChild(li);
-      });
-      progDisplay.textContent = `${samplePointer+1} / ${samples.length}`;
+      // scroll into view
+      sampleBox.scrollIntoView({behavior:'smooth', block:'nearest'});
+      inputBox.value = '';
+      inputBox.disabled = false;
+      inputBox.focus();
+      updateProgressUI();
     }
 
-    // highlight on-screen key
-    function pressKeyVisual(ch){
-      const normalized = (''+ch).toLowerCase();
-      // find elements with matching data-key
-      const keys = Array.from(keyboardEl.querySelectorAll('.kbd-key'));
-      keys.forEach(k=>{
-        k.classList.toggle('active', k.dataset.key === normalized);
-      });
-      // remove active after 150ms
-      setTimeout(()=> keys.forEach(k=>k.classList.remove('active')), 150);
-    }
-
-    function charCompare(a,b){
-      // return true if characters match (letters case-insensitive, else exact)
-      if (!a && !b) return true;
-      if (!a || !b) return false;
-      if (a.match(/[a-zA-Z]/) && b.match(/[a-zA-Z]/)) return a.toLowerCase() === b.toLowerCase();
-      return a === b;
-    }
-
-    function updateStats(){
-      const acc = totalTyped ? Math.round((totalCorrect/totalTyped)*100) : 0;
-      accDisplay.textContent = acc + '%';
-      const elapsedMinutes = startTime ? ((Date.now() - startTime)/1000/60) : 0;
-      const words = Math.max(0, Math.round((totalTyped/5)));
-      const wpm = elapsedMinutes > 0 ? Math.round(words / elapsedMinutes) : 0;
-      wpmDisplay.textContent = wpm + ' WPM';
-    }
-
-    function completeSample(){
-      // small animation / mark all remaining chars as correct
-      const spans = sampleLine.querySelectorAll('span');
-      spans.forEach(s=>{
-        s.classList.remove('incorrect');
-        s.classList.add('correct');
-      });
-      // advance after tiny delay
-      setTimeout(()=> {
-        samplePointer++;
-        charPointer = 0;
-        typingInput.value = '';
-        if (samplePointer >= samples.length){
-          // topic finished
-          typingInput.disabled = true;
-          alert('🎉 Topic complete! Well done!');
-        } else {
-          renderSample();
-          typingInput.focus();
-        }
-        updateStats();
-      }, 220);
+    function updateProgressUI(){
+      prevBtn.disabled = curIndex <= 0;
+      nextBtn.disabled = curIndex >= currentSamples.length - 1;
     }
 
     function startTimer(seconds){
-      if (timer) clearInterval(timer);
-      timerEndsAt = Date.now() + seconds * 1000;
-      timerDisplay.textContent = formatSeconds(seconds);
-      timer = setInterval(()=> {
-        const left = Math.max(0, Math.round((timerEndsAt - Date.now())/1000));
-        timerDisplay.textContent = formatSeconds(left);
+      if (timerID) clearInterval(timerID);
+      timerSeconds = seconds;
+      timerEnd = Date.now() + seconds*1000;
+      timerEl.textContent = formatTime(seconds);
+      timerID = setInterval(()=>{
+        const left = Math.max(0, Math.round((timerEnd - Date.now())/1000));
+        timerEl.textContent = formatTime(left);
         if (left <= 0) {
-          clearInterval(timer);
-          alert('⏰ Time up! Topic finished.');
-          // disable typing
-          typingInput.disabled = true;
+          clearInterval(timerID);
+          inputBox.disabled = true;
+          encourage.textContent = '⏰ Time up — well done!';
+          // Optionally mark topic done
         }
       }, 300);
     }
+    function formatTime(s){ return `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`; }
 
-    function formatSeconds(s){
-      const mm = String(Math.floor(s/60)).padStart(2,'0');
-      const ss = String(s%60).padStart(2,'0');
-      return `${mm}:${ss}`;
+    function computeStats(){
+      const accPct = typedChars ? Math.round((correctChars/typedChars)*100) : 0;
+      acc.textContent = accPct + '%';
+      const elapsedMinutes = startTime ? ((Date.now() - startTime)/1000/60) : 0;
+      const words = Math.max(0, Math.round((correctChars/5)));
+      const curWpm = elapsedMinutes > 0 ? Math.round(words / elapsedMinutes) : 0;
+      wpm.textContent = curWpm;
+      errors.textContent = Math.max(0, typedChars - correctChars);
     }
 
-    // load a topic by its meta reference
-    function loadTopic(meta, focus){
-      resetPracticeState();
-      currentTopicRef = meta;
-      const found = findTopic(meta);
-      if (!found) {
-        topicTitle.textContent = 'Topic not found';
-        return;
-      }
-      currentTopicObj = found;
-      const topic = found.topic;
-      topicTitle.textContent = topic.title;
-      topicMeta.textContent = `${found.year.name} • ${found.term.title} • ${found.cat.name}`;
-      instructionText.textContent = topic.instruction || '';
-      samples = (topic.samples || []).slice(); // copy
-      // if a sample is multiline with \n, keep as-is (we show exact)
-      // populate samples list and render first
-      renderSample();
-      samples.forEach((s, i)=>{
-        // nothing extra needed now
-      });
-
-      // detect if timed
-      const mins = isTopicTimed(topic);
-      if (mins > 0) {
-        isTimed = true;
-        timedSeconds = mins * 60;
-        timerDisplay.textContent = formatSeconds(timedSeconds);
-      } else {
-        isTimed = false;
-        timerDisplay.textContent = '—';
-      }
-
-      typingInput.disabled = false;
-      if (focus) typingInput.focus();
-
-      // highlight active item in sidebar
-      highlightActiveInSidebar(meta);
-
-      // enable next/prev buttons
-      const idx = topicsIndex.findIndex(t => t.yearId===meta.yearId && t.termNum===meta.termNum && t.catId===meta.catId && t.topicIndex===meta.topicIndex);
-      prevBtn.disabled = idx <= 0;
-      nextBtn.disabled = idx < 0 || idx >= topicsIndex.length-1;
-      // set text for next button maybe
-    }
-
-    function highlightActiveInSidebar(meta){
-      // remove all active classes
-      sidebar.querySelectorAll('button').forEach(b => b.classList.remove('lesson-active'));
-      // find the topic button
-      const sel = `button[data-year="${meta.yearId}"][data-term="${meta.termNum}"][data-cat="${meta.catId}"][data-topic="${meta.topicIndex}"]`;
-      const btn = sidebar.querySelector(sel);
-      if (btn) {
-        btn.classList.add('lesson-active');
-        // open parents (year, term, cat)
-        let parent = btn.parentElement;
-        while (parent && parent !== sidebar){
-          if (parent.classList.contains('hidden')) parent.classList.remove('hidden');
-          parent = parent.parentElement;
-        }
+    // Visual key press
+    function keyVisual(k){
+      const key = virtualKeyboard.querySelector(`.kbd-key[data-key="${(k+'').toLowerCase()}"]`);
+      if (key) {
+        key.classList.add('active');
+        setTimeout(()=> key.classList.remove('active'), 160);
       }
     }
 
-    // keyboard physical map listeners
-    document.addEventListener('keydown', (ev) => {
-      // visual press
-      pressKeyVisual(ev.key);
-    });
-    document.addEventListener('keyup', (ev) => {
-      // visual release handled by timeout in pressKeyVisual
-    });
+    // Compare char: letters case-insensitive, else exact
+    function charMatch(a,b){
+      if (!a && !b) return true;
+      if (!a || !b) return false;
+      if (/[a-zA-Z]/.test(a) && /[a-zA-Z]/.test(b)) return a.toLowerCase() === b.toLowerCase();
+      return a === b;
+    }
 
-    // typing input handler
-    typingInput.addEventListener('input', (ev)=>{
-      if (!currentTopicObj) return;
-      if (!startTime) startTime = Date.now();
-      // start timer for timed topics when user starts typing
-      if (isTimed && !timer) startTimer(timedSeconds);
-
-      const val = typingInput.value;
-      totalTyped += 1;
-      // compare as sequence against current sample
-      const currentText = samples[samplePointer] || '';
-      // if user typed past the current sample length, ignore extra chars (or allow backspace)
-      // we'll compare up to typed length or sample length, whichever smaller
-      const minLen = Math.min(val.length, currentText.length);
-      let correctThisInput = 0;
-      // update span classes
-      const spans = sampleLine.querySelectorAll('span');
+    // Input handler
+    inputBox.addEventListener('input', (e)=>{
+      if (!startTime) {
+        startTime = Date.now();
+        if (timed && timerSeconds>0 && !timerID) startTimer(timerSeconds);
+      }
+      const val = inputBox.value;
+      typedChars = (currentSamples.slice(0,curIndex).join('').length) + val.length;
+      // update spans
+      const spans = sampleBox.querySelectorAll('span');
+      let correctThis = 0;
       for (let i=0;i<spans.length;i++){
-        const ch = val[i] || '';
-        if (i < minLen && charCompare(ch, currentText[i])){
-          spans[i].classList.remove('incorrect');
-          spans[i].classList.add('correct');
-          correctThisInput++;
-        } else if (i < val.length) {
-          spans[i].classList.remove('correct');
-          spans[i].classList.add('incorrect');
-        } else {
-          spans[i].classList.remove('correct','incorrect');
-        }
+        const expected = spans[i].textContent;
+        const got = val[i] || '';
+        if (got === '') { spans[i].classList.remove('char-correct','char-wrong'); }
+        else if (charMatch(got, expected)) { spans[i].classList.add('char-correct'); spans[i].classList.remove('char-wrong'); correctThis++; }
+        else { spans[i].classList.add('char-wrong'); spans[i].classList.remove('char-correct'); }
       }
-      // update totals (we'll approximate correct chars by correctThisInput)
-      // to avoid double counting on repeated input events, recompute totals from scratch:
-      // recompute totalTyped and totalCorrect from typed input across samples up to current
-      // For simplicity: we keep running totals but also correctThisInput influences totalCorrect incrementally:
-      // We'll increment totalCorrect by 1 for each newly-correct character at the tail (detect progress)
-      // Find previously-correct position (charPointer) and update
-      // Simpler approach: compute totalTyped/totalCorrect based on current progress across all completed samples + current.
-      // compute completed chars correct:
-      let correctCompleted = 0;
-      for (let s=0; s<samplePointer; s++){
-        const txt = samples[s];
-        correctCompleted += txt.length; // we treat completed samples as fully correct (they were completed)
+      // Recompute totals: treat completed earlier samples as fully correct (if user moved on)
+      let completedCorrect = 0;
+      for (let s=0;s<curIndex;s++) completedCorrect += currentSamples[s].length;
+      correctChars = completedCorrect + correctThis;
+      computeStats();
+      // visual keyboard
+      if (val.length) keyVisual(val[val.length-1]);
+
+      // if fully matched current sample, auto-complete to next after short delay
+      const curText = currentSamples[curIndex] || '';
+      let allMatch = true;
+      for (let i=0;i<curText.length;i++){
+        if (!charMatch(val[i]||'', curText[i])) { allMatch = false; break; }
       }
-      // for current sample, count correct spans
-      const currentCorrectSpans = Array.from(spans).filter(sp=> sp.classList.contains('correct')).length;
-      totalCorrect = correctCompleted + currentCorrectSpans;
-      // compute totalTyped as sum of lengths of completed samples + current typed length
-      let typedSoFarLength = 0;
-      for (let s=0; s<samplePointer; s++) typedSoFarLength += samples[s].length;
-      typedSoFarLength += val.length;
-      // set totals
-      // (We won't track deletions perfectly across events but this gives reasonable metrics)
-      totalTyped = Math.max(typedSoFarLength, 1);
-
-      updateStats();
-
-      // If user has matched entire current sample exactly, advance
-      if (val.length >= currentText.length) {
-        // check exact match (charCompare for each)
-        let allMatch = true;
-        for (let i=0;i<currentText.length;i++){
-          if (!charCompare(val[i]||'', currentText[i])) { allMatch = false; break; }
-        }
-        if (allMatch) {
-          completeSample();
-        }
+      if (val.length >= curText.length && allMatch) {
+        // mark finished
+        setTimeout(()=> {
+          // mark all spans correct
+          sampleBox.querySelectorAll('span').forEach(sp=> { sp.classList.remove('char-wrong'); sp.classList.add('char-correct'); });
+          // advance
+          if (curIndex < currentSamples.length - 1) {
+            curIndex++;
+            renderCurrentSample();
+            encourage.textContent = randomEncouragement(true);
+          } else {
+            // last item done
+            inputBox.disabled = true;
+            encourage.textContent = '🎉 Topic complete — great work!';
+          }
+        }, 180);
       }
     });
 
-    // prev/next/restart handlers
-    prevBtn.addEventListener('click', ()=>{
-      if (!currentTopicRef) return;
-      const idx = topicsIndex.findIndex(t => t.yearId===currentTopicRef.yearId && t.termNum===currentTopicRef.termNum && t.catId===currentTopicRef.catId && t.topicIndex===currentTopicRef.topicIndex);
-      if (idx > 0) {
-        const prev = topicsIndex[idx-1];
-        loadTopic({yearId:prev.yearId, termNum:prev.termNum, catId:prev.catId, topicIndex:prev.topicIndex}, true);
+    // keyboard physical highlight
+    document.addEventListener('keydown', (e)=> {
+      keyVisual(e.key);
+    });
+
+    // Begin training click
+    beginBtn.addEventListener('click', ()=> {
+      const selObj = getSelectedTopicObject();
+      if (!selObj) return alert('Please select a topic');
+      const topic = selObj.topic;
+      // prepare samples
+      currentSamples = (topic.samples || []).slice();
+      // Build progressive difficulty: if samples are single letters/words, automatically add a few combined strings to increase difficulty
+      // e.g., combine words into short phrases for later progression (simple heuristic)
+      const more = [];
+      // if many short words (length <=3), create combined
+      const shortWords = currentSamples.filter(s => s.length <= 3);
+      if (shortWords.length >= 2) {
+        more.push(shortWords.join(' '));
+        more.push(shortWords.slice().reverse().join(' '));
       }
+      // if topic contains sentences, keep them and optionally add concatenated sentences
+      const sentences = currentSamples.filter(s => s.includes(' ') || s.includes('.') || s.includes(','));
+      if (sentences.length >= 2) more.push(sentences.join(' '));
+      // append progressive items
+      currentSamples = currentSamples.concat(more);
+
+      curIndex = 0;
+      resetStats();
+      // timed?
+      const mins = detectTimedMinutes(topic);
+      timed = mins > 0; if (timed) { timerSeconds = mins * 60; timerEl.textContent = formatTime(timerSeconds); } else timerEl.textContent = '—';
+      // Show UI
+      tutorArea.classList.remove('hidden');
+      instructionBox.textContent = topic.instruction || '';
+      topicTitle.textContent = topic.title;
+      topicInfo.textContent = `${selObj.cls.name} • ${selObj.term.title} • ${selObj.cat.name}`;
+      renderCurrentSample();
+      updateProgressUI();
+      // If keyboard practice, show keyboard
+      if (selObj.cat.id === 'keyboard') {
+        keyboardWrap.classList.remove('hidden');
+      } else {
+        keyboardWrap.classList.add('hidden');
+      }
+      beginBtn.classList.add('hidden');
+      encourage.textContent = 'Go on — start typing when ready!';
+      // make topicsList for navigation
+      topicsList = gatherTopicsForSelection(selObj.cls.id, selObj.cat.id);
+      // find current absolute index (match by title)
+      // Not used heavily here, but available for next/prev across whole class type
+    });
+
+    // Prev/Next/Restart handlers
+    prevBtn.addEventListener('click', ()=>{
+      if (curIndex > 0) { curIndex--; renderCurrentSample(); encourage.textContent = 'Try this one again!'; }
     });
     nextBtn.addEventListener('click', ()=>{
-      if (!currentTopicRef) return;
-      const idx = topicsIndex.findIndex(t => t.yearId===currentTopicRef.yearId && t.termNum===currentTopicRef.termNum && t.catId===currentTopicRef.catId && t.topicIndex===currentTopicRef.topicIndex);
-      if (idx >= 0 && idx < topicsIndex.length-1) {
-        const next = topicsIndex[idx+1];
-        loadTopic({yearId:next.yearId, termNum:next.termNum, catId:next.catId, topicIndex:next.topicIndex}, true);
-      }
+      if (curIndex < currentSamples.length - 1) { curIndex++; renderCurrentSample(); encourage.textContent = 'Keep going — you got this!'; }
     });
     restartBtn.addEventListener('click', ()=>{
-      if (!currentTopicRef) return;
-      loadTopic(currentTopicRef, true);
+      resetStats(); curIndex = 0; renderCurrentSample(); encourage.textContent = 'Restarted — take your time.'; inputBox.focus();
+      // reset timer if timed
+      if (timed && timerSeconds) { if (timerID) clearInterval(timerID); timerID = null; timerEl.textContent = formatTime(timerSeconds); }
     });
 
-    // initialize: open first year and load first topic
-    if (topicsIndex.length > 0){
-      // buildSidebar already populated topicsIndex
-      // open first year node
-      const first = topicsIndex[0];
-      // load first
-      loadTopic({yearId:first.yearId, termNum:first.termNum, catId:first.catId, topicIndex:first.topicIndex}, true);
+    // simple encouragement phrases
+    function randomEncouragement(success){
+      const good = ['Nice!', 'Great job!', 'Keep it up!', 'You’re improving!', 'Awesome!'];
+      const tryAgain = ['Almost!', 'Try again — you can do it!', 'Keep practicing!', 'One more time!'];
+      return success ? good[Math.floor(Math.random()*good.length)] : tryAgain[Math.floor(Math.random()*tryAgain.length)];
     }
 
-    // Make sidebar buttons accessible (keyboard)
-    sidebar.addEventListener('keydown', (e)=> {
-      if (e.key === 'Enter' && e.target && e.target.dataset && e.target.dataset.topic) {
-        const meta = { yearId: e.target.dataset.year, termNum: parseInt(e.target.dataset.term,10), catId: e.target.dataset.cat, topicIndex: parseInt(e.target.dataset.topic,10) };
-        loadTopic(meta, true);
-      }
-    });
+    // gather topics for navigation: within selected class & type
+    function gatherTopicsForSelection(cId, type){
+      const list = [];
+      const cls = classes.find(x=>x.id===cId);
+      if (!cls) return list;
+      cls.terms.forEach(t=>{
+        t.categories.forEach(cat=>{
+          if (cat.id === type) {
+            cat.topics.forEach((topic, idx)=>{
+              list.push({term: t.number, catId: cat.id, idx, topic});
+            });
+          }
+        });
+      });
+      return list;
+    }
 
-    // expose a function for external use (dev/test)
-    window.typingTutor = { loadTopic };
+    // get selected topic object function for begin handler
+    function getSelectedTopicObject(){
+      const sel = topicSelect.value; if (!sel) return null;
+      const parsed = JSON.parse(sel);
+      const cId = classSelect.value;
+      const cls = classes.find(x=>x.id===cId);
+      const term = cls.terms.find(t=>t.number===parsed.term);
+      const cat = term.categories.find(cc=>cc.id===parsed.cat);
+      const topic = cat.topics[parsed.idx];
+      return { cls, term, cat, topic, idx: parsed.idx };
+    }
 
+    // expose for debugging
+    window._edu = { classes };
+
+    // initial small nicety: populate practiceSelect disabled until class chosen
+    // (we already set that up)
   })();
   </script>
 
