@@ -142,8 +142,49 @@ document.addEventListener('keydown', e=>{
   const key = e.key.length===1 ? e.key : ''; // ignore Shift etc.
   handleInput(key);
 });
-
 // === FETCH JSON TOPIC DATA ===
+async function loadPractice(yearId, termNumber, topicTitle) {
+  try {
+    const res = await fetch('data/classes.json');
+    if (!res.ok) throw new Error("Failed to load classes.json");
+    const data = await res.json();
+
+    // 1. Locate the correct year
+    const year = data.classes.find(c => c.id === yearId);
+    if (!year) throw new Error(`Year '${yearId}' not found`);
+
+    // 2. Locate the correct term
+    const term = year.terms.find(t => t.number === termNumber);
+    if (!term) throw new Error(`Term ${termNumber} not found in ${year.name}`);
+
+    // 3. Find topic in ANY category
+    let topic;
+    for (const cat of term.categories) {
+      topic = cat.topics.find(tp => tp.title === topicTitle);
+      if (topic) break; // stop if found
+    }
+    if (!topic) throw new Error(`Topic '${topicTitle}' not found`);
+
+    // === Use samples for practice ===
+    currentSequence = [...topic.samples];
+    score = 0;
+    currentIndex = 0;
+    currentLetterIndex = 0;
+
+    // Update UI
+    scoreDisplay.textContent = "Score: 0";
+    instructionBox.textContent = topic.instruction; // show guide
+    showCurrentLetter();
+
+  } catch (err) {
+    practiceArea.innerHTML = `<p style="color:red">${err.message}</p>`;
+    console.error(err);
+  }
+}
+
+
+  
+/*// === FETCH JSON TOPIC DATA ===
 async function loadPractice(yearId, termNumber, topicTitle){
   try{
     const res = await fetch("data/classes.json"); 
@@ -174,7 +215,7 @@ async function loadPractice(yearId, termNumber, topicTitle){
 }
 
 // Example call (replace with URL params if needed)
-loadPractice("year1",1,"Home Row Keys");
+loadPractice("year1",1,"Home Row Keys");*/
 </script>
 </body>
 </html>
