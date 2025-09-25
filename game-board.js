@@ -1,4 +1,4 @@
-<script>
+
 const practiceArea = document.getElementById('practiceArea');
 const scoreDisplay = document.getElementById('scoreDisplay');
 const virtualKeyboard = document.getElementById('virtualKeyboard');
@@ -171,4 +171,4 @@ async function loadTopic() {
 
 window.focus();
 loadTopic();
-</script>
+
