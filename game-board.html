@@ -19,6 +19,56 @@
   .vk-key.active { cursor:pointer; background:#e7e7e7; }
   .vk-key.highlight { background:#ffeb3b; }
   .score { font-weight:bold; margin-top:10px; }
+
+/*additional css*/
+  
+  .accordion-btn {
+  width: 100%;
+  text-align: left;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background: #4caf50;
+  color: white;
+  transition: background 0.3s ease;
+}
+.accordion-btn:hover {
+  background: #45a049;
+}
+.accordion-panel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease-out, padding 0.3s ease;
+  background: #f9f9f9;
+  padding: 0 15px;
+}
+.accordion-btn.active + .accordion-panel {
+  max-height: 600px; /* big enough for content */
+  padding: 10px 15px;
+}
+.term {
+  margin-bottom: 10px;
+}
+.category-title {
+  font-weight: bold;
+  margin-top: 8px;
+}
+ul {
+  list-style: none;
+  padding-left: 15px;
+}
+ul li {
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background 0.3s;
+}
+ul li:hover {
+  background: #e0ffe0;
+}
 </style>
 </head>
 <body>
