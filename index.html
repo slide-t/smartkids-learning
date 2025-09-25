@@ -1,0 +1,338 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Typing Tutor — Sample</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* small custom styles */
+    .key {
+      min-width: 38px; min-height: 38px; display:inline-flex;align-items:center;justify-content:center;border-radius:6px;border:1px solid #e5e7eb;margin:2px;font-weight:600;
+    }
+    .key.active { box-shadow: 0 6px 18px rgba(249,115,22,0.15); transform: translateY(-3px); }
+    .cursor { display:inline-block; width:2px; height:1.1em; background:#111; margin-left:1px; animation: blink 1s steps(2) infinite;}
+    @keyframes blink { 0%,50% {opacity:1} 51%,100% {opacity:0} }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen font-sans text-gray-800">
+  <div class="max-w-4xl mx-auto p-6">
+    <header class="flex items-center justify-between mb-6">
+      <div class="flex items-center gap-4">
+        <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48'><rect rx='8' width='48' height='48' fill='%23f97316'/><text x='50%' y='55%' font-size='20' font-family='Arial' text-anchor='middle' fill='white'>KT</text></svg>" alt="logo" class="w-12 h-12 rounded-full"/>
+        <div>
+          <h1 class="text-2xl font-bold">Typing Tutor — Kids Practice</h1>
+          <p class="text-sm text-gray-600">Progressive drills from your <code>sample.json</code> file</p>
+        </div>
+      </div>
+      <div>
+        <label class="text-xs text-gray-600 mr-2">Mode</label>
+        <select id="modeSelect" class="px-3 py-2 rounded bg-white border">
+          <option value="guided">Guided (per-key)</option>
+          <option value="timed">Timed (WPM)</option>
+          <option value="free">Free Practice</option>
+        </select>
+      </div>
+    </header><main class="grid grid-cols-1 md:grid-cols-3 gap-6">
+  <section class="md:col-span-2 bg-white p-4 rounded shadow-sm">
+    <div class="flex items-start justify-between">
+      <div>
+        <h2 id="lessonTitle" class="text-lg font-semibold">Loading lessons...</h2>
+        <p id="lessonSubtitle" class="text-sm text-gray-500">Choose a lesson to start</p>
+      </div>
+      <div class="text-right">
+        <div class="text-xs text-gray-500">Progress</div>
+        <div id="progressText" class="font-medium">0 / 0</div>
+      </div>
+    </div>
+
+    <div id="drillCard" class="mt-4 p-4 border rounded min-h-[160px]">
+      <div id="passageWrap" class="rounded p-3 bg-gray-50 text-xl leading-relaxed text-gray-800 break-words">
+        <div id="passage" class="select-none"></div>
+      </div>
+
+      <div id="inputArea" class="mt-4">
+        <textarea id="hiddenInput" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" class="w-full h-24 p-3 text-lg rounded border focus:outline-none" placeholder="Start typing here..." ></textarea>
+        <div class="mt-2 text-sm text-gray-600">Accuracy: <span id="accuracy">0%</span> &nbsp; • &nbsp; WPM: <span id="wpm">0</span></div>
+      </div>
+    </div>
+
+    <div class="mt-4 flex gap-2">
+      <button id="prevBtn" class="px-4 py-2 rounded bg-white border hover:bg-orange-50">Previous</button>
+      <button id="nextBtn" class="px-4 py-2 rounded bg-white border hover:bg-orange-50">Next</button>
+      <button id="restartBtn" class="ml-auto px-4 py-2 rounded bg-white border hover:bg-orange-50">Restart Lesson</button>
+    </div>
+  </section>
+
+  <aside class="bg-white p-4 rounded shadow-sm">
+    <div class="mb-3">
+      <label class="text-sm font-medium">Lessons</label>
+      <div id="lessonsList" class="mt-2 space-y-2 max-h-64 overflow-auto"></div>
+    </div>
+
+    <div class="mt-4">
+      <label class="text-sm font-medium">On-screen keyboard</label>
+      <div id="keyboard" class="mt-2 p-2 bg-gray-100 rounded"></div>
+    </div>
+
+    <div class="mt-4 text-xs text-gray-500">
+      <p>Tip: Place your fingers on the home row (ASDF / JKL;) and start slowly. The tutor will track accuracy and speed.</p>
+    </div>
+  </aside>
+</main>
+
+  </div>  <script>
+    // Basic assumptions about sample.json structure:
+    // {
+    //   "lessons": [
+    //     { "id": "l1", "title": "Home row", "subtitle": "a s d f j k l ;", "exercises": [ {"text":"asdf jkl;","id":"e1"}, ... ] },
+    //     ...
+    //   ]
+    // }
+
+    const state = {
+      lessons: [],
+      lessonIndex: 0,
+      exerciseIndex: 0,
+      startTime: null,
+      typed: '',
+      correct: 0,
+      totalKeystrokes: 0,
+    }
+
+    // Elements
+    const lessonTitle = document.getElementById('lessonTitle')
+    const lessonSubtitle = document.getElementById('lessonSubtitle')
+    const lessonsList = document.getElementById('lessonsList')
+    const passageEl = document.getElementById('passage')
+    const hiddenInput = document.getElementById('hiddenInput')
+    const accuracyEl = document.getElementById('accuracy')
+    const wpmEl = document.getElementById('wpm')
+    const keyboardEl = document.getElementById('keyboard')
+    const prevBtn = document.getElementById('prevBtn')
+    const nextBtn = document.getElementById('nextBtn')
+    const restartBtn = document.getElementById('restartBtn')
+    const modeSelect = document.getElementById('modeSelect')
+    const progressText = document.getElementById('progressText')
+
+    // Small on-screen keyboard layout (simple)
+    const KB_ROWS = [
+      ['q','w','e','r','t','y','u','i','o','p'],
+      ['a','s','d','f','g','h','j','k','l',';'],
+      ['z','x','c','v','b','n','m',',','.','/']
+    ]
+
+    function buildKeyboard(){
+      keyboardEl.innerHTML = ''
+      KB_ROWS.forEach(row=>{
+        const rowDiv = document.createElement('div')
+        rowDiv.className = 'flex mb-1'
+        row.forEach(k=>{
+          const kEl = document.createElement('div')
+          kEl.className = 'key'
+          kEl.dataset.key = k
+          kEl.textContent = k
+          rowDiv.appendChild(kEl)
+        })
+        keyboardEl.appendChild(rowDiv)
+      })
+    }
+
+    function loadSampleJSON(){
+      // try to fetch sample.json from same folder
+      fetch('sample.json')
+        .then(r=>{
+          if(!r.ok) throw new Error('Could not load sample.json')
+          return r.json()
+        })
+        .then(j=>{
+          // flexible structures: support root being array or object with lessons
+          if(Array.isArray(j)) state.lessons = j
+          else if(j.lessons) state.lessons = j.lessons
+          else { // try to interpret as exercises list
+            state.lessons = [{ id: 'auto', title: 'Practice', subtitle: '', exercises: (j.exercises || j) }]
+          }
+          if(state.lessons.length===0) throw new Error('No lessons found in sample.json')
+          renderLessonsList()
+          loadLesson(0)
+        })
+        .catch(err=>{
+          lessonTitle.textContent = 'No sample.json — ready with a default demo'
+          lessonSubtitle.textContent = 'Paste a sample.json next to this HTML file, or drag & drop below (coming soon)'
+          // create a default lesson so page is usable without sample.json
+          state.lessons = [{ id:'demo', title:'Demo: home row', subtitle:'asdf jkl;', exercises:[ {id:'d1', text:'asdf jkl; asdf jkl;'}, {id:'d2', text:'sadf kjl;'} ] }]
+          renderLessonsList()
+          loadLesson(0)
+          console.warn(err)
+        })
+    }
+
+    function renderLessonsList(){
+      lessonsList.innerHTML = ''
+      state.lessons.forEach((ls,i)=>{
+        const btn = document.createElement('button')
+        btn.className = 'w-full text-left px-3 py-2 rounded hover:bg-orange-50'
+        btn.innerHTML = `<div class=\"font-medium\">${ls.title}</div><div class=\"text-xs text-gray-500\">${ls.subtitle || (ls.exercises && ls.exercises.length + ' exercises') || ''}</div>`
+        btn.addEventListener('click',()=> loadLesson(i))
+        lessonsList.appendChild(btn)
+      })
+    }
+
+    function loadLesson(index){
+      state.lessonIndex = index
+      state.exerciseIndex = 0
+      const lesson = state.lessons[index]
+      lessonTitle.textContent = lesson.title || 'Lesson'
+      lessonSubtitle.textContent = lesson.subtitle || ''
+      renderProgress()
+      loadExercise(0)
+    }
+
+    function renderProgress(){
+      const lesson = state.lessons[state.lessonIndex]
+      const total = lesson.exercises ? lesson.exercises.length : 0
+      progressText.textContent = `${state.exerciseIndex+1} / ${total}`
+    }
+
+    function loadExercise(idx){
+      const lesson = state.lessons[state.lessonIndex]
+      if(!lesson || !lesson.exercises || lesson.exercises.length===0) return
+      state.exerciseIndex = idx
+      state.typed = ''
+      state.correct = 0
+      state.totalKeystrokes = 0
+      state.startTime = null
+      hiddenInput.value = ''
+      const ex = lesson.exercises[idx]
+      passageEl.innerHTML = ''
+
+      // Build passage with span per char
+      const text = (ex.text || ex.passage || ex.content || '')
+      for(let i=0;i<text.length;i++){
+        const ch = text[i]
+        const span = document.createElement('span')
+        span.textContent = ch
+        span.dataset.pos = i
+        passageEl.appendChild(span)
+      }
+
+      // make first char active
+      highlightAt(0)
+      renderProgress()
+      hiddenInput.focus()
+    }
+
+    function highlightAt(pos){
+      const spans = passageEl.querySelectorAll('span')
+      spans.forEach(s=> s.classList.remove('bg-yellow-100','text-orange-700'))
+      if(spans[pos]) spans[pos].classList.add('bg-yellow-100','text-orange-700')
+      // show active key on keyboard
+      const allKeys = keyboardEl.querySelectorAll('.key')
+      allKeys.forEach(k=>k.classList.remove('active'))
+      const activeChar = spans[pos] ? spans[pos].textContent.toLowerCase() : ''
+      if(activeChar){
+        const match = keyboardEl.querySelector(`.key[data-key='${activeChar}']`)
+        if(match) match.classList.add('active')
+      }
+    }
+
+    function updateMetrics(){
+      const correct = state.correct
+      const total = state.totalKeystrokes || 1
+      const acc = Math.round((correct/total)*100)
+      accuracyEl.textContent = acc + '%'
+      const seconds = Math.max(1, ((Date.now() - (state.startTime || Date.now()))/1000))
+      const wordsTyped = (state.typed.trim().length / 5)
+      const wpm = Math.round((wordsTyped / (seconds/60)))
+      wpmEl.textContent = wpm
+    }
+
+    // handle typing
+    hiddenInput.addEventListener('input', (e)=>{
+      const lesson = state.lessons[state.lessonIndex]
+      const ex = lesson.exercises[state.exerciseIndex]
+      const target = ex.text || ''
+      if(state.startTime===null) state.startTime = Date.now()
+      const value = hiddenInput.value
+      // process latest keystroke only
+      const lastChar = value[value.length-1] || ''
+      state.typed = value
+      if(value.length > state.totalKeystrokes){
+        state.totalKeystrokes = value.length
+        const pos = value.length-1
+        const expected = target[pos] || ''
+        const spans = passageEl.querySelectorAll('span')
+        if(lastChar === expected){
+          state.correct += 1
+          if(spans[pos]) { spans[pos].classList.add('text-green-700') }
+        } else {
+          if(spans[pos]) { spans[pos].classList.add('text-red-600') }
+        }
+        highlightAt(pos+1)
+      } else {
+        // user deleted
+        const pos = value.length
+        const spans = passageEl.querySelectorAll('span')
+        if(spans[pos]) { spans[pos].classList.remove('text-red-600','text-green-700') }
+        highlightAt(pos)
+      }
+
+      updateMetrics()
+
+      // check completion
+      if(value.length >= (target.length)){
+        // small success state
+        hiddenInput.blur()
+        // mark any remaining as correct if matched
+        // save progress
+        setTimeout(()=>{
+          alert('Exercise complete!')
+        },100)
+      }
+    })
+
+    // keyboard visual on physical keydown
+    document.addEventListener('keydown', (e)=>{
+      const k = e.key.toLowerCase()
+      const el = keyboardEl.querySelector(`.key[data-key='${k}']`)
+      if(el) el.classList.add('active')
+    })
+    document.addEventListener('keyup', (e)=>{
+      const k = e.key.toLowerCase()
+      const el = keyboardEl.querySelector(`.key[data-key='${k}']`)
+      if(el) el.classList.remove('active')
+    })
+
+    // navigation
+    prevBtn.addEventListener('click', ()=>{
+      if(state.exerciseIndex>0) loadExercise(state.exerciseIndex-1)
+      else if(state.lessonIndex>0) loadLesson(state.lessonIndex-1)
+    })
+    nextBtn.addEventListener('click', ()=>{
+      const lesson = state.lessons[state.lessonIndex]
+      if(state.exerciseIndex < lesson.exercises.length-1) loadExercise(state.exerciseIndex+1)
+      else if(state.lessonIndex < state.lessons.length-1) loadLesson(state.lessonIndex+1)
+      else alert('You finished all lessons!')
+    })
+
+    restartBtn.addEventListener('click', ()=> loadExercise(state.exerciseIndex))
+
+    // init
+    buildKeyboard()
+    loadSampleJSON()
+
+    // helpful: allow loading JSON via paste
+    window.addEventListener('paste', async (ev)=>{
+      try{
+        const txt = (ev.clipboardData || window.clipboardData).getData('text')
+        const json = JSON.parse(txt)
+        state.lessons = Array.isArray(json) ? json : (json.lessons ? json.lessons : [{id:'p', title:'Pasted', exercises: json.exercises || json}])
+        renderLessonsList()
+        loadLesson(0)
+        alert('Loaded JSON from clipboard as lessons')
+      }catch(e){ /* ignore non-json paste */ }
+    })
+
+  </script></body>
+</html>
