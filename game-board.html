@@ -51,6 +51,181 @@
     <button id="restartBtn" style="display:none;">Restart</button>
   </div>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const startKeyboardBtn = document.getElementById("keyboardMode");
+  const startMouseBtn = document.getElementById("mouseMode");
+  const practiceArea = document.getElementById("practiceArea");
+  const targetChar = document.getElementById("targetChar");
+  const feedbackEl = document.getElementById("feedback");
+  const virtualKeyboard = document.getElementById("virtualKeyboard");
+  const mouseBoard = document.getElementById("mouseBoard");
+  const nextBtn = document.getElementById("nextBtn");
+  const restartBtn = document.getElementById("restartBtn");
+
+  let classesData = [];
+  let topics = [];
+  let currentTopicIndex = 0;
+  let currentChars = [];
+  let currentCharIndex = 0;
+  let mode = ""; // "keyboard" or "mouse"
+
+  // 🔹 Load classes.json
+  async function loadClasses() {
+    try {
+      const res = await fetch("classes.json");
+      classesData = await res.json();
+
+      // Flatten only current year's term (for now assume year 1, term 1)
+      topics = classesData[0].terms[0].topics.map(t => t.link);
+    } catch (err) {
+      console.error("Error loading classes.json:", err);
+    }
+  }
+
+  // 🔹 Load a topic file (JSON)
+  async function loadTopic(topicFile) {
+    try {
+      const res = await fetch(topicFile);
+      const topicData = await res.json();
+
+      if (topicData && topicData.content) {
+        currentChars = topicData.content.split("");
+        currentCharIndex = 0;
+        renderKeyboard(currentChars[0]); // build the right keys
+        if (mode === "keyboard") loadKeyboardItem();
+        if (mode === "mouse") loadMouseItem();
+      }
+    } catch (err) {
+      console.error("Error loading topic:", err);
+    }
+  }
+
+  // =========================
+  // KEYBOARD MODE
+  // =========================
+  function loadKeyboardItem() {
+    if (currentCharIndex < currentChars.length) {
+      const char = currentChars[currentCharIndex];
+      targetChar.textContent = char;
+      feedbackEl.textContent = "";
+      highlightKey(char);
+    } else {
+      nextBtn.classList.remove("hidden");
+    }
+  }
+
+  function checkKeyboardInput(input) {
+    const expected = currentChars[currentCharIndex];
+    if (!expected) return;
+
+    if (input.toLowerCase() === expected.toLowerCase()) {
+      feedbackEl.textContent = "✅ Correct!";
+      feedbackEl.className = "text-green-600 font-semibold";
+      currentCharIndex++;
+      if (currentCharIndex < currentChars.length) {
+        renderKeyboard(currentChars[currentCharIndex]);
+        setTimeout(loadKeyboardItem, 300);
+      } else {
+        nextBtn.classList.remove("hidden");
+      }
+    } else {
+      feedbackEl.textContent = "❌ Try again!";
+      feedbackEl.className = "text-red-600 font-semibold";
+    }
+  }
+
+  function highlightKey(char) {
+    document.querySelectorAll(".key").forEach(el => el.classList.remove("highlight"));
+    const btn = document.querySelector(`.key[data-key="${char.toLowerCase()}"]`);
+    if (btn) btn.classList.add("highlight");
+  }
+
+  // 🔹 Render a minimal keyboard based on needed char
+  function renderKeyboard(char) {
+    virtualKeyboard.innerHTML = "";
+    let rowKeys = [];
+
+    if (/[a-z]/.test(char)) {
+      rowKeys = "abcdefghijklmnopqrstuvwxyz".split("");
+    } else if (/[0-9]/.test(char)) {
+      rowKeys = "0123456789".split("");
+    } else if (/[\.\,\!\?]/.test(char)) {
+      rowKeys = [".", ",", "!", "?"];
+    } else if (char === " ") {
+      rowKeys = [" "]; // spacebar
+    } else {
+      rowKeys = [char]; // fallback
+    }
+
+    rowKeys.forEach(k => {
+      const keyDiv = document.createElement("button");
+      keyDiv.className = "key px-3 py-2 m-1 bg-gray-200 rounded";
+      keyDiv.dataset.key = k;
+      keyDiv.textContent = k;
+      virtualKeyboard.appendChild(keyDiv);
+    });
+  }
+
+  // =========================
+  // MOUSE MODE
+  // =========================
+  function loadMouseItem() {
+    // same as your code before (shuffle word letters)
+  }
+
+  // =========================
+  // TOPIC PROGRESSION
+  // =========================
+  function nextTopic() {
+    nextBtn.classList.add("hidden");
+    currentTopicIndex++;
+    if (currentTopicIndex < topics.length) {
+      loadTopic(topics[currentTopicIndex]);
+    } else {
+      restartBtn.classList.remove("hidden");
+      feedbackEl.textContent = "🎉 Term complete!";
+    }
+  }
+
+  restartBtn.addEventListener("click", () => {
+    restartBtn.classList.add("hidden");
+    currentTopicIndex = 0;
+    loadTopic(topics[currentTopicIndex]);
+  });
+
+  nextBtn.addEventListener("click", () => nextTopic());
+
+  // =========================
+  // EVENT LISTENERS
+  // =========================
+  startKeyboardBtn.addEventListener("click", async () => {
+    await loadClasses();
+    mode = "keyboard";
+    practiceArea.classList.remove("hidden");
+    virtualKeyboard.classList.remove("hidden");
+    mouseBoard.classList.add("hidden");
+    currentTopicIndex = 0;
+    loadTopic(topics[currentTopicIndex]);
+  });
+
+  // Virtual keyboard clicks
+  virtualKeyboard.addEventListener("click", (e) => {
+    if (mode === "keyboard" && e.target.classList.contains("key")) {
+      checkKeyboardInput(e.target.dataset.key);
+    }
+  });
+
+  // Physical keyboard
+  document.addEventListener("keydown", (e) => {
+    if (mode === "keyboard") {
+      checkKeyboardInput(e.key);
+    }
+  });
+});
+</script>
+  <!--
 <script>
 let chars = [];
 let currentIndex = 0;
