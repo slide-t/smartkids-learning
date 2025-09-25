@@ -1,1092 +1,1029 @@
-[
-  {
-    "id": "year1",
-    "name": "Year 1",
-    "terms": [
-      {
-        "number": 1,
-        "title": "Term 1",
-        "categories": [
-          {
-            "id": "mouse",
-            "name": "Mouse Skills",
-            "topics": [
-              { "title": "Point & Click", "type": "action", "description": "Point and click on icons.", "items": ["Click the sun","Click the cat"] },
-              { "title": "Drag & Drop", "type": "action", "description": "Drag items to target.", "items": ["Drag apple to basket","Drag book to shelf"] },
-              { "title": "Scroll Practice", "type": "scroll", "description": "Practice scrolling images.", "items": ["Scroll down the page","Scroll up the page"] }
-            ]
-          },
-          {
-            "id": "keyboard",
-            "name": "Keyboard Skills",
-            "topics": [
-              { "title": "Home Row Intro", "type": "keys", "description": "Learn where your fingers rest: a s d f  j k l ;", "items": ["a","s","d","f","j","k","l",";"] },
-              { "title": "Home Row Practice", "type": "sequence", "description": "Practice quick home-row key presses and simple patterns.", "items": ["as","df","jk","l;","asd","fjd"] },
-              { "title": "Two-Letter Words (home row)", "type": "words", "description": "Type two-letter words using home row keys.", "items": ["as","fa","ad","la","kl"] },
-              { "title": "Three-Letter Words (home row)", "type": "words", "description": "Type three-letter home-row words.", "items": ["sad","lad","ask","fak","jkl"] }
-            ]
-          }
-        ]
-      },
-      {
-        "number": 2,
-        "title": "Term 2",
-        "categories": [
-          {
-            "id": "mouse",
-            "name": "Mouse Skills",
-            "topics": [
-              { "title": "Drag & Drop Simple", "type": "action", "description": "Move objects to target areas.", "items": ["Drag car to garage","Drag ball to basket"] }
-            ]
-          },
-          {
-            "id": "keyboard",
-            "name": "Keyboard Skills",
-            "topics": [
-              { "title": "Enter Space Backspace", "type": "special", "description": "Practice using Space, Enter and Backspace.", "items": ["cat","dog","sun"] },
-              { "title": "Simple Words (mixed)", "type": "words", "description": "Type short words (2-3 letters).", "items": ["map","pen","cup","dog","cat"] }
-            ]
-          }
-        ]
-      },
-      {
-        "number": 3,
-        "title": "Term 3",
-        "categories": [
-          {
-            "id": "mouse",
-            "name": "Mouse Skills",
-            "topics": [
-              { "title": "Mouse Accuracy Game", "type": "game", "description": "Click targets quickly and accurately.", "items": ["Click all stars","Click all circles"] }
-            ]
-          },
-          {
-            "id": "keyboard",
-            "name": "Keyboard Skills",
-            "topics": [
-              { "title": "Letters to Words", "type": "words", "description": "Progress from letters to simple words.", "items": ["b a t","bat","cap","man"] },
-              { "title": "Short Sentences", "type": "sentences", "description": "Type short sentences (punctuation included).", "items": ["I am a kid.","We like to play."] }
-            ]
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "id": "year2",
-    "name": "Year 2",
-    "terms": [
-      {
-        "number": 1,
-        "title": "Term 1",
-        "categories": [
-          {
-            "id": "mouse",
-            "name": "Mouse Skills",
-            "topics": [
-              { "title": "Pointing & Clicking", "type": "action", "description": "Click objects accurately.", "items": ["Click apple","Click sun"] }
-            ]
-          },
-          {
-            "id": "keyboard",
-            "name": "Keyboard Skills",
-            "topics": [
-              { "title": "Home Row + Top Row Keys", "type": "keys", "description": "Introduce top-row letters q w e r t.", "items": ["q","w","e","r","t","a","s","d","f","j","k","l"] },
-              { "title": "Three-Letter Words", "type": "words", "description": "Practice three-letter words.", "items": ["dog","sun","box","pen","cup"] }
-            ]
-          }
-        ]
-      },
-      {
-        "number": 2,
-        "title": "Term 2",
-        "categories": [
-          {
-            "id": "mouse",
-            "name": "Mouse Skills",
-            "topics": [
-              { "title": "Drag & Drop Game", "type": "game", "description": "Drag objects accurately.", "items": ["Drag cat to mat","Drag ball to box"] }
-            ]
-          },
-          {
-            "id": "keyboard",
-            "name": "Keyboard Skills",
-            "topics": [
-              { "title": "Four-Letter Words", "type": "words", "description": "Type four-letter words.", "items": ["tree","book","frog","milk","play"] },
-              { "title": "Speed Drills (short)", "type": "timed", "description": "Short timed drills.", "items": ["cat dog sun map pen"] }
-            ]
-          }
-        ]
-      },
-      {
-        "number": 3,
-        "title": "Term 3",
-        "categories": [
-          {
-            "id": "mouse",
-            "name": "Mouse Skills",
-            "topics": [
-              { "title": "Accuracy Challenge", "type": "game", "description": "Click small moving targets.", "items": ["Click all stars","Click all moons"] }
-            ]
-          },
-          {
-            "id": "keyboard",
-            "name": "Keyboard Skills",
-            "topics": [
-              { "title": "Short Paragraphs", "type": "paragraphs", "description": "Type short 2–3 sentence paragraphs.", "items": ["The dog runs in the sun. It likes to play.","My book is red. I read every day."] }
-            ]
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "id": "year3",
-    "name": "Year 3",
-    "terms": [
-      {
-        "number": 1,
-        "title": "Term 1",
-        "categories": [
-          {
-            "id": "mouse",
-            "name": "Mouse Skills",
-            "topics": [
-              { "title": "Mouse Precision Practice", "type": "game", "description": "Click targets quickly and accurately.", "items": ["Click circle","Click star"] }
-            ]
-          },
-          {
-            "id": "keyboard",
-            "name": "Keyboard Skills",
-            "topics": [
-              { "title": "Touch-typing Fundamentals", "type": "home_row_drill", "description": "Focus on home-row accuracy.", "items": ["asdf jkl;","asdf asdf jkl; jkl;"] },
-              { "title": "Words & Short Sentences", "type": "words", "description": "3–5 letter words and short sentences.", "items": ["apple","happy","small","I like apples.","We play games."] }
-            ]
-          }
-        ]
-      },
-      {
-        "number": 2,
-        "title": "Term 2",
-        "categories": [
-          {
-            "id": "mouse",
-            "name": "Mouse Skills",
-            "topics": [
-              { "title": "Drag & Drop Challenge", "type": "game", "description": "Drag items to correct positions.", "items": ["Drag star to box","Drag ball to basket"] }
-            ]
-          },
-          {
-            "id": "keyboard",
-            "name": "Keyboard Skills",
-            "topics": [
-              { "title": "Speed + Accuracy Home Row", "type": "timed", "description": "Improve speed on home row keys.", "items": ["asdfasdf","jkl;jkl;","asdjkl;"] }
-            ]
-          }
-        ]
-      },
-      {
-        "number": 3,
-        "title": "Term 3",
-        "categories": [
-          {
-            "id": "mouse",
-            "name": "Mouse Skills",
-            "topics": [
-              { "title": "Mouse Game Challenge", "type": "game", "description": "Click multiple moving targets.", "items": ["Click all stars","Click all moons"] }
-            ]
-          },
-          {
-            "id": "keyboard",
-            "name": "Keyboard Skills",
-            "topics": [
-              { "title": "Paragraph Typing", "type": "paragraphs", "description": "3–4 sentence paragraphs.", "items": ["My name is Maya. I love music. We sing at school.","The sun sets in the west. Birds return home at night."] }
-            ]
-          }
-        ]
-      }
-    ]
-  },
+{
+  "classes": [
+    {
+      "id": "year1",
+      "name": "Year 1",
+      "terms": [
+        {
+          "number": 1,
+          "title": "Term 1",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Home Row Keys",
+                  "instruction": "Place your fingers on A S D F J K L ; and press each key when prompted.",
+                  "samples": ["A", "S", "D", "F", "J", "K", "L", ";"]
+                },
+                {
+                  "title": "Two Letter Words",
+                  "instruction": "Type simple two-letter words using home-row letters.",
+                  "samples": ["AS", "AD", "FA", "JK", "KL"]
+                },
+                {
+                  "title": "Three Letter Words",
+                  "instruction": "Type these three-letter words slowly and correctly.",
+                  "samples": ["CAT", "DOG", "SUN", "HAT", "FUN"]
+                }
+              ]
+            },
+            {
+              "id": "mouse",
+              "name": "Mouse",
+              "topics": [
+                {
+                  "title": "Mouse Clicks",
+                  "instruction": "Practice left click, right click, and double-click on targets.",
+                  "samples": ["Left Click", "Right Click", "Double Click"]
+                },
+                {
+                  "title": "Drag and Drop",
+                  "instruction": "Drag small shapes to their matching outlines.",
+                  "samples": ["Drag Circle", "Drag Square", "Drop Triangle"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "title": "Term 2",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Simple Words",
+                  "instruction": "Type these simple 3–4 letter words clearly.",
+                  "samples": ["BIRD", "FISH", "TREE", "STAR", "BALL"]
+                },
+                {
+                  "title": "Common Sentences",
+                  "instruction": "Type each sentence exactly as shown, including spaces.",
+                  "samples": ["I am happy", "You are good", "We like to play", "It is sunny", "I can run"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 3,
+          "title": "Term 3",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Phrases Practice",
+                  "instruction": "Type short simple phrases; watch spacing and capitals.",
+                  "samples": ["Good day", "My cat", "Big fun", "Play now", "Nice hat"]
+                },
+                {
+                  "title": "Timed Drill (3 min)",
+                  "instruction": "Type the listed words as many times as you can in 3 minutes.",
+                  "samples": ["CAT", "DOG", "FUN", "SUN", "HAT"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
 
-  {
-    "id": "year4",
-    "name": "Year 4",
-    "terms": [
-      {
-        "number": 1,
-        "title": "Term 1",
-        "categories": [
-          {
-            "id": "keyboard",
-            "name": "Keyboard Skills",
-            "topics": [
-              {
-                "title": "Typing Sentences",
-                "type": "sentences",
-                "description": "Practice composing sentences.",
-                "items": ["I went to the park today.","She likes to draw pictures."]
-              },
-              {
-                "title": "Typing Short Paragraphs",
-                "type": "paragraphs",
-                "description": "Type 2–3 sentence paragraphs.",
-                "items": ["We had a picnic. It was fun.","The cat sat on the warm mat."]
-              }
-            ]
-          },
-          {
-            "id": "mouse",
-            "name": "Mouse Skills",
-            "topics": [
-              {
-                "title": "Click & Drag Basics",
-                "type": "drag-drop",
-                "description": "Learn to click, drag, and drop objects.",
-                "items": ["Drag the circle to the square.","Move the puzzle piece."]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "number": 2,
-        "title": "Term 2",
-        "categories": [
-          {
-            "id": "keyboard",
-            "name": "Keyboard Skills",
-            "topics": [
-              {
-                "title": "Formatting & Symbols",
-                "type": "special",
-                "description": "Type symbols and format text.",
-                "items": ["( ) , . ! ?", "$100", "E-mail: test@example.com"]
-              }
-            ]
-          },
-          {
-            "id": "mouse",
-            "name": "Mouse Skills",
-            "topics": [
-              {
-                "title": "Scrolling & Navigation",
-                "type": "scroll",
-                "description": "Practice scrolling up/down and navigating windows.",
-                "items": ["Scroll the page.","Use the scroll bar to reach bottom."]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "number": 3,
-        "title": "Term 3",
-        "categories": [
-          {
-            "id": "keyboard",
-            "name": "Keyboard Skills",
-            "topics": [
-              {
-                "title": "One-Page Essay",
-                "type": "essay",
-                "description": "Type a one-page essay.",
-                "items": ["Write about your favourite day at school."]
-              }
-            ]
-          },
-          {
-            "id": "mouse",
-            "name": "Mouse Skills",
-            "topics": [
-              {
-                "title": "Precision Clicks",
-                "type": "click",
-                "description": "Practice precise clicking and double clicks.",
-                "items": ["Click the small target.","Double-click the icon."]
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "id": "year5",
-    "name": "Year 5",
-    "terms": [
-      {
-        "number": 1,
-        "title": "Term 1",
-        "categories": [
-          {
-            "id": "keyboard",
-            "name": "Keyboard Skills",
-            "topics": [
-              {
-                "title": "Typing Stories",
-                "type": "essay",
-                "description": "Compose multiple paragraphs.",
-                "items": ["Write a short story about a journey."]
-              },
-              {
-                "title": "Editing & Proofreading",
-                "type": "editing",
-                "description": "Practice editing already-typed text.",
-                "items": ["Correct the paragraph given."]
-              }
-            ]
-          },
-          {
-            "id": "mouse",
-            "name": "Mouse Skills",
-            "topics": [
-              {
-                "title": "Drag & Drop Exercises",
-                "type": "drag-drop",
-                "description": "Move objects to targets.",
-                "items": ["Drag fruit to basket.","Organize shapes by color."]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "number": 2,
-        "title": "Term 2",
-        "categories": [
-          {
-            "id": "keyboard",
-            "name": "Keyboard Skills",
-            "topics": [
-              {
-                "title": "Report Structure",
-                "type": "reports",
-                "description": "Practice titles, headings, paragraphs.",
-                "items": ["Create a 1-page report about your hobby."]
-              }
-            ]
-          },
-          {
-            "id": "mouse",
-            "name": "Mouse Skills",
-            "topics": [
-              {
-                "title": "Mouse Accuracy Drills",
-                "type": "precision",
-                "description": "Practice accurate clicks on moving targets.",
-                "items": ["Click the moving target.","Drag items quickly to bin."]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "number": 3,
-        "title": "Term 3",
-        "categories": [
-          {
-            "id": "keyboard",
-            "name": "Keyboard Skills",
-            "topics": [
-              {
-                "title": "Multi-page Essay",
-                "type": "essay",
-                "description": "Longer writing practice.",
-                "items": ["Plan and write a 2-part essay."]
-              }
-            ]
-          },
-          {
-            "id": "mouse",
-            "name": "Mouse Skills",
-            "topics": [
-              {
-                "title": "Advanced Drag & Drop",
-                "type": "drag-drop",
-                "description": "Organize multiple objects correctly.",
-                "items": ["Sort numbers ascending.","Arrange puzzle pieces."]
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  },
+    {
+      "id": "year2",
+      "name": "Year 2",
+      "terms": [
+        {
+          "number": 1,
+          "title": "Term 1",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Home Row Drill",
+                  "instruction": "Repeat the home row letters, build speed and accuracy.",
+                  "samples": ["A", "S", "D", "F", "J", "K", "L", ";"]
+                },
+                {
+                  "title": "Two & Three Letter Words",
+                  "instruction": "Type mixed 2–3 letter words using the home row.",
+                  "samples": ["AND", "SAD", "FUN", "JAM", "LAD"]
+                },
+                {
+                  "title": "Five Short Words",
+                  "instruction": "Type these five short words clearly.",
+                  "samples": ["MAP", "PEN", "CUP", "RAT", "BAG"]
+                }
+              ]
+            },
+            {
+              "id": "mouse",
+              "name": "Mouse",
+              "topics": [
+                {
+                  "title": "Precision Clicks",
+                  "instruction": "Click accurately on small targets, practice double-click speed.",
+                  "samples": ["Left Click", "Double Click", "Right Click"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "title": "Term 2",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Typing Short Sentences",
+                  "instruction": "Type short sentences, paying attention to capitalization and spacing.",
+                  "samples": ["I like cake", "You are nice", "We play together", "She can sing", "He has a ball"]
+                },
+                {
+                  "title": "Simple Phrases",
+                  "instruction": "Type the phrases slowly and accurately.",
+                  "samples": ["Come here", "Sit down", "Good job", "Well done", "Try again"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 3,
+          "title": "Term 3",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Longer Words (5 letters)",
+                  "instruction": "Practice typing five-letter words to grow vocabulary.",
+                  "samples": ["APPLE", "HOUSE", "SCHOOL", "WATER", "PLANT"]
+                },
+                {
+                  "title": "Speed Drill (5 min)",
+                  "instruction": "Type the supplied words and short phrases repeatedly for 5 minutes.",
+                  "samples": ["APPLE", "HOUSE", "PLAY", "SCHOOL", "FRIEND"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
 
-  {
-    "id": "year6",
-    "name": "Year 6",
-    "terms": [
-      {
-        "number": 1,
-        "title": "Term 1",
-        "categories": [
-          {
-            "id": "keyboard",
-            "name": "Keyboard Skills",
-            "topics": [
-              {
-                "title": "Timed Accuracy Drills",
-                "type": "timed",
-                "description": "Timed accuracy sessions for speed and precision.",
-                "items": ["The quick brown fox","Typing drills sample"]
-              }
-            ]
-          },
-          {
-            "id": "mouse",
-            "name": "Mouse Skills",
-            "topics": [
-              {
-                "title": "Click & Drag Challenges",
-                "type": "drag-drop",
-                "description": "Move multiple objects to target areas quickly.",
-                "items": ["Drag shapes to correct spots.","Arrange objects by color."]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "number": 2,
-        "title": "Term 2",
-        "categories": [
-          {
-            "id": "keyboard",
-            "name": "Keyboard Skills",
-            "topics": [
-              {
-                "title": "Essays with Citations",
-                "type": "essay",
-                "description": "Practice longer essays including citations.",
-                "items": ["Research your favourite animal and type a report."]
-              }
-            ]
-          },
-          {
-            "id": "mouse",
-            "name": "Mouse Skills",
-            "topics": [
-              {
-                "title": "Precision Scrolling",
-                "type": "scroll",
-                "description": "Scroll through documents accurately.",
-                "items": ["Scroll to specific paragraphs.","Use scroll bars efficiently."]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "number": 3,
-        "title": "Term 3",
-        "categories": [
-          {
-            "id": "keyboard",
-            "name": "Keyboard Skills",
-            "topics": [
-              {
-                "title": "Summary Writing",
-                "type": "summary",
-                "description": "Summarise passages accurately and concisely.",
-                "items": ["Summarise the paragraph provided."]
-              }
-            ]
-          },
-          {
-            "id": "mouse",
-            "name": "Mouse Skills",
-            "topics": [
-              {
-                "title": "Drag & Drop Precision",
-                "type": "drag-drop",
-                "description": "Accurate placement of multiple objects.",
-                "items": ["Arrange words in order.","Move shapes to exact positions."]
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "id": "year7",
-    "name": "Year 7",
-    "terms": [
-      {
-        "number": 1,
-        "title": "Term 1",
-        "categories": [
-          {
-            "id": "keyboard",
-            "name": "Keyboard Skills",
-            "topics": [
-              {
-                "title": "Reports & Research",
-                "type": "reports",
-                "description": "Practice longer typed reports.",
-                "items": ["Report practice sample"]
-              }
-            ]
-          },
-          {
-            "id": "mouse",
-            "name": "Mouse Skills",
-            "topics": [
-              {
-                "title": "Interactive Dragging",
-                "type": "drag-drop",
-                "description": "Drag objects to interactive areas.",
-                "items": ["Complete the drag puzzle.","Organize charts."]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "number": 2,
-        "title": "Term 2",
-        "categories": [
-          {
-            "id": "keyboard",
-            "name": "Keyboard Skills",
-            "topics": [
-              {
-                "title": "Timed Essays",
-                "type": "timed",
-                "description": "Timed essay sections for speed and accuracy.",
-                "items": ["Type the given prompt in 20 mins"]
-              }
-            ]
-          },
-          {
-            "id": "mouse",
-            "name": "Mouse Skills",
-            "topics": [
-              {
-                "title": "Precision Click Drills",
-                "type": "click",
-                "description": "Practice accurate clicking and double clicks.",
-                "items": ["Click small targets quickly.","Double-click icons."]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "number": 3,
-        "title": "Term 3",
-        "categories": [
-          {
-            "id": "keyboard",
-            "name": "Keyboard Skills",
-            "topics": [
-              {
-                "title": "Project Writing",
-                "type": "projects",
-                "description": "Long project typing exercises.",
-                "items": ["Project: class magazine"]
-              }
-            ]
-          },
-          {
-            "id": "mouse",
-            "name": "Mouse Skills",
-            "topics": [
-              {
-                "title": "Advanced Drag & Drop",
-                "type": "drag-drop",
-                "description": "Organize multiple objects efficiently.",
-                "items": ["Sort numbers ascending.","Arrange puzzle pieces."]
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "id": "year8",
-    "name": "Year 8",
-    "terms": [
-      {
-        "number": 1,
-        "title": "Term 1",
-        "categories": [
-          {
-            "id": "keyboard",
-            "name": "Keyboard Skills",
-            "topics": [
-              {
-                "title": "Research Papers",
-                "type": "research",
-                "description": "Practice research writing.",
-                "items": ["Start research paper template"]
-              }
-            ]
-          },
-          {
-            "id": "mouse",
-            "name": "Mouse Skills",
-            "topics": [
-              {
-                "title": "Mouse Navigation",
-                "type": "navigation",
-                "description": "Practice navigating documents with the mouse.",
-                "items": ["Open folders and files.","Scroll through documents."]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "number": 2,
-        "title": "Term 2",
-        "categories": [
-          {
-            "id": "keyboard",
-            "name": "Keyboard Skills",
-            "topics": [
-              {
-                "title": "Report Construction",
-                "type": "reports",
-                "description": "Make a full report.",
-                "items": ["Report sample"]
-              }
-            ]
-          },
-          {
-            "id": "mouse",
-            "name": "Mouse Skills",
-            "topics": [
-              {
-                "title": "Precision Dragging",
-                "type": "drag-drop",
-                "description": "Move objects to precise locations.",
-                "items": ["Move shapes to exact coordinates.","Arrange items correctly."]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "number": 3,
-        "title": "Term 3",
-        "categories": [
-          {
-            "id": "keyboard",
-            "name": "Keyboard Skills",
-            "topics": [
-              {
-                "title": "Project Typing",
-                "type": "projects",
-                "description": "Typing for multi-media projects.",
-                "items": ["Project story writing"]
-              }
-            ]
-          },
-          {
-            "id": "mouse",
-            "name": "Mouse Skills",
-            "topics": [
-              {
-                "title": "Drag & Arrange Multimedia",
-                "type": "drag-drop",
-                "description": "Organize text, images, and shapes.",
-                "items": ["Arrange images on canvas.","Move text boxes."]
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "id": "year9",
-    "name": "Year 9",
-    "terms": [
-      {
-        "number": 1,
-        "title": "Term 1",
-        "categories": [
-          {
-            "id": "keyboard",
-            "name": "Keyboard Skills",
-            "topics": [
-              {
-                "title": "Advanced Reports",
-                "type": "reports",
-                "description": "Practice longer reports and structure.",
-                "items": ["Report template"]
-              }
-            ]
-          },
-          {
-            "id": "mouse",
-            "name": "Mouse Skills",
-            "topics": [
-              {
-                "title": "Precision Mouse Work",
-                "type": "precision",
-                "description": "Complex mouse tasks for accuracy.",
-                "items": ["Click moving targets.","Organize files quickly."]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "number": 2,
-        "title": "Term 2",
-        "categories": [
-          {
-            "id": "keyboard",
-            "name": "Keyboard Skills",
-            "topics": [
-              {
-                "title": "Research Development",
-                "type": "research",
-                "description": "Research development and citation practice.",
-                "items": ["Research tasks"]
-              }
-            ]
-          },
-          {
-            "id": "mouse",
-            "name": "Mouse Skills",
-            "topics": [
-              {
-                "title": "Scrolling & Dragging",
-                "type": "scroll-drag",
-                "description": "Scroll and drag accurately.",
-                "items": ["Scroll to paragraph.","Drag files to folders."]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "number": 3,
-        "title": "Term 3",
-        "categories": [
-          {
-            "id": "keyboard",
-            "name": "Keyboard Skills",
-            "topics": [
-              {
-                "title": "Final Project Prep",
-                "type": "projects",
-                "description": "Draft and prepare final projects.",
-                "items": ["Draft final project"]
-              }
-            ]
-          },
-          {
-            "id": "mouse",
-            "name": "Mouse Skills",
-            "topics": [
-              {
-                "title": "Complex Drag & Drop",
-                "type": "drag-drop",
-                "description": "Advanced organization using mouse.",
-                "items": ["Arrange multiple objects.","Sort data in tables."]
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  },
+    {
+      "id": "year3",
+      "name": "Year 3",
+      "terms": [
+        {
+          "number": 1,
+          "title": "Term 1",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Home Row Speed Drill",
+                  "instruction": "Type home row letters with more speed and less looking.",
+                  "samples": ["A", "S", "D", "F", "J", "K", "L", ";"]
+                },
+                {
+                  "title": "Simple Words Practice",
+                  "instruction": "Type common easy words accurately.",
+                  "samples": ["SUN", "FUN", "HAT", "CAT", "DOG"]
+                },
+                {
+                  "title": "Five 5-letter Words",
+                  "instruction": "Type these 5-letter words to expand vocabulary and finger control.",
+                  "samples": ["BRING", "SMILE", "PLANT", "RIVER", "LIGHT"]
+                }
+              ]
+            },
+            {
+              "id": "mouse",
+              "name": "Mouse",
+              "topics": [
+                {
+                  "title": "Clicking Games",
+                  "instruction": "Click targets accurately and practice drag interactions.",
+                  "samples": ["Left Click", "Right Click", "Double Click", "Drag"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "title": "Term 2",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Typing Sentences",
+                  "instruction": "Type short sentences smoothly, including punctuation.",
+                  "samples": ["The sun is bright.", "I love coding.", "We play games.", "She likes books.", "They run fast."]
+                },
+                {
+                  "title": "Phrases & Clauses",
+                  "instruction": "Type phrases and short clauses correctly.",
+                  "samples": ["in the park", "on the table", "under the tree", "with a friend", "after class"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 3,
+          "title": "Term 3",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Paragraph Typing",
+                  "instruction": "Type a short paragraph word-for-word, watch punctuation.",
+                  "samples": ["I have a dog. It runs fast. I love my dog.", "We went to the park and played all afternoon.", "My favorite food is rice and beans."]
+                },
+                {
+                  "title": "Timed Accuracy Drill",
+                  "instruction": "Type as many items correctly in 5 minutes as possible.",
+                  "samples": ["BRING", "SMILE", "PLANT", "RIVER", "LIGHT", "APPLE", "HOUSE"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
 
-  {
-    "id": "year10",
-    "name": "Year 10",
-    "terms": [
-      {
-        "number": 1,
-        "title": "Term 1",
-        "categories": [
-          {
-            "id": "keyboard",
-            "name": "Keyboard Skills",
-            "topics": [
-              {
-                "title": "Thesis Practice",
-                "type": "thesis",
-                "description": "Practice drafting thesis sections.",
-                "items": ["Thesis draft sample"]
-              }
-            ]
-          },
-          {
-            "id": "mouse",
-            "name": "Mouse Skills",
-            "topics": [
-              {
-                "title": "Advanced Navigation",
-                "type": "navigation",
-                "description": "Navigate documents, folders, and menus efficiently.",
-                "items": ["Open nested folders.","Use right-click options."]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "number": 2,
-        "title": "Term 2",
-        "categories": [
-          {
-            "id": "keyboard",
-            "name": "Keyboard Skills",
-            "topics": [
-              {
-                "title": "Project Writing",
-                "type": "projects",
-                "description": "Complex project typing and formatting.",
-                "items": ["Project full draft"]
-              }
-            ]
-          },
-          {
-            "id": "mouse",
-            "name": "Mouse Skills",
-            "topics": [
-              {
-                "title": "Drag & Organize Multimedia",
-                "type": "drag-drop",
-                "description": "Move and organize images, shapes, and text boxes.",
-                "items": ["Arrange slides in presentation.","Organize images on canvas."]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "number": 3,
-        "title": "Term 3",
-        "categories": [
-          {
-            "id": "keyboard",
-            "name": "Keyboard Skills",
-            "topics": [
-              {
-                "title": "Final Submission Prep",
-                "type": "finals",
-                "description": "Prepare final projects for submission.",
-                "items": ["Final edits & polish"]
-              }
-            ]
-          },
-          {
-            "id": "mouse",
-            "name": "Mouse Skills",
-            "topics": [
-              {
-                "title": "Precision Dragging & Selection",
-                "type": "drag-select",
-                "description": "Select and organize multiple objects accurately.",
-                "items": ["Select multiple text boxes.","Align images on page."]
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "id": "year11",
-    "name": "Year 11",
-    "terms": [
-      {
-        "number": 1,
-        "title": "Term 1",
-        "categories": [
-          {
-            "id": "keyboard",
-            "name": "Keyboard Skills",
-            "topics": [
-              {
-                "title": "Advanced Projects",
-                "type": "projects",
-                "description": "Plan and type large-scale projects.",
-                "items": ["Project plan & write"]
-              }
-            ]
-          },
-          {
-            "id": "mouse",
-            "name": "Mouse Skills",
-            "topics": [
-              {
-                "title": "Complex Drag & Drop",
-                "type": "drag-drop",
-                "description": "Move multiple items with precision.",
-                "items": ["Organize slides.","Arrange diagrams accurately."]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "number": 2,
-        "title": "Term 2",
-        "categories": [
-          {
-            "id": "keyboard",
-            "name": "Keyboard Skills",
-            "topics": [
-              {
-                "title": "Theses & Dissertations",
-                "type": "thesis",
-                "description": "Long thesis drafting and formatting practice.",
-                "items": ["Long draft sample"]
-              }
-            ]
-          },
-          {
-            "id": "mouse",
-            "name": "Mouse Skills",
-            "topics": [
-              {
-                "title": "Interactive Mouse Work",
-                "type": "precision",
-                "description": "Complete interactive assignments using mouse efficiently.",
-                "items": ["Click, drag, and drop accurately.","Use right-click menus for tasks."]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "number": 3,
-        "title": "Term 3",
-        "categories": [
-          {
-            "id": "keyboard",
-            "name": "Keyboard Skills",
-            "topics": [
-              {
-                "title": "Final Projects",
-                "type": "finals",
-                "description": "Complete final projects with advanced formatting.",
-                "items": ["Final project writing"]
-              }
-            ]
-          },
-          {
-            "id": "mouse",
-            "name": "Mouse Skills",
-            "topics": [
-              {
-                "title": "Drag & Drop Mastery",
-                "type": "drag-drop",
-                "description": "Organize multi-component projects efficiently.",
-                "items": ["Arrange charts, images, and text.","Manage layout in complex documents."]
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "id": "year12",
-    "name": "Year 12",
-    "terms": [
-      {
-        "number": 1,
-        "title": "Term 1",
-        "categories": [
-          {
-            "id": "keyboard",
-            "name": "Keyboard Skills",
-            "topics": [
-              {
-                "title": "Dissertations",
-                "type": "thesis",
-                "description": "Long dissertation drafting practice.",
-                "items": ["Dissertation draft"]
-              }
-            ]
-          },
-          {
-            "id": "mouse",
-            "name": "Mouse Skills",
-            "topics": [
-              {
-                "title": "Advanced Navigation & Clicks",
-                "type": "navigation",
-                "description": "Master navigation, selecting, and dragging efficiently.",
-                "items": ["Navigate complex folders.","Select multiple items quickly."]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "number": 2,
-        "title": "Term 2",
-        "categories": [
-          {
-            "id": "keyboard",
-            "name": "Keyboard Skills",
-            "topics": [
-              {
-                "title": "Final Projects",
-                "type": "finals",
-                "description": "Complete year-long final projects.",
-                "items": ["Project final"]
-              }
-            ]
-          },
-          {
-            "id": "mouse",
-            "name": "Mouse Skills",
-            "topics": [
-              {
-                "title": "Drag & Arrange Complex Documents",
-                "type": "drag-drop",
-                "description": "Organize multiple pages, charts, and diagrams.",
-                "items": ["Reorder pages.","Align images and tables."]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "number": 3,
-        "title": "Term 3",
-        "categories": [
-          {
-            "id": "keyboard",
-            "name": "Keyboard Skills",
-            "topics": [
-              {
-                "title": "Publication & Presentation",
-                "type": "presentation",
-                "description": "Prepare documents for publication and presentations.",
-                "items": ["Prepare presentation"]
-              }
-            ]
-          },
-          {
-            "id": "mouse",
-            "name": "Mouse Skills",
-            "topics": [
-              {
-                "title": "Mastery Drag & Drop",
-                "type": "drag-drop",
-                "description": "Complete advanced tasks with precision mouse control.",
-                "items": ["Organize multimedia projects.","Manage layouts efficiently."]
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  }
-]
-  
+    {
+      "id": "year4",
+      "name": "Year 4",
+      "terms": [
+        {
+          "number": 1,
+          "title": "Term 1",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Top Row Keys",
+                  "instruction": "Practice the top row letters (Q–P) with accuracy.",
+                  "samples": ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"]
+                },
+                {
+                  "title": "Word Building",
+                  "instruction": "Form and type words using top & home rows.",
+                  "samples": ["TREE", "WORD", "QUIZ", "JUMP", "FROG"]
+                },
+                {
+                  "title": "Five 6-letter Words",
+                  "instruction": "Type these 6-letter words to build typing stamina.",
+                  "samples": ["ORANGE", "BUTTER", "FLOWER", "STREET", "GARDEN"]
+                }
+              ]
+            },
+            {
+              "id": "mouse",
+              "name": "Mouse",
+              "topics": [
+                {
+                  "title": "Drag Shapes",
+                  "instruction": "Drag shapes to their matching outlines with precision.",
+                  "samples": ["Circle", "Square", "Triangle", "Star", "Heart"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "title": "Term 2",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Sentences Practice",
+                  "instruction": "Type the sentences accurately; include punctuation.",
+                  "samples": ["The dog runs fast.", "We love to play.", "Coding is fun.", "She reads daily.", "He writes well."]
+                },
+                {
+                  "title": "Speed Words (3 min)",
+                  "instruction": "Type these words quickly over multiple rounds.",
+                  "samples": ["FAST", "LOVE", "SCHOOL", "DOG", "FUN"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 3,
+          "title": "Term 3",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Paragraph Practice",
+                  "instruction": "Type short paragraphs focusing on punctuation and capitals.",
+                  "samples": ["My name is Tola. I like school. I play football.", "Every morning I walk to school with friends.", "We study and then we play games."]
+                },
+                {
+                  "title": "Comprehension Typing",
+                  "instruction": "Read short passage, then type summary sentences.",
+                  "samples": ["The cat climbed the tall tree. It could not get down.", "A farmer grows crops to feed his family and sell the rest."]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
 
-  
+    {
+      "id": "year5",
+      "name": "Year 5",
+      "terms": [
+        {
+          "number": 1,
+          "title": "Term 1",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Lower Row Keys",
+                  "instruction": "Practice lower-row letters and punctuation , . / with control.",
+                  "samples": ["Z", "X", "C", "V", "B", "N", "M", ",", ".", "/"]
+                },
+                {
+                  "title": "Mixed Row Words",
+                  "instruction": "Type words that use multiple rows together.",
+                  "samples": ["CAMP", "MANOR", "VOLUME", "BRICK", "ZEBRA"]
+                },
+                {
+                  "title": "Five 7-letter Words",
+                  "instruction": "Build strength by typing 7-letter words.",
+                  "samples": ["ANIMALIA", "PORTRAY", "CAPABLE", "BALANCE", "FREIGHT"]
+                }
+              ]
+            },
+            {
+              "id": "mouse",
+              "name": "Mouse",
+              "topics": [
+                {
+                  "title": "Click Challenge",
+                  "instruction": "Click on moving targets quickly and accurately.",
+                  "samples": ["Target 1", "Target 2", "Target 3", "Target 4", "Target 5"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "title": "Term 2",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Sentence Drill",
+                  "instruction": "Type sentences focusing on punctuation and flow.",
+                  "samples": ["Typing helps us write better.", "Practice makes perfect.", "We learn faster with drills.", "Write neatly every time.", "Use correct capital letters."]
+                },
+                {
+                  "title": "Phrases & Idioms",
+                  "instruction": "Type common phrases and short idioms to expand language.",
+                  "samples": ["time flies", "break the ice", "hold on", "come back", "carry on"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 3,
+          "title": "Term 3",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Paragraph Practice",
+                  "instruction": "Type multi-sentence paragraphs carefully and accurately.",
+                  "samples": ["Typing is a good skill for school work. We practice often to improve speed and accuracy.", "Good handwriting helps when you plan and type your work."]
+                },
+                {
+                  "title": "Timed Typing Drill",
+                  "instruction": "Type as many provided words as possible in 5 minutes.",
+                  "samples": ["CAN", "PEN", "DOG", "RUN", "HAT", "BOOK", "LOVE"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "year6",
+      "name": "Year 6",
+      "terms": [
+        {
+          "number": 1,
+          "title": "Term 1",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "All Rows Practice",
+                  "instruction": "Practice letters across all rows to build accuracy.",
+                  "samples": ["Q", "W", "E", "A", "S", "D", "Z", "X", "C", "M"]
+                },
+                {
+                  "title": "Word Mix",
+                  "instruction": "Type mixed words that use letters from all rows.",
+                  "samples": ["GAME", "QUIZ", "CAMP", "ZONE", "WAVE"]
+                },
+                {
+                  "title": "Seven-Letter Words",
+                  "instruction": "Type longer single words to improve reach and speed.",
+                  "samples": ["SPRINGY", "CAPTURE", "JOURNEY", "ANCIENT", "BALANCE"]
+                }
+              ]
+            },
+            {
+              "id": "mouse",
+              "name": "Mouse",
+              "topics": [
+                {
+                  "title": "Drag & Match",
+                  "instruction": "Drag each item to its matching partner correctly.",
+                  "samples": ["Apple-Red", "Sun-Yellow", "Sky-Blue"]
+                },
+                {
+                  "title": "Right-Click Menu Use",
+                  "instruction": "Practice right-clicking to access context menus and options.",
+                  "samples": ["Copy", "Paste", "Rename", "Delete", "Properties"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "title": "Term 2",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Sentence Typing",
+                  "instruction": "Type longer sentences accurately with punctuation.",
+                  "samples": ["Learning to type is very useful.", "We practice daily to improve our speed.", "The quick brown fox jumps over the lazy dog."]
+                },
+                {
+                  "title": "Creative Writing (short)",
+                  "instruction": "Type short story sentences ensuring correct grammar.",
+                  "samples": ["Once upon a time a child found a small box.", "The box held a map to a hidden garden."]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 3,
+          "title": "Term 3",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Story Typing",
+                  "instruction": "Type short stories word for word for fluency practice.",
+                  "samples": ["The boy plays in the garden every day.", "Our class is learning to use the computer.", "Typing fast helps us finish work quickly."]
+                },
+                {
+                  "title": "Final Timed Drill",
+                  "instruction": "Complete the timed drill focus on accuracy for 5 minutes.",
+                  "samples": ["SPRINGY", "CAPTURE", "JOURNEY", "ANCIENT", "BALANCE", "GAME", "QUIZ"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "year7",
+      "name": "Year 7",
+      "terms": [
+        {
+          "number": 1,
+          "title": "Term 1",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Advanced Home Row Practice",
+                  "instruction": "Maintain correct finger positions while increasing speed.",
+                  "samples": ["ASDF JKL;", "AS DF JK", "FJ DK LA", "ASDFAS", "JKL;JK"]
+                },
+                {
+                  "title": "Number Keys",
+                  "instruction": "Practice typing the number row with and without shift.",
+                  "samples": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
+                }
+              ]
+            },
+            {
+              "id": "mouse",
+              "name": "Mouse",
+              "topics": [
+                {
+                  "title": "Precision Navigation",
+                  "instruction": "Use the mouse to navigate menus and small UI elements.",
+                  "samples": ["Open Menu", "Click Submenu", "Select Option"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "title": "Term 2",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Typing Phrases",
+                  "instruction": "Type common phrases paying attention to punctuation.",
+                  "samples": ["Good morning", "How are you", "I like reading", "See you soon", "Thank you"]
+                },
+                {
+                  "title": "Mixed Words Speed Drill",
+                  "instruction": "Type longer vocabulary words quickly and accurately.",
+                  "samples": ["HOUSE", "FRIEND", "SCHOOL", "BOOKS", "TEACHER"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 3,
+          "title": "Term 3",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Paragraph Drill",
+                  "instruction": "Type given paragraphs smoothly with accuracy.",
+                  "samples": ["Typing skills help us in school and beyond.", "We must practice daily to improve our speed."]
+                },
+                {
+                  "title": "Short Essay Starters",
+                  "instruction": "Type introductory sentences for essays to practice flow.",
+                  "samples": ["Technology has changed the way we live.", "Education is the key to success."]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "year8",
+      "name": "Year 8",
+      "terms": [
+        {
+          "number": 1,
+          "title": "Term 1",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Symbols & Special Characters",
+                  "instruction": "Practice common symbols used in writing and code.",
+                  "samples": ["!", "@", "#", "$", "%", "^", "&", "*", "(", ")"]
+                },
+                {
+                  "title": "Numbers & Symbols Mix",
+                  "instruction": "Type number-symbol combinations quickly.",
+                  "samples": ["1!", "2@", "3#", "4$", "5%"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "title": "Term 2",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Sentence Drill",
+                  "instruction": "Type sentences including commas and question marks.",
+                  "samples": ["Hello, how are you?", "I love to type!", "Do you like coding?", "When will you come?", "Let's begin now."]
+                },
+                {
+                  "title": "Speed Paragraph",
+                  "instruction": "Type the paragraph as fast and accurately as possible.",
+                  "samples": ["Typing improves when we practice every day."]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 3,
+          "title": "Term 3",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Essay Typing",
+                  "instruction": "Type a short essay of several paragraphs without looking at the keys.",
+                  "samples": ["My school is a place where I learn and play.", "Typing helps me complete assignments faster."]
+                },
+                {
+                  "title": "Report Snippets",
+                  "instruction": "Type report-style sentences and headings.",
+                  "samples": ["Title: School Fair", "Objective: Raise funds", "Outcome: Successful event"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "year9",
+      "name": "Year 9",
+      "terms": [
+        {
+          "number": 1,
+          "title": "Term 1",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Numbers & Special Keys",
+                  "instruction": "Type numbers with shifted symbols for practice.",
+                  "samples": ["1!", "2@", "3#", "4$", "5%", "6^", "7&", "8*", "9(", "0)"]
+                },
+                {
+                  "title": "Typing Data Sets",
+                  "instruction": "Practice typing short structured data lines.",
+                  "samples": ["Name: John", "Age: 12", "Class: 9", "Score: 89", "Date: 2025-01-01"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "title": "Term 2",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Complex Sentences",
+                  "instruction": "Type complex sentences including commas and conjunctions.",
+                  "samples": ["Although it rained, we played football.", "She studied hard, so she passed her exams.", "Typing skills require focus and practice."]
+                },
+                {
+                  "title": "Summaries",
+                  "instruction": "Type short summaries from passage notes.",
+                  "samples": ["The passage explains how photosynthesis works.", "The story is about a boy who learns responsibility."]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 3,
+          "title": "Term 3",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Report Typing",
+                  "instruction": "Type report-style paragraphs with headings and short contents.",
+                  "samples": ["Title: My Holiday\nI visited the beach with my family.", "Title: School Project\nWe worked on a science fair project."]
+                },
+                {
+                  "title": "Research Snippets",
+                  "instruction": "Type sentences that summarize research findings.",
+                  "samples": ["Findings indicate improved performance after training.", "Students who practice daily show better accuracy."]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "year10",
+      "name": "Year 10",
+      "terms": [
+        {
+          "number": 1,
+          "title": "Term 1",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Typing Accuracy Challenge",
+                  "instruction": "Type longer words and sentences targeting 95% accuracy.",
+                  "samples": ["programming", "development", "accuracy is important", "coding improves skills", "structured practice"]
+                },
+                {
+                  "title": "Essay Practice",
+                  "instruction": "Type a short 150-word essay or provided prompt.",
+                  "samples": ["Write about how you use computers daily.", "The role of technology in education."]
+                }
+              ]
+            },
+            {
+              "id": "mouse",
+              "name": "Mouse",
+              "topics": [
+                {
+                  "title": "Graphic Design Basics",
+                  "instruction": "Use the mouse to create and adjust simple graphics.",
+                  "samples": ["Draw a banner", "Resize an image", "Apply color fill"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "title": "Term 2",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Formal Writing",
+                  "instruction": "Type formal letters and format them correctly.",
+                  "samples": ["Application Letter", "Invitation Letter", "Formal email: Dear Sir/Madam,"]
+                },
+                {
+                  "title": "Typing Test",
+                  "instruction": "Achieve 25–30 WPM with minimal errors in a timed test.",
+                  "samples": ["Speed typing challenge for 5 minutes", "Focus on accuracy"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 3,
+          "title": "Term 3",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Project Reports",
+                  "instruction": "Type structured project reports including headings and conclusion.",
+                  "samples": ["The experiment proved that...", "Findings indicate a positive trend."]
+                },
+                {
+                  "title": "Comparative Essays",
+                  "instruction": "Type essays comparing two topics with clear structure.",
+                  "samples": ["Compare rural and urban lifestyles.", "Contrast traditional and modern medicine."]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "year11",
+      "name": "Year 11",
+      "terms": [
+        {
+          "number": 1,
+          "title": "Term 1",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Literature Essays",
+                  "instruction": "Type literary analysis paragraphs with correct citations.",
+                  "samples": ["Shakespeare explores themes of fate in Macbeth.", "The novel reflects the society of its time."]
+                },
+                {
+                  "title": "Code Typing Practice",
+                  "instruction": "Type short code snippets correctly (syntax-focused).",
+                  "samples": ["print('Hello World')", "for i in range(5): print(i)", "if (x > 0) { console.log(x); }"]
+                }
+              ]
+            },
+            {
+              "id": "mouse",
+              "name": "Mouse",
+              "topics": [
+                {
+                  "title": "Photo Editing",
+                  "instruction": "Use the mouse to crop, resize and apply simple edits.",
+                  "samples": ["Crop photo", "Resize image", "Apply filter"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "title": "Term 2",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Presentation Preparation",
+                  "instruction": "Type clear slide contents and speaker notes.",
+                  "samples": ["Slide title", "Bullet points", "Summary notes"]
+                },
+                {
+                  "title": "Research Essays",
+                  "instruction": "Type research-based essays summarizing findings.",
+                  "samples": ["Global warming affects biodiversity.", "Renewable energy is the future of power."]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 3,
+          "title": "Term 3",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Debate & Case Studies",
+                  "instruction": "Type debate points and case study summaries clearly.",
+                  "samples": ["The company improved sales after the campaign.", "The community grew stronger after the project."]
+                },
+                {
+                  "title": "Evaluation Writing",
+                  "instruction": "Type evaluations noting strengths and weaknesses.",
+                  "samples": ["The experiment was successful but had flaws.", "The book was informative yet complex."]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "year12",
+      "name": "Year 12",
+      "terms": [
+        {
+          "number": 1,
+          "title": "Term 1",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Thesis Writing",
+                  "instruction": "Type thesis-style paragraphs with clear argumentation.",
+                  "samples": ["The research aims to investigate the impact of technology on learning.", "This study focuses on the effects of social media."]
+                },
+                {
+                  "title": "Academic Essays",
+                  "instruction": "Type academic-level essays focusing on structure and clarity.",
+                  "samples": ["Education reforms are essential for development.", "Technology influences modern communication."]
+                }
+              ]
+            },
+            {
+              "id": "mouse",
+              "name": "Mouse",
+              "topics": [
+                {
+                  "title": "UI/UX Precision",
+                  "instruction": "Use mouse to align and adjust interface elements precisely.",
+                  "samples": ["Align text box", "Resize panels", "Drag widgets"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "title": "Term 2",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Final Speed Test",
+                  "instruction": "Complete a timed test aiming for 40+ WPM with high accuracy.",
+                  "samples": ["Timed test: type the passages as fast and accurately as possible."]
+                },
+                {
+                  "title": "Project Documentation",
+                  "instruction": "Type full technical or project documentation with headings.",
+                  "samples": ["Introduction", "Methodology", "Results", "Conclusion"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 3,
+          "title": "Term 3",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard",
+              "topics": [
+                {
+                  "title": "Final Year Essays",
+                  "instruction": "Type longer critical essays and prepare for publication style.",
+                  "samples": ["The impact of colonialism in African literature.", "The future of artificial intelligence."]
+                },
+                {
+                  "title": "Professional Reports",
+                  "instruction": "Type business-style reports with clear structure.",
+                  "samples": ["Executive Summary", "Findings", "Recommendations"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
