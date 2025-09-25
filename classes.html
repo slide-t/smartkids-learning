@@ -19,8 +19,164 @@
       <a href="index.html" class="bg-white text-blue-600 px-4 py-2 rounded-lg font-medium shadow hover:bg-blue-100 transition">Home</a>
     </div>
   </header>
+<main class="pt-24 max-w-4xl mx-auto px-4">
+  <h2 class="text-3xl font-bold text-center mb-8">Select Your Class</h2>
+  <div id="accordion" class="space-y-4"></div>
 
-  <!-- Content -->
+  <!-- Typing Tutor Practice Area -->
+  <div id="practiceArea" class="mt-10 p-6 bg-white rounded-xl shadow-md hidden">
+    <h3 id="practiceTitle" class="text-xl font-semibold mb-2"></h3>
+    <p id="practiceInstruction" class="mb-4 text-gray-700"></p>
+    <div id="currentSample" class="text-2xl font-mono font-bold mb-4"></div>
+    <p id="scoreDisplay" class="mb-4 font-semibold">Score: 0</p>
+    <div id="virtualKeyboard" class="grid grid-cols-10 gap-2"></div>
+  </div>
+</main>
+
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  const container = document.getElementById("accordion");
+  const practiceArea = document.getElementById("practiceArea");
+  const practiceTitle = document.getElementById("practiceTitle");
+  const practiceInstruction = document.getElementById("practiceInstruction");
+  const currentSample = document.getElementById("currentSample");
+  const scoreDisplay = document.getElementById("scoreDisplay");
+  const keyboardDiv = document.getElementById("virtualKeyboard");
+
+  let currentSequence = [];
+  let score = 0;
+  let currentIndex = 0;
+
+  const today = new Date();
+  const termUnlockDates = { 2: new Date("2026-01-04"), 3: new Date("2026-04-20") };
+
+  // Build virtual keyboard once
+  const keys = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+  keyboardDiv.innerHTML = keys.map(k =>
+    `<button class="key bg-gray-200 rounded p-2 font-bold">${k}</button>`
+  ).join("");
+
+  async function startPractice(topic) {
+    practiceArea.classList.remove("hidden");
+    practiceTitle.textContent = topic.title;
+    practiceInstruction.textContent = topic.instruction;
+    currentSequence = [...topic.samples];
+    currentIndex = 0;
+    score = 0;
+    scoreDisplay.textContent = "Score: 0";
+    showSample();
+  }
+
+  function showSample() {
+    if (currentIndex < currentSequence.length) {
+      currentSample.textContent = currentSequence[currentIndex];
+    } else {
+      currentSample.textContent = "✅ Done! Great job!";
+    }
+  }
+
+  document.addEventListener("keydown", (e) => {
+    if (currentIndex >= currentSequence.length) return;
+    const expected = currentSequence[currentIndex];
+    if (e.key.toUpperCase() === expected[0].toUpperCase()) {
+      score++;
+      scoreDisplay.textContent = `Score: ${score}`;
+      currentIndex++;
+      showSample();
+    }
+  });
+
+  try {
+    const res = await fetch("data/classes.json");
+    const data = await res.json();
+    const classes = Array.isArray(data) ? data : data.classes;
+
+    classes.forEach((cls) => {
+      const card = document.createElement("div");
+      card.className = "bg-white rounded-xl shadow-md overflow-hidden mb-4";
+
+      const header = document.createElement("button");
+      header.className = "accordion-header w-full flex justify-between items-center px-6 py-4 text-lg font-semibold bg-blue-100 hover:bg-blue-200 transition";
+      header.innerHTML = `<span class="text-gray-900">${cls.name}</span><span class="text-gray-900">+</span>`;
+      card.appendChild(header);
+
+      const body = document.createElement("div");
+      body.className = "accordion-body bg-gray-50";
+
+      body.innerHTML = (cls.terms || []).map(term => {
+        const termUnlocked = term.number === 1 || today >= termUnlockDates[term.number];
+        return `
+          <div class="mb-4">
+            <h3 class="text-lg font-semibold text-blue-700 px-4 py-2">${term.title}</h3>
+            ${(term.categories || []).map(cat => `
+              <div class="ml-4 mb-2">
+                <h4 class="text-md font-semibold text-purple-600 px-3 py-1">${cat.name}</h4>
+                <ul class="space-y-2 pl-6">
+                  ${(cat.topics || []).map((topic, topicIndex) => {
+                    if (termUnlocked) {
+                      const icon = cat.id === "mouse" ? "🖱️" : cat.id === "keyboard" ? "⌨️" : "📖";
+                      return `<li>
+                        <button data-cls='${cls.id}' data-term='${term.number}' data-cat='${cat.id}' data-topic='${topicIndex}'
+                          class="start-practice w-full text-left px-4 py-2 rounded-lg shadow text-gray-900 bg-white hover:shadow-md hover:bg-blue-50 transition flex items-center gap-2">
+                          <span>${icon}</span> ${topic.title}
+                        </button>
+                      </li>`;
+                    } else {
+                      const icon = cat.id === "mouse" ? "🖱️" : cat.id === "keyboard" ? "⌨️" : "📖";
+                      return `<li>
+                        <span class="block px-4 py-2 rounded-lg shadow text-base bg-gray-200 text-gray-500 cursor-not-allowed flex items-center gap-2">
+                          <span>${icon}</span> ${topic.title} (Locked)
+                        </span>
+                      </li>`;
+                    }
+                  }).join("")}
+                </ul>
+              </div>
+            `).join("")}
+          </div>`;
+      }).join("");
+
+      card.appendChild(body);
+
+      header.addEventListener("click", () => {
+        const isOpen = body.style.maxHeight && body.style.maxHeight !== "0px";
+        container.querySelectorAll(".accordion-body").forEach(el => el.style.maxHeight = null);
+        container.querySelectorAll(".accordion-header span:last-child").forEach(icon => icon.style.transform = "rotate(0deg)");
+        if (!isOpen) {
+          body.style.maxHeight = body.scrollHeight + "px";
+          header.querySelector("span:last-child").style.transform = "rotate(45deg)";
+        }
+      });
+
+      container.appendChild(card);
+    });
+
+    // Attach event listener AFTER rendering
+    container.addEventListener("click", (e) => {
+      if (e.target.closest(".start-practice")) {
+        const btn = e.target.closest(".start-practice");
+        const clsId = btn.dataset.cls;
+        const termNum = parseInt(btn.dataset.term);
+        const catId = btn.dataset.cat;
+        const topicIndex = parseInt(btn.dataset.topic);
+
+        const cls = classes.find(c => c.id === clsId);
+        const term = cls.terms.find(t => t.number === termNum);
+        const cat = term.categories.find(c => c.id === catId);
+        const topic = cat.topics[topicIndex];
+        startPractice(topic);
+      }
+    });
+
+  } catch (err) {
+    console.error("Error loading JSON:", err);
+    container.innerHTML = '<p class="text-red-500">⚠️ Failed to load class data. Check console.</p>';
+  }
+});
+</script>
+
+  
+  <!-- Content --
   <main class="pt-24 max-w-4xl mx-auto px-4">
     <h2 class="text-3xl font-bold text-center mb-8">Select Your Class</h2>
     <div id="accordion" class="space-y-4"></div>
