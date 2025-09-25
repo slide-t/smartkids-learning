@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Typing Tutor - EduKids Africa</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 font-sans text-gray-900 min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="bg-white shadow-md p-4 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <img src="logo.png" alt="Logo" class="w-10 h-10 rounded-full">
+      <h1 class="text-xl font-bold text-gray-800">EduKids Africa</h1>
+    </div>
+    <a href="classes.html" class="text-sm px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition">
+      ← Back to Classes
+    </a>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-1 container mx-auto p-6">
+    <div class="bg-white shadow-lg rounded-2xl p-6">
+      <h2 id="lessonTitle" class="text-2xl font-bold mb-4 text-center">Loading Lesson...</h2>
+
+      <!-- Lesson Text -->
+      <div id="lessonBox" class="bg-gray-100 rounded-lg p-4 h-40 overflow-y-auto text-lg leading-relaxed mb-4"></div>
+
+      <!-- Typing Input -->
+      <textarea id="typingInput" 
+        class="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none text-lg"
+        rows="5" placeholder="Start typing here..." disabled></textarea>
+
+      <!-- Stats -->
+      <div class="grid grid-cols-3 gap-4 text-center mt-6">
+        <div class="bg-gray-50 p-4 rounded-lg shadow">
+          <p class="text-sm text-gray-600">Accuracy</p>
+          <p id="accuracy" class="text-xl font-bold">0%</p>
+        </div>
+        <div class="bg-gray-50 p-4 rounded-lg shadow">
+          <p class="text-sm text-gray-600">Speed</p>
+          <p id="speed" class="text-xl font-bold">0 WPM</p>
+        </div>
+        <div class="bg-gray-50 p-4 rounded-lg shadow">
+          <p class="text-sm text-gray-600">Progress</p>
+          <p id="progress" class="text-xl font-bold">0%</p>
+        </div>
+      </div>
+
+      <!-- Next Lesson -->
+      <div class="flex justify-center mt-6">
+        <button id="nextLesson" class="px-6 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700 transition hidden">
+          Next Lesson →
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // --- Utility to read query parameters ---
+    function getQueryParams() {
+      const urlParams = new URLSearchParams(window.location.search);
+      return {
+        classId: urlParams.get("class"),
+        term: parseInt(urlParams.get("term")),
+        category: urlParams.get("category"),
+        topicIndex: parseInt(urlParams.get("topic"))
+      };
+    }
+
+    const { classId, term, category, topicIndex } = getQueryParams();
+    const lessonTitle = document.getElementById("lessonTitle");
+    const lessonBox = document.getElementById("lessonBox");
+    const typingInput = document.getElementById("typingInput");
+    const accuracyEl = document.getElementById("accuracy");
+    const speedEl = document.getElementById("speed");
+    const progressEl = document.getElementById("progress");
+    const nextLessonBtn = document.getElementById("nextLesson");
+
+    let lessonText = "";
+    let startTime = null;
+    let typedChars = 0;
+
+    // --- Load lesson from classes.json ---
+    fetch("classes.json")
+      .then(res => res.json())
+      .then(data => {
+        const cls = data.find(c => c.id === classId);
+        if (!cls) throw new Error("Class not found");
+
+        const termData = cls.terms.find(t => t.number === term);
+        if (!termData) throw new Error("Term not found");
+
+        const cat = termData.categories.find(c => c.id === category);
+        if (!cat) throw new Error("Category not found");
+
+        const topic = cat.topics[topicIndex];
+        if (!topic) throw new Error("Topic not found");
+
+        lessonTitle.textContent = topic.title;
+        lessonText = topic.content || "No content found for this lesson.";
+        lessonBox.textContent = lessonText;
+
+        typingInput.disabled = false;
+        typingInput.focus();
+
+        // Enable next lesson if available
+        if (cat.topics[topicIndex + 1]) {
+          nextLessonBtn.classList.remove("hidden");
+          nextLessonBtn.onclick = () => {
+            const nextLink = `typing.html?class=${classId}&term=${term}&category=${category}&topic=${topicIndex + 1}`;
+            window.location.href = nextLink;
+          };
+        }
+      })
+      .catch(err => {
+        lessonTitle.textContent = "Error loading lesson.";
+        console.error(err);
+      });
+
+    // --- Typing logic ---
+    typingInput.addEventListener("input", () => {
+      if (!startTime) startTime = new Date();
+
+      const typed = typingInput.value;
+      typedChars = typed.length;
+
+      // Accuracy
+      let correct = 0;
+      for (let i = 0; i < typed.length; i++) {
+        if (typed[i] === lessonText[i]) correct++;
+      }
+      const accuracy = typed.length ? Math.round((correct / typed.length) * 100) : 0;
+      accuracyEl.textContent = accuracy + "%";
+
+      // Speed (WPM)
+      const elapsedMinutes = (new Date() - startTime) / 1000 / 60;
+      const wordsTyped = typed.trim().split(/\s+/).length;
+      const wpm = elapsedMinutes > 0 ? Math.round(wordsTyped / elapsedMinutes) : 0;
+      speedEl.textContent = wpm + " WPM";
+
+      // Progress
+      const progress = Math.min(100, Math.round((typed.length / lessonText.length) * 100));
+      progressEl.textContent = progress + "%";
+
+      // Highlighting text
+      lessonBox.innerHTML = "";
+      for (let i = 0; i < lessonText.length; i++) {
+        const span = document.createElement("span");
+        span.textContent = lessonText[i];
+        if (i < typed.length) {
+          span.className = typed[i] === lessonText[i] ? "text-green-600" : "bg-red-200";
+        }
+        lessonBox.appendChild(span);
+      }
+    });
+  </script>
+</body>
+</html>
