@@ -30,6 +30,182 @@
   <div class="score" id="scoreDisplay">Score: 0</div>
   <div class="virtual-keyboard" id="virtualKeyboard"></div>
 </div>
+
+<script>
+const practiceArea = document.getElementById('practiceArea');
+const scoreDisplay = document.getElementById('scoreDisplay');
+const virtualKeyboard = document.getElementById('virtualKeyboard');
+
+let score = 0;
+let currentIndex = 0;
+let currentLetterIndex = 0;
+let currentSequence = [];
+let topicType = "";
+
+// Keyboard layout
+const keyboardRows = [
+  ['Q','W','E','R','T','Y','U','I','O','P'],
+  ['A','S','D','F','G','H','J','K','L',';'],
+  ['Z','X','C','V','B','N','M',',','.','/']
+];
+
+// Build virtual keyboard
+function buildKeyboard() {
+  virtualKeyboard.innerHTML = '';
+  keyboardRows.forEach(row=>{
+    const rowDiv = document.createElement('div');
+    rowDiv.classList.add('keyboard-row');
+    row.forEach(key=>{
+      const keyDiv = document.createElement('div');
+      keyDiv.classList.add('vk-key');
+      keyDiv.textContent = key;
+      rowDiv.appendChild(keyDiv);
+    });
+    virtualKeyboard.appendChild(rowDiv);
+  });
+}
+buildKeyboard();
+
+// Highlight keys
+function highlightVK(keyChar,type='highlight'){
+  const vkKeys = document.querySelectorAll('.vk-key');
+  vkKeys.forEach(vk=>{ 
+    vk.classList.remove('highlight','correct','wrong'); 
+    vk.style.backgroundColor = vk.classList.contains('active') ? '#e7e7e7' : '#ccc';
+  });
+  const vk = Array.from(vkKeys).find(k=>k.textContent.toUpperCase()===keyChar.toUpperCase());
+  if(vk){
+    vk.classList.add(type);
+    if(type==='correct') vk.style.backgroundColor='#4CAF50';
+    if(type==='wrong') vk.style.backgroundColor='#f44336';
+    if(type==='highlight') vk.style.backgroundColor='#ffeb3b';
+  }
+}
+
+// Enable clickable keys
+function enableKeysForSequence() {
+  const vkKeys = document.querySelectorAll('.vk-key');
+  vkKeys.forEach(vk=>{
+    vk.classList.remove('active');
+    if(currentSequence.some(seq => seq.toUpperCase().includes(vk.textContent))){
+      vk.classList.add('active');
+      vk.onclick = ()=>handleInput(vk.textContent);
+    } else {
+      vk.onclick = null;
+    }
+  });
+}
+
+// Show current practice letter/word
+function showCurrentLetter(){
+  if(currentIndex >= currentSequence.length){
+    practiceArea.innerHTML='<p>✅ Well done! You finished this topic.</p>';
+    highlightVK('');
+    return;
+  }
+
+  practiceArea.innerHTML='';
+  const keyDiv = document.createElement('div');
+  keyDiv.classList.add('key');
+
+  const currentWord = currentSequence[currentIndex];
+  keyDiv.textContent = currentWord[currentLetterIndex] || currentWord;
+  practiceArea.appendChild(keyDiv);
+
+  enableKeysForSequence();
+  highlightVK(keyDiv.textContent,'highlight');
+}
+
+// Handle input
+function handleInput(input){
+  if(currentIndex>=currentSequence.length) return;
+  const currentWord = currentSequence[currentIndex];
+  const expectedLetter = currentWord[currentLetterIndex];
+  const keyDiv = document.querySelector('.key');
+  if(input.toUpperCase()===expectedLetter.toUpperCase()){
+    keyDiv.classList.add('correct');
+    highlightVK(expectedLetter,'correct');
+    score++;
+    currentLetterIndex++;
+    if(currentLetterIndex>=currentWord.length){
+      currentLetterIndex=0;
+      currentIndex++;
+      setTimeout(showCurrentLetter,400);
+    } else {
+      setTimeout(showCurrentLetter,400);
+    }
+  } else {
+    keyDiv.classList.add('wrong');
+    highlightVK(expectedLetter,'wrong');
+    setTimeout(showCurrentLetter,400);
+  }
+  scoreDisplay.textContent=`Score: ${score}`;
+}
+
+// Listen to real keyboard
+document.addEventListener('keydown', e=>{
+  const key = e.key.length===1 ? e.key : '';
+  handleInput(key);
+});
+
+// --- Fetch JSON and load topic ---
+async function loadTopic(){
+  const urlParams = new URLSearchParams(window.location.search);
+  let yearId = urlParams.get('year');      // "1" or "year1"
+  const termNum = parseInt(urlParams.get('term'));  // "1"
+  const categoryId = urlParams.get('category');     // "keyboard"
+  const topicParam = urlParams.get('topic');        // "Home Row Intro"
+
+  console.log("URL Params →", {yearId, termNum, categoryId, topicParam});
+
+  // Normalize yearId → always like "year1"
+  if(yearId){
+    if(!yearId.startsWith("year")){
+      yearId = "year" + yearId;
+    }
+  }
+
+  if(!yearId){
+    practiceArea.innerHTML = "<p>⚠️ Error: No year specified in URL.</p>";
+    return;
+  }
+
+  try {
+    const res = await fetch('data/classes.json');
+    if(!res.ok) throw new Error("Cannot load JSON file");
+    const data = await res.json();
+
+    const year = data.find(y => y.id === yearId);
+    if(!year){
+      practiceArea.innerHTML=`<p>❌ Year ${yearId} not found in JSON.</p>`;
+      return;
+    }
+
+    const term = year.terms.find(t => t.number === termNum);
+    if(!term) return practiceArea.innerHTML=`<p>❌ Term ${termNum} not found.</p>`;
+
+    const category = term.categories.find(c => c.id === categoryId);
+    if(!category) return practiceArea.innerHTML=`<p>❌ Category "${categoryId}" not found.</p>`;
+
+    const topic = category.topics.find(t => t.title === topicParam);
+    if(!topic) return practiceArea.innerHTML=`<p>❌ Topic "${topicParam}" not found.</p>`;
+
+    topicType = topic.type;
+    currentSequence = topic.items;
+    console.log("✅ Loaded topic:", topic);
+    showCurrentLetter();
+
+  } catch(err){
+    practiceArea.innerHTML = `<p>⚠️ Error: ${err.message}</p>`;
+  }
+}
+
+window.focus();
+loadTopic();
+</script>
+
+
+  <!--
 <script>
 const practiceArea = document.getElementById('practiceArea');
 const scoreDisplay = document.getElementById('scoreDisplay');
@@ -196,6 +372,6 @@ async function loadTopic(){
 window.focus();
 loadTopic();
 </script>
-
+-->
 </body>
 </html>
