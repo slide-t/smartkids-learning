@@ -51,7 +51,120 @@
     <button id="restartBtn" style="display:none;">Restart</button>
   </div>
 </div>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  const container = document.getElementById("keyboard-game");
+  const urlParams = new URLSearchParams(window.location.search);
+  const yearId = urlParams.get("year");
+  const subjectId = urlParams.get("subject");
+  const topicId = urlParams.get("topic");
 
+  // Virtual keyboard layout
+  const keyboardLayout = [
+    ["1","2","3","4","5","6","7","8","9","0"],
+    ["q","w","e","r","t","y","u","i","o","p"],
+    ["a","s","d","f","g","h","j","k","l",";"],
+    ["z","x","c","v","b","n","m",",",".","/"],
+    [" "]
+  ];
+
+  // Build keyboard UI
+  const keyboardDiv = document.createElement("div");
+  keyboardDiv.className = "keyboard mt-6 grid gap-2";
+
+  keyboardLayout.forEach(row => {
+    const rowDiv = document.createElement("div");
+    rowDiv.className = "flex justify-center";
+    row.forEach(key => {
+      const keyBtn = document.createElement("button");
+      keyBtn.textContent = key === " " ? "Space" : key;
+      keyBtn.className =
+        "key px-3 py-2 m-1 border rounded bg-gray-200 hover:bg-gray-300 active:bg-gray-400";
+      keyBtn.dataset.key = key;
+      keyBtn.addEventListener("click", () => handleKeyPress(key));
+      rowDiv.appendChild(keyBtn);
+    });
+    keyboardDiv.appendChild(rowDiv);
+  });
+
+  // Add to DOM
+  container.appendChild(keyboardDiv);
+
+  // Load JSON
+  let sampleText = "Loading...";
+  try {
+    const response = await fetch("data/classes.json");
+    const classes = await response.json();
+    const year = classes.find(c => c.id === yearId);
+    const subject = year?.subjects.find(s => s.id === subjectId);
+    const topic = subject?.topics.find(t => t.id === topicId);
+    if (topic?.sample) {
+      sampleText = topic.sample;
+    } else {
+      sampleText = "❌ No sample found in JSON";
+    }
+  } catch (err) {
+    console.error("Error loading JSON:", err);
+    sampleText = "❌ Failed to load data/classes.json";
+  }
+
+  // Game board
+  const textDiv = document.createElement("div");
+  textDiv.className = "mt-4 text-lg font-mono";
+  container.insertBefore(textDiv, keyboardDiv);
+
+  let currentIndex = 0;
+  renderText();
+
+  function renderText() {
+    textDiv.innerHTML =
+      sampleText
+        .split("")
+        .map((ch, idx) =>
+          idx < currentIndex
+            ? `<span class="text-green-600">${ch}</span>`
+            : idx === currentIndex
+            ? `<span class="bg-yellow-300">${ch}</span>`
+            : ch
+        )
+        .join("");
+    highlightKey(sampleText[currentIndex]);
+  }
+
+  // Highlight virtual key
+  function highlightKey(expectedChar) {
+    document.querySelectorAll(".key").forEach(btn => {
+      btn.classList.remove("bg-yellow-200");
+      if (btn.dataset.key === expectedChar.toLowerCase()) {
+        btn.classList.add("bg-yellow-200");
+      }
+      if (expectedChar === " " && btn.dataset.key === " ") {
+        btn.classList.add("bg-yellow-200");
+      }
+    });
+  }
+
+  // Handle physical + virtual input
+  document.addEventListener("keydown", e => handleKeyPress(e.key));
+  
+  function handleKeyPress(key) {
+    const expected = sampleText[currentIndex];
+    if (key === expected || (key === " " && expected === " ")) {
+      currentIndex++;
+      if (currentIndex >= sampleText.length) {
+        alert("🎉 Well done! You finished the exercise.");
+        currentIndex = 0; // restart
+      }
+      renderText();
+    }
+  }
+});
+</script>
+
+
+
+
+  <!--
 <script>
 // 🔹 Replace with JSON sample content (for demo, I hardcode one)
 const content = "Final Project: Developing a community app for waste recycling. The app allows households to schedule pickups and track recycling activities.";
@@ -144,6 +257,6 @@ document.getElementById("restartBtn").addEventListener("click",()=>{
   startTimer();
 });
 </script>
-
+-->
 </body>
 </html>
