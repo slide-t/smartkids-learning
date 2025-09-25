@@ -158,31 +158,38 @@ document.addEventListener('keydown', e=>{
 // === FETCH JSON TOPIC DATA ===
 async function loadPractice(yearId, termNumber, topicTitle){
   try{
-    const res = await fetch('classes.json');
+    // ✅ correct relative path
+    const res = await fetch("data/classes.json"); 
     if(!res.ok) throw new Error("Failed to load classes.json");
     const data = await res.json();
 
-    const year = data.classes.find(c=>c.id===yearId);
+    // find year
+    const year = data.classes.find(c => c.id === yearId);
     if(!year) throw new Error("Year not found");
 
-    const term = year.terms.find(t=>t.number===termNumber);
+    // find term
+    const term = year.terms.find(t => t.number === termNumber);
     if(!term) throw new Error("Term not found");
 
+    // find topic (search inside all categories)
     const topic = term.categories
-      .flatMap(cat=>cat.topics)
-      .find(tp=>tp.title===topicTitle);
+      .flatMap(cat => cat.topics)
+      .find(tp => tp.title === topicTitle);
 
     if(!topic) throw new Error("Topic not found");
 
     // use samples as practice sequence
     currentSequence = [...topic.samples];
-    score=0;
-    currentIndex=0;
-    currentLetterIndex=0;
-    scoreDisplay.textContent="Score: 0";
+    score = 0;
+    currentIndex = 0;
+    currentLetterIndex = 0;
+    scoreDisplay.textContent = "Score: 0";
+
+    // show first item
     showCurrentLetter();
+
   }catch(err){
-    practiceArea.innerHTML=`<p style="color:red">${err.message}</p>`;
+    practiceArea.innerHTML = `<p style="color:red">${err.message}</p>`;
     console.error(err);
   }
 }
