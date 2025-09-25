@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Typing Practice</title>
+  <title>Typing Tutor</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body { font-family: Arial, sans-serif; margin:0; padding:10px; background:#f9f9f9; }
     h1 { text-align:center; }
-    #practiceArea { margin:10px auto; padding:15px; width:95%; min-height:80px; background:#fff; border:2px solid #444; border-radius:10px; text-align:center; }
+    #practiceArea { margin:10px auto; padding:15px; width:95%; min-height:80px; background:#fff; border:2px solid #444; border-radius:10px; text-align:center; font-size:22px; letter-spacing:2px; }
     #scoreDisplay, #timerDisplay { margin-top:10px; font-size:16px; text-align:center; }
     #virtualKeyboard { margin:15px auto; max-width:700px; display:flex; flex-wrap:wrap; justify-content:center; }
     .key {
@@ -22,15 +22,20 @@
       user-select:none;
       color:#fff;
       box-shadow:0 2px 4px rgba(0,0,0,0.2);
+      transition: background 0.2s;
     }
     .key.spacebar { min-width:150px; }
+    .key.active { background:#ffeb3b; color:#000; }
+    .key.correct { background:#2ecc71; }
+    .key.wrong { background:#e74c3c; }
     #controls { margin-top:15px; text-align:center; }
     button { margin:5px; padding:8px 15px; border:none; border-radius:5px; background:#444; color:#fff; cursor:pointer; }
+    .done { color:green; font-weight:bold; }
   </style>
 </head>
 <body>
 
-  <h1>Typing Practice</h1>
+  <h1>Typing Tutor</h1>
 
   <div id="practiceArea">Loading...</div>
   <div id="scoreDisplay">Score: 0</div>
@@ -41,7 +46,7 @@
   <div id="controls">
     <button id="prevBtn">Prev</button>
     <button id="nextBtn">Next</button>
-    <button id="restartBtn">Restart</button>
+    <button id="restartBtn" style="display:none;">Restart</button>
   </div>
 
   <script>
@@ -57,6 +62,10 @@
     let currentTopicIndex = 0;
     let score = 0;
     let timer = 0, timerInterval = null;
+
+    let currentSamples = [];
+    let currentWordIndex = 0;
+    let currentCharIndex = 0;
 
     function renderKeyboard(activeKeys=[]){
       virtualKeyboard.innerHTML="";
@@ -80,6 +89,77 @@
       },1000);
     }
 
+    function showCurrentWord(){
+      if(currentWordIndex >= currentSamples.length){
+        practiceArea.innerHTML = `<p class="done">🎉 Well done! You finished this topic.</p>`;
+        restartBtn.style.display="inline-block";
+        return;
+      }
+      restartBtn.style.display="none";
+
+      const word = currentSamples[currentWordIndex];
+      practiceArea.innerHTML="";
+      word.split("").forEach((ch,idx)=>{
+        const span=document.createElement("span");
+        span.textContent=ch;
+        span.style.padding="0 4px";
+        if(idx === currentCharIndex){
+          span.style.background="#ffeb3b";
+        }
+        if(idx < currentCharIndex){
+          span.style.color="green";
+        }
+        practiceArea.appendChild(span);
+      });
+
+      highlightKey(word[currentCharIndex]);
+    }
+
+    function highlightKey(char){
+      const keys=document.querySelectorAll(".key");
+      keys.forEach(k=>{
+        k.classList.remove("active");
+        if(k.textContent===char.toUpperCase() || (char===" " && k.textContent==="⎵")){
+          k.classList.add("active");
+        }
+      });
+    }
+
+    function handleInput(input){
+      if(currentWordIndex >= currentSamples.length) return;
+      const word=currentSamples[currentWordIndex];
+      const expected=word[currentCharIndex];
+
+      if(input.toUpperCase()===expected.toUpperCase()){
+        score++;
+        currentCharIndex++;
+        if(currentCharIndex >= word.length){
+          currentWordIndex++;
+          currentCharIndex=0;
+        }
+        showCurrentWord();
+      } else {
+        flashWrongKey(input);
+      }
+      scoreDisplay.textContent="Score: "+score;
+    }
+
+    function flashWrongKey(input){
+      const keys=document.querySelectorAll(".key");
+      keys.forEach(k=>{
+        if(k.textContent===input.toUpperCase() || (input===" " && k.textContent==="⎵")){
+          k.classList.add("wrong");
+          setTimeout(()=>k.classList.remove("wrong"),300);
+        }
+      });
+    }
+
+    document.addEventListener("keydown",e=>{
+      if(e.key.length===1 || e.key===" "){
+        handleInput(e.key);
+      }
+    });
+
     function loadTopic(index){
       if(!data || !data.classes){ practiceArea.textContent="No class found."; return; }
       const topics = data.classes[0].terms[0].categories[0].topics;
@@ -88,26 +168,20 @@
       currentTopicIndex=index;
       const topic=topics[index];
 
-      practiceArea.innerHTML="<b>"+topic.title+"</b><br>"+(topic.instruction || "")+"<br><br>Samples: "+topic.samples.join(", ");
+      currentSamples=topic.samples || [];
+      currentWordIndex=0;
+      currentCharIndex=0;
       score=0;
       scoreDisplay.textContent="Score: "+score;
-      renderKeyboard(topic.samples);
+      renderKeyboard([...new Set(currentSamples.join("").split(""))]);
       startTimer();
+      showCurrentWord();
     }
 
-    // input handler (for real typing or clicks)
-    function handleInput(input){
-      console.log("Pressed:",input);
-      score++;
-      scoreDisplay.textContent="Score: "+score;
-    }
-
-    // buttons
     prevBtn.onclick=()=> loadTopic(currentTopicIndex-1);
     nextBtn.onclick=()=> loadTopic(currentTopicIndex+1);
     restartBtn.onclick=()=> loadTopic(currentTopicIndex);
 
-    // fetch JSON
     fetch("classes.json")
       .then(r=>r.json())
       .then(json=>{
