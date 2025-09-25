@@ -154,7 +154,46 @@ document.addEventListener('keydown', e=>{
   handleInput(key);
 });
 
+// === FETCH JSON TOPIC DATA (per year file) ===
+async function loadPractice(yearId, termNumber, topicTitle){
+  try{
+    // load directly from file e.g. data/year1.json
+    const res = await fetch(`/data/${yearId}.json`);
+    if(!res.ok) throw new Error(`Failed to load ${yearId}.json`);
+    const data = await res.json();
 
+    // get the year object (your file has only one year inside)
+    const year = data.classes.find(c=>c.id===yearId);
+    if(!year) throw new Error("Year not found");
+
+    const term = year.terms.find(t=>t.number===termNumber);
+    if(!term) throw new Error("Term not found");
+
+    // look inside all categories for topic by title
+    const topic = term.categories
+      .flatMap(cat=>cat.topics)
+      .find(tp=>tp.title===topicTitle);
+
+    if(!topic) throw new Error("Topic not found");
+
+    // set up samples for typing tutor
+    currentSequence = [...topic.samples];
+    score = 0;
+    currentIndex = 0;
+    currentLetterIndex = 0;
+    scoreDisplay.textContent = "Score: 0";
+    showCurrentLetter();
+
+    // optional: show instruction somewhere
+    practiceArea.innerHTML = `<p><strong>${topic.instruction}</strong></p>`;
+  }catch(err){
+    practiceArea.innerHTML = `<p style="color:red">${err.message}</p>`;
+    console.error(err);
+  }
+}
+
+  
+/*
 // === FETCH JSON TOPIC DATA ===
 async function loadPractice(yearId, termNumber, topicTitle){
   try{
