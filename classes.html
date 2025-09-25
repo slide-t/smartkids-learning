@@ -26,6 +26,77 @@
     <div id="accordion" class="space-y-4"></div>
   </main>
 
+<script>
+async function loadYears() {
+  const yearsContainer = document.getElementById("accordion");
+  yearsContainer.innerHTML = "";
+
+  // Example: adjust number of years available
+  const yearFiles = ["data/year1.json", "data/year2.json", "data/year3.json"];
+
+  for (let i = 0; i < yearFiles.length; i++) {
+    try {
+      const res = await fetch(yearFiles[i]);
+      if (!res.ok) throw new Error("Failed to load " + yearFiles[i]);
+      const yearData = await res.json();
+
+      // Build accordion section for each year
+      const yearId = "year" + (i + 1);
+      const yearHeader = document.createElement("h2");
+      yearHeader.innerHTML = `
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#${yearId}">
+          ${yearData.year}
+        </button>
+      `;
+
+      const yearBody = document.createElement("div");
+      yearBody.id = yearId;
+      yearBody.className = "accordion-collapse collapse";
+      yearBody.innerHTML = `<div class="accordion-body"></div>`;
+
+      // Insert terms
+      const bodyContainer = yearBody.querySelector(".accordion-body");
+      yearData.terms.forEach((term, tIndex) => {
+        const termDiv = document.createElement("div");
+        termDiv.className = "mb-3";
+        termDiv.innerHTML = `<h5>${term.term}</h5>`;
+
+        // Insert topics
+        term.topics.forEach(topic => {
+          const btn = document.createElement("button");
+          btn.className = "btn btn-outline-primary btn-sm m-1";
+          btn.textContent = topic.title;
+          btn.onclick = () => loadPractice(topic.file);
+          termDiv.appendChild(btn);
+        });
+
+        bodyContainer.appendChild(termDiv);
+      });
+
+      // Wrap in accordion-item
+      const yearItem = document.createElement("div");
+      yearItem.className = "accordion-item";
+      yearItem.appendChild(yearHeader);
+      yearItem.appendChild(yearBody);
+
+      yearsContainer.appendChild(yearItem);
+
+    } catch (err) {
+      console.error("Error loading", yearFiles[i], err);
+    }
+  }
+}
+
+function loadPractice(file) {
+  alert("Load typing tutor practice: " + file);
+  // Here you can fetch the practice JSON or open typing tutor view
+}
+
+// Call on page load
+document.addEventListener("DOMContentLoaded", loadYears);
+</script>
+
+  
   <!--
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
@@ -97,7 +168,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 </script>
--->
+
 
   
 <script>
@@ -179,7 +250,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 </script>
-
+-->
 <script>
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js').then(() => {
