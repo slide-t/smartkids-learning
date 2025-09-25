@@ -148,6 +148,71 @@ document.addEventListener('keydown', e=>{
 });
 
 // --- Fetch JSON and load topic ---
+async function loadTopic() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const yearId = urlParams.get('year');          // e.g. "1"
+  const termNum = parseInt(urlParams.get('term')); // e.g. "1"
+  const categoryId = urlParams.get('category');  // e.g. "keyboard"
+  const topicParam = urlParams.get('topic');     // e.g. "home-row-intro"
+
+  try {
+    const res = await fetch('data/classes.json');
+    if (!res.ok) throw new Error("Cannot load JSON file");
+    const data = await res.json();
+
+    // --- Get year (support array OR object) ---
+    let year;
+    if (Array.isArray(data)) {
+      year = data.find(y => y.id === `year${yearId}`);
+    } else {
+      year = data[`year${yearId}`];
+    }
+    if (!year) {
+      practiceArea.innerHTML = `<p>❌ Year ${yearId} not found.</p>`;
+      return;
+    }
+
+    // --- Get term ---
+    const term = year.terms?.find(t => t.number === termNum);
+    if (!term) {
+      practiceArea.innerHTML = `<p>❌ Term ${termNum} not found.</p>`;
+      return;
+    }
+
+    // --- Get category ---
+    const category = term.categories?.find(c => c.id === categoryId);
+    if (!category) {
+      practiceArea.innerHTML = `<p>❌ Category '${categoryId}' not found.</p>`;
+      return;
+    }
+
+    // --- Get topic (try id first, fallback to title match) ---
+    const topic = category.topics?.find(
+      t => t.id === topicParam || t.title === topicParam
+    );
+    if (!topic) {
+      practiceArea.innerHTML = `<p>❌ Topic '${topicParam}' not found.</p>`;
+      return;
+    }
+
+    // --- Load items ---
+    topicType = topic.type;
+    currentSequence = topic.items || [];
+    console.log("✅ Loaded topic:", topic);
+
+    showCurrentLetter();
+
+  } catch (err) {
+    practiceArea.innerHTML = `<p>⚠️ Error: ${err.message}</p>`;
+  }
+}
+
+window.focus();
+loadTopic();
+  
+  
+  /*
+  // --- Fetch JSON and load topic ---
 async function loadTopic(){
   const urlParams = new URLSearchParams(window.location.search);
   const yearId = urlParams.get('year');      // e.g. "1"
@@ -184,6 +249,7 @@ async function loadTopic(){
 
 window.focus();
 loadTopic();
+  */
 </script>
 <script>
 if ('serviceWorker' in navigator) {
