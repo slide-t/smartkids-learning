@@ -52,6 +52,145 @@
   </div>
 </div>
 
+<script>
+// 🔹 Load practice content dynamically from JSON
+async function loadContent() {
+  try {
+    const res = await fetch("data/classes.json");
+    const data = await res.json();
+
+    // Example: get Year 4 -> first topic (adjust as needed)
+    let sampleText = "";
+    if (Array.isArray(data)) {
+      // If classes.json is an array of objects
+      sampleText = data[0]?.content || "Sample practice text.";
+    } else if (typeof data === "object") {
+      // If classes.json is object keyed by class name
+      const firstKey = Object.keys(data)[0];
+      sampleText = data[firstKey]?.content?.[0] || "Sample practice text.";
+    }
+
+    startGame(sampleText);
+  } catch (err) {
+    console.error("Error loading JSON:", err);
+    startGame("Fallback: Practice typing with this default text.");
+  }
+}
+
+// Game state
+let chars = [];
+let currentIndex = 0;
+let score = 0;
+let timer = 60;
+let timerInterval;
+
+// Build virtual keyboard (like real keyboard layout)
+const keyboardLayout = [
+  "`1234567890-=".split(""),
+  "QWERTYUIOP[]\\".split(""),
+  "ASDFGHJKL;'".split(""),
+  "ZXCVBNM,./".split(""),
+  ["SPACE"] // spacebar row
+];
+
+const vk = document.getElementById("virtualKeyboard");
+keyboardLayout.forEach(r => {
+  const rowDiv = document.createElement("div");
+  rowDiv.className = "vk-row";
+  r.forEach(k => {
+    const keyDiv = document.createElement("div");
+    keyDiv.className = "vk-key";
+    keyDiv.id = "key-" + (k === "SPACE" ? "SPACE" : k.toUpperCase());
+    keyDiv.textContent = (k === "SPACE" ? "␣" : k);
+    keyDiv.addEventListener("click", () => handleInput(k === "SPACE" ? " " : k));
+    rowDiv.appendChild(keyDiv);
+  });
+  vk.appendChild(rowDiv);
+});
+
+// Start the game with chosen passage
+function startGame(text) {
+  chars = text.split("");
+  currentIndex = 0;
+  score = 0;
+  timer = 60;
+  renderText();
+  document.getElementById("scoreDisplay").textContent = "Score: 0";
+  document.getElementById("restartBtn").style.display = "none";
+  startTimer();
+}
+
+// Show text with cursor
+function renderText() {
+  const display = chars.map((ch, i) => {
+    if (i < currentIndex) return `<span style="color:#999;">${ch}</span>`;
+    if (i === currentIndex) return `<span style="text-decoration:underline;">${ch}</span>`;
+    return ch;
+  }).join("");
+  document.getElementById("practiceArea").innerHTML = display;
+}
+
+// Handle input
+function handleInput(inputChar) {
+  const expected = chars[currentIndex];
+  const key = inputChar;
+
+  const keyId = key === " " ? "SPACE" : key.toUpperCase();
+  const keyDiv = document.getElementById("key-" + keyId);
+
+  if (key === expected) {
+    if (keyDiv) {
+      keyDiv.classList.add("active");
+      setTimeout(() => keyDiv.classList.remove("active"), 300);
+    }
+    currentIndex++;
+    score++;
+  } else {
+    if (keyDiv) {
+      keyDiv.classList.add("wrong");
+      setTimeout(() => keyDiv.classList.remove("wrong"), 300);
+    }
+  }
+  document.getElementById("scoreDisplay").textContent = "Score: " + score;
+  renderText();
+}
+
+// Physical keyboard input
+document.addEventListener("keydown", e => {
+  if (e.key.length === 1) {
+    handleInput(e.key);
+  } else if (e.code === "Space") {
+    handleInput(" ");
+  }
+});
+
+// Timer
+function startTimer() {
+  const progress = document.querySelector(".timer-progress");
+  clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    timer--;
+    if (timer < 0) {
+      clearInterval(timerInterval);
+      document.getElementById("practiceArea").textContent = "Time's up!";
+      document.getElementById("restartBtn").style.display = "inline-block";
+      return;
+    }
+    document.getElementById("timerText").textContent = timer;
+    const offset = 283 - (timer / 60 * 283);
+    if (progress) progress.style.strokeDashoffset = offset;
+  }, 1000);
+}
+
+// Restart
+document.getElementById("restartBtn").addEventListener("click", () => {
+  startGame(chars.join("")); // restart same text
+});
+
+// 🔹 Load JSON + Start
+loadContent();
+</script>
+  
   <!--
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
@@ -163,10 +302,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 </script>
 
--->
 
-
-  
 <script>
 // 🔹 Replace with JSON sample content (for demo, I hardcode one)
 const content = "Final Project: Developing a community app for waste recycling. The app allows households to schedule pickups and track recycling activities.";
@@ -259,6 +395,6 @@ document.getElementById("restartBtn").addEventListener("click",()=>{
   startTimer();
 });
 </script>
-
+-->
 </body>
 </html>
