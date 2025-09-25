@@ -1,7 +1,7 @@
 // sw.js
-const CACHE_NAME = 'slkids-cache-v' + Date.now();  // unique name each load
+const CACHE_NAME = 'slkids-cache-v' + Date.now(); // unique name each build
 const PRECACHE_URLS = [
-  '/',                 // adjust if app is not at root
+  '/',
   '/index.html',
   '/classes.html',
   '/game-board.html',
@@ -10,7 +10,7 @@ const PRECACHE_URLS = [
   '/script.js'
 ];
 
-// Install: clear old caches, then pre-cache new
+// Install: clear old caches, pre-cache new files
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.keys().then(keys =>
@@ -19,12 +19,19 @@ self.addEventListener('install', event => {
       caches.open(CACHE_NAME).then(cache => cache.addAll(PRECACHE_URLS))
     )
   );
-  self.skipWaiting();
+  self.skipWaiting(); // force activate immediately
 });
 
-// Activate: claim clients
+// Activate: claim clients & reload them
 self.addEventListener('activate', event => {
-  event.waitUntil(self.clients.claim());
+  event.waitUntil(
+    clients.claim().then(() =>
+      clients.matchAll({ type: 'window', includeUncontrolled: true })
+        .then(windowClients => {
+          windowClients.forEach(client => client.navigate(client.url)); // 🔄 auto reload
+        })
+    )
+  );
 });
 
 // Fetch: network first, fallback to cache
