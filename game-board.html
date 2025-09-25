@@ -1,298 +1,171 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Typing Practice - Real Keyboard Layout</title>
-<style>
-  body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f2f2f2; display:flex; flex-direction:column; align-items:center;}
-  header { background:#4CAF50; color:white; padding:1rem; width:100%; text-align:center; }
-  .container { max-width:700px; margin-top:20px; padding:1rem; background:white; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.2); text-align:center;}
-  .practice-area { min-height:150px; padding:1rem; border:1px solid #ccc; border-radius:5px; background:#fafafa; display:flex; justify-content:center; align-items:center; font-size:3rem; perspective:1000px; margin-bottom:15px;}
-  .key { width:60px; height:60px; line-height:60px; margin:0.3rem; text-align:center; border:2px solid #ccc; border-radius:10px; background:#e7e7e7; transform-style:preserve-3d; transition: transform 0.4s, background 0.3s;}
-  .key.correct { background:#4CAF50; color:white; }
-  .key.wrong { background:#f44336; color:white; }
-  .flip { transform: rotateY(90deg); }
-  .virtual-keyboard { display:flex; flex-direction:column; justify-content:center; gap:5px; margin-top:15px; }
-  .keyboard-row { display:flex; justify-content:center; gap:5px; }
-  .vk-key { width:50px; height:50px; line-height:50px; text-align:center; border-radius:5px; background:#ccc; user-select:none; cursor:default; }
-  .vk-key.active { cursor:pointer; background:#e7e7e7; }
-  .vk-key.highlight { background:#ffeb3b; }
-  .score { font-weight:bold; margin-top:10px; }
-</style>
+  <meta charset="UTF-8">
+  <title>Typing Tutor</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#f9fafb; margin:20px; }
+    #accordion .card { margin-bottom:10px; border-radius:10px; overflow:hidden; box-shadow:0 2px 6px rgba(0,0,0,0.1);}
+    .accordion-header { width:100%; display:flex; justify-content:space-between; padding:12px 16px; font-weight:bold; background:#e0f2fe; border:none; cursor:pointer; transition:background 0.3s; }
+    .accordion-header:hover { background:#bae6fd; }
+    .accordion-body { max-height:0; overflow:hidden; transition:max-height 0.5s ease; background:#f8fafc; }
+    .accordion-body.open { padding:8px 0; }
+    .accordion-body ul { list-style:none; padding-left:20px; }
+    .accordion-body li { margin:5px 0; }
+    .accordion-body a { display:block; padding:8px; border-radius:6px; text-decoration:none; background:#fff; color:#111; box-shadow:0 1px 3px rgba(0,0,0,0.1); transition:all 0.3s; }
+    .accordion-body a:hover { background:#f1f5f9; }
+
+    /* Game area */
+    #practiceArea { margin-top:20px; padding:16px; background:#fff; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.1);}
+    #score { font-weight:bold; margin-bottom:10px; }
+
+    /* Virtual keyboard */
+    #keyboard { margin-top:20px; display:grid; grid-template-columns:repeat(10, 1fr); gap:5px; }
+    .key { padding:12px; text-align:center; background:#e5e7eb; border-radius:6px; font-weight:bold; transition:0.2s; }
+    .key.active { background:#3b82f6; color:#fff; transform:scale(1.1); }
+  </style>
 </head>
 <body>
+  <h1>Typing Tutor for Kids</h1>
 
-<header><h1>SmartKids Typing Practice</h1></header>
+  <div id="accordion"></div>
 
-<div class="container">
-  <p id="instruction" style="margin-bottom:10px;color:#333;font-size:1.1rem;"></p>
-  <div class="practice-area" id="practiceArea"></div>
-  <div class="score" id="scoreDisplay">Score: 0</div>
-  <div class="virtual-keyboard" id="virtualKeyboard"></div>
-</div>
+  <div id="practiceArea">
+    <div id="score">Score: 0</div>
+    <div id="textDisplay"></div>
+  </div>
 
-<script>
-const practiceArea = document.getElementById('practiceArea');
-const instructionEl = document.getElementById('instruction');
-const scoreDisplay = document.getElementById('scoreDisplay');
-const virtualKeyboard = document.getElementById('virtualKeyboard');
+  <div id="keyboard"></div>
 
-let score = 0;
-let currentIndex = 0;
-let currentLetterIndex = 0;
-let currentSequence = [];
+  <script>
+    let currentSequence = [];
+    let score = 0;
+    let currentIndex = 0;
+    const scoreDisplay = document.getElementById("score");
+    const textDisplay = document.getElementById("textDisplay");
 
-// Realistic keyboard rows
-const keyboardRows = [
-  ['Q','W','E','R','T','Y','U','I','O','P'],
-  ['A','S','D','F','G','H','J','K','L',';'],
-  ['Z','X','C','V','B','N','M',',','.','/']
-];
-
-// Build virtual keyboard
-function buildKeyboard() {
-  virtualKeyboard.innerHTML = '';
-  keyboardRows.forEach(row=>{
-    const rowDiv = document.createElement('div');
-    rowDiv.classList.add('keyboard-row');
-    row.forEach(key=>{
-      const keyDiv = document.createElement('div');
-      keyDiv.classList.add('vk-key');
-      keyDiv.textContent = key;
-      rowDiv.appendChild(keyDiv);
+    // Build virtual keyboard
+    const keys = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+    const keyboardDiv = document.getElementById("keyboard");
+    keys.forEach(k=>{
+      const keyDiv = document.createElement("div");
+      keyDiv.className="key";
+      keyDiv.id="key-"+k;
+      keyDiv.textContent=k;
+      keyboardDiv.appendChild(keyDiv);
     });
-    virtualKeyboard.appendChild(rowDiv);
-  });
-}
-buildKeyboard();
 
-// Highlight virtual key
-function highlightVK(keyChar,type='highlight'){
-  const vkKeys = document.querySelectorAll('.vk-key');
-  vkKeys.forEach(vk=>{ 
-    vk.classList.remove('highlight','correct','wrong'); 
-    vk.style.backgroundColor = vk.classList.contains('active') ? '#e7e7e7' : '#ccc';
-  });
-  const vk = Array.from(vkKeys).find(k=>k.textContent===keyChar.toUpperCase());
-  if(vk){
-    vk.classList.add(type);
-    if(type==='correct') vk.style.backgroundColor='#4CAF50';
-    if(type==='wrong') vk.style.backgroundColor='#f44336';
-    if(type==='highlight') vk.style.backgroundColor='#ffeb3b';
-  }
-}
-
-// Enable only sequence keys
-function enableKeysForSequence() {
-  const vkKeys = document.querySelectorAll('.vk-key');
-  vkKeys.forEach(vk=>{
-    vk.classList.remove('active');
-    if(currentSequence.some(seq=>seq.includes(vk.textContent))){
-      vk.classList.add('active');
-      vk.onclick = ()=>handleInput(vk.textContent);
-    } else {
-      vk.onclick = null;
+    // Show current practice letter
+    function showCurrentLetter(){
+      if(currentIndex<currentSequence.length){
+        textDisplay.textContent=currentSequence[currentIndex];
+      }else{
+        textDisplay.textContent="✅ Well done!";
+      }
     }
-  });
-}
 
-// Show current letter/key
-function showCurrentLetter(){
-  if(currentIndex>=currentSequence.length){
-    practiceArea.innerHTML='<p>🎉 Well done! You finished this topic.</p>';
-    highlightVK('');
-    return;
-  }
-  practiceArea.innerHTML='';
-  const keyDiv = document.createElement('div');
-  keyDiv.classList.add('key');
-  keyDiv.textContent = currentSequence[currentIndex][currentLetterIndex] || currentSequence[currentIndex];
-  practiceArea.appendChild(keyDiv);
-  enableKeysForSequence();
-  highlightVK(keyDiv.textContent,'highlight');
-}
+    // Typing logic
+    document.addEventListener("keydown", (e)=>{
+      const pressed = e.key.toUpperCase();
+      const keyDiv = document.getElementById("key-"+pressed);
+      if(keyDiv){
+        keyDiv.classList.add("active");
+        setTimeout(()=>keyDiv.classList.remove("active"),200);
+      }
+      if(currentSequence[currentIndex] && pressed===currentSequence[currentIndex].toUpperCase()){
+        score++;
+        scoreDisplay.textContent="Score: "+score;
+        currentIndex++;
+        showCurrentLetter();
+      }
+    });
 
-// Handle input
-function handleInput(input){
-  if(currentIndex>=currentSequence.length) return;
-  const currentWord = currentSequence[currentIndex];
-  const expectedLetter = currentWord[currentLetterIndex];
-  const keyDiv = document.querySelector('.key');
-  if(input.toUpperCase()===expectedLetter.toUpperCase()){
-    keyDiv.classList.add('correct');
-    highlightVK(expectedLetter,'correct');
-    score++;
-    currentLetterIndex++;
-    if(currentLetterIndex>=currentWord.length){
-      currentLetterIndex=0;
-      currentIndex++;
-    }
-    setTimeout(()=>{ keyDiv.classList.add('flip'); showCurrentLetter(); },400);
-  } else {
-    keyDiv.classList.add('wrong');
-    highlightVK(expectedLetter,'wrong');
-    setTimeout(()=>{ keyDiv.classList.add('flip'); showCurrentLetter(); },400);
-  }
-  scoreDisplay.textContent=`Score: ${score}`;
-}
+    // Load JSON & build accordion
+    async function buildAccordion(){
+      const container = document.getElementById("accordion");
+      try{
+        const res = await fetch("data/classes.json");
+        const data = await res.json();
+        const classes = Array.isArray(data) ? data : data.classes;
 
-// Capture real keyboard
-document.addEventListener('keydown', e=>{
-  const key = e.key.length===1 ? e.key : ''; // ignore Shift etc.
-  handleInput(key);
-});
+        classes.forEach(cls=>{
+          const card=document.createElement("div"); card.className="card";
+          const header=document.createElement("button");
+          header.className="accordion-header";
+          header.innerHTML=`<span>${cls.name}</span><span>+</span>`;
+          card.appendChild(header);
 
-/*
-  // === FETCH JSON TOPIC DATA ===
- async function buildAccordion() {
-  try {
-    const res = await fetch("data/classes.json");
-    if (!res.ok) throw new Error("Could not load classes.json");
-    const data = await res.json();
+          const body=document.createElement("div");
+          body.className="accordion-body";
 
-    const container = document.getElementById("accordion");
-    container.innerHTML = ""; // reset
+          body.innerHTML=(cls.terms||[]).map(term=>`
+            <h3 style="margin:8px 16px; color:#1d4ed8">${term.title}</h3>
+            ${(term.categories||[]).map(cat=>`
+              <h4 style="margin:4px 24px; color:#9333ea">${cat.name}</h4>
+              <ul>
+                ${(cat.topics||[]).map((topic,idx)=>`
+                  <li><a href="#" data-year="${cls.id}" data-term="${term.number}" data-cat="${cat.id}" data-topic="${idx}">
+                    ${topic.title}
+                  </a></li>
+                `).join("")}
+              </ul>
+            `).join("")}
+          `).join("");
 
-    data.classes.forEach(year => {
-      // Year header
-      const yearDiv = document.createElement("div");
-      yearDiv.classList.add("year");
-
-      const yearBtn = document.createElement("button");
-      yearBtn.classList.add("accordion-btn");
-      yearBtn.textContent = year.name;
-      yearBtn.addEventListener("click", () => {
-        yearBtn.classList.toggle("active");
-        yearPanel.classList.toggle("show");
-      });
-
-      const yearPanel = document.createElement("div");
-      yearPanel.classList.add("accordion-panel");
-
-      // Terms inside each year
-      year.terms.forEach(term => {
-        const termDiv = document.createElement("div");
-        termDiv.classList.add("term");
-
-        const termHeader = document.createElement("h4");
-        termHeader.textContent = `Term ${term.number}`;
-        termDiv.appendChild(termHeader);
-
-        // Categories + topics
-        term.categories.forEach(cat => {
-          const catTitle = document.createElement("p");
-          catTitle.classList.add("category-title");
-          catTitle.textContent = cat.name;
-          termDiv.appendChild(catTitle);
-
-          const topicList = document.createElement("ul");
-          cat.topics.forEach(topic => {
-            const li = document.createElement("li");
-            li.textContent = topic.title;
-
-            // On click → load practice
-            li.addEventListener("click", () => {
-              loadPractice(year.id, term.number, topic.title);
-            });
-
-            topicList.appendChild(li);
+          card.appendChild(body);
+          header.addEventListener("click",()=>{
+            body.classList.toggle("open");
+            if(body.classList.contains("open")){
+              body.style.maxHeight=body.scrollHeight+"px";
+              header.querySelector("span:last-child").textContent="−";
+            }else{
+              body.style.maxHeight=null;
+              header.querySelector("span:last-child").textContent="+";
+            }
           });
-          termDiv.appendChild(topicList);
+
+          container.appendChild(card);
         });
 
-        yearPanel.appendChild(termDiv);
-      });
-
-      yearDiv.appendChild(yearBtn);
-      yearDiv.appendChild(yearPanel);
-      container.appendChild(yearDiv);
-    });
-  } catch (err) {
-    console.error(err);
-    document.getElementById("accordion").innerHTML =
-      `<p style="color:red">${err.message}</p>`;
-  }
-}
-
-// Call this once at startup
-buildAccordion(); 
-  */
-  
- // === FETCH JSON TOPIC DATA ===
-async function loadPractice(yearId, termNumber, topicTitle) {
-  try {
-    const res = await fetch('data/classes.json');
-    if (!res.ok) throw new Error("Failed to load classes.json");
-    const data = await res.json();
-
-    // 1. Locate the correct year
-    const year = data.classes.find(c => c.id === yearId);
-    if (!year) throw new Error(`Year '${yearId}' not found`);
-
-    // 2. Locate the correct term
-    const term = year.terms.find(t => t.number === termNumber);
-    if (!term) throw new Error(`Term ${termNumber} not found in ${year.name}`);
-
-    // 3. Find topic in ANY category
-    let topic;
-    for (const cat of term.categories) {
-      topic = cat.topics.find(tp => tp.title === topicTitle);
-      if (topic) break; // stop if found
+        // Topic click → load samples
+        container.addEventListener("click",(e)=>{
+          if(e.target.tagName==="A"){
+            e.preventDefault();
+            const yearId=e.target.dataset.year;
+            const termNumber=parseInt(e.target.dataset.term);
+            const catId=e.target.dataset.cat;
+            const topicIndex=parseInt(e.target.dataset.topic);
+            loadPractice(yearId,termNumber,catId,topicIndex);
+          }
+        });
+      }catch(err){
+        console.error(err);
+        container.innerHTML="<p style='color:red'>⚠ Failed to load data</p>";
+      }
     }
-    if (!topic) throw new Error(`Topic '${topicTitle}' not found`);
 
-    // === Use samples for practice ===
-    currentSequence = [...topic.samples];
-    score = 0;
-    currentIndex = 0;
-    currentLetterIndex = 0;
+    async function loadPractice(yearId,termNumber,catId,topicIndex){
+      try{
+        const res = await fetch("data/classes.json");
+        const data = await res.json();
+        const classes = Array.isArray(data) ? data : data.classes;
 
-    // Update UI
-    scoreDisplay.textContent = "Score: 0";
-    instructionBox.textContent = topic.instruction; // show guide
-    showCurrentLetter();
+        const year=classes.find(c=>c.id===yearId);
+        const term=year.terms.find(t=>t.number===termNumber);
+        const cat=term.categories.find(c=>c.id===catId);
+        const topic=cat.topics[topicIndex];
 
-  } catch (err) {
-    practiceArea.innerHTML = `<p style="color:red">${err.message}</p>`;
-    console.error(err);
-  }
-}
+        currentSequence=[...topic.samples];
+        score=0; currentIndex=0;
+        scoreDisplay.textContent="Score: 0";
+        showCurrentLetter();
+      }catch(err){
+        console.error(err);
+        textDisplay.textContent="Error loading practice";
+      }
+    }
 
-
-  
-/*// === FETCH JSON TOPIC DATA ===
-async function loadPractice(yearId, termNumber, topicTitle){
-  try{
-    const res = await fetch("data/classes.json"); 
-    if(!res.ok) throw new Error("Failed to load classes.json");
-    const data = await res.json();
-
-    const year = data.classes.find(c => c.id === yearId);
-    if(!year) throw new Error("Year not found");
-
-    const term = year.terms.find(t => t.number === termNumber);
-    if(!term) throw new Error("Term not found");
-
-    const topic = term.categories.flatMap(cat=>cat.topics).find(tp=>tp.title===topicTitle);
-    if(!topic) throw new Error("Topic not found");
-
-    currentSequence = [...topic.samples];
-    score = 0;
-    currentIndex = 0;
-    currentLetterIndex = 0;
-    scoreDisplay.textContent = "Score: 0";
-    instructionEl.textContent = topic.instruction;
-
-    showCurrentLetter();
-  }catch(err){
-    practiceArea.innerHTML = `<p style="color:red">${err.message}</p>`;
-    console.error(err);
-  }
-}
-
-// Example call (replace with URL params if needed)
-loadPractice("year1",1,"Home Row Keys");*/
-</script>
+    buildAccordion();
+  </script>
 </body>
 </html>
