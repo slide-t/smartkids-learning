@@ -1,163 +1,174 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const urlParams = new URLSearchParams(window.location.search);
-  const yearId = urlParams.get("year");
-  const termNum = parseInt(urlParams.get("term"));
-  const categoryId = urlParams.get("category");
-  const topicIndex = parseInt(urlParams.get("topic"));
+<script>
+const practiceArea = document.getElementById('practiceArea');
+const scoreDisplay = document.getElementById('scoreDisplay');
+const virtualKeyboard = document.getElementById('virtualKeyboard');
 
-  const titleEl = document.getElementById("topic-title");
-  const instructionEl = document.getElementById("topic-instruction");
-  const promptEl = document.getElementById("prompt");
-  const inputEl = document.getElementById("input");
-  const feedbackEl = document.getElementById("feedback");
-  const keyboardEl = document.getElementById("virtual-keyboard");
+let score = 0;
+let currentIndex = 0;
+let currentLetterIndex = 0;
+let currentSequence = [];
+let topicType = "";
 
-  let samples = [];
-  let currentIndex = 0;
-  let shiftActive = false;
+// Keyboard layouts
+const keyboardRowsBase = [
+  ['q','w','e','r','t','y','u','i','o','p'],
+  ['a','s','d','f','g','h','j','k','l',';'],
+  ['z','x','c','v','b','n','m',',','.','/']
+];
 
-  // Base keyboard layout
-  const keyboardLayout = [
-    ["`","1","2","3","4","5","6","7","8","9","0","-","=","Backspace"],
-    ["Tab","q","w","e","r","t","y","u","i","o","p","[","]","\\"],
-    ["CapsLock","a","s","d","f","g","h","j","k","l",";","'","Enter"],
-    ["Shift","z","x","c","v","b","n","m",",",".","/","Shift"],
-    ["Space"]
-  ];
+// Build virtual keyboard (lowercase by default)
+function buildKeyboard(shifted = false) {
+  virtualKeyboard.innerHTML = '';
+  keyboardRowsBase.forEach(row => {
+    const rowDiv = document.createElement('div');
+    rowDiv.classList.add('keyboard-row');
+    row.forEach(key => {
+      const keyDiv = document.createElement('div');
+      keyDiv.classList.add('vk-key');
+      keyDiv.textContent = shifted ? getShiftedChar(key) : key;
+      rowDiv.appendChild(keyDiv);
+    });
+    virtualKeyboard.appendChild(rowDiv);
+  });
+}
 
-  // Shifted symbols for top row and punctuation
-  const shiftedMap = {
-    "`": "~", "1": "!", "2": "@", "3": "#", "4": "$", "5": "%",
-    "6": "^", "7": "&", "8": "*", "9": "(", "0": ")",
-    "-": "_", "=": "+", "[": "{", "]": "}", "\\": "|",
-    ";": ":", "'": "\"", ",": "<", ".": ">", "/": "?"
+// Map for shifted characters
+function getShiftedChar(ch) {
+  const shiftMap = {
+    ';': ':',
+    ',': '<',
+    '.': '>',
+    '/': '?'
   };
+  if (/[a-z]/.test(ch)) return ch.toUpperCase();
+  return shiftMap[ch] || ch;
+}
+buildKeyboard();
 
-  // Load JSON
-  fetch("data/classes.json")
-    .then(res => res.json())
-    .then(data => {
-      const year = data.classes.find(c => c.id === yearId);
-      if (!year) return showError("Year not found");
-
-      const term = year.terms.find(t => t.number === termNum);
-      if (!term) return showError("Term not found");
-
-      const category = term.categories.find(cat => cat.id === categoryId);
-      if (!category) return showError("Category not found");
-
-      const topic = category.topics[topicIndex];
-      if (!topic) return showError("Topic not found");
-
-      titleEl.textContent = topic.title;
-      instructionEl.textContent = topic.instruction;
-      samples = topic.samples;
-      loadPrompt();
-
-      buildKeyboard();
-    })
-    .catch(() => showError("Error loading classes.json"));
-
-  function showError(msg) {
-    document.getElementById("game-board").innerHTML =
-      `<p class="text-red-500">${msg}</p>`;
-  }
-
-  function loadPrompt() {
-    if (currentIndex < samples.length) {
-      promptEl.textContent = samples[currentIndex];
-      inputEl.value = "";
-      feedbackEl.textContent = "";
-      inputEl.focus();
-    } else {
-      promptEl.textContent = "🎉 Well done! You finished this topic.";
-      inputEl.disabled = true;
-    }
-  }
-
-  function checkInput() {
-    if (inputEl.value === samples[currentIndex]) {
-      feedbackEl.textContent = "✅ Correct!";
-      feedbackEl.className = "text-green-600 text-center";
-      currentIndex++;
-      setTimeout(loadPrompt, 1000);
-    } else {
-      feedbackEl.textContent = "❌ Try again.";
-      feedbackEl.className = "text-red-600 text-center";
-    }
-  }
-
-  inputEl.addEventListener("keyup", e => {
-    if (e.key === "Enter") checkInput();
+// Highlight keys
+function highlightVK(char) {
+  const vkKeys = document.querySelectorAll('.vk-key');
+  vkKeys.forEach(vk => {
+    vk.classList.remove('highlight','correct','wrong');
+    vk.style.backgroundColor = '#ccc';
   });
 
-  function buildKeyboard() {
-    keyboardEl.innerHTML = ""; // clear previous
-    keyboardLayout.forEach(row => {
-      const rowEl = document.createElement("div");
-      rowEl.classList.add("keyboard-row");
-
-      row.forEach(key => {
-        const keyEl = document.createElement("div");
-        let display = getDisplayKey(key);
-        keyEl.textContent = display;
-        keyEl.classList.add("key");
-
-        if (["Backspace","Enter","Shift","CapsLock","Tab"].includes(key)) {
-          keyEl.classList.add("wide");
-        }
-        if (key === "Space") {
-          keyEl.classList.add("extra-wide");
-          keyEl.textContent = "␣";
-        }
-
-        keyEl.addEventListener("click", () => handleVirtualKey(key));
-        rowEl.appendChild(keyEl);
-      });
-
-      keyboardEl.appendChild(rowEl);
-    });
-
-    document.addEventListener("keydown", e => toggleKeyHighlight(e.key, true));
-    document.addEventListener("keyup", e => toggleKeyHighlight(e.key, false));
+  const key = Array.from(vkKeys).find(k => k.textContent === char);
+  if (key) {
+    key.classList.add('highlight');
+    key.style.backgroundColor = '#ffeb3b';
   }
+}
 
-  function getDisplayKey(key) {
-    if (key === "Space") return "␣";
-    if (shiftActive) {
-      if (shiftedMap[key]) return shiftedMap[key];
-      if (key.length === 1) return key.toUpperCase();
+// Enable clickable keys for current sequence
+function enableKeysForSequence() {
+  const vkKeys = document.querySelectorAll('.vk-key');
+  vkKeys.forEach(vk => {
+    vk.onclick = null;
+    if (currentSequence.length > 0 && currentSequence[currentIndex]) {
+      const needed = currentSequence[currentIndex][currentLetterIndex];
+      if (vk.textContent === needed) {
+        vk.onclick = () => handleInput(vk.textContent);
+      }
     }
-    return key;
+  });
+}
+
+// Show current practice letter
+function showCurrentLetter() {
+  if (currentIndex >= currentSequence.length) {
+    practiceArea.innerHTML = '<p>✅ Well done! You finished this topic.</p>';
+    return;
   }
 
-  function handleVirtualKey(key) {
-    if (key === "Backspace") {
-      inputEl.value = inputEl.value.slice(0, -1);
-    } else if (key === "Space") {
-      inputEl.value += " ";
-    } else if (key === "Enter") {
-      checkInput();
-    } else if (key === "Shift") {
-      shiftActive = !shiftActive;
-      buildKeyboard(); // rebuild with shift applied
-    } else if (!["CapsLock","Tab"].includes(key)) {
-      let char = shiftActive ? getDisplayKey(key) : key;
-      if (char.length === 1) inputEl.value += char;
+  const currentWord = currentSequence[currentIndex];
+  const currentChar = currentWord[currentLetterIndex];
+
+  // Decide if keyboard should be shifted
+  const needsShift = /[A-Z:<>?]/.test(currentChar);
+  buildKeyboard(needsShift);
+
+  practiceArea.innerHTML = '';
+  const keyDiv = document.createElement('div');
+  keyDiv.classList.add('key');
+  keyDiv.textContent = currentChar;
+  practiceArea.appendChild(keyDiv);
+
+  enableKeysForSequence();
+  highlightVK(currentChar);
+}
+
+// Handle input
+function handleInput(input) {
+  if (currentIndex >= currentSequence.length) return;
+  const currentWord = currentSequence[currentIndex];
+  const expectedLetter = currentWord[currentLetterIndex];
+  const keyDiv = document.querySelector('.key');
+
+  if (input === expectedLetter) {
+    keyDiv.classList.add('correct');
+    score++;
+    currentLetterIndex++;
+    if (currentLetterIndex >= currentWord.length) {
+      currentLetterIndex = 0;
+      currentIndex++;
     }
-    inputEl.focus();
+    setTimeout(showCurrentLetter, 300);
+  } else {
+    keyDiv.classList.add('wrong');
+    setTimeout(showCurrentLetter, 300);
   }
+  scoreDisplay.textContent = `Score: ${score}`;
+}
 
-  function toggleKeyHighlight(key, active) {
-    const normalized = key === " " ? "␣" : key;
-    const match = [...keyboardEl.querySelectorAll(".key")]
-      .find(k => k.textContent.toLowerCase() === normalized.toLowerCase());
-    if (match) {
-      if (active) match.classList.add("active");
-      else match.classList.remove("active");
-    }
-  }
-
-  document.getElementById("back-btn").addEventListener("click", () => window.history.back());
-  document.getElementById("home-btn").addEventListener("click", () => window.location.href = "index.html");
+// Listen to real keyboard
+document.addEventListener('keydown', e => {
+  const key = e.key.length === 1 ? e.key : '';
+  handleInput(key);
 });
+
+// --- Fetch JSON and load topic ---
+async function loadTopic() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const yearId = urlParams.get('year');
+  const termNum = parseInt(urlParams.get('term'));
+  const categoryId = urlParams.get('category');
+  const topicParam = urlParams.get('topic');
+
+  if (!yearId) {
+    practiceArea.innerHTML = "<p>⚠️ Error: No year specified in URL.</p>";
+    return;
+  }
+
+  try {
+    const res = await fetch('data/classes.json');
+    const data = await res.json();
+
+    const yearKey = yearId.startsWith('year') ? yearId : `year${yearId}`;
+    const year = data.find(y => y.id === yearKey);
+    if (!year) {
+      practiceArea.innerHTML = `<p>❌ Year ${yearId} not found in JSON.</p>`;
+      return;
+    }
+
+    const term = year.terms.find(t => t.number === termNum);
+    if (!term) return practiceArea.innerHTML = `<p>❌ Term ${termNum} not found.</p>`;
+
+    const category = term.categories.find(c => c.id === categoryId);
+    if (!category) return practiceArea.innerHTML = `<p>❌ Category "${categoryId}" not found.</p>`;
+
+    const topic = category.topics.find(t => t.title === topicParam);
+    if (!topic) return practiceArea.innerHTML = `<p>❌ Topic "${topicParam}" not found.</p>`;
+
+    topicType = topic.type;
+    currentSequence = topic.items;
+    showCurrentLetter();
+
+  } catch (err) {
+    practiceArea.innerHTML = `<p>⚠️ Error: ${err.message}</p>`;
+  }
+}
+
+window.focus();
+loadTopic();
+</script>
