@@ -32,6 +32,138 @@
 </div>
 
 <script>
+// keyboard.js
+document.addEventListener("DOMContentLoaded", () => {
+  const container = document.getElementById("keyboard-game");
+
+  // Get topic from query string
+  const urlParams = new URLSearchParams(window.location.search);
+  const topicId = urlParams.get("topic");
+
+  if (!topicId) {
+    container.innerHTML = `<p class="text-red-500">No topic selected.</p>`;
+    return;
+  }
+
+  // Load topics.json
+  fetch("data/topics.json")
+    .then((res) => res.json())
+    .then((topics) => {
+      const topic = topics[topicId];
+      if (!topic) {
+        container.innerHTML = `<p class="text-red-500">Topic not found.</p>`;
+        return;
+      }
+
+      container.innerHTML = `
+        <h2 class="text-xl font-bold mb-4">${topic.title}</h2>
+        <p class="mb-4">${topic.instructions}</p>
+        <div id="game-area" class="hidden">
+          <p id="prompt" class="text-lg mb-2"></p>
+          <input id="input" type="text" class="border p-2 w-full mb-2" placeholder="Type here..." disabled />
+          <div id="virtual-keyboard" class="grid grid-cols-10 gap-2 mb-4"></div>
+          <p id="feedback" class="mt-2"></p>
+        </div>
+        <button id="start-btn" class="bg-green-500 text-white px-4 py-2 rounded">Start</button>
+        <button id="restart-btn" class="bg-blue-500 text-white px-4 py-2 rounded hidden">Restart</button>
+        <button id="back-btn" class="bg-gray-500 text-white px-4 py-2 rounded">Back</button>
+        <button id="home-btn" class="bg-gray-700 text-white px-4 py-2 rounded">Home</button>
+      `;
+
+      // Select elements
+      const startBtn = document.getElementById("start-btn");
+      const restartBtn = document.getElementById("restart-btn");
+      const backBtn = document.getElementById("back-btn");
+      const homeBtn = document.getElementById("home-btn");
+      const gameArea = document.getElementById("game-area");
+      const prompt = document.getElementById("prompt");
+      const input = document.getElementById("input");
+      const feedback = document.getElementById("feedback");
+      const keyboard = document.getElementById("virtual-keyboard");
+
+      let currentIndex = 0;
+
+      // Generate virtual keyboard keys
+      const keys = [
+        ..."abcdefghijklmnopqrstuvwxyz",
+        "space",
+        "backspace"
+      ];
+
+      keys.forEach((key) => {
+        const keyBtn = document.createElement("button");
+        keyBtn.textContent = key === "space" ? "␣" : key === "backspace" ? "⌫" : key;
+        keyBtn.className = "bg-gray-300 rounded p-2 text-center";
+        keyBtn.addEventListener("click", () => handleVirtualKey(key));
+        keyboard.appendChild(keyBtn);
+      });
+
+      function handleVirtualKey(key) {
+        if (input.disabled) return;
+        if (key === "space") {
+          input.value += " ";
+        } else if (key === "backspace") {
+          input.value = input.value.slice(0, -1);
+        } else {
+          input.value += key;
+        }
+      }
+
+      function loadPrompt() {
+        prompt.textContent = topic.content[currentIndex];
+        input.value = "";
+        input.focus();
+      }
+
+      function startGame() {
+        startBtn.classList.add("hidden");
+        restartBtn.classList.add("hidden");
+        gameArea.classList.remove("hidden");
+        input.disabled = false;
+        feedback.textContent = "";
+        currentIndex = 0;
+        loadPrompt();
+      }
+
+      function checkInput() {
+        if (input.value === topic.content[currentIndex]) {
+          feedback.textContent = "✅ Correct!";
+          feedback.className = "text-green-600 mt-2";
+
+          currentIndex++;
+          if (currentIndex < topic.content.length) {
+            setTimeout(loadPrompt, 1000);
+          } else {
+            feedback.textContent = "🎉 Well done! You finished.";
+            feedback.className = "text-blue-600 mt-2";
+            input.disabled = true;
+            restartBtn.classList.remove("hidden");
+          }
+        } else {
+          feedback.textContent = "❌ Try again.";
+          feedback.className = "text-red-600 mt-2";
+        }
+      }
+
+      // Event Listeners
+      startBtn.addEventListener("click", startGame);
+      restartBtn.addEventListener("click", startGame);
+
+      input.addEventListener("keyup", (e) => {
+        if (e.key === "Enter") {
+          checkInput();
+        }
+      });
+
+      backBtn.addEventListener("click", () => window.history.back());
+      homeBtn.addEventListener("click", () => (window.location.href = "index.html"));
+    })
+    .catch(() => {
+      container.innerHTML = `<p class="text-red-500">Error loading topics.</p>`;
+    });
+});
+
+  /*
 const practiceArea = document.getElementById('practiceArea');
 const scoreDisplay = document.getElementById('scoreDisplay');
 const virtualKeyboard = document.getElementById('virtualKeyboard');
