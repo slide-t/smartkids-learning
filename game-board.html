@@ -55,6 +55,177 @@
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const startKeyboardBtn = document.getElementById("keyboardMode");
+  const practiceArea = document.getElementById("practiceArea");
+  const targetChar = document.getElementById("targetChar");
+  const feedbackEl = document.getElementById("feedback");
+  const virtualKeyboard = document.getElementById("virtualKeyboard");
+  const nextBtn = document.getElementById("nextBtn");
+  const restartBtn = document.getElementById("restartBtn");
+
+  let classesData = [];
+  let topics = []; // flattened topics for current term
+  let currentTopicIndex = 0;
+  let currentChars = [];
+  let currentCharIndex = 0;
+
+  let currentYear = "";
+  let currentTerm = "";
+
+  // 🔹 Load classes.json
+  async function loadClasses() {
+    try {
+      const res = await fetch("data/classes.json");
+      classesData = await res.json();
+
+      // Pick first available year and term for demo
+      currentYear = Object.keys(classesData)[0];
+      currentTerm = Object.keys(classesData[currentYear])[0];
+
+      topics = Object.keys(classesData[currentYear][currentTerm]);
+
+    } catch (err) {
+      console.error("Error loading classes.json:", err);
+    }
+  }
+
+  // 🔹 Load topic content by index
+  async function loadTopic(index) {
+    const topicName = topics[index];
+    const topicData = classesData[currentYear][currentTerm][topicName];
+
+    // Convert to array of characters for typing
+    let text = Array.isArray(topicData.content)
+      ? topicData.content[0] // first sample text
+      : topicData.content;
+
+    currentChars = text.split("");
+    currentCharIndex = 0;
+    feedbackEl.textContent = "";
+    nextBtn.classList.add("hidden");
+
+    // Render first keyboard layout
+    renderKeyboard(currentChars[0]);
+    loadKeyboardItem();
+  }
+
+  // --- display typing character and switch keyboard ---
+  function loadKeyboardItem() {
+    if (currentCharIndex < currentChars.length) {
+      const char = currentChars[currentCharIndex];
+      targetChar.textContent = char;
+
+      // auto-switch keyboard layout based on char type
+      if (/[a-z]/i.test(char)) renderKeyboard("letters");
+      else if (/[0-9]/.test(char)) renderKeyboard("numbers");
+      else if (/[\.\,\!\?\;\:]/.test(char)) renderKeyboard("symbols");
+      else if (char === " ") renderKeyboard("letters"); // keep letters but spacebar
+    } else {
+      // Topic finished
+      if (currentTopicIndex < topics.length - 1) {
+        nextBtn.classList.remove("hidden");
+      } else {
+        restartBtn.classList.remove("hidden");
+        feedbackEl.textContent = "🎉 Term complete!";
+      }
+    }
+  }
+
+  // --- check input ---
+  function checkInput(input) {
+    const expected = currentChars[currentCharIndex];
+    if (input.toLowerCase() === expected.toLowerCase()) {
+      feedbackEl.textContent = "✅ Correct!";
+      feedbackEl.className = "text-green-600";
+      currentCharIndex++;
+      setTimeout(loadKeyboardItem, 200);
+    } else {
+      feedbackEl.textContent = "❌ Try again!";
+      feedbackEl.className = "text-red-600";
+    }
+  }
+
+  // --- render keyboard ---
+  function renderKeyboard(type) {
+    virtualKeyboard.innerHTML = "";
+    let layout = [];
+
+    if (type === "letters") {
+      layout = [
+        "q w e r t y u i o p".split(" "),
+        "a s d f g h j k l".split(" "),
+        "z x c v b n m".split(" "),
+        [" "]
+      ];
+    } else if (type === "numbers") {
+      layout = [
+        "1 2 3 4 5 6 7 8 9 0".split(" "),
+        [" "]
+      ];
+    } else if (type === "symbols") {
+      layout = [
+        ". , ! ? ; :".split(" "),
+        [" "]
+      ];
+    }
+
+    layout.forEach(row => {
+      const rowDiv = document.createElement("div");
+      rowDiv.className = "vk-row flex justify-center mb-1";
+      row.forEach(k => {
+        const keyDiv = document.createElement("button");
+        keyDiv.className = "key px-3 py-2 bg-gray-200 rounded mx-1";
+        keyDiv.dataset.key = (k === " " ? " " : k);
+        keyDiv.textContent = (k === " " ? "␣" : k);
+        rowDiv.appendChild(keyDiv);
+      });
+      virtualKeyboard.appendChild(rowDiv);
+    });
+  }
+
+  // --- Next / Restart ---
+  nextBtn.addEventListener("click", () => {
+    nextBtn.classList.add("hidden");
+    currentTopicIndex++;
+    if (currentTopicIndex < topics.length) {
+      loadTopic(currentTopicIndex);
+    } else {
+      restartBtn.classList.remove("hidden");
+      feedbackEl.textContent = "🎉 Term complete!";
+    }
+  });
+
+  restartBtn.addEventListener("click", () => {
+    restartBtn.classList.add("hidden");
+    currentTopicIndex = 0;
+    loadTopic(currentTopicIndex);
+  });
+
+  // --- Listeners ---
+  startKeyboardBtn.addEventListener("click", async () => {
+    await loadClasses();
+    practiceArea.classList.remove("hidden");
+    virtualKeyboard.classList.remove("hidden");
+    currentTopicIndex = 0;
+    loadTopic(currentTopicIndex);
+  });
+
+  virtualKeyboard.addEventListener("click", e => {
+    if (e.target.classList.contains("key")) {
+      checkInput(e.target.dataset.key);
+    }
+  });
+
+  document.addEventListener("keydown", e => {
+    checkInput(e.key);
+  });
+
+});
+</script>
+
+  <!--
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const startKeyboardBtn = document.getElementById("keyboardMode");
   const startMouseBtn = document.getElementById("mouseMode");
   const practiceArea = document.getElementById("practiceArea");
   const targetChar = document.getElementById("targetChar");
