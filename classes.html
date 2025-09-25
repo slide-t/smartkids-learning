@@ -26,7 +26,6 @@
     <div id="accordion" class="space-y-4"></div>
   </main>
 
-
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   const container = document.getElementById("accordion");
@@ -40,7 +39,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (!classes) throw new Error("Invalid JSON format");
 
-    classes.forEach((cls, classIndex) => {
+    classes.forEach((cls) => {
       const card = document.createElement("div");
       card.className = "bg-white rounded-xl shadow-md overflow-hidden mb-4";
 
@@ -52,41 +51,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const body = document.createElement("div");
       body.className = "accordion-body bg-gray-50";
 
-    body.innerHTML = (cls.terms || []).map(term => {
-  const termUnlocked = term.number === 1 || today >= termUnlockDates[term.number];
-  return `
-    <div class="mb-4">
-      <h3 class="text-lg font-semibold text-blue-700 px-4 py-2">${term.title}</h3>
-      ${(term.categories || []).map(cat => `
-        <div class="ml-4 mb-2">
-          <h4 class="text-md font-semibold text-purple-600 px-3 py-1">${cat.name}</h4>
-          <ul class="space-y-2 pl-6">
-            ${(cat.topics || []).map((topic, topicIndex) => {
-              if (termUnlocked) {
-                const link = \`game-board.html?year=${cls.id}&term=${term.number}&catId=${cat.id}&topic=${topicIndex}\`;
-                const icon = cat.id === "mouse" ? "🖱️" : cat.id === "keyboard" ? "⌨️" : "📖";
-                return `<li>
-                  <a href="${link}" class="block px-4 py-2 rounded-lg shadow text-gray-900 bg-white hover:shadow-md hover:bg-blue-50 transition flex items-center gap-2">
-                    <span>${icon}</span> ${topic.title}
-                  </a>
-                </li>`;
-              } else {
-                const icon = cat.id === "mouse" ? "🖱️" : cat.id === "keyboard" ? "⌨️" : "📖";
-                return `<li>
-                  <span class="block px-4 py-2 rounded-lg shadow text-base bg-gray-200 text-gray-500 cursor-not-allowed flex items-center gap-2">
-                    <span>${icon}</span> ${topic.title} (Locked)
-                  </span>
-                </li>`;
-              }
-            }).join("")}
-          </ul>
-        </div>
-      `).join("")}
-    </div>`;
-}).join("");
-      
-      
-      /*body.innerHTML = (cls.terms || []).map(term => {
+      body.innerHTML = (cls.terms || []).map(term => {
         const termUnlocked = term.number === 1 || today >= termUnlockDates[term.number];
         return `
           <div class="mb-4">
@@ -97,7 +62,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <ul class="space-y-2 pl-6">
                   ${(cat.topics || []).map((topic, topicIndex) => {
                     if (termUnlocked) {
-                      const link = `game-board.html?classId=${cls.id}&term=${term.number}&catId=${cat.id}&topic=${topicIndex}`;
+                      const link = `game-board.html?year=${cls.id}&term=${term.number}&catId=${cat.id}&topic=${topicIndex}`;
                       const icon = cat.id === "mouse" ? "🖱️" : cat.id === "keyboard" ? "⌨️" : "📖";
                       return `<li>
                         <a href="${link}" class="block px-4 py-2 rounded-lg shadow text-gray-900 bg-white hover:shadow-md hover:bg-blue-50 transition flex items-center gap-2">
@@ -120,7 +85,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       }).join("");
 
       card.appendChild(body);
-*/
+
       header.addEventListener("click", () => {
         const isOpen = body.style.maxHeight && body.style.maxHeight !== "0px";
         container.querySelectorAll(".accordion-body").forEach(el => el.style.maxHeight = null);
@@ -140,6 +105,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 </script>
+
 <script>
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js').then(() => {
