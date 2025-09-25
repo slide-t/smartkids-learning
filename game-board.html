@@ -7,24 +7,23 @@
   <style>
     body { font-family: Arial, sans-serif; margin:0; padding:10px; background:#f9f9f9; }
     h1 { text-align:center; }
-    #practiceArea { margin:10px auto; padding:15px; width:95%; min-height:80px; background:#fff; border:2px solid #444; border-radius:10px; }
+    #practiceArea { margin:10px auto; padding:15px; width:95%; min-height:80px; background:#fff; border:2px solid #444; border-radius:10px; text-align:center; }
     #scoreDisplay, #timerDisplay { margin-top:10px; font-size:16px; text-align:center; }
-    #virtualKeyboard { margin:15px auto; max-width:700px; }
-    .keyRow { display:flex; justify-content:center; margin:3px 0; flex-wrap:wrap; }
+    #virtualKeyboard { margin:15px auto; max-width:700px; display:flex; flex-wrap:wrap; justify-content:center; }
     .key {
       flex:0 0 auto;
-      margin:2px;
-      padding:10px 12px;
-      background:#ddd;
-      border-radius:5px;
-      font-size:14px;
-      min-width:28px;
+      margin:4px;
+      padding:12px 16px;
+      background:#4CAF50;
+      border-radius:6px;
+      font-size:16px;
+      min-width:35px;
       text-align:center;
       user-select:none;
+      color:#fff;
+      box-shadow:0 2px 4px rgba(0,0,0,0.2);
     }
-    .key.active { background:#4CAF50; color:#fff; }
-    .key.disabled { opacity:0.3; }
-    .spacebar { flex:1; min-width:120px; }
+    .key.spacebar { min-width:150px; }
     #controls { margin-top:15px; text-align:center; }
     button { margin:5px; padding:8px 15px; border:none; border-radius:5px; background:#444; color:#fff; cursor:pointer; }
   </style>
@@ -59,34 +58,15 @@
     let score = 0;
     let timer = 0, timerInterval = null;
 
-    // QWERTY rows with specials
-    const rows = [
-      ["q","w","e","r","t","y","u","i","o","p","[","]"],
-      ["a","s","d","f","g","h","j","k","l",";","'"],
-      ["z","x","c","v","b","n","m",",",".","/"],
-      ["space"]
-    ];
-
     function renderKeyboard(activeKeys=[]){
       virtualKeyboard.innerHTML="";
-      rows.forEach(r=>{
-        const rowDiv=document.createElement("div");
-        rowDiv.className="keyRow";
-        r.forEach(k=>{
-          const key=document.createElement("div");
-          key.className="key";
-          key.textContent=(k==="space")?"⎵":k;
-          if(activeKeys.length>0){
-            if(activeKeys.includes(k.toUpperCase()) || activeKeys.includes(k.toLowerCase())){
-              key.classList.add("active");
-            } else {
-              key.classList.add("disabled");
-            }
-          }
-          if(k==="space"){ key.classList.add("spacebar"); }
-          rowDiv.appendChild(key);
-        });
-        virtualKeyboard.appendChild(rowDiv);
+      activeKeys.forEach(k=>{
+        const key=document.createElement("div");
+        key.className="key";
+        key.textContent=(k===" " || k==="space")?"⎵":k;
+        if(k===" " || k==="space") key.classList.add("spacebar");
+        key.addEventListener("click",()=>handleInput(k));
+        virtualKeyboard.appendChild(key);
       });
     }
 
@@ -108,11 +88,18 @@
       currentTopicIndex=index;
       const topic=topics[index];
 
-      practiceArea.innerHTML="<b>"+topic.title+"</b><br>"+topic.instruction+"<br><br>Samples: "+topic.samples.join(", ");
+      practiceArea.innerHTML="<b>"+topic.title+"</b><br>"+(topic.instruction || "")+"<br><br>Samples: "+topic.samples.join(", ");
       score=0;
       scoreDisplay.textContent="Score: "+score;
       renderKeyboard(topic.samples);
       startTimer();
+    }
+
+    // input handler (for real typing or clicks)
+    function handleInput(input){
+      console.log("Pressed:",input);
+      score++;
+      scoreDisplay.textContent="Score: "+score;
     }
 
     // buttons
@@ -130,7 +117,6 @@
       .catch(err=>{
         console.error("Error loading JSON",err);
         practiceArea.textContent="Cannot load classes.json";
-        renderKeyboard(); // fallback full keyboard
       });
   </script>
 
