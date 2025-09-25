@@ -9,16 +9,14 @@
   header { background:#0d3b66; color:white; padding:1rem; width:100%; text-align:center; display:flex; justify-content:space-between; align-items:center;}
   header a { color:white; text-decoration:none; background:#0d3b66; padding:0.5rem 1rem; border-radius:5px; border:1px solid white; }
   .container { max-width:750px; margin-top:20px; padding:1rem; background:white; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.2); text-align:center;}
-  .practice-area { min-height:100px; padding:1rem; border:1px solid #ccc; border-radius:5px; background:#fafafa; display:flex; justify-content:center; align-items:center; font-size:2rem; margin-bottom:15px;}
+  .practice-area { min-height:120px; padding:1rem; border:1px solid #ccc; border-radius:5px; background:#fafafa; font-size:1.5rem; margin-bottom:15px; word-wrap:break-word;}
   .score { font-weight:bold; margin-top:10px; color:#0d3b66; }
   .nav-buttons { margin-top:15px; display:flex; justify-content:space-between; }
   .nav-buttons button { padding:0.5rem 1rem; border:none; border-radius:5px; background:#0d3b66; color:white; cursor:pointer; transition:0.3s;}
   .nav-buttons button:hover { background:#144e8c; }
-  .tooltip { position:absolute; top:90px; background:#0d3b66; color:white; padding:0.5rem 1rem; border-radius:5px; font-size:0.9rem; opacity:0; transition:opacity 0.5s ease-in-out; }
-  .tooltip.show { opacity:1; }
   .virtual-keyboard { display:flex; flex-direction:column; justify-content:center; align-items:center; margin-top:15px; }
   .vk-row { display:flex; justify-content:center; margin-bottom:3px; }
-  .vk-key { width:45px; height:45px; line-height:45px; text-align:center; border-radius:5px; background:#ccc; user-select:none; font-weight:bold; margin:0.1rem; opacity:0.4; }
+  .vk-key { width:45px; height:45px; line-height:45px; text-align:center; border-radius:5px; background:#ccc; user-select:none; font-weight:bold; margin:0.1rem; opacity:0.5; cursor:pointer;}
   .vk-key.active { opacity:1; background:#4CAF50; color:white; }
   .vk-key.wrong { background:#f44336; color:white; }
   .timer-container { position: relative; width: 100px; height: 100px; margin: 15px auto; }
@@ -43,8 +41,6 @@
   <div class="timer-text" id="timerText">60</div>
 </div>
 
-<div class="tooltip" id="tooltip"></div>
-
 <div class="container">
   <div class="practice-area" id="practiceArea"></div>
   <div class="score" id="scoreDisplay">Score: 0</div>
@@ -57,7 +53,9 @@
 </div>
 
 <script>
-const words = ["cat","dog","sun","fish","book","tree","pen","apple","ball","car"];
+// 🔹 Replace with JSON sample content (for demo, I hardcode one)
+const content = "Final Project: Developing a community app for waste recycling. The app allows households to schedule pickups and track recycling activities.";
+let chars = content.split(""); // target full passage, character by character
 let currentIndex = 0;
 let score = 0;
 let timer = 60;
@@ -67,7 +65,7 @@ let timerInterval;
 const rows = [
   "QWERTYUIOP".split(""),
   "ASDFGHJKL".split(""),
-  "ZXCVBNM".split("")
+  "ZXCVBNM".split(" ")
 ];
 const vk = document.getElementById("virtualKeyboard");
 rows.forEach(r=>{
@@ -78,43 +76,50 @@ rows.forEach(r=>{
     keyDiv.className="vk-key";
     keyDiv.id="key-"+k;
     keyDiv.textContent=k;
+    keyDiv.addEventListener("click", ()=> handleInput(k)); // 🔹 clickable support
     rowDiv.appendChild(keyDiv);
   });
   vk.appendChild(rowDiv);
 });
 
-// Display word
-function showWord(){
-  document.getElementById("practiceArea").textContent=words[currentIndex];
+// Show text with cursor
+function renderText(){
+  const display = chars.map((ch, i)=>{
+    if(i<currentIndex) return `<span style="color:#999;">${ch}</span>`;
+    if(i===currentIndex) return `<span style="text-decoration:underline;">${ch}</span>`;
+    return ch;
+  }).join("");
+  document.getElementById("practiceArea").innerHTML = display;
 }
-showWord();
+renderText();
 
-// Handle typing
-document.addEventListener("keydown", e=>{
-  const expected = words[currentIndex][0].toUpperCase();
-  const key = e.key.toUpperCase();
+// Handle input (works for both typing + clicks)
+function handleInput(inputChar){
+  const expected = chars[currentIndex].toUpperCase();
+  const key = inputChar.toUpperCase();
   const keyDiv = document.getElementById("key-"+key);
   if(!/^[A-Z]$/.test(key)) return;
 
   if(key===expected){
-    if(keyDiv){ keyDiv.classList.add("active"); setTimeout(()=>keyDiv.classList.remove("active"),500);}
-    words[currentIndex] = words[currentIndex].slice(1);
-    if(words[currentIndex].length===0){
-      score++;
-      currentIndex=(currentIndex+1)%words.length;
-      showWord();
-    } else {
-      showWord();
-    }
+    if(keyDiv){ keyDiv.classList.add("active"); setTimeout(()=>keyDiv.classList.remove("active"),300);}
+    currentIndex++;
+    score++;
   } else {
-    if(keyDiv){ keyDiv.classList.add("wrong"); setTimeout(()=>keyDiv.classList.remove("wrong"),500);}
+    if(keyDiv){ keyDiv.classList.add("wrong"); setTimeout(()=>keyDiv.classList.remove("wrong"),300);}
   }
   document.getElementById("scoreDisplay").textContent="Score: "+score;
+  renderText();
+}
+
+// Physical keyboard input
+document.addEventListener("keydown", e=>{
+  if(e.key.length===1){ handleInput(e.key); }
 });
 
 // Timer
 function startTimer(){
   const progress=document.querySelector(".timer-progress");
+  clearInterval(timerInterval);
   timerInterval=setInterval(()=>{
     timer--;
     if(timer<0){
@@ -130,9 +135,10 @@ function startTimer(){
 }
 startTimer();
 
+// Restart
 document.getElementById("restartBtn").addEventListener("click",()=>{
   timer=60; score=0; currentIndex=0;
-  showWord();
+  renderText();
   document.getElementById("scoreDisplay").textContent="Score: 0";
   document.getElementById("restartBtn").style.display="none";
   startTimer();
