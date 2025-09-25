@@ -1,171 +1,737 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Typing Tutor</title>
-  <style>
-    body { font-family: Arial, sans-serif; background:#f9fafb; margin:20px; }
-    #accordion .card { margin-bottom:10px; border-radius:10px; overflow:hidden; box-shadow:0 2px 6px rgba(0,0,0,0.1);}
-    .accordion-header { width:100%; display:flex; justify-content:space-between; padding:12px 16px; font-weight:bold; background:#e0f2fe; border:none; cursor:pointer; transition:background 0.3s; }
-    .accordion-header:hover { background:#bae6fd; }
-    .accordion-body { max-height:0; overflow:hidden; transition:max-height 0.5s ease; background:#f8fafc; }
-    .accordion-body.open { padding:8px 0; }
-    .accordion-body ul { list-style:none; padding-left:20px; }
-    .accordion-body li { margin:5px 0; }
-    .accordion-body a { display:block; padding:8px; border-radius:6px; text-decoration:none; background:#fff; color:#111; box-shadow:0 1px 3px rgba(0,0,0,0.1); transition:all 0.3s; }
-    .accordion-body a:hover { background:#f1f5f9; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Typing Practice - Smart Kids Learning</title>
+<style>
+  body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f0f4f8; display:flex; flex-direction:column; align-items:center;}
+  header { background:#0d3b66; color:white; padding:1rem; width:100%; text-align:center; display:flex; justify-content:space-between; align-items:center;}
+  header a { color:white; text-decoration:none; background:#0d3b66; padding:0.5rem 1rem; border-radius:5px; border:1px solid white; }
+  .container { max-width:750px; margin-top:20px; padding:1rem; background:white; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.2); text-align:center;}
+  .practice-area { min-height:150px; padding:1rem; border:1px solid #ccc; border-radius:5px; background:#fafafa; display:flex; justify-content:center; align-items:center; font-size:2rem; perspective:1000px; margin-bottom:15px;}
+  .key { width:45px; height:45px; line-height:45px; margin:0.2rem; text-align:center; border:2px solid #ccc; border-radius:5px; background:#e7e7e7; transform-style:preserve-3d; transition: transform 0.3s, background 0.3s; font-weight:bold;}
+  .key.correct { background:#4CAF50; color:white; }
+  .key.wrong { background:#f44336; color:white; }
+  .flip { transform: rotateY(90deg); }
+  .virtual-keyboard { display:flex; flex-direction:column; justify-content:center; align-items:center; margin-top:15px; }
+  .vk-row { display:flex; justify-content:center; margin-bottom:3px; }
+  .vk-key { width:45px; height:45px; line-height:45px; text-align:center; border-radius:5px; background:#ccc; user-select:none; cursor:pointer; opacity:0.3; font-weight:bold; margin:0.1rem;}
+  .vk-key.active { opacity:1; background:#ddd; cursor:pointer; }
+  .score { font-weight:bold; margin-top:10px; color:#0d3b66; }
+  .nav-buttons { margin-top:15px; display:flex; justify-content:space-between; }
+  .nav-buttons button { padding:0.5rem 1rem; border:none; border-radius:5px; background:#0d3b66; color:white; cursor:pointer; transition:0.3s;}
+  .nav-buttons button:hover { background:#144e8c; }
+  /* Tooltip */
+  .tooltip { 
+    position:absolute; top:90px; background:#0d3b66; color:white; 
+    padding:0.5rem 1rem; border-radius:5px; font-size:0.9rem; 
+    opacity:0; transition:opacity 0.5s ease-in-out;
+  }
+  .tooltip.show { opacity:1; }
 
-    /* Game area */
-    #practiceArea { margin-top:20px; padding:16px; background:#fff; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.1);}
-    #score { font-weight:bold; margin-bottom:10px; }
+/* Bounce animation for Restart button */
+@keyframes bounceIn {
+  0% { transform: scale(0.5); opacity: 0; }
+  60% { transform: scale(1.2); opacity: 1; }
+  80% { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
 
-    /* Virtual keyboard */
-    #keyboard { margin-top:20px; display:grid; grid-template-columns:repeat(10, 1fr); gap:5px; }
-    .key { padding:12px; text-align:center; background:#e5e7eb; border-radius:6px; font-weight:bold; transition:0.2s; }
-    .key.active { background:#3b82f6; color:#fff; transform:scale(1.1); }
-  </style>
+#restartBtn.bounce {
+  animation: bounceIn 0.6s ease;
+}
+
+/* Timer styles */
+.timer-container {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  margin: 15px auto;
+}
+
+svg circle {
+  fill: none;
+  stroke-width: 10;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+}
+
+.timer-bg {
+  stroke: #ccc; /* grey background */
+}
+
+.timer-progress {
+  stroke: lightblue; /* progress */
+  stroke-linecap: round;
+  stroke-dasharray: 283; /* 2 * π * radius (45) */
+  stroke-dashoffset: 283;
+  transition: stroke-dashoffset 1s linear;
+}
+
+.timer-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #0d3b66;
+}
+
+</style>
 </head>
 <body>
-  <h1>Typing Tutor for Kids</h1>
 
-  <div id="accordion"></div>
+<header>
+  <h1>Smart Kids Typing Practice</h1>
+  <a href="classes.html">Home</a>
+</header>
+<div class="timer-container">
+  <svg width="100" height="100">
+    <circle class="timer-bg" cx="50" cy="50" r="45"></circle>
+    <circle class="timer-progress" cx="50" cy="50" r="45"></circle>
+  </svg>
+  <div class="timer-text" id="timerText">60</div>
+</div>
+<div class="tooltip" id="tooltip"></div>
 
-  <div id="practiceArea">
-    <div id="score">Score: 0</div>
-    <div id="textDisplay"></div>
-  </div>
+<div class="container">
+  <div class="practice-area" id="practiceArea"></div>
+  <div class="score" id="scoreDisplay">Score: 0</div>
+  <div class="virtual-keyboard" id="virtualKeyboard"></div>
+  <div class="nav-buttons">
+  <button id="prevBtn">Previous</button>
+  <button id="nextBtn">Next</button>
+  <button id="restartBtn" style="display:none;">Restart</button>
+</div>
+</div>
 
-  <div id="keyboard"></div>
+<script>
+const practiceArea = document.getElementById('practiceArea');
+const scoreDisplay = document.getElementById('scoreDisplay');
+const virtualKeyboard = document.getElementById('virtualKeyboard');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const restartBtn = document.getElementById('restartBtn');
+const tooltip = document.getElementById('tooltip');
 
-  <script>
-    let currentSequence = [];
-    let score = 0;
-    let currentIndex = 0;
-    const scoreDisplay = document.getElementById("score");
-    const textDisplay = document.getElementById("textDisplay");
+let score = 0;
+let currentIndex = 0;
+let currentLetterIndex = 0;
+let currentSequence = [];
+let activeKeys = [];
 
-    // Build virtual keyboard
-    const keys = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
-    const keyboardDiv = document.getElementById("keyboard");
-    keys.forEach(k=>{
-      const keyDiv = document.createElement("div");
-      keyDiv.className="key";
-      keyDiv.id="key-"+k;
-      keyDiv.textContent=k;
-      keyboardDiv.appendChild(keyDiv);
+const params = new URLSearchParams(window.location.search);
+const classId = params.get('classId');
+const termNumber = parseInt(params.get('term'));
+const catId = params.get('catId');
+let topicIndex = parseInt(params.get('topic'));
+
+let classesData = [];
+
+// Keyboard rows
+const keyboardRows = [
+  ['Q','W','E','R','T','Y','U','I','O','P'],
+  ['A','S','D','F','G','H','J','K','L',';'],
+  ['Z','X','C','V','B','N','M',' ',',','.']
+];
+
+// Highlight virtual key
+function highlightVK(keyChar,type='reset'){
+  const vkKeys = document.querySelectorAll('.vk-key');
+  vkKeys.forEach(vk=>{ 
+    vk.classList.remove('vk-active','correct','wrong'); 
+    vk.style.backgroundColor='#ccc'; 
+  });
+  const vk = Array.from(vkKeys).find(k=>k.textContent===keyChar.toUpperCase());
+  if(vk){
+    vk.classList.add('vk-active');
+    if(type==='correct') vk.style.backgroundColor='#4CAF50';
+    if(type==='wrong') vk.style.backgroundColor='#f44336';
+  }
+}
+
+// Show current word/sentence
+function showCurrentSample(){
+  if(currentIndex>=currentSequence.length){
+    practiceArea.innerHTML='<p>🎉 Well done! You finished this topic.</p>';
+    highlightVK('');
+    restartBtn.style.display = "inline-block";
+    restartBtn.classList.add('bounce');
+    setTimeout(()=> restartBtn.classList.remove('bounce'), 700);
+    return;
+  }
+
+  restartBtn.style.display = "none"; 
+  const sample = currentSequence[currentIndex];
+  practiceArea.innerHTML='';
+
+  // Build word container
+  const wrapper = document.createElement('div');
+  wrapper.style.display="inline-block";
+
+  sample.split('').forEach((char,idx)=>{
+    const span=document.createElement('span');
+    span.textContent=char;
+    span.style.padding="0 2px";
+
+    // highlight smoothly per letter
+    if(idx===currentLetterIndex){
+      span.style.background="#ffeb3b"; 
+    }
+
+    // tint the whole word while inside it
+    if(currentLetterIndex < sample.length && idx < currentLetterIndex){
+      span.style.color="green";
+    }
+
+    wrapper.appendChild(span);
+  });
+
+  practiceArea.appendChild(wrapper);
+  highlightVK(sample[currentLetterIndex],'reset');
+}
+
+// Handle input
+function handleInput(input){
+  if(currentIndex>=currentSequence.length) return;
+  const currentSample=currentSequence[currentIndex];
+  const expectedChar=currentSample[currentLetterIndex] || '';
+
+  if(input===expectedChar){
+    score++;
+    currentLetterIndex++;
+    if(currentLetterIndex>=currentSample.length){
+      currentLetterIndex=0;
+      currentIndex++;
+    }
+    showCurrentSample();
+  }
+  scoreDisplay.textContent=`Score: ${score}`;
+}
+
+// Real keyboard
+document.addEventListener('keydown', e=>{
+  if(e.key.length===1 || e.key===" "){
+    handleInput(e.key);
+  }
+});
+
+// Virtual keyboard
+function buildVirtualKeyboard(){
+  virtualKeyboard.innerHTML='';
+  keyboardRows.forEach(row=>{
+    const rowDiv = document.createElement('div');
+    rowDiv.classList.add('vk-row');
+    row.forEach(k=>{
+      const vk = document.createElement('div');
+      vk.classList.add('vk-key');
+      vk.textContent = k;
+      vk.addEventListener('click',()=>handleInput(k));
+      rowDiv.appendChild(vk);
     });
+    virtualKeyboard.appendChild(rowDiv);
+  });
+}
 
-    // Show current practice letter
-    function showCurrentLetter(){
-      if(currentIndex<currentSequence.length){
-        textDisplay.textContent=currentSequence[currentIndex];
-      }else{
-        textDisplay.textContent="✅ Well done!";
-      }
+// Tooltip
+function showTooltip(message){
+  tooltip.textContent=message;
+  tooltip.classList.add('show');
+  setTimeout(()=>{ tooltip.classList.remove('show'); },4000);
+}
+
+// Load topic
+function loadTopic(){
+  const cls = classesData.find(c=>c.id===classId);
+  if(!cls){ practiceArea.innerHTML='<p style="color:red;">Class not found</p>'; return; }
+  const term = cls.terms.find(t=>t.number===termNumber);
+  if(!term){ practiceArea.innerHTML='<p style="color:red;">Term not found</p>'; return; }
+  const category = term.categories.find(c=>c.id===catId);
+  if(!category){ practiceArea.innerHTML='<p style="color:red;">Category not found</p>'; return; }
+  const topic = category.topics[topicIndex];
+  if(!topic){ practiceArea.innerHTML='<p style="color:red;">Topic not found</p>'; return; }
+
+  currentSequence = topic.samples || [];
+  activeKeys = [...new Set(currentSequence.join('').toUpperCase().split(''))];
+
+  buildVirtualKeyboard();
+  currentIndex=0;
+  currentLetterIndex=0;
+  score=0;
+  scoreDisplay.textContent=`Score: ${score}`;
+  showCurrentSample();
+  showTooltip(topic.instruction || `Practice: ${topic.title}`);
+}
+
+// Navigation
+prevBtn.addEventListener('click', ()=>{
+  if(topicIndex>0){ topicIndex--; loadTopic(); }
+});
+nextBtn.addEventListener('click', ()=>{
+  const cls = classesData.find(c=>c.id===classId);
+  const term = cls.terms.find(t=>t.number===termNumber);
+  const category = term.categories.find(c=>c.id===catId);
+  if(topicIndex<category.topics.length-1){ topicIndex++; loadTopic(); }
+});
+
+// Restart logic
+restartBtn.addEventListener('click', ()=>{
+  loadTopic();
+  restartBtn.style.display = "none"; 
+});
+
+// Fetch JSON
+fetch('data/classes.json')
+  .then(res=>res.json())
+  .then(data=>{
+    classesData = Array.isArray(data)? data : data.classes;
+    loadTopic();
+  })
+  .catch(err=>{
+    practiceArea.innerHTML = `<p style="color:red;">Failed to load classes.json</p>`;
+    console.error(err);
+  });
+</script>
+
+
+  
+<script>
+/*const practiceArea = document.getElementById('practiceArea');
+const scoreDisplay = document.getElementById('scoreDisplay');
+const virtualKeyboard = document.getElementById('virtualKeyboard');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const tooltip = document.getElementById('tooltip');
+const restartBtn = document.getElementById('restartBtn');
+
+let score = 0;
+let currentIndex = 0;
+let currentLetterIndex = 0;
+let currentSequence = [];
+let activeKeys = [];
+
+const params = new URLSearchParams(window.location.search);
+const classId = params.get('classId');
+const termNumber = parseInt(params.get('term'));
+const catId = params.get('catId');
+let topicIndex = parseInt(params.get('topic'));
+
+let classesData = [];
+
+// Keyboard rows
+const keyboardRows = [
+  ['Q','W','E','R','T','Y','U','I','O','P'],
+  ['A','S','D','F','G','H','J','K','L',';'],
+  ['Z','X','C','V','B','N','M',' ',',','.']
+];
+
+// Highlight virtual key
+function highlightVK(keyChar,type='reset'){
+  const vkKeys = document.querySelectorAll('.vk-key');
+  vkKeys.forEach(vk=>{
+    vk.classList.remove('vk-active');
+    vk.style.backgroundColor='#ccc';
+  });
+  const vk = Array.from(vkKeys).find(k=>k.textContent===keyChar.toUpperCase());
+  if(vk){
+    vk.classList.add('vk-active');
+    if(type==='correct') vk.style.backgroundColor='#4CAF50';
+    if(type==='wrong') vk.style.backgroundColor='#f44336';
+  }
+}
+
+// Show current word/sentence
+function showCurrentSample(){
+  if(currentIndex>=currentSequence.length){
+    practiceArea.innerHTML='<p>Well done! You finished this topic.</p>';
+    highlightVK('');
+    restartBtn.style.display = "inline-block"; 
+    restartBtn.classList.add('bounce');
+    setTimeout(()=> restartBtn.classList.remove('bounce'), 700);
+    return;
+  }
+  restartBtn.style.display = "none"; 
+  const sample = currentSequence[currentIndex];
+  practiceArea.innerHTML='';
+
+  const wrapper = document.createElement('div');
+  wrapper.classList.add('key');
+  wrapper.style.display="inline-block";
+
+  sample.split('').forEach((char,idx)=>{
+    const span=document.createElement('span');
+    span.textContent=char;
+    if(idx===currentLetterIndex) span.style.background="#ffeb3b"; 
+    wrapper.appendChild(span);
+  });
+
+  practiceArea.appendChild(wrapper);
+  highlightVK(sample[currentLetterIndex],'reset');
+}
+
+// Handle input
+function handleInput(input){
+  if(currentIndex>=currentSequence.length) return;
+  const currentSample=currentSequence[currentIndex];
+  const expectedChar=currentSample[currentLetterIndex] || '';
+
+  if(input.length===1 && input===expectedChar){
+    score++;
+    currentLetterIndex++;
+    if(currentLetterIndex>=currentSample.length){
+      currentLetterIndex=0;
+      currentIndex++;
     }
+    showCurrentSample();
+  }
+  scoreDisplay.textContent=`Score: ${score}`;
+}
 
-    // Typing logic
-    document.addEventListener("keydown", (e)=>{
-      const pressed = e.key.toUpperCase();
-      const keyDiv = document.getElementById("key-"+pressed);
-      if(keyDiv){
-        keyDiv.classList.add("active");
-        setTimeout(()=>keyDiv.classList.remove("active"),200);
-      }
-      if(currentSequence[currentIndex] && pressed===currentSequence[currentIndex].toUpperCase()){
-        score++;
-        scoreDisplay.textContent="Score: "+score;
-        currentIndex++;
-        showCurrentLetter();
-      }
+// Real keyboard
+document.addEventListener('keydown', e=>{
+  if(e.key.length===1 || e.key===" "){
+    handleInput(e.key);
+  }
+});
+
+// Virtual keyboard
+function buildVirtualKeyboard(){
+  virtualKeyboard.innerHTML='';
+  keyboardRows.forEach(row=>{
+    const rowDiv = document.createElement('div');
+    rowDiv.classList.add('vk-row');
+    row.forEach(k=>{
+      const vk = document.createElement('div');
+      vk.classList.add('vk-key');
+      vk.textContent = k;
+      vk.addEventListener('click',()=>handleInput(k));
+      rowDiv.appendChild(vk);
     });
+    virtualKeyboard.appendChild(rowDiv);
+  });
+}
 
-    // Load JSON & build accordion
-    async function buildAccordion(){
-      const container = document.getElementById("accordion");
-      try{
-        const res = await fetch("data/classes.json");
-        const data = await res.json();
-        const classes = Array.isArray(data) ? data : data.classes;
+// Tooltip
+function showTooltip(message){
+  tooltip.textContent=message;
+  tooltip.classList.add('show');
+  setTimeout(()=>{ tooltip.classList.remove('show'); },4000);
+}
 
-        classes.forEach(cls=>{
-          const card=document.createElement("div"); card.className="card";
-          const header=document.createElement("button");
-          header.className="accordion-header";
-          header.innerHTML=`<span>${cls.name}</span><span>+</span>`;
-          card.appendChild(header);
+// Load topic
+function loadTopic(){
+  const cls = classesData.find(c=>c.id===classId);
+  if(!cls){ practiceArea.innerHTML='<p style="color:red;">Class not found</p>'; return; }
+  const term = cls.terms.find(t=>t.number===termNumber);
+  if(!term){ practiceArea.innerHTML='<p style="color:red;">Term not found</p>'; return; }
+  const category = term.categories.find(c=>c.id===catId);
+  if(!category){ practiceArea.innerHTML='<p style="color:red;">Category not found</p>'; return; }
+  const topic = category.topics[topicIndex];
+  if(!topic){ practiceArea.innerHTML='<p style="color:red;">Topic not found</p>'; return; }
 
-          const body=document.createElement("div");
-          body.className="accordion-body";
+  currentSequence = topic.samples || topic.items || [];
+  activeKeys = [...new Set(currentSequence.join('').toUpperCase().split(''))];
 
-          body.innerHTML=(cls.terms||[]).map(term=>`
-            <h3 style="margin:8px 16px; color:#1d4ed8">${term.title}</h3>
-            ${(term.categories||[]).map(cat=>`
-              <h4 style="margin:4px 24px; color:#9333ea">${cat.name}</h4>
-              <ul>
-                ${(cat.topics||[]).map((topic,idx)=>`
-                  <li><a href="#" data-year="${cls.id}" data-term="${term.number}" data-cat="${cat.id}" data-topic="${idx}">
-                    ${topic.title}
-                  </a></li>
-                `).join("")}
-              </ul>
-            `).join("")}
-          `).join("");
+  buildVirtualKeyboard();
+  currentIndex=0;
+  currentLetterIndex=0;
+  score=0;
+  scoreDisplay.textContent=`Score: ${score}`;
+  showCurrentSample();
+  showTooltip(topic.instruction || topic.description || `Practice: ${topic.title}`);
+}
 
-          card.appendChild(body);
-          header.addEventListener("click",()=>{
-            body.classList.toggle("open");
-            if(body.classList.contains("open")){
-              body.style.maxHeight=body.scrollHeight+"px";
-              header.querySelector("span:last-child").textContent="−";
-            }else{
-              body.style.maxHeight=null;
-              header.querySelector("span:last-child").textContent="+";
-            }
-          });
+// Navigation
+prevBtn.addEventListener('click', ()=>{
+  if(topicIndex>0){ topicIndex--; loadTopic(); }
+});
+nextBtn.addEventListener('click', ()=>{
+  const cls = classesData.find(c=>c.id===classId);
+  const term = cls.terms.find(t=>t.number===termNumber);
+  const category = term.categories.find(c=>c.id===catId);
+  if(topicIndex<category.topics.length-1){ topicIndex++; loadTopic(); }
+});
 
-          container.appendChild(card);
-        });
+// Restart
+restartBtn.addEventListener('click', ()=>{
+  loadTopic(); 
+  restartBtn.style.display = "none"; 
+});
 
-        // Topic click → load samples
-        container.addEventListener("click",(e)=>{
-          if(e.target.tagName==="A"){
-            e.preventDefault();
-            const yearId=e.target.dataset.year;
-            const termNumber=parseInt(e.target.dataset.term);
-            const catId=e.target.dataset.cat;
-            const topicIndex=parseInt(e.target.dataset.topic);
-            loadPractice(yearId,termNumber,catId,topicIndex);
-          }
-        });
-      }catch(err){
-        console.error(err);
-        container.innerHTML="<p style='color:red'>⚠ Failed to load data</p>";
-      }
+// Fetch JSON
+fetch('data/classes.json')
+  .then(res=>res.json())
+  .then(data=>{
+    classesData = Array.isArray(data)? data : data.classes;
+    loadTopic();
+  })
+  .catch(err=>{
+    practiceArea.innerHTML = `<p style="color:red;">Failed to load classes.json</p>`;
+    console.error(err);
+  });
+*/
+// Timer logic
+let timerDuration = 60; // seconds
+let timeLeft = timerDuration;
+let timerInterval;
+
+const timerText = document.getElementById('timerText');
+const timerProgress = document.querySelector('.timer-progress');
+const circleLength = 2 * Math.PI * 45; // circumference (r=45)
+timerProgress.style.strokeDasharray = circleLength;
+
+function startTimer() {
+  clearInterval(timerInterval);
+  timeLeft = timerDuration;
+  timerText.textContent = timeLeft;
+  timerProgress.style.strokeDashoffset = circleLength;
+
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    if (timeLeft < 0) {
+      clearInterval(timerInterval);
+      practiceArea.innerHTML = `<p style="color:red;">⏰ Time's up! Practice again.</p>`;
+      restartBtn.style.display = "inline-block";
+      return;
     }
+    timerText.textContent = timeLeft;
+    const progress = (timeLeft / timerDuration) * circleLength;
+    timerProgress.style.strokeDashoffset = progress;
+  }, 1000);
+}
 
-    async function loadPractice(yearId,termNumber,catId,topicIndex){
-      try{
-        const res = await fetch("data/classes.json");
-        const data = await res.json();
-        const classes = Array.isArray(data) ? data : data.classes;
+// Restart also resets timer
+restartBtn.addEventListener('click', ()=>{
+  loadTopic();
+  restartBtn.style.display = "none";
+  startTimer();
+});
 
-        const year=classes.find(c=>c.id===yearId);
-        const term=year.terms.find(t=>t.number===termNumber);
-        const cat=term.categories.find(c=>c.id===catId);
-        const topic=cat.topics[topicIndex];
+// Start timer with topic
+function loadTopic(){
+  const cls = classesData.find(c=>c.id===classId);
+  if(!cls){ practiceArea.innerHTML='<p style="color:red;">Class not found</p>'; return; }
+  const term = cls.terms.find(t=>t.number===termNumber);
+  if(!term){ practiceArea.innerHTML='<p style="color:red;">Term not found</p>'; return; }
+  const category = term.categories.find(c=>c.id===catId);
+  if(!category){ practiceArea.innerHTML='<p style="color:red;">Category not found</p>'; return; }
+  const topic = category.topics[topicIndex];
+  if(!topic){ practiceArea.innerHTML='<p style="color:red;">Topic not found</p>'; return; }
 
-        currentSequence=[...topic.samples];
-        score=0; currentIndex=0;
-        scoreDisplay.textContent="Score: 0";
-        showCurrentLetter();
-      }catch(err){
-        console.error(err);
-        textDisplay.textContent="Error loading practice";
-      }
+  currentSequence = topic.samples || [];
+  activeKeys = [...new Set(currentSequence.join('').toUpperCase().split(''))];
+
+  buildVirtualKeyboard();
+  currentIndex=0;
+  currentLetterIndex=0;
+  score=0;
+  scoreDisplay.textContent=`Score: ${score}`;
+  showCurrentSample();
+  showTooltip(topic.instruction || `Practice: ${topic.title}`);
+
+  startTimer(); // ⏳ Start timer whenever topic loads
+}
+  
+</script>
+
+
+
+  <!--
+<script>
+const practiceArea = document.getElementById('practiceArea');
+const scoreDisplay = document.getElementById('scoreDisplay');
+const virtualKeyboard = document.getElementById('virtualKeyboard');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const tooltip = document.getElementById('tooltip');
+
+let score = 0;
+let currentIndex = 0;
+let currentLetterIndex = 0;
+let currentSequence = [];
+let activeKeys = [];
+
+const params = new URLSearchParams(window.location.search);
+const classId = params.get('classId');
+const termNumber = parseInt(params.get('term'));
+const catId = params.get('catId');
+let topicIndex = parseInt(params.get('topic'));
+
+let classesData = [];
+
+// Keyboard rows
+const keyboardRows = [
+  ['Q','W','E','R','T','Y','U','I','O','P'],
+  ['A','S','D','F','G','H','J','K','L',';'],
+  ['Z','X','C','V','B','N','M',' ',',','.']
+];
+
+// Highlight virtual key
+function highlightVK(keyChar,type='reset'){
+  const vkKeys = document.querySelectorAll('.vk-key');
+  vkKeys.forEach(vk=>{ vk.classList.remove('vk-active','correct','wrong'); vk.style.backgroundColor='#ccc'; });
+  const vk = Array.from(vkKeys).find(k=>k.textContent===keyChar.toUpperCase());
+  if(vk){
+    vk.classList.add('vk-active');
+    if(type==='correct') vk.style.backgroundColor='#4CAF50';
+    if(type==='wrong') vk.style.backgroundColor='#f44336';
+  }
+}
+
+// Show current word/sentence
+function showCurrentSample(){
+  if(currentIndex>=currentSequence.length){
+    practiceArea.innerHTML='<p>Well done! You finished this topic.</p>';
+    highlightVK('');
+    return;
+  }
+  const sample = currentSequence[currentIndex];
+  practiceArea.innerHTML='';
+
+  const wrapper = document.createElement('div');
+  wrapper.classList.add('key');
+  wrapper.style.display="inline-block";
+
+  // show sample with per-letter span
+  sample.split('').forEach((char,idx)=>{
+    const span=document.createElement('span');
+    span.textContent=char;
+    if(idx===currentLetterIndex) span.style.background="#ffeb3b"; // highlight current char
+    wrapper.appendChild(span);
+  });
+
+  practiceArea.appendChild(wrapper);
+  highlightVK(sample[currentLetterIndex],'reset');
+}
+
+// Handle input
+function handleInput(input){
+  if(currentIndex>=currentSequence.length) return;
+  const currentSample=currentSequence[currentIndex];
+  const expectedChar=currentSample[currentLetterIndex] || '';
+
+  // Normalize: treat space specially
+  if(input.length===1 && input===expectedChar){
+    score++;
+    currentLetterIndex++;
+    if(currentLetterIndex>=currentSample.length){
+      currentLetterIndex=0;
+      currentIndex++;
     }
+    showCurrentSample();
+  }
+  scoreDisplay.textContent=`Score: ${score}`;
+}
 
-    buildAccordion();
-  </script>
+// Real keyboard
+document.addEventListener('keydown', e=>{
+  if(e.key.length===1 || e.key===" "){
+    handleInput(e.key);
+  }
+});
+
+// Virtual keyboard
+function buildVirtualKeyboard(){
+  virtualKeyboard.innerHTML='';
+  keyboardRows.forEach(row=>{
+    const rowDiv = document.createElement('div');
+    rowDiv.classList.add('vk-row');
+    row.forEach(k=>{
+      const vk = document.createElement('div');
+      vk.classList.add('vk-key');
+      vk.textContent = k;
+      vk.addEventListener('click',()=>handleInput(k));
+      rowDiv.appendChild(vk);
+    });
+    virtualKeyboard.appendChild(rowDiv);
+  });
+}
+
+// Tooltip
+function showTooltip(message){
+  tooltip.textContent=message;
+  tooltip.classList.add('show');
+  setTimeout(()=>{ tooltip.classList.remove('show'); },4000);
+}
+
+// Load topic
+function loadTopic(){
+  const cls = classesData.find(c=>c.id===classId);
+  if(!cls){ practiceArea.innerHTML='<p style="color:red;">Class not found</p>'; return; }
+  const term = cls.terms.find(t=>t.number===termNumber);
+  if(!term){ practiceArea.innerHTML='<p style="color:red;">Term not found</p>'; return; }
+  const category = term.categories.find(c=>c.id===catId);
+  if(!category){ practiceArea.innerHTML='<p style="color:red;">Category not found</p>'; return; }
+  const topic = category.topics[topicIndex];
+  if(!topic){ practiceArea.innerHTML='<p style="color:red;">Topic not found</p>'; return; }
+
+  currentSequence = topic.samples || [];
+  activeKeys = [...new Set(currentSequence.join('').toUpperCase().split(''))];
+
+  buildVirtualKeyboard();
+  currentIndex=0;
+  currentLetterIndex=0;
+  score=0;
+  scoreDisplay.textContent=`Score: ${score}`;
+  showCurrentSample();
+  showTooltip(topic.instruction || `Practice: ${topic.title}`);
+}
+
+// Navigation
+prevBtn.addEventListener('click', ()=>{
+  if(topicIndex>0){ topicIndex--; loadTopic(); }
+});
+nextBtn.addEventListener('click', ()=>{
+  const cls = classesData.find(c=>c.id===classId);
+  const term = cls.terms.find(t=>t.number===termNumber);
+  const category = term.categories.find(c=>c.id===catId);
+  if(topicIndex<category.topics.length-1){ topicIndex++; loadTopic(); }
+});
+
+const restartBtn = document.getElementById('restartBtn');
+
+// Modify showCurrentLetter to reveal Restart button at the end
+function showCurrentLetter(){
+  if(currentIndex >= currentSequence.length){
+    practiceArea.innerHTML='<p>Well done! You finished this topic.</p>';
+    highlightVK('');
+    restartBtn.style.display = "inline-block"; 
+    restartBtn.classList.add('bounce'); // add bounce animation
+    setTimeout(()=> restartBtn.classList.remove('bounce'), 700); // reset after animation
+    return;
+  }
+  restartBtn.style.display = "none"; // hide while practicing
+  practiceArea.innerHTML='';
+  const keyDiv = document.createElement('div');
+  keyDiv.classList.add('key');
+  keyDiv.textContent = currentSequence[currentIndex][currentLetterIndex] || currentSequence[currentIndex];
+  practiceArea.appendChild(keyDiv);
+  highlightVK(keyDiv.textContent,'reset');
+}
+
+// Restart logic
+restartBtn.addEventListener('click', ()=>{
+  loadTopic(); // reload same topic
+  restartBtn.style.display = "none"; 
+});
+  
+ 
+
+// Fetch JSON
+fetch('data/classes.json')
+  .then(res=>res.json())
+  .then(data=>{
+    classesData = Array.isArray(data)? data : data.classes;
+    loadTopic();
+  })
+  .catch(err=>{
+    practiceArea.innerHTML = `<p style="color:red;">Failed to load classes.json</p>`;
+    console.error(err);
+  });
+</script>
+-->
+
 </body>
 </html>
