@@ -1,138 +1,218 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EduKids Africa - Classes</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smartkids Typing Tutor</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    .accordion-content {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s ease, padding 0.3s ease;
-    }
-    .accordion-content.open {
-      max-height: 500px;
-      padding: 0.5rem 0;
-    }
+    .key { display:inline-block; padding:14px 18px; margin:4px; border-radius:8px;
+      border:2px solid #ccc; font-weight:bold; font-size:1rem; transition:all 0.2s;
+      background:#f9f9f9;}
+    .key.highlight {border-color:#1e3a8a; background:#e0f2fe; box-shadow:0 0 12px #1e3a8a;}
+    .key.correct {background:#22c55e; color:white; border-color:#16a34a;}
+    .key.wrong {background:#ef4444; color:white; border-color:#b91c1c;}
   </style>
 </head>
-<body class="bg-gray-100 text-gray-900">
+<body class="bg-gray-50 flex flex-col min-h-screen">
 
-  <!-- HEADER -->
-  <header class="flex items-center justify-between p-4 bg-white shadow">
-    <div class="flex items-center space-x-3">
-      <img src="logo.png" alt="EduKids Africa Logo" class="w-10 h-10 rounded-full">
-      <span class="text-xl font-bold">EduKids Africa</span>
-    </div>
-    <button id="menuToggle" class="md:hidden text-gray-600 focus:outline-none">☰</button>
-    <nav id="menu" class="hidden md:flex space-x-6">
-      <a href="index.html" class="hover:text-orange-500">Home</a>
-      <a href="about.html" class="hover:text-orange-500">About</a>
-      <a href="classes.html" class="text-orange-500 font-bold">Classes</a>
-    </nav>
+  <!-- Header -->
+  <header class="bg-blue-900 text-white p-4 text-center text-xl font-bold">
+    SmartKids Typing Tutor
   </header>
 
-  <!-- ACCORDION -->
-  <section class="max-w-4xl mx-auto mt-6 p-4">
-    <h1 class="text-2xl font-bold mb-4">Classes</h1>
+  <!-- Lesson Selection with Accordion -->
+  <section id="lessonSelection" class="p-6 max-w-4xl mx-auto w-full">
+    <h2 class="text-lg font-semibold mb-4">Choose a Lesson:</h2>
+    <div id="accordion" class="space-y-3"></div>
+  </section>
 
-    <div id="accordion">
-      <!-- Accordion items populated via JS -->
+  <!-- Practice Board -->
+  <main id="practiceBoard" class="flex-1 p-4 flex-col items-center hidden">
+    <div id="lessonText"
+         class="text-2xl font-mono mb-6 text-center break-words max-w-3xl mx-auto">
+      Click a lesson to begin...
     </div>
-  </section>
 
-  <!-- TYPING TUTOR -->
-  <section class="max-w-4xl mx-auto mt-10 p-4 bg-white rounded-lg shadow">
-    <h2 class="text-2xl font-bold mb-4">Typing Tutor</h2>
-    <main class="space-y-4">
-      <div id="lessonDisplay" class="p-4 bg-gray-100 rounded-md min-h-[80px]">
-        Select a lesson to start typing...
+    <div class="w-full max-w-3xl mx-auto">
+      <input id="typingInput" type="text"
+             class="w-full border p-3 rounded-lg text-lg focus:ring-2 focus:ring-orange-500"
+             placeholder="Start typing here..." disabled>
+      <div class="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-2 text-center text-lg">
+        <div class="bg-gray-100 rounded p-2">Score: <span id="score">0</span></div>
+        <div class="bg-gray-100 rounded p-2">Errors: <span id="errors">0</span></div>
+        <div class="bg-gray-100 rounded p-2">WPM: <span id="wpm">0</span></div>
       </div>
-      <textarea id="typingInput" rows="5" class="w-full p-3 border rounded-md" placeholder="Start typing here..."></textarea>
-      <div id="result" class="mt-2 text-green-600 font-medium"></div>
-    </main>
-  </section>
+    </div>
 
-  <!-- FOOTER -->
-  <footer class="mt-10 p-4 text-center text-sm text-gray-600">
-    © 2025 EduKids Africa. All rights reserved.
-  </footer>
+    <div id="keyboard" class="mt-8 flex flex-col items-center"></div>
 
-  <!-- SCRIPT -->
+    <div class="mt-6 flex gap-4">
+      <button onclick="restartLesson()" class="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600">Restart</button>
+      <button onclick="backToLessons()" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700">Back to Lessons</button>
+    </div>
+  </main>
+
   <script>
-    // Accordion Data
-    fetch("data/classes.json")
+    let lessonsData = {};
+    const accordion = document.getElementById("accordion");
+    const lessonSelection = document.getElementById("lessonSelection");
+    const practiceBoard = document.getElementById("practiceBoard");
+    const lessonText = document.getElementById("lessonText");
+    const typingInput = document.getElementById("typingInput");
+    const scoreEl = document.getElementById("score");
+    const errorsEl = document.getElementById("errors");
+    const wpmEl = document.getElementById("wpm");
+    const keyboard = document.getElementById("keyboard");
+
+    let currentContent = "";
+    let score = 0, errors = 0, startTime = null;
+
+    // Fetch classes.json
+    fetch("classes.json")
       .then(res => res.json())
       .then(data => {
-        const accordion = document.getElementById("accordion");
-        Object.keys(data).forEach(year => {
-          const yearItem = document.createElement("div");
-          yearItem.className = "mb-3 border rounded-lg bg-white shadow";
-
-          const header = document.createElement("button");
-          header.className = "w-full flex justify-between items-center px-4 py-2 font-semibold hover:bg-orange-50";
-          header.innerHTML = \`${year} <span class="chevron">▼</span>\`;
-
-          const content = document.createElement("div");
-          content.className = "accordion-content px-4";
-
-          Object.keys(data[year]).forEach(term => {
-            const termDiv = document.createElement("div");
-            termDiv.className = "mt-2";
-
-            const termTitle = document.createElement("h3");
-            termTitle.className = "font-bold text-gray-700";
-            termTitle.textContent = term;
-
-            const topicList = document.createElement("ul");
-            topicList.className = "list-disc ml-6";
-
-            data[year][term].forEach(lesson => {
-              const li = document.createElement("li");
-              li.textContent = lesson.title;
-              li.className = "cursor-pointer hover:text-orange-500";
-              li.addEventListener("click", () => {
-                document.getElementById("lessonDisplay").textContent = lesson.content;
-                document.getElementById("typingInput").value = "";
-                document.getElementById("result").textContent = "";
-              });
-              topicList.appendChild(li);
-            });
-
-            termDiv.appendChild(termTitle);
-            termDiv.appendChild(topicList);
-            content.appendChild(termDiv);
-          });
-
-          header.addEventListener("click", () => {
-            content.classList.toggle("open");
-          });
-
-          yearItem.appendChild(header);
-          yearItem.appendChild(content);
-          accordion.appendChild(yearItem);
-        });
+        lessonsData = data.classes;
+        buildAccordion(lessonsData);
       });
 
-    // Typing Tutor Logic
-    const typingInput = document.getElementById("typingInput");
-    const lessonDisplay = document.getElementById("lessonDisplay");
-    const result = document.getElementById("result");
+    function buildAccordion(classes) {
+      accordion.innerHTML = "";
+      classes.forEach((year, yIndex) => {
+        // Year Header
+        const yearDiv = document.createElement("div");
+        yearDiv.className = "border rounded";
 
+        const header = document.createElement("button");
+        header.className = "w-full text-left p-3 font-bold bg-gray-100 hover:bg-gray-200";
+        header.textContent = year.name;
+        header.onclick = () => content.classList.toggle("hidden");
+
+        const content = document.createElement("div");
+        content.className = "p-3 space-y-2 hidden";
+
+        // Terms inside year
+        year.terms.forEach((term, tIndex) => {
+          const termDiv = document.createElement("div");
+          termDiv.className = "ml-4";
+
+          const termTitle = document.createElement("h4");
+          termTitle.className = "font-semibold mt-2";
+          termTitle.textContent = term.title;
+          termDiv.appendChild(termTitle);
+
+          term.categories.forEach(cat => {
+            const catTitle = document.createElement("p");
+            catTitle.className = "italic ml-2";
+            catTitle.textContent = cat.name;
+            termDiv.appendChild(catTitle);
+
+            const ul = document.createElement("ul");
+            ul.className = "ml-6 list-disc";
+            cat.topics.forEach((topic, lIndex) => {
+              const li = document.createElement("li");
+              li.className = "cursor-pointer hover:text-orange-600";
+              li.textContent = topic.title;
+              li.onclick = () => startLesson(topic.title);
+              ul.appendChild(li);
+            });
+            termDiv.appendChild(ul);
+          });
+          content.appendChild(termDiv);
+        });
+
+        yearDiv.appendChild(header);
+        yearDiv.appendChild(content);
+        accordion.appendChild(yearDiv);
+      });
+    }
+
+    // Virtual keyboard
+    const keyboardLayout = [
+      ["q","w","e","r","t","y","u","i","o","p"],
+      ["a","s","d","f","g","h","j","k","l"],
+      ["z","x","c","v","b","n","m"]
+    ];
+    function buildKeyboard() {
+      keyboard.innerHTML = "";
+      keyboardLayout.forEach(row => {
+        const rowDiv = document.createElement("div");
+        row.forEach(k => {
+          const keyDiv = document.createElement("div");
+          keyDiv.className = "key";
+          keyDiv.id = "key-" + k;
+          keyDiv.textContent = k;
+          rowDiv.appendChild(keyDiv);
+        });
+        keyboard.appendChild(rowDiv);
+      });
+    }
+    buildKeyboard();
+
+    function startLesson(title) {
+      currentContent = "Practice: " + title; // placeholder
+      lessonText.textContent = currentContent;
+      typingInput.value = "";
+      typingInput.disabled = false;
+      typingInput.focus();
+      score = 0; errors = 0; startTime = null;
+      scoreEl.textContent = 0; errorsEl.textContent = 0; wpmEl.textContent = 0;
+      lessonSelection.classList.add("hidden");
+      practiceBoard.classList.remove("hidden");
+    }
+
+    function restartLesson() {
+      typingInput.value = "";
+      lessonText.textContent = currentContent;
+      score = 0; errors = 0; startTime = null;
+      scoreEl.textContent = 0; errorsEl.textContent = 0; wpmEl.textContent = 0;
+      typingInput.focus();
+    }
+
+    function backToLessons() {
+      practiceBoard.classList.add("hidden");
+      lessonSelection.classList.remove("hidden");
+    }
+
+    // Typing logic
     typingInput.addEventListener("input", () => {
-      const expected = lessonDisplay.textContent.trim();
-      const typed = typingInput.value.trim();
+      if (!startTime) startTime = new Date();
+      const typed = typingInput.value;
+      const expected = currentContent.slice(0, typed.length);
+      const nextChar = currentContent[typed.length] || "";
 
-      if (!expected || expected === "Select a lesson to start typing...") return;
+      lessonText.innerHTML = `
+        <span class="text-green-600 underline">${typed}</span>
+        <span class="underline decoration-blue-500">${nextChar}</span>
+        ${currentContent.slice(typed.length+1)}
+      `;
+
+      document.querySelectorAll(".key").forEach(k => k.classList.remove("highlight"));
+      if (nextChar) {
+        const keyEl = document.getElementById("key-" + nextChar.toLowerCase());
+        if (keyEl) keyEl.classList.add("highlight");
+      }
 
       if (typed === expected) {
-        result.textContent = "✅ Perfect! Lesson completed.";
-      } else if (expected.startsWith(typed)) {
-        result.textContent = "⏳ Keep going...";
+        score++; scoreEl.textContent = score;
       } else {
-        result.textContent = "❌ Typo detected. Correct and continue.";
+        errors++; errorsEl.textContent = errors;
       }
+
+      const minutes = (new Date() - startTime) / 60000;
+      const words = typed.trim().split(/\s+/).length;
+      wpmEl.textContent = Math.round(words / minutes) || 0;
+    });
+
+    document.addEventListener("keydown", e => {
+      const key = e.key.toLowerCase();
+      const keyEl = document.getElementById("key-" + key);
+      if (keyEl) keyEl.classList.add("correct");
+    });
+    document.addEventListener("keyup", e => {
+      const key = e.key.toLowerCase();
+      const keyEl = document.getElementById("key-" + key);
+      if (keyEl) keyEl.classList.remove("correct");
     });
   </script>
 </body>
