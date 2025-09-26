@@ -77,7 +77,97 @@
     </div>
   </main>
 
-  <script>
+
+<script>
+const lessons = {
+  "Year 1": {
+    "Term 1": {
+      "Home Row Keys": "fff jjj fff jjj fjf jfj fjf jfj",
+      "Basic Words": "as df jk ll aj sd fj kl"
+    },
+    "Term 2": {
+      "Simple Words": "cat dog jam bat sit top",
+      "Short Sentences": "The cat sat. The dog ran."
+    },
+    "Term 3": {
+      "Numbers Row": "123 456 789 0 1234 5678 90",
+      "Mixed Practice": "fjd ksl a; 123 fjd 456"
+    }
+  },
+  "Year 2": {
+    "Term 1": {
+      "Word Practice": "hat mat pat sat rat bat",
+      "Sentence Practice": "I am typing. We are learning."
+    },
+    "Term 2": {
+      "Paragraph Practice": "Typing helps us write better. We can learn every day.",
+      "Capital Letters": "AAA BBB CCC DDD EEE"
+    },
+    "Term 3": {
+      "Punctuation Keys": ".,?! ;:' \" -- ()",
+      "Speed Drills": "the quick brown fox jumps over the lazy dog"
+    }
+  },
+  "Year 3": {
+    "Term 1": {
+      "Shift Key Practice": "Aa Bb Cc Dd Ee Ff",
+      "Symbols": "! @ # $ % ^ & *"
+    },
+    "Term 2": {
+      "Numbers & Symbols": "123 + - = / * % 456",
+      "Quotes & Apostrophes": "It's John's book. She said, \"Hello!\""
+    },
+    "Term 3": {
+      "Advanced Words": "keyboard typing lesson practice accuracy",
+      "Typing Speed Test": "Typing fast is fun. Accuracy is important."
+    }
+  },
+  "Year 4": {
+    "Term 1": {
+      "Text Copy Practice": "Copy this line exactly as it is written.",
+      "Accuracy Drills": "Keep your eyes on the screen while typing."
+    },
+    "Term 2": {
+      "Timed Lessons": "Practice typing for 1 minute without stopping.",
+      "Dictation Typing": "Type the words you hear as quickly as you can."
+    },
+    "Term 3": {
+      "Creative Writing": "Once upon a time, there was a fast typist...",
+      "Speed vs Accuracy": "Fast typing is good, but accuracy is better."
+    }
+  },
+  "Year 5": {
+    "Term 1": {
+      "Essay Typing": "Write a short essay about your best friend.",
+      "Report Typing": "Type a school report about healthy eating."
+    },
+    "Term 2": {
+      "Email Practice": "Dear Sir/Madam, I am writing to inform you...",
+      "Formal Letters": "To whom it may concern, Yours sincerely..."
+    },
+    "Term 3": {
+      "Speed Essay": "Practice writing essays quickly but neatly.",
+      "Typing Contest": "Who can type the most words correctly in 2 minutes?"
+    }
+  },
+  "Year 6": {
+    "Term 1": {
+      "Research Practice": "Search for information and type it accurately.",
+      "Typing Challenges": "Complete this challenge: 50 words in 1 minute."
+    },
+    "Term 2": {
+      "Transcription Practice": "Listen carefully and type exactly what you hear.",
+      "Fast Writing": "Write your thoughts quickly without stopping."
+    },
+    "Term 3": {
+      "Professional Documents": "Type a professional CV or resume with headings.",
+      "Final Speed Test": "Final test: The quick brown fox jumps over the lazy dog."
+    }
+  }
+};
+
+
+    /*
     const lessons = {
       "Year 1": [
         { "title": "Home Row Keys", "content": "fff jjj fff jjj fjf jfj fjf jfj" },
@@ -87,7 +177,7 @@
         { "title": "Simple Words", "content": "cat dog jam bat sit top" },
         { "title": "Short Sentences", "content": "The cat sat. The dog ran." }
       ]
-    };
+    };*/
 
     const lessonList = document.getElementById("lessonList");
     const lessonSelection = document.getElementById("lessonSelection");
