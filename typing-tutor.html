@@ -1,9 +1,11 @@
+<!--My Main Typing tutor -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Typing Tutor – Year 1 & 2</title>
+  <title>Smartkids Typing Tutor</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     .key {
@@ -37,7 +39,7 @@
 <body class="bg-gray-50 flex flex-col min-h-screen">
   <!-- Header -->
   <header class="bg-blue-900 text-white p-4 text-center text-xl font-bold">
-    Typing Tutor – Year 1 & 2
+    SmartKids Typing Tutor
   </header>
 
   <!-- Lesson Selection -->
@@ -76,411 +78,18 @@
       <button onclick="backToLessons()" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700">Back to Lessons</button>
     </div>
   </main>
-<script>
-  const lessonList = document.getElementById("lessonList");
-  const lessonSelection = document.getElementById("lessonSelection");
-  const practiceBoard = document.getElementById("practiceBoard");
-  const lessonText = document.getElementById("lessonText");
-  const typingInput = document.getElementById("typingInput");
-  const scoreEl = document.getElementById("score");
-  const errorsEl = document.getElementById("errors");
-  const wpmEl = document.getElementById("wpm");
-  const keyboard = document.getElementById("keyboard");
 
-  let lessons = {};
-  let currentContent = "";
-  let score = 0;
-  let errors = 0;
-  let startTime = null;
-
-  // Load lessons.json dynamically
-  fetch("data/lessons.json")
-    .then(res => res.json())
-    .then(data => {
-      lessons = data;
-      populateLessons();
-    })
-    .catch(err => {
-      console.error("Error loading lessons.json:", err);
-    });
-
-  function populateLessons() {
-    for (let year in lessons) {
-      const yearTitle = document.createElement("h2");
-      yearTitle.className = "text-xl font-bold mt-6";
-      yearTitle.textContent = year;
-      lessonList.appendChild(yearTitle);
-
-      for (let term in lessons[year]) {
-        const termTitle = document.createElement("h3");
-        termTitle.className = "font-semibold mt-3";
-        termTitle.textContent = term;
-        lessonList.appendChild(termTitle);
-
-        for (let topic in lessons[year][term]) {
-          const li = document.createElement("li");
-          li.className =
-            "p-3 bg-white border rounded-lg shadow hover:bg-orange-100 cursor-pointer";
-          li.textContent = topic;
-          li.onclick = () => startLesson(year, term, topic);
-          lessonList.appendChild(li);
-        }
-      }
-    }
-  }
-
-  // Build virtual keyboard
-  const keyboardLayout = [
-    ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
-    ["a", "s", "d", "f", "g", "h", "j", "k", "l"],
-    ["z", "x", "c", "v", "b", "n", "m"]
-  ];
-  function buildKeyboard() {
-    keyboard.innerHTML = "";
-    keyboardLayout.forEach((row) => {
-      const rowDiv = document.createElement("div");
-      row.forEach((k) => {
-        const keyDiv = document.createElement("div");
-        keyDiv.className = "key";
-        keyDiv.id = "key-" + k;
-        keyDiv.textContent = k;
-        rowDiv.appendChild(keyDiv);
-      });
-      keyboard.appendChild(rowDiv);
-    });
-  }
-  buildKeyboard();
-
-  function startLesson(year, term, topic) {
-    currentContent = lessons[year][term][topic];
-    lessonText.textContent = currentContent;
-    typingInput.value = "";
-    typingInput.disabled = false;
-    typingInput.focus();
-    score = 0;
-    errors = 0;
-    startTime = null;
-    scoreEl.textContent = 0;
-    errorsEl.textContent = 0;
-    wpmEl.textContent = 0;
-    lessonSelection.classList.add("hidden");
-    practiceBoard.classList.remove("hidden");
-  }
-
-  function restartLesson() {
-    typingInput.value = "";
-    lessonText.textContent = currentContent;
-    score = 0;
-    errors = 0;
-    startTime = null;
-    scoreEl.textContent = 0;
-    errorsEl.textContent = 0;
-    wpmEl.textContent = 0;
-    typingInput.focus();
-  }
-
-  function backToLessons() {
-    practiceBoard.classList.add("hidden");
-    lessonSelection.classList.remove("hidden");
-  }
-
-  // Handle typing
-  typingInput.addEventListener("input", () => {
-    if (!startTime) startTime = new Date();
-    const typed = typingInput.value;
-    const expected = currentContent.slice(0, typed.length);
-    const nextChar = currentContent[typed.length] || "";
-
-    lessonText.innerHTML = `
-      <span class="text-green-600 underline">${typed}</span>
-      <span class="underline decoration-blue-500">${nextChar}</span>
-      ${currentContent.slice(typed.length + 1)}
-    `;
-
-    document.querySelectorAll(".key").forEach((k) =>
-      k.classList.remove("highlight")
-    );
-    if (nextChar) {
-      const keyEl = document.getElementById("key-" + nextChar.toLowerCase());
-      if (keyEl) keyEl.classList.add("highlight");
-    }
-
-    if (typed === expected) {
-      score++;
-      scoreEl.textContent = score;
-    } else {
-      errors++;
-      errorsEl.textContent = errors;
-    }
-
-    const minutes = (new Date() - startTime) / 60000;
-    const words = typed.trim().split(/\s+/).length;
-    wpmEl.textContent = Math.round(words / minutes) || 0;
-  });
-
-  // Physical keyboard sync
-  document.addEventListener("keydown", (e) => {
-    const key = e.key.toLowerCase();
-    const keyEl = document.getElementById("key-" + key);
-    if (keyEl) keyEl.classList.add("correct");
-  });
-  document.addEventListener("keyup", (e) => {
-    const key = e.key.toLowerCase();
-    const keyEl = document.getElementById("key-" + key);
-    if (keyEl) keyEl.classList.remove("correct");
-  });
-</script>
-
-
-<!--
-<script>
-
-  const lessons = {
-  "Year 1": {
-    "Term 1": {
-      "Home Row Keys": "fff jjj fff jjj fjf jfj fjf jfj",
-      "Basic Words": "as df jk ll aj sd fj kl"
-    },
-    "Term 2": {
-      "Simple Words": "cat dog jam bat sit top",
-      "Short Sentences": "The cat sat. The dog ran."
-    },
-    "Term 3": {
-      "Numbers Row": "123 456 789 0 1234 5678 90",
-      "Mixed Practice": "fjd ksl a; 123 fjd 456"
-    }
-  },
-  "Year 2": {
-    "Term 1": {
-      "Word Practice": "hat mat pat sat rat bat",
-      "Sentence Practice": "I am typing. We are learning."
-    },
-    "Term 2": {
-      "Paragraph Practice": "Typing helps us write better. We can learn every day.",
-      "Capital Letters": "AAA BBB CCC DDD EEE"
-    },
-    "Term 3": {
-      "Punctuation Keys": ".,?! ;:' \" -- ()",
-      "Speed Drills": "the quick brown fox jumps over the lazy dog"
-    }
-  },
-  "Year 3": {
-    "Term 1": {
-      "Shift Key Practice": "Aa Bb Cc Dd Ee Ff",
-      "Symbols": "! @ # $ % ^ & *"
-    },
-    "Term 2": {
-      "Numbers & Symbols": "123 + - = / * % 456",
-      "Quotes & Apostrophes": "It's John's book. She said, \"Hello!\""
-    },
-    "Term 3": {
-      "Advanced Words": "keyboard typing lesson practice accuracy",
-      "Typing Speed Test": "Typing fast is fun. Accuracy is important."
-    }
-  },
-  "Year 4": {
-    "Term 1": {
-      "Text Copy Practice": "Copy this line exactly as it is written.",
-      "Accuracy Drills": "Keep your eyes on the screen while typing."
-    },
-    "Term 2": {
-      "Timed Lessons": "Practice typing for 1 minute without stopping.",
-      "Dictation Typing": "Type the words you hear as quickly as you can."
-    },
-    "Term 3": {
-      "Creative Writing": "Once upon a time, there was a fast typist...",
-      "Speed vs Accuracy": "Fast typing is good, but accuracy is better."
-    }
-  },
-  "Year 5": {
-    "Term 1": {
-      "Essay Typing": "Write a short essay about your best friend.",
-      "Report Typing": "Type a school report about healthy eating."
-    },
-    "Term 2": {
-      "Email Practice": "Dear Sir/Madam, I am writing to inform you...",
-      "Formal Letters": "To whom it may concern, Yours sincerely..."
-    },
-    "Term 3": {
-      "Speed Essay": "Practice writing essays quickly but neatly.",
-      "Typing Contest": "Who can type the most words correctly in 2 minutes?"
-    }
-  },
-  "Year 6": {
-    "Term 1": {
-      "Research Practice": "Search for information and type it accurately.",
-      "Typing Challenges": "Complete this challenge: 50 words in 1 minute."
-    },
-    "Term 2": {
-      "Transcription Practice": "Listen carefully and type exactly what you hear.",
-      "Fast Writing": "Write your thoughts quickly without stopping."
-    },
-    "Term 3": {
-      "Professional Documents": "Type a professional CV or resume with headings.",
-      "Final Speed Test": "Final test: The quick brown fox jumps over the lazy dog."
-    }
-  }
-};
-  
-  
-  
-
-  
-
-  const lessonList = document.getElementById("lessonList");
-  const lessonSelection = document.getElementById("lessonSelection");
-  const practiceBoard = document.getElementById("practiceBoard");
-  const lessonText = document.getElementById("lessonText");
-  const typingInput = document.getElementById("typingInput");
-  const scoreEl = document.getElementById("score");
-  const errorsEl = document.getElementById("errors");
-  const wpmEl = document.getElementById("wpm");
-  const keyboard = document.getElementById("keyboard");
-
-  let currentContent = "";
-  let score = 0;
-  let errors = 0;
-  let startTime = null;
-
-  // Populate lessons (Years → Terms → Lessons)
-  for (let year in lessons) {
-    const yearTitle = document.createElement("h2");
-    yearTitle.className = "text-xl font-bold mt-6";
-    yearTitle.textContent = year;
-    lessonList.appendChild(yearTitle);
-
-    for (let term in lessons[year]) {
-      const termTitle = document.createElement("h3");
-      termTitle.className = "font-semibold mt-3";
-      termTitle.textContent = term;
-      lessonList.appendChild(termTitle);
-
-      lessons[year][term].forEach((lesson, idx) => {
-        const li = document.createElement("li");
-        li.className =
-          "p-3 bg-white border rounded-lg shadow hover:bg-orange-100 cursor-pointer";
-        li.textContent = lesson.title;
-        li.onclick = () => startLesson(year, term, idx);
-        lessonList.appendChild(li);
-      });
-    }
-  }
-
-  // Build virtual keyboard
-  const keyboardLayout = [
-    ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
-    ["a", "s", "d", "f", "g", "h", "j", "k", "l"],
-    ["z", "x", "c", "v", "b", "n", "m"]
-  ];
-  function buildKeyboard() {
-    keyboard.innerHTML = "";
-    keyboardLayout.forEach((row) => {
-      const rowDiv = document.createElement("div");
-      row.forEach((k) => {
-        const keyDiv = document.createElement("div");
-        keyDiv.className = "key";
-        keyDiv.id = "key-" + k;
-        keyDiv.textContent = k;
-        rowDiv.appendChild(keyDiv);
-      });
-      keyboard.appendChild(rowDiv);
-    });
-  }
-  buildKeyboard();
-
-  function startLesson(year, term, idx) {
-    const lesson = lessons[year][term][idx];
-    currentContent = lesson.content;
-    lessonText.textContent = lesson.content;
-    typingInput.value = "";
-    typingInput.disabled = false;
-    typingInput.focus();
-    score = 0;
-    errors = 0;
-    startTime = null;
-    scoreEl.textContent = 0;
-    errorsEl.textContent = 0;
-    wpmEl.textContent = 0;
-    lessonSelection.classList.add("hidden");
-    practiceBoard.classList.remove("hidden");
-  }
-
-  function restartLesson() {
-    typingInput.value = "";
-    lessonText.textContent = currentContent;
-    score = 0;
-    errors = 0;
-    startTime = null;
-    scoreEl.textContent = 0;
-    errorsEl.textContent = 0;
-    wpmEl.textContent = 0;
-    typingInput.focus();
-  }
-
-  function backToLessons() {
-    practiceBoard.classList.add("hidden");
-    lessonSelection.classList.remove("hidden");
-  }
-
-  // Handle typing
-  typingInput.addEventListener("input", () => {
-    if (!startTime) startTime = new Date();
-    const typed = typingInput.value;
-    const expected = currentContent.slice(0, typed.length);
-    const nextChar = currentContent[typed.length] || "";
-
-    // Update lesson text with underline highlight
-    lessonText.innerHTML = `
-      <span class="text-green-600 underline">${typed}</span>
-      <span class="underline decoration-blue-500">${nextChar}</span>
-      ${currentContent.slice(typed.length + 1)}
-    `;
-
-    // Virtual keyboard highlight
-    document.querySelectorAll(".key").forEach((k) =>
-      k.classList.remove("highlight")
-    );
-    if (nextChar) {
-      const keyEl = document.getElementById("key-" + nextChar.toLowerCase());
-      if (keyEl) keyEl.classList.add("highlight");
-    }
-
-    if (typed === expected) {
-      score++;
-      scoreEl.textContent = score;
-    } else {
-      errors++;
-      errorsEl.textContent = errors;
-    }
-
-    // WPM calculation
-    const minutes = (new Date() - startTime) / 60000;
-    const words = typed.trim().split(/\s+/).length;
-    wpmEl.textContent = Math.round(words / minutes) || 0;
-  });
-
-  // Physical keyboard sync
-  document.addEventListener("keydown", (e) => {
-    const key = e.key.toLowerCase();
-    const keyEl = document.getElementById("key-" + key);
-    if (keyEl) keyEl.classList.add("correct");
-  });
-  document.addEventListener("keyup", (e) => {
-    const key = e.key.toLowerCase();
-    const keyEl = document.getElementById("key-" + key);
-    if (keyEl) keyEl.classList.remove("correct");
-  });
-</script>
-
-
-  <!--
   <script>
-
     const lessons = {
-  
-  }
-};
-
+      "Year 1": [
+        { "title": "Home Row Keys", "content": "fff jjj fff jjj fjf jfj fjf jfj" },
+        { "title": "Basic Words", "content": "as df jk ll aj sd fj kl" }
+      ],
+      "Year 2": [
+        { "title": "Simple Words", "content": "cat dog jam bat sit top" },
+        { "title": "Short Sentences", "content": "The cat sat. The dog ran." }
+      ]
+    };
 
     const lessonList = document.getElementById("lessonList");
     const lessonSelection = document.getElementById("lessonSelection");
@@ -612,6 +221,5 @@
       if (keyEl) keyEl.classList.remove("correct");
     });
   </script>
-  -->
 </body>
 </html>
