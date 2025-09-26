@@ -9,8 +9,24 @@
     .accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; }
     .accordion-header span:last-child { transition: transform 0.3s ease; }
     .hidden { display: none; }
-    .key { display: inline-block; padding: 8px 10px; margin: 2px; background: #eee; border-radius: 6px; }
-    .key.active { background: white; box-shadow: 0 0 8px #000; }
+    /*.key { display: inline-block; padding: 8px 10px; margin: 2px; background: #eee; border-radius: 6px; }*/
+    .key {
+  display: inline-block;
+  padding: 8px 10px;
+  margin: 2px;
+  background: #eee;
+  border-radius: 6px;
+  border: 2px solid transparent;
+  transition: background 0.2s, border 0.2s, box-shadow 0.2s;
+}
+
+.key.active {
+  background: #3b82f6; /* Tailwind Blue-500 */
+  color: white;
+  border-color: white;
+  box-shadow: 0 0 12px white;
+}
+  /*  .key.active { background: white; box-shadow: 0 0 8px #000; }*/
     .correct { color: green; }
     .incorrect { color: red; text-decoration: underline; }
     .current { text-decoration: underline; text-decoration-thickness: 2px; }
@@ -141,20 +157,31 @@ document.addEventListener("DOMContentLoaded", async () => {
     lessonText.innerHTML = renderHighlightedText(sampleText, typed);
     updateStats(typed);
   });
+  
+// Virtual keyboard flash (blue + white border glow)
+document.addEventListener("keydown", e => {
+  if (tutorModal.classList.contains("hidden")) return;
 
-  // Virtual keyboard flash
-  document.addEventListener("keydown", e => {
-    if (tutorModal.classList.contains("hidden")) return;
-
-    const pressed = e.key.toLowerCase();
-    keys.forEach(k => {
-      const keyChar = k.textContent.trim().toLowerCase();
-      if (keyChar === pressed || (pressed === " " && keyChar === "")) {
-        k.classList.add("active");
-        setTimeout(() => k.classList.remove("active"), 200);
-      }
-    });
+  const pressed = e.key.toLowerCase();
+  keys.forEach(k => {
+    const keyChar = k.textContent.trim().toLowerCase();
+    if (keyChar === pressed || (pressed === " " && keyChar === "")) {
+      k.classList.add("active");
+    }
   });
+});
+
+document.addEventListener("keyup", e => {
+  const released = e.key.toLowerCase();
+  keys.forEach(k => {
+    const keyChar = k.textContent.trim().toLowerCase();
+    if (keyChar === released || (released === " " && keyChar === "")) {
+      setTimeout(() => k.classList.remove("active"), 100);
+    }
+  });
+});
+ 
+
 
   // Load JSON and build accordion
   try {
