@@ -1,71 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Typing Tutor</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Typing Tutor – Year 1 & 2</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     .key {
       display: inline-block;
-      padding: 12px 16px;
-      margin: 3px;
-      border-radius: 6px;
+      padding: 14px 18px;
+      margin: 4px;
+      border-radius: 8px;
       border: 2px solid #ccc;
       font-weight: bold;
+      font-size: 1rem;
       transition: all 0.2s;
+      background: #f9f9f9;
     }
-    .key.active {
-      border-color: #1d4ed8;
-      background: #1d4ed8;
+    .key.highlight {
+      border-color: #1e3a8a;
+      background: #e0f2fe;
+      box-shadow: 0 0 12px #1e3a8a;
+    }
+    .key.correct {
+      background: #22c55e;
       color: white;
-      box-shadow: 0 0 10px #1d4ed8;
+      border-color: #16a34a;
     }
-    .highlight {
-      text-decoration: underline;
-      text-decoration-color: orange;
+    .key.wrong {
+      background: #ef4444;
+      color: white;
+      border-color: #b91c1c;
     }
   </style>
 </head>
-<body class="bg-white text-gray-800 min-h-screen flex flex-col">
-
+<body class="bg-gray-50 flex flex-col min-h-screen">
   <!-- Header -->
-  <header class="bg-blue-900 text-white text-center p-4 text-2xl font-bold">
+  <header class="bg-blue-900 text-white p-4 text-center text-xl font-bold">
     Typing Tutor – Year 1 & 2
   </header>
 
-  <!-- Main Board -->
-  <main class="flex-1 p-6">
-    <!-- Lesson Text -->
-    <div id="lessonText" class="text-xl font-mono mb-6">
+  <!-- Lesson Selection -->
+  <section id="lessonSelection" class="p-6 max-w-4xl mx-auto w-full">
+    <h2 class="text-lg font-semibold mb-4">Choose a Lesson:</h2>
+    <ul id="lessonList" class="space-y-3"></ul>
+  </section>
+
+  <!-- Practice Board -->
+  <main id="practiceBoard" class="flex-1 p-4 flex-col items-center hidden">
+    <!-- Lesson text -->
+    <div id="lessonText"
+         class="text-2xl font-mono mb-6 text-center break-words max-w-3xl mx-auto">
       Click a lesson to begin...
     </div>
 
-    <!-- Input + Stats -->
-    <div class="mb-4">
-      <input id="typingInput" type="text" 
-             class="w-full border p-3 rounded text-lg" 
+    <!-- Typing Input + Stats -->
+    <div class="w-full max-w-3xl mx-auto">
+      <input id="typingInput" type="text"
+             class="w-full border p-3 rounded-lg text-lg focus:ring-2 focus:ring-orange-500"
              placeholder="Start typing here..." disabled>
-      <div class="mt-2 flex space-x-6 text-lg">
-        <div>Score: <span id="score">0</span></div>
-        <div>Errors: <span id="errors">0</span></div>
-        <div>WPM: <span id="wpm">0</span></div>
+
+      <div class="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-2 text-center text-lg">
+        <div class="bg-gray-100 rounded p-2">Score: <span id="score">0</span></div>
+        <div class="bg-gray-100 rounded p-2">Errors: <span id="errors">0</span></div>
+        <div class="bg-gray-100 rounded p-2">WPM: <span id="wpm">0</span></div>
       </div>
     </div>
 
     <!-- Virtual Keyboard -->
-    <div id="keyboard" class="mt-6 text-center"></div>
+    <div id="keyboard" class="mt-8 flex flex-col items-center"></div>
+
+    <!-- Control Buttons -->
+    <div class="mt-6 flex gap-4">
+      <button onclick="restartLesson()" class="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600">Restart</button>
+      <button onclick="backToLessons()" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700">Back to Lessons</button>
+    </div>
   </main>
 
   <script>
-    // Sample Lessons
     const lessons = {
-      "Year 1": ["fff jjj", "ddd kkk", "The cat sat"],
-      "Year 2": ["quick brown fox", "jumped over lazy dog"]
+      "Year 1": [
+        { "title": "Home Row Keys", "content": "fff jjj fff jjj fjf jfj fjf jfj" },
+        { "title": "Basic Words", "content": "as df jk ll aj sd fj kl" }
+      ],
+      "Year 2": [
+        { "title": "Simple Words", "content": "cat dog jam bat sit top" },
+        { "title": "Short Sentences", "content": "The cat sat. The dog ran." }
+      ]
     };
 
-    let currentLesson = "";
-    let score = 0, errors = 0, startTime;
-
+    const lessonList = document.getElementById("lessonList");
+    const lessonSelection = document.getElementById("lessonSelection");
+    const practiceBoard = document.getElementById("practiceBoard");
     const lessonText = document.getElementById("lessonText");
     const typingInput = document.getElementById("typingInput");
     const scoreEl = document.getElementById("score");
@@ -73,83 +99,125 @@
     const wpmEl = document.getElementById("wpm");
     const keyboard = document.getElementById("keyboard");
 
-    // Build virtual keyboard
-    const rows = ["qwertyuiop", "asdfghjkl", "zxcvbnm"];
-    rows.forEach(r => {
-      let rowDiv = document.createElement("div");
-      [...r].forEach(ch => {
-        let key = document.createElement("div");
-        key.className = "key";
-        key.textContent = ch;
-        key.id = "key-" + ch;
-        rowDiv.appendChild(key);
-      });
-      keyboard.appendChild(rowDiv);
-    });
+    let currentContent = "";
+    let score = 0;
+    let errors = 0;
+    let startTime = null;
 
-    // Start lesson
-    function startLesson(text) {
-      currentLesson = text;
+    // Populate lessons
+    for (let year in lessons) {
+      const yearTitle = document.createElement("h3");
+      yearTitle.className = "font-bold mt-4";
+      yearTitle.textContent = year;
+      lessonList.appendChild(yearTitle);
+
+      lessons[year].forEach((lesson, idx) => {
+        const li = document.createElement("li");
+        li.className = "p-3 bg-white border rounded-lg shadow hover:bg-orange-100 cursor-pointer";
+        li.textContent = lesson.title;
+        li.onclick = () => startLesson(year, idx);
+        lessonList.appendChild(li);
+      });
+    }
+
+    // Build virtual keyboard
+    const keyboardLayout = [
+      ["q","w","e","r","t","y","u","i","o","p"],
+      ["a","s","d","f","g","h","j","k","l"],
+      ["z","x","c","v","b","n","m"]
+    ];
+    function buildKeyboard() {
+      keyboard.innerHTML = "";
+      keyboardLayout.forEach(row => {
+        const rowDiv = document.createElement("div");
+        row.forEach(k => {
+          const keyDiv = document.createElement("div");
+          keyDiv.className = "key";
+          keyDiv.id = "key-" + k;
+          keyDiv.textContent = k;
+          rowDiv.appendChild(keyDiv);
+        });
+        keyboard.appendChild(rowDiv);
+      });
+    }
+    buildKeyboard();
+
+    function startLesson(year, idx) {
+      const lesson = lessons[year][idx];
+      currentContent = lesson.content;
+      lessonText.textContent = lesson.content;
       typingInput.value = "";
       typingInput.disabled = false;
       typingInput.focus();
-      lessonText.innerHTML = `<span class="highlight">${text[0]}</span>${text.slice(1)}`;
-      score = 0; errors = 0;
-      scoreEl.textContent = score;
-      errorsEl.textContent = errors;
-      startTime = Date.now();
+      score = 0;
+      errors = 0;
+      startTime = null;
+      scoreEl.textContent = 0;
+      errorsEl.textContent = 0;
+      wpmEl.textContent = 0;
+      lessonSelection.classList.add("hidden");
+      practiceBoard.classList.remove("hidden");
+    }
+
+    function restartLesson() {
+      typingInput.value = "";
+      lessonText.textContent = currentContent;
+      score = 0; errors = 0; startTime = null;
+      scoreEl.textContent = 0; errorsEl.textContent = 0; wpmEl.textContent = 0;
+      typingInput.focus();
+    }
+
+    function backToLessons() {
+      practiceBoard.classList.add("hidden");
+      lessonSelection.classList.remove("hidden");
     }
 
     // Handle typing
-    typingInput.addEventListener("input", e => {
-      const val = e.target.value;
-      let correct = true;
+    typingInput.addEventListener("input", () => {
+      if (!startTime) startTime = new Date();
+      const typed = typingInput.value;
+      const expected = currentContent.slice(0, typed.length);
+      const nextChar = currentContent[typed.length] || "";
 
-      if (val.length <= currentLesson.length) {
-        const expected = currentLesson.slice(0, val.length);
-        if (val !== expected) {
-          errors++;
-          errorsEl.textContent = errors;
-          correct = false;
-        }
+      // Update lesson text with underline highlight
+      lessonText.innerHTML = `
+        <span class="text-green-600 underline">${typed}</span>
+        <span class="underline decoration-blue-500">${nextChar}</span>
+        ${currentContent.slice(typed.length+1)}
+      `;
+
+      // Virtual keyboard highlight
+      document.querySelectorAll(".key").forEach(k => k.classList.remove("highlight"));
+      if (nextChar) {
+        const keyEl = document.getElementById("key-" + nextChar.toLowerCase());
+        if (keyEl) keyEl.classList.add("highlight");
       }
 
-      // Update highlight
-      let nextChar = currentLesson[val.length] || "";
-      lessonText.innerHTML =
-        currentLesson.slice(0, val.length) +
-        (nextChar ? `<span class="highlight">${nextChar}</span>` : "") +
-        currentLesson.slice(val.length + 1);
-
-      // Update WPM
-      let mins = (Date.now() - startTime) / 60000;
-      wpmEl.textContent = Math.round(val.length / 5 / mins);
-
-      // Update Score
-      if (correct) {
+      if (typed === expected) {
         score++;
         scoreEl.textContent = score;
+      } else {
+        errors++;
+        errorsEl.textContent = errors;
       }
 
-      // Done
-      if (val === currentLesson) {
-        typingInput.disabled = true;
-        lessonText.textContent = "🎉 Lesson Complete!";
-      }
+      // WPM calculation
+      const minutes = (new Date() - startTime) / 60000;
+      const words = typed.trim().split(/\s+/).length;
+      wpmEl.textContent = Math.round(words / minutes) || 0;
     });
 
-    // Key highlight
+    // Physical keyboard sync
     document.addEventListener("keydown", e => {
-      const key = document.getElementById("key-" + e.key);
-      if (key) key.classList.add("active");
+      const key = e.key.toLowerCase();
+      const keyEl = document.getElementById("key-" + key);
+      if (keyEl) keyEl.classList.add("correct");
     });
     document.addEventListener("keyup", e => {
-      const key = document.getElementById("key-" + e.key);
-      if (key) key.classList.remove("active");
+      const key = e.key.toLowerCase();
+      const keyEl = document.getElementById("key-" + key);
+      if (keyEl) keyEl.classList.remove("correct");
     });
-
-    // Auto start first lesson
-    startLesson(lessons["Year 1"][0]);
   </script>
 </body>
 </html>
