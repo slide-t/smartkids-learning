@@ -77,6 +77,190 @@
     </div>
   </main>
 
+<script>
+  const lessons = {
+    "Year 1": {
+      "Term 1": [
+        { "title": "Home Row Keys", "content": "fff jjj fff jjj fjf jfj fjf jfj" },
+        { "title": "Left Hand Keys", "content": "aaa sss ddd fff" },
+        { "title": "Right Hand Keys", "content": "jjj kkk lll ;;" }
+      ],
+      "Term 2": [
+        { "title": "Basic Words", "content": "as df jk ll aj sd fj kl" },
+        { "title": "Simple Words", "content": "dad sad lad fad jam mat sat" },
+        { "title": "Short Sentences", "content": "I am Sam. Sam is sad." }
+      ],
+      "Term 3": [
+        { "title": "Finger Drills", "content": "asa sasa dada fafa jkj kjk lfl" },
+        { "title": "Punctuation Keys", "content": ". , ? ! ; :" },
+        { "title": "Sentences with Punctuation", "content": "Can Sam run? Yes! Sam can run." }
+      ]
+    },
+    "Year 2": {
+      "Term 1": [
+        { "title": "Common Words", "content": "the and for you we was are" },
+        { "title": "Simple Sentences", "content": "The sun is hot. We run and jump." }
+      ],
+      "Term 2": [
+        { "title": "Numbers Row", "content": "123 456 789 0" },
+        { "title": "Symbols", "content": "! @ # $ % ^ & * ( )" },
+        { "title": "Mixed Practice", "content": "Today is 12/09/2025!" }
+      ],
+      "Term 3": [
+        { "title": "Long Words", "content": "computer keyboard elephant watermelon" },
+        { "title": "Full Sentences", "content": "Typing is fun and helps us learn faster." },
+        { "title": "Story Practice", "content": "Once upon a time, a boy had a red ball." }
+      ]
+    }
+  };
+
+  const lessonList = document.getElementById("lessonList");
+  const lessonSelection = document.getElementById("lessonSelection");
+  const practiceBoard = document.getElementById("practiceBoard");
+  const lessonText = document.getElementById("lessonText");
+  const typingInput = document.getElementById("typingInput");
+  const scoreEl = document.getElementById("score");
+  const errorsEl = document.getElementById("errors");
+  const wpmEl = document.getElementById("wpm");
+  const keyboard = document.getElementById("keyboard");
+
+  let currentContent = "";
+  let score = 0;
+  let errors = 0;
+  let startTime = null;
+
+  // Populate lessons (Years → Terms → Lessons)
+  for (let year in lessons) {
+    const yearTitle = document.createElement("h2");
+    yearTitle.className = "text-xl font-bold mt-6";
+    yearTitle.textContent = year;
+    lessonList.appendChild(yearTitle);
+
+    for (let term in lessons[year]) {
+      const termTitle = document.createElement("h3");
+      termTitle.className = "font-semibold mt-3";
+      termTitle.textContent = term;
+      lessonList.appendChild(termTitle);
+
+      lessons[year][term].forEach((lesson, idx) => {
+        const li = document.createElement("li");
+        li.className =
+          "p-3 bg-white border rounded-lg shadow hover:bg-orange-100 cursor-pointer";
+        li.textContent = lesson.title;
+        li.onclick = () => startLesson(year, term, idx);
+        lessonList.appendChild(li);
+      });
+    }
+  }
+
+  // Build virtual keyboard
+  const keyboardLayout = [
+    ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
+    ["a", "s", "d", "f", "g", "h", "j", "k", "l"],
+    ["z", "x", "c", "v", "b", "n", "m"]
+  ];
+  function buildKeyboard() {
+    keyboard.innerHTML = "";
+    keyboardLayout.forEach((row) => {
+      const rowDiv = document.createElement("div");
+      row.forEach((k) => {
+        const keyDiv = document.createElement("div");
+        keyDiv.className = "key";
+        keyDiv.id = "key-" + k;
+        keyDiv.textContent = k;
+        rowDiv.appendChild(keyDiv);
+      });
+      keyboard.appendChild(rowDiv);
+    });
+  }
+  buildKeyboard();
+
+  function startLesson(year, term, idx) {
+    const lesson = lessons[year][term][idx];
+    currentContent = lesson.content;
+    lessonText.textContent = lesson.content;
+    typingInput.value = "";
+    typingInput.disabled = false;
+    typingInput.focus();
+    score = 0;
+    errors = 0;
+    startTime = null;
+    scoreEl.textContent = 0;
+    errorsEl.textContent = 0;
+    wpmEl.textContent = 0;
+    lessonSelection.classList.add("hidden");
+    practiceBoard.classList.remove("hidden");
+  }
+
+  function restartLesson() {
+    typingInput.value = "";
+    lessonText.textContent = currentContent;
+    score = 0;
+    errors = 0;
+    startTime = null;
+    scoreEl.textContent = 0;
+    errorsEl.textContent = 0;
+    wpmEl.textContent = 0;
+    typingInput.focus();
+  }
+
+  function backToLessons() {
+    practiceBoard.classList.add("hidden");
+    lessonSelection.classList.remove("hidden");
+  }
+
+  // Handle typing
+  typingInput.addEventListener("input", () => {
+    if (!startTime) startTime = new Date();
+    const typed = typingInput.value;
+    const expected = currentContent.slice(0, typed.length);
+    const nextChar = currentContent[typed.length] || "";
+
+    // Update lesson text with underline highlight
+    lessonText.innerHTML = `
+      <span class="text-green-600 underline">${typed}</span>
+      <span class="underline decoration-blue-500">${nextChar}</span>
+      ${currentContent.slice(typed.length + 1)}
+    `;
+
+    // Virtual keyboard highlight
+    document.querySelectorAll(".key").forEach((k) =>
+      k.classList.remove("highlight")
+    );
+    if (nextChar) {
+      const keyEl = document.getElementById("key-" + nextChar.toLowerCase());
+      if (keyEl) keyEl.classList.add("highlight");
+    }
+
+    if (typed === expected) {
+      score++;
+      scoreEl.textContent = score;
+    } else {
+      errors++;
+      errorsEl.textContent = errors;
+    }
+
+    // WPM calculation
+    const minutes = (new Date() - startTime) / 60000;
+    const words = typed.trim().split(/\s+/).length;
+    wpmEl.textContent = Math.round(words / minutes) || 0;
+  });
+
+  // Physical keyboard sync
+  document.addEventListener("keydown", (e) => {
+    const key = e.key.toLowerCase();
+    const keyEl = document.getElementById("key-" + key);
+    if (keyEl) keyEl.classList.add("correct");
+  });
+  document.addEventListener("keyup", (e) => {
+    const key = e.key.toLowerCase();
+    const keyEl = document.getElementById("key-" + key);
+    if (keyEl) keyEl.classList.remove("correct");
+  });
+</script>
+
+
+  <!--
   <script>
 
     const lessons = {
@@ -215,5 +399,6 @@
       if (keyEl) keyEl.classList.remove("correct");
     });
   </script>
+  -->
 </body>
 </html>
