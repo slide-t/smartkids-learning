@@ -1,256 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Smart Learning Kids - Classes</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    .accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; }
-    .accordion-header span:last-child { transition: transform 0.3s ease; }
-    .hidden { display: none; }
-    .key { display: inline-block; padding: 8px 10px; margin: 2px; background: #eee; border-radius: 6px; }
-    .key.active { background: white; box-shadow: 0 0 8px #000; }
-    .correct { color: green; }
-    .incorrect { color: red; text-decoration: underline; }
-    .current { text-decoration: underline; text-decoration-thickness: 2px; }
-  </style>
-</head>
-<body class="bg-gray-50 text-gray-900 font-sans">
+<!-- Typing Tutor Modal -->
+<div id="tutorModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+  <div class="bg-white rounded-xl p-6 max-w-2xl w-full shadow-lg relative">
+    <button id="closeTutor" class="absolute top-2 right-2 text-red-600 text-xl font-bold">&times;</button>
+    <h2 id="lessonTitle" class="text-xl font-bold mb-4">Typing Tutor</h2>
 
-  <!-- Header -->
-  <header class="bg-blue-600 text-white shadow-md fixed top-0 left-0 w-full z-50">
-    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-      <h1 class="text-2xl font-bold">Smart Learning Kids</h1>
-      <a href="index.html" class="bg-white text-blue-600 px-4 py-2 rounded-lg font-medium shadow hover:bg-blue-100 transition">Home</a>
+    <!-- Highlighted Sample Text -->
+    <div id="lessonText" class="mb-4 p-3 bg-gray-100 rounded text-lg leading-relaxed"></div>
+
+    <!-- Typing Area -->
+    <textarea id="typingArea" rows="4" class="w-full border p-3 rounded mb-4" placeholder="Start typing here..."></textarea>
+
+    <!-- Stats -->
+    <div class="flex justify-between text-sm font-semibold mb-4">
+      <span>WPM: <span id="wpm">0</span></span>
+      <span>Errors: <span id="errors">0</span></span>
+      <span>Accuracy: <span id="accuracy">100</span>%</span>
     </div>
-  </header>
 
-  <!-- Content -->
-  <main class="pt-24 max-w-4xl mx-auto px-4">
-    <h2 class="text-3xl font-bold text-center mb-8">Select Your Class</h2>
-    <div id="accordion" class="space-y-4"></div>
-  </main>
-
-  <!-- Typing Tutor Modal -->
-  <div id="tutorModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-    <div class="bg-white rounded-xl p-6 max-w-2xl w-full shadow-lg relative">
-      <button id="closeTutor" class="absolute top-2 right-2 text-red-600 text-xl font-bold">&times;</button>
-      <h2 id="lessonTitle" class="text-xl font-bold mb-2">Typing Tutor</h2>
-
-      <!-- Stats -->
-      <div class="flex justify-between mb-4 text-sm font-medium">
-        <div>WPM: <span id="wpm">0</span></div>
-        <div>Errors: <span id="errors">0</span></div>
-        <div>Accuracy: <span id="accuracy">100%</span></div>
+    <!-- Virtual Keyboard -->
+    <div id="keyboard" class="p-2 bg-gray-200 rounded">
+      <div>
+        <span class="key">q</span><span class="key">w</span><span class="key">e</span><span class="key">r</span><span class="key">t</span><span class="key">y</span><span class="key">u</span><span class="key">i</span><span class="key">o</span><span class="key">p</span>
       </div>
-
-      <!-- Lesson text -->
-      <div id="lessonText" class="mb-4 p-3 bg-gray-100 rounded text-lg leading-relaxed"></div>
-
-      <!-- Virtual Keyboard -->
-      <div id="keyboard" class="p-2 bg-gray-200 rounded">
-        <div>
-          <span class="key">q</span><span class="key">w</span><span class="key">e</span><span class="key">r</span><span class="key">t</span><span class="key">y</span><span class="key">u</span><span class="key">i</span><span class="key">o</span><span class="key">p</span>
-        </div>
-        <div>
-          <span class="key">a</span><span class="key">s</span><span class="key">d</span><span class="key">f</span><span class="key">g</span><span class="key">h</span><span class="key">j</span><span class="key">k</span><span class="key">l</span>
-        </div>
-        <div>
-          <span class="key">z</span><span class="key">x</span><span class="key">c</span><span class="key">v</span><span class="key">b</span><span class="key">n</span><span class="key">m</span>
-        </div>
-        <div>
-          <span class="key"> </span>
-        </div>
+      <div>
+        <span class="key">a</span><span class="key">s</span><span class="key">d</span><span class="key">f</span><span class="key">g</span><span class="key">h</span><span class="key">j</span><span class="key">k</span><span class="key">l</span>
+      </div>
+      <div>
+        <span class="key">z</span><span class="key">x</span><span class="key">c</span><span class="key">v</span><span class="key">b</span><span class="key">n</span><span class="key">m</span>
+      </div>
+      <div>
+        <span class="key"> </span>
       </div>
     </div>
   </div>
-
-<script>
-document.addEventListener("DOMContentLoaded", async () => {
-  const container = document.getElementById("accordion");
-  const today = new Date();
-  const termUnlockDates = { 2: new Date("2026-01-04"), 3: new Date("2026-04-20") };
-
-  const tutorModal = document.getElementById("tutorModal");
-  const closeTutor = document.getElementById("closeTutor");
-  const lessonTitle = document.getElementById("lessonTitle");
-  const lessonText = document.getElementById("lessonText");
-  const keys = document.querySelectorAll(".key");
-
-  let sampleText = "";
-  let currentIndex = 0;
-  let errors = 0;
-  let typedChars = 0;
-  let startTime = null;
-  let timerInterval;
-
-  const wpmEl = document.getElementById("wpm");
-  const errorsEl = document.getElementById("errors");
-  const accuracyEl = document.getElementById("accuracy");
-
-  // Render lesson text with highlighting
-  function renderText() {
-    lessonText.innerHTML = sampleText.split("").map((ch, i) => {
-      if (i < currentIndex) {
-        return `<span class="correct">${ch}</span>`;
-      } else if (i === currentIndex) {
-        return `<span class="current">${ch}</span>`;
-      } else {
-        return `<span>${ch}</span>`;
-      }
-    }).join("");
-  }
-
-  function updateStats() {
-    const elapsedMin = (Date.now() - startTime) / 60000;
-    const wpm = Math.round((typedChars / 5) / elapsedMin) || 0;
-    const accuracy = Math.max(0, Math.round(((typedChars - errors) / typedChars) * 100)) || 100;
-
-    wpmEl.textContent = wpm;
-    errorsEl.textContent = errors;
-    accuracyEl.textContent = accuracy + "%";
-  }
-
-  function handleInput(key) {
-    if (!startTime) {
-      startTime = Date.now();
-      timerInterval = setInterval(updateStats, 1000);
-    }
-
-    if (currentIndex < sampleText.length) {
-      const expected = sampleText[currentIndex];
-      if (key === expected) {
-        currentIndex++;
-      } else {
-        errors++;
-        currentIndex++;
-      }
-      typedChars++;
-      renderText();
-      updateStats();
-    }
-
-    if (currentIndex >= sampleText.length) {
-      clearInterval(timerInterval);
-    }
-  }
-
-  // Load JSON
-  try {
-    const res = await fetch("data/classes.json");
-    const data = await res.json();
-    const classes = Array.isArray(data) ? data : data.classes;
-
-    if (!classes) throw new Error("Invalid JSON format");
-
-    classes.forEach(cls => {
-      const card = document.createElement("div");
-      card.className = "bg-white rounded-xl shadow-md overflow-hidden mb-4";
-
-      const header = document.createElement("button");
-      header.className = "accordion-header w-full flex justify-between items-center px-6 py-4 text-lg font-semibold bg-blue-100 hover:bg-blue-200 transition";
-      header.innerHTML = `<span class="text-gray-900">${cls.name}</span><span class="text-gray-900">+</span>`;
-      card.appendChild(header);
-
-      const body = document.createElement("div");
-      body.className = "accordion-body bg-gray-50";
-      
-      body.innerHTML = (cls.terms || []).map(term => {
-        const termUnlocked = term.number === 1 || today >= termUnlockDates[term.number];
-        return `
-          <div class="mb-4">
-            <h3 class="text-lg font-semibold text-blue-700 px-4 py-2">${term.title}</h3>
-            ${(term.categories || []).map(cat => `
-              <div class="ml-4 mb-2">
-                <h4 class="text-md font-semibold text-purple-600 px-3 py-1">${cat.name}</h4>
-                <ul class="space-y-2 pl-6">
-                  ${(cat.topics || []).map(topic => {
-                    const icon = cat.id === "mouse" ? "🖱️" : cat.id === "keyboard" ? "⌨️" : "📖";
-                    if (termUnlocked) {
-                      return `<li>
-                        <button 
-                          class="topicBtn block w-full text-left px-4 py-2 rounded-lg shadow text-gray-900 bg-white hover:shadow-md hover:bg-blue-50 transition flex items-center gap-2"
-                          data-title="${topic.title}"
-                          data-sample="${topic.sample}">
-                          <span>${icon}</span> ${topic.title}
-                        </button>
-                      </li>`;
-                    } else {
-                      return `<li>
-                        <span class="block px-4 py-2 rounded-lg shadow text-base bg-gray-200 text-gray-500 cursor-not-allowed flex items-center gap-2">
-                          <span>${icon}</span> ${topic.title} (Locked)
-                        </span>
-                      </li>`;
-                    }
-                  }).join("")}
-                </ul>
-              </div>
-            `).join("")}
-          </div>`;
-      }).join("");
-
-      card.appendChild(body);
-
-      header.addEventListener("click", () => {
-        const isOpen = body.style.maxHeight && body.style.maxHeight !== "0px";
-        container.querySelectorAll(".accordion-body").forEach(el => el.style.maxHeight = null);
-        container.querySelectorAll(".accordion-header span:last-child").forEach(icon => icon.style.transform = "rotate(0deg)");
-        if (!isOpen) {
-          body.style.maxHeight = body.scrollHeight + "px";
-          header.querySelector("span:last-child").style.transform = "rotate(45deg)";
-        }
-      });
-
-      container.appendChild(card);
-    });
-
-    // Attach topic buttons
-    container.addEventListener("click", e => {
-      if (e.target.closest(".topicBtn")) {
-        const btn = e.target.closest(".topicBtn");
-        lessonTitle.textContent = btn.dataset.title;
-        sampleText = btn.dataset.sample.toLowerCase();
-        currentIndex = 0;
-        errors = 0;
-        typedChars = 0;
-        startTime = null;
-        clearInterval(timerInterval);
-
-        renderText();
-        updateStats();
-
-        tutorModal.classList.remove("hidden");
-      }
-    });
-
-  } catch (err) {
-    console.error("Error loading JSON:", err);
-    container.innerHTML = '<p class="text-red-500">⚠️ Failed to load class data. Check console.</p>';
-  }
-
-  // Close modal
-  closeTutor.addEventListener("click", () => {
-    tutorModal.classList.add("hidden");
-  });
-
-  // External keyboard typing
-  document.addEventListener("keydown", e => {
-    if (!tutorModal.classList.contains("hidden")) {
-      const key = e.key.toLowerCase();
-      if (/^[a-z ]$/.test(key)) {
-        handleInput(key === " " ? " " : key);
-        const keyEl = [...keys].find(k => k.textContent === key || (key === " " && k.textContent === " "));
-        if (keyEl) {
-          keyEl.classList.add("active");
-          setTimeout(() => keyEl.classList.remove("active"), 150);
-        }
-      }
-    }
-  });
-
-});
-</script>
-
-</body>
-</html>
+</div>
