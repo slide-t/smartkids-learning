@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Typing Tutor</title>
+  <title>Typing Tutor Classes</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     .accordion-header { cursor: pointer; }
@@ -16,13 +16,13 @@
 <body class="bg-gray-100 min-h-screen flex flex-col">
 
   <!-- Header -->
-  <header class="bg-orange-600 text-white p-4 shadow-md flex items-center justify-center">
-    <h1 class="text-2xl font-bold">Typing Tutor</h1>
+  <header class="bg-orange-600 text-white p-4 shadow-md text-center">
+    <h1 class="text-2xl font-bold">Typing Tutor – Classes</h1>
   </header>
 
   <!-- Main -->
   <main class="flex-1 p-4 flex flex-col md:flex-row gap-4">
-
+    
     <!-- Accordion Sidebar -->
     <aside class="w-full md:w-1/3 bg-white shadow-md rounded-lg p-4 overflow-y-auto">
       <h2 class="text-lg font-bold mb-2">Lessons</h2>
@@ -43,93 +43,77 @@
     </section>
   </main>
 
-  <!-- JSON Data Embedded -->
   <script>
-    const lessonsData = {
-      "Year 1": {
-        "Term 1": [
-          { "title": "Home Row Keys", "content": "fff jjj fff jjj fjf jfj fjf jfj" },
-          { "title": "Basic Words", "content": "as df jk ll aj sd fj kl" }
-        ],
-        "Term 2": [
-          { "title": "Simple Words", "content": "cat dog jam bat sit top" },
-          { "title": "Short Sentences", "content": "The cat sat. The dog ran." }
-        ],
-        "Term 3": [
-          { "title": "Numbers Row", "content": "123 456 789 0" },
-          { "title": "Mixed Practice", "content": "abc 123 def 456" }
-        ]
-      },
-      "Year 2": {
-        "Term 1": [
-          { "title": "Word Practice", "content": "sun fun run pen men hen" },
-          { "title": "Sentence Practice", "content": "I run fast. We play ball." }
-        ],
-        "Term 2": [
-          { "title": "Paragraph Practice", "content": "Typing is fun. Keep practicing daily to improve." },
-          { "title": "Capital Letters", "content": "ABC DEF GHI JKL" }
-        ],
-        "Term 3": [
-          { "title": "Punctuation Keys", "content": ".,!?;: () [] {}" },
-          { "title": "Speed Drills", "content": "The quick brown fox jumps over the lazy dog." }
-        ]
-      }
-    };
+    let lessonsData = null;
 
-    // Render Accordion
-    const accordion = document.getElementById("accordion");
+    // Fetch external JSON file
+    fetch("data/classes.json")
+      .then(res => res.json())
+      .then(data => {
+        lessonsData = data.classes;
+        renderAccordion();
+      })
+      .catch(err => console.error("Error loading JSON:", err));
 
-    Object.keys(lessonsData).forEach((year, yIndex) => {
-      const yearDiv = document.createElement("div");
-      yearDiv.className = "mb-2 border rounded-md";
+    // Render Accordion from JSON
+    function renderAccordion() {
+      const accordion = document.getElementById("accordion");
+      accordion.innerHTML = "";
 
-      const yearHeader = document.createElement("div");
-      yearHeader.className = "accordion-header flex justify-between items-center bg-gray-200 px-4 py-2 font-bold";
-      yearHeader.innerHTML = `${year} <span class="chevron">▶</span>`;
-      yearHeader.onclick = () => {
-        yearContent.classList.toggle("active");
-        chevron.classList.toggle("rotate");
-      };
+      lessonsData.forEach(year => {
+        const yearDiv = document.createElement("div");
+        yearDiv.className = "mb-2 border rounded-md";
 
-      const chevron = yearHeader.querySelector(".chevron");
-      const yearContent = document.createElement("div");
-      yearContent.className = "accordion-content px-4 pb-2";
-
-      Object.keys(lessonsData[year]).forEach(term => {
-        const termDiv = document.createElement("div");
-        termDiv.className = "mb-2";
-
-        const termHeader = document.createElement("div");
-        termHeader.className = "accordion-header flex justify-between items-center bg-gray-100 px-3 py-1 font-semibold cursor-pointer";
-        termHeader.innerHTML = `${term} <span class="chevron">▶</span>`;
-        termHeader.onclick = () => {
-          termContent.classList.toggle("active");
-          termChevron.classList.toggle("rotate");
+        const yearHeader = document.createElement("div");
+        yearHeader.className = "accordion-header flex justify-between items-center bg-gray-200 px-4 py-2 font-bold";
+        yearHeader.innerHTML = `${year.name} <span class="chevron">▶</span>`;
+        yearHeader.onclick = () => {
+          yearContent.classList.toggle("active");
+          chevron.classList.toggle("rotate");
         };
 
-        const termChevron = termHeader.querySelector(".chevron");
-        const termContent = document.createElement("div");
-        termContent.className = "accordion-content pl-4 pb-1";
+        const chevron = yearHeader.querySelector(".chevron");
+        const yearContent = document.createElement("div");
+        yearContent.className = "accordion-content px-4 pb-2";
 
-        lessonsData[year][term].forEach(lesson => {
-          const btn = document.createElement("button");
-          btn.className = "block w-full text-left px-3 py-1 mt-1 rounded-md bg-gray-50 hover:bg-orange-200";
-          btn.innerText = lesson.title;
-          btn.onclick = () => loadLesson(lesson.title, lesson.content);
-          termContent.appendChild(btn);
+        year.terms.forEach(term => {
+          const termDiv = document.createElement("div");
+          termDiv.className = "mb-2";
+
+          const termHeader = document.createElement("div");
+          termHeader.className = "accordion-header flex justify-between items-center bg-gray-100 px-3 py-1 font-semibold cursor-pointer";
+          termHeader.innerHTML = `${term.title} <span class="chevron">▶</span>`;
+          termHeader.onclick = () => {
+            termContent.classList.toggle("active");
+            termChevron.classList.toggle("rotate");
+          };
+
+          const termChevron = termHeader.querySelector(".chevron");
+          const termContent = document.createElement("div");
+          termContent.className = "accordion-content pl-4 pb-1";
+
+          term.categories.forEach(cat => {
+            cat.topics.forEach(topic => {
+              const btn = document.createElement("button");
+              btn.className = "block w-full text-left px-3 py-1 mt-1 rounded-md bg-gray-50 hover:bg-orange-200";
+              btn.innerText = topic.title;
+              btn.onclick = () => loadLesson(topic.title, topic.content); // <-- use content directly
+              termContent.appendChild(btn);
+            });
+          });
+
+          termDiv.appendChild(termHeader);
+          termDiv.appendChild(termContent);
+          yearContent.appendChild(termDiv);
         });
 
-        termDiv.appendChild(termHeader);
-        termDiv.appendChild(termContent);
-        yearContent.appendChild(termDiv);
+        yearDiv.appendChild(yearHeader);
+        yearDiv.appendChild(yearContent);
+        accordion.appendChild(yearDiv);
       });
+    }
 
-      yearDiv.appendChild(yearHeader);
-      yearDiv.appendChild(yearContent);
-      accordion.appendChild(yearDiv);
-    });
-
-    // Load Lesson
+    // Load Lesson into Typing Tutor
     function loadLesson(title, content) {
       document.getElementById("lesson-title").innerText = title;
       document.getElementById("lesson-text").innerText = content;
