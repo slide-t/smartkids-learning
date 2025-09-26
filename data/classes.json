@@ -1,30 +1,146 @@
 {
-  "Year 1": {
-    "Term 1": [
-      { "title": "Home Row Keys", "content": "fff jjj fff jjj fjf jfj fjf jfj" },
-      { "title": "Basic Words", "content": "as df jk ll aj sd fj kl" }
-    ],
-    "Term 2": [
-      { "title": "Upper Row Keys", "content": "qqq www eee rrr ttt yyy" },
-      { "title": "Numbers Practice", "content": "111 222 333 444 555" }
-    ],
-    "Term 3": [
-      { "title": "Short Sentences", "content": "The cat sat. The dog ran." },
-      { "title": "Fun Practice", "content": "Run to the sun. Jump up high." }
-    ]
-  },
-  "Year 2": {
-    "Term 1": [
-      { "title": "Simple Words", "content": "cat dog jam bat sit top" },
-      { "title": "Short Sentences", "content": "I can run. We can play." }
-    ],
-    "Term 2": [
-      { "title": "Longer Words", "content": "apple table chair happy" },
-      { "title": "Practice Sentences", "content": "The apple is red. I like my chair." }
-    ],
-    "Term 3": [
-      { "title": "Paragraph Practice", "content": "The sun is bright. We play outside. It is fun to run and jump." },
-      { "title": "Story Time", "content": "The cat ran fast. The dog sat down. They are friends." }
-    ]
-  }
+  "classes": [
+    {
+      "name": "Year 1",
+      "terms": [
+        {
+          "number": 1,
+          "title": "Term 1",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard Practice",
+              "topics": [
+                { "title": "Home Row Keys" },
+                { "title": "Basic Words" }
+              ]
+            },
+            {
+              "id": "mouse",
+              "name": "Mouse Practice",
+              "topics": [
+                { "title": "Click and Drag" },
+                { "title": "Double Click Fun" }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "title": "Term 2",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard Practice",
+              "topics": [
+                { "title": "Upper Row Keys" },
+                { "title": "Numbers Practice" }
+              ]
+            },
+            {
+              "id": "mouse",
+              "name": "Mouse Practice",
+              "topics": [
+                { "title": "Drag Shapes" },
+                { "title": "Paint with Mouse" }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 3,
+          "title": "Term 3",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard Practice",
+              "topics": [
+                { "title": "Short Sentences" },
+                { "title": "Fun Practice" }
+              ]
+            },
+            {
+              "id": "mouse",
+              "name": "Mouse Practice",
+              "topics": [
+                { "title": "Maze Challenge" },
+                { "title": "Click the Balloon" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Year 2",
+      "terms": [
+        {
+          "number": 1,
+          "title": "Term 1",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard Practice",
+              "topics": [
+                { "title": "Simple Words" },
+                { "title": "Short Sentences" }
+              ]
+            },
+            {
+              "id": "mouse",
+              "name": "Mouse Practice",
+              "topics": [
+                { "title": "Point and Click" },
+                { "title": "Match the Pairs" }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "title": "Term 2",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard Practice",
+              "topics": [
+                { "title": "Longer Words" },
+                { "title": "Practice Sentences" }
+              ]
+            },
+            {
+              "id": "mouse",
+              "name": "Mouse Practice",
+              "topics": [
+                { "title": "Coloring Game" },
+                { "title": "Catch the Object" }
+              ]
+            }
+          ]
+        },
+        {
+          "number": 3,
+          "title": "Term 3",
+          "categories": [
+            {
+              "id": "keyboard",
+              "name": "Keyboard Practice",
+              "topics": [
+                { "title": "Paragraph Practice" },
+                { "title": "Story Time" }
+              ]
+            },
+            {
+              "id": "mouse",
+              "name": "Mouse Practice",
+              "topics": [
+                { "title": "Puzzle Game" },
+                { "title": "Shape Builder" }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
