@@ -62,7 +62,12 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <ul class="space-y-2 pl-6">
                   ${(cat.topics || []).map(topic => {
                     // Build link dynamically based on category id
-                    const link = termUnlocked ? `games/${cat.id}/${cat.id}.html` : "#";
+                    
+                    
+                         /* const link = termUnlocked ? `games/${cat.id}/${cat.id}.html` : "#";*/
+                    const link = termUnlocked 
+  ? `typing-tutor.html?year=${encodeURIComponent(cls.name)}&term=${encodeURIComponent(term.title)}&lesson=${encodeURIComponent(topic.title)}` 
+  : "#";
                     const icon = cat.id === "mouse" ? "🖱️" : cat.id === "keyboard" ? "⌨️" : "📖";
 
                     if (termUnlocked) {
