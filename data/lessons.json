@@ -1,66 +1,27 @@
 {
-  "classes": [
+  "years": [
     {
       "name": "Year 1",
       "terms": [
         {
-          "number": 1,
           "title": "Term 1",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard Practice",
-              "topics": [
-                {
-                  "title": "Home Row Keys",
-                  "link": "typing-tutor.html?year=Year%201&term=Term%201&lesson=Home%20Row%20Keys"
-                },
-                {
-                  "title": "Basic Words",
-                  "link": "typing-tutor.html?year=Year%201&term=Term%201&lesson=Basic%20Words"
-                }
-              ]
-            }
+          "topics": [
+            { "title": "Home Row Keys", "link": "typing-tutor.html?year=Year%201&term=Term%201&lesson=Home%20Row%20Keys" },
+            { "title": "Basic Words", "link": "typing-tutor.html?year=Year%201&term=Term%201&lesson=Basic%20Words" }
           ]
         },
         {
-          "number": 2,
           "title": "Term 2",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard Practice",
-              "topics": [
-                {
-                  "title": "Simple Words",
-                  "link": "typing-tutor.html?year=Year%201&term=Term%202&lesson=Simple%20Words"
-                },
-                {
-                  "title": "Short Sentences",
-                  "link": "typing-tutor.html?year=Year%201&term=Term%202&lesson=Short%20Sentences"
-                }
-              ]
-            }
+          "topics": [
+            { "title": "Simple Words", "link": "typing-tutor.html?year=Year%201&term=Term%202&lesson=Simple%20Words" },
+            { "title": "Short Sentences", "link": "typing-tutor.html?year=Year%201&term=Term%202&lesson=Short%20Sentences" }
           ]
         },
         {
-          "number": 3,
           "title": "Term 3",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard Practice",
-              "topics": [
-                {
-                  "title": "Numbers Row",
-                  "link": "typing-tutor.html?year=Year%201&term=Term%203&lesson=Numbers%20Row"
-                },
-                {
-                  "title": "Mixed Practice",
-                  "link": "typing-tutor.html?year=Year%201&term=Term%203&lesson=Mixed%20Practice"
-                }
-              ]
-            }
+          "topics": [
+            { "title": "Numbers Row", "link": "typing-tutor.html?year=Year%201&term=Term%203&lesson=Numbers%20Row" },
+            { "title": "Mixed Practice", "link": "typing-tutor.html?year=Year%201&term=Term%203&lesson=Mixed%20Practice" }
           ]
         }
       ]
@@ -69,63 +30,24 @@
       "name": "Year 2",
       "terms": [
         {
-          "number": 1,
           "title": "Term 1",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard Practice",
-              "topics": [
-                {
-                  "title": "Word Practice",
-                  "link": "typing-tutor.html?year=Year%202&term=Term%201&lesson=Word%20Practice"
-                },
-                {
-                  "title": "Sentence Practice",
-                  "link": "typing-tutor.html?year=Year%202&term=Term%201&lesson=Sentence%20Practice"
-                }
-              ]
-            }
+          "topics": [
+            { "title": "Word Practice", "link": "typing-tutor.html?year=Year%202&term=Term%201&lesson=Word%20Practice" },
+            { "title": "Sentence Practice", "link": "typing-tutor.html?year=Year%202&term=Term%201&lesson=Sentence%20Practice" }
           ]
         },
         {
-          "number": 2,
           "title": "Term 2",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard Practice",
-              "topics": [
-                {
-                  "title": "Paragraph Practice",
-                  "link": "typing-tutor.html?year=Year%202&term=Term%202&lesson=Paragraph%20Practice"
-                },
-                {
-                  "title": "Capital Letters",
-                  "link": "typing-tutor.html?year=Year%202&term=Term%202&lesson=Capital%20Letters"
-                }
-              ]
-            }
+          "topics": [
+            { "title": "Paragraph Practice", "link": "typing-tutor.html?year=Year%202&term=Term%202&lesson=Paragraph%20Practice" },
+            { "title": "Capital Letters", "link": "typing-tutor.html?year=Year%202&term=Term%202&lesson=Capital%20Letters" }
           ]
         },
         {
-          "number": 3,
           "title": "Term 3",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard Practice",
-              "topics": [
-                {
-                  "title": "Punctuation Keys",
-                  "link": "typing-tutor.html?year=Year%202&term=Term%203&lesson=Punctuation%20Keys"
-                },
-                {
-                  "title": "Speed Drills",
-                  "link": "typing-tutor.html?year=Year%202&term=Term%203&lesson=Speed%20Drills"
-                }
-              ]
-            }
+          "topics": [
+            { "title": "Punctuation Keys", "link": "typing-tutor.html?year=Year%202&term=Term%203&lesson=Punctuation%20Keys" },
+            { "title": "Speed Drills", "link": "typing-tutor.html?year=Year%202&term=Term%203&lesson=Speed%20Drills" }
           ]
         }
       ]
@@ -134,63 +56,24 @@
       "name": "Year 3",
       "terms": [
         {
-          "number": 1,
           "title": "Term 1",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard Mastery",
-              "topics": [
-                {
-                  "title": "Shift Key Practice",
-                  "link": "typing-tutor.html?year=Year%203&term=Term%201&lesson=Shift%20Key%20Practice"
-                },
-                {
-                  "title": "Symbols",
-                  "link": "typing-tutor.html?year=Year%203&term=Term%201&lesson=Symbols"
-                }
-              ]
-            }
+          "topics": [
+            { "title": "Shift Key Practice", "link": "typing-tutor.html?year=Year%203&term=Term%201&lesson=Shift%20Key%20Practice" },
+            { "title": "Symbols", "link": "typing-tutor.html?year=Year%203&term=Term%201&lesson=Symbols" }
           ]
         },
         {
-          "number": 2,
           "title": "Term 2",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard Mastery",
-              "topics": [
-                {
-                  "title": "Numbers & Symbols",
-                  "link": "typing-tutor.html?year=Year%203&term=Term%202&lesson=Numbers%20and%20Symbols"
-                },
-                {
-                  "title": "Quotes & Apostrophes",
-                  "link": "typing-tutor.html?year=Year%203&term=Term%202&lesson=Quotes%20and%20Apostrophes"
-                }
-              ]
-            }
+          "topics": [
+            { "title": "Numbers & Symbols", "link": "typing-tutor.html?year=Year%203&term=Term%202&lesson=Numbers%20and%20Symbols" },
+            { "title": "Quotes & Apostrophes", "link": "typing-tutor.html?year=Year%203&term=Term%202&lesson=Quotes%20and%20Apostrophes" }
           ]
         },
         {
-          "number": 3,
           "title": "Term 3",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Keyboard Mastery",
-              "topics": [
-                {
-                  "title": "Advanced Words",
-                  "link": "typing-tutor.html?year=Year%203&term=Term%203&lesson=Advanced%20Words"
-                },
-                {
-                  "title": "Typing Speed Test",
-                  "link": "typing-tutor.html?year=Year%203&term=Term%203&lesson=Typing%20Speed%20Test"
-                }
-              ]
-            }
+          "topics": [
+            { "title": "Advanced Words", "link": "typing-tutor.html?year=Year%203&term=Term%203&lesson=Advanced%20Words" },
+            { "title": "Typing Speed Test", "link": "typing-tutor.html?year=Year%203&term=Term%203&lesson=Typing%20Speed%20Test" }
           ]
         }
       ]
@@ -199,63 +82,24 @@
       "name": "Year 4",
       "terms": [
         {
-          "number": 1,
           "title": "Term 1",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Typing Skills",
-              "topics": [
-                {
-                  "title": "Text Copy Practice",
-                  "link": "typing-tutor.html?year=Year%204&term=Term%201&lesson=Text%20Copy%20Practice"
-                },
-                {
-                  "title": "Accuracy Drills",
-                  "link": "typing-tutor.html?year=Year%204&term=Term%201&lesson=Accuracy%20Drills"
-                }
-              ]
-            }
+          "topics": [
+            { "title": "Text Copy Practice", "link": "typing-tutor.html?year=Year%204&term=Term%201&lesson=Text%20Copy%20Practice" },
+            { "title": "Accuracy Drills", "link": "typing-tutor.html?year=Year%204&term=Term%201&lesson=Accuracy%20Drills" }
           ]
         },
         {
-          "number": 2,
           "title": "Term 2",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Typing Skills",
-              "topics": [
-                {
-                  "title": "Timed Lessons",
-                  "link": "typing-tutor.html?year=Year%204&term=Term%202&lesson=Timed%20Lessons"
-                },
-                {
-                  "title": "Dictation Typing",
-                  "link": "typing-tutor.html?year=Year%204&term=Term%202&lesson=Dictation%20Typing"
-                }
-              ]
-            }
+          "topics": [
+            { "title": "Timed Lessons", "link": "typing-tutor.html?year=Year%204&term=Term%202&lesson=Timed%20Lessons" },
+            { "title": "Dictation Typing", "link": "typing-tutor.html?year=Year%204&term=Term%202&lesson=Dictation%20Typing" }
           ]
         },
         {
-          "number": 3,
           "title": "Term 3",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Typing Skills",
-              "topics": [
-                {
-                  "title": "Creative Writing",
-                  "link": "typing-tutor.html?year=Year%204&term=Term%203&lesson=Creative%20Writing"
-                },
-                {
-                  "title": "Speed vs Accuracy",
-                  "link": "typing-tutor.html?year=Year%204&term=Term%203&lesson=Speed%20vs%20Accuracy"
-                }
-              ]
-            }
+          "topics": [
+            { "title": "Creative Writing", "link": "typing-tutor.html?year=Year%204&term=Term%203&lesson=Creative%20Writing" },
+            { "title": "Speed vs Accuracy", "link": "typing-tutor.html?year=Year%204&term=Term%203&lesson=Speed%20vs%20Accuracy" }
           ]
         }
       ]
@@ -264,63 +108,24 @@
       "name": "Year 5",
       "terms": [
         {
-          "number": 1,
           "title": "Term 1",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Advanced Typing",
-              "topics": [
-                {
-                  "title": "Essay Typing",
-                  "link": "typing-tutor.html?year=Year%205&term=Term%201&lesson=Essay%20Typing"
-                },
-                {
-                  "title": "Report Typing",
-                  "link": "typing-tutor.html?year=Year%205&term=Term%201&lesson=Report%20Typing"
-                }
-              ]
-            }
+          "topics": [
+            { "title": "Essay Typing", "link": "typing-tutor.html?year=Year%205&term=Term%201&lesson=Essay%20Typing" },
+            { "title": "Report Typing", "link": "typing-tutor.html?year=Year%205&term=Term%201&lesson=Report%20Typing" }
           ]
         },
         {
-          "number": 2,
           "title": "Term 2",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Advanced Typing",
-              "topics": [
-                {
-                  "title": "Email Practice",
-                  "link": "typing-tutor.html?year=Year%205&term=Term%202&lesson=Email%20Practice"
-                },
-                {
-                  "title": "Formal Letters",
-                  "link": "typing-tutor.html?year=Year%205&term=Term%202&lesson=Formal%20Letters"
-                }
-              ]
-            }
+          "topics": [
+            { "title": "Email Practice", "link": "typing-tutor.html?year=Year%205&term=Term%202&lesson=Email%20Practice" },
+            { "title": "Formal Letters", "link": "typing-tutor.html?year=Year%205&term=Term%202&lesson=Formal%20Letters" }
           ]
         },
         {
-          "number": 3,
           "title": "Term 3",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Advanced Typing",
-              "topics": [
-                {
-                  "title": "Speed Essay",
-                  "link": "typing-tutor.html?year=Year%205&term=Term%203&lesson=Speed%20Essay"
-                },
-                {
-                  "title": "Typing Contest",
-                  "link": "typing-tutor.html?year=Year%205&term=Term%203&lesson=Typing%20Contest"
-                }
-              ]
-            }
+          "topics": [
+            { "title": "Speed Essay", "link": "typing-tutor.html?year=Year%205&term=Term%203&lesson=Speed%20Essay" },
+            { "title": "Typing Contest", "link": "typing-tutor.html?year=Year%205&term=Term%203&lesson=Typing%20Contest" }
           ]
         }
       ]
@@ -329,63 +134,24 @@
       "name": "Year 6",
       "terms": [
         {
-          "number": 1,
           "title": "Term 1",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Proficiency Typing",
-              "topics": [
-                {
-                  "title": "Research Practice",
-                  "link": "typing-tutor.html?year=Year%206&term=Term%201&lesson=Research%20Practice"
-                },
-                {
-                  "title": "Typing Challenges",
-                  "link": "typing-tutor.html?year=Year%206&term=Term%201&lesson=Typing%20Challenges"
-                }
-              ]
-            }
+          "topics": [
+            { "title": "Research Practice", "link": "typing-tutor.html?year=Year%206&term=Term%201&lesson=Research%20Practice" },
+            { "title": "Typing Challenges", "link": "typing-tutor.html?year=Year%206&term=Term%201&lesson=Typing%20Challenges" }
           ]
         },
         {
-          "number": 2,
           "title": "Term 2",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Proficiency Typing",
-              "topics": [
-                {
-                  "title": "Transcription Practice",
-                  "link": "typing-tutor.html?year=Year%206&term=Term%202&lesson=Transcription%20Practice"
-                },
-                {
-                  "title": "Fast Writing",
-                  "link": "typing-tutor.html?year=Year%206&term=Term%202&lesson=Fast%20Writing"
-                }
-              ]
-            }
+          "topics": [
+            { "title": "Transcription Practice", "link": "typing-tutor.html?year=Year%206&term=Term%202&lesson=Transcription%20Practice" },
+            { "title": "Fast Writing", "link": "typing-tutor.html?year=Year%206&term=Term%202&lesson=Fast%20Writing" }
           ]
         },
         {
-          "number": 3,
           "title": "Term 3",
-          "categories": [
-            {
-              "id": "keyboard",
-              "name": "Proficiency Typing",
-              "topics": [
-                {
-                  "title": "Professional Documents",
-                  "link": "typing-tutor.html?year=Year%206&term=Term%203&lesson=Professional%20Documents"
-                },
-                {
-                  "title": "Final Speed Test",
-                  "link": "typing-tutor.html?year=Year%206&term=Term%203&lesson=Final%20Speed%20Test"
-                }
-              ]
-            }
+          "topics": [
+            { "title": "Professional Documents", "link": "typing-tutor.html?year=Year%206&term=Term%203&lesson=Professional%20Documents" },
+            { "title": "Final Speed Test", "link": "typing-tutor.html?year=Year%206&term=Term%203&lesson=Final%20Speed%20Test" }
           ]
         }
       ]
