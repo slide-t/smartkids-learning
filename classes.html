@@ -30,6 +30,16 @@
     .correct { color: green; }
     .incorrect { color: red; text-decoration: underline; }
     .current { text-decoration: underline; text-decoration-thickness: 2px; }
+
+    .key.highlight {
+  background: #3498db !important;
+  color: #fff !important;
+}
+
+.key.pressed {
+  border: 2px solid white !important;
+  box-shadow: 0 0 8px white;
+}
   </style>
 </head>
 <body class="bg-gray-50 text-gray-900 font-sans">
@@ -67,7 +77,13 @@
       <span>Errors: <span id="errors">0</span></span>
       <span>Accuracy: <span id="accuracy">100</span>%</span>
     </div>
+<div class="flex justify-between mt-4">
+  <button id="btnPrev" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">⬅ Prev</button>
+  <button id="btnRestart" class="px-4 py-2 bg-yellow-200 rounded hover:bg-yellow-300">🔄 Restart</button>
+  <button id="btnNext" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Next ➡</button>
+</div>
 
+    
     <!-- Virtual Keyboard -->
     <div id="keyboard" class="p-2 bg-gray-200 rounded">
       <div>
@@ -85,7 +101,244 @@
     </div>
   </div>
 </div>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  const container = document.getElementById("accordion");
+  const today = new Date();
+  const termUnlockDates = { 2: new Date("2026-01-04"), 3: new Date("2026-04-20") };
 
+  // Modal elements
+  const tutorModal = document.getElementById("tutorModal");
+  const closeTutor = document.getElementById("closeTutor");
+  const lessonTitle = document.getElementById("lessonTitle");
+  const lessonText = document.getElementById("lessonText");
+  const typingArea = document.getElementById("typingArea");
+  const keys = document.querySelectorAll(".key");
+
+  // Stats
+  const wpmEl = document.getElementById("wpm");
+  const errorsEl = document.getElementById("errors");
+  const accuracyEl = document.getElementById("accuracy");
+
+  // Navigation buttons (add these in your modal footer)
+  const btnPrev = document.getElementById("btnPrev");
+  const btnNext = document.getElementById("btnNext");
+  const btnRestart = document.getElementById("btnRestart");
+
+  let sampleText = "";
+  let startTime = null;
+  let errors = 0;
+  let currentTopics = [];
+  let currentIndex = 0;
+
+  // Highlight renderer
+  function renderHighlightedText(sample, typed) {
+    let result = "";
+    for (let i = 0; i < sample.length; i++) {
+      if (i < typed.length) {
+        result += sample[i] === typed[i]
+          ? `<span class="text-green-600 underline">${sample[i]}</span>`
+          : `<span class="text-red-600 underline">${sample[i]}</span>`;
+      } else if (i === typed.length) {
+        result += `<span class="current underline">${sample[i]}</span>`;
+      } else {
+        result += `<span class="text-gray-700">${sample[i]}</span>`;
+      }
+    }
+    return result;
+  }
+
+  // Update stats while typing
+  function updateStats(typed) {
+    if (!startTime) startTime = new Date();
+
+    // Count errors
+    errors = 0;
+    for (let i = 0; i < typed.length; i++) {
+      if (typed[i] !== sampleText[i]) errors++;
+    }
+
+    // WPM
+    const elapsedMinutes = (new Date() - startTime) / 60000;
+    const words = typed.trim().split(/\s+/).filter(Boolean).length;
+    const wpm = elapsedMinutes > 0 ? Math.round(words / elapsedMinutes) : 0;
+
+    // Accuracy
+    const accuracy = typed.length > 0
+      ? Math.max(0, Math.round(((typed.length - errors) / typed.length) * 100))
+      : 100;
+
+    wpmEl.textContent = wpm;
+    errorsEl.textContent = errors;
+    accuracyEl.textContent = accuracy;
+  }
+
+  // Reset and load a topic
+  function loadTopic(topic) {
+    lessonTitle.textContent = topic.dataset.title;
+    sampleText = topic.dataset.sample.toLowerCase();
+    typingArea.value = "";
+    lessonText.innerHTML = renderHighlightedText(sampleText, "");
+    startTime = null;
+    errors = 0;
+    wpmEl.textContent = 0;
+    errorsEl.textContent = 0;
+    accuracyEl.textContent = 100;
+    tutorModal.classList.remove("hidden");
+
+    // highlight first expected key
+    highlightNextKey(sampleText[0]);
+  }
+
+  // Reset keyboard highlights
+  function resetKeyboardHighlights() {
+    keys.forEach(k => k.classList.remove("highlight"));
+  }
+
+  // Highlight expected next key (blue background)
+  function highlightNextKey(nextChar) {
+    resetKeyboardHighlights();
+    if (!nextChar) return;
+    const keyEl = document.getElementById("key-" + nextChar.toLowerCase());
+    if (keyEl) keyEl.classList.add("highlight");
+  }
+
+  // Typing listener
+  typingArea.addEventListener("input", () => {
+    const typed = typingArea.value;
+    lessonText.innerHTML = renderHighlightedText(sampleText, typed);
+    updateStats(typed);
+
+    // Highlight the next expected key
+    const nextChar = sampleText[typed.length] || null;
+    highlightNextKey(nextChar);
+  });
+
+  // Physical keyboard flash (white glow)
+  document.addEventListener("keydown", e => {
+    if (tutorModal.classList.contains("hidden")) return;
+    const key = e.key.toLowerCase();
+    const keyEl = document.getElementById("key-" + key);
+    if (keyEl) {
+      keyEl.classList.add("pressed");
+      setTimeout(() => keyEl.classList.remove("pressed"), 150);
+    }
+  });
+
+  // Load JSON and build accordion
+  try {
+    const res = await fetch("data/classes.json");
+    const data = await res.json();
+    const classes = Array.isArray(data) ? data : data.classes;
+
+    classes.forEach(cls => {
+      const card = document.createElement("div");
+      card.className = "bg-white rounded-xl shadow-md overflow-hidden mb-4";
+
+      const header = document.createElement("button");
+      header.className = "accordion-header w-full flex justify-between items-center px-6 py-4 text-lg font-semibold bg-blue-100 hover:bg-blue-200 transition";
+      header.innerHTML = `<span class="text-gray-900">${cls.name}</span><span class="text-gray-900">+</span>`;
+      card.appendChild(header);
+
+      const body = document.createElement("div");
+      body.className = "accordion-body bg-gray-50";
+
+      body.innerHTML = (cls.terms || []).map(term => {
+        const termUnlocked = term.number === 1 || today >= termUnlockDates[term.number];
+        return `
+          <div class="mb-4">
+            <h3 class="text-lg font-semibold text-blue-700 px-4 py-2">${term.title}</h3>
+            ${(term.categories || []).map(cat => `
+              <div class="ml-4 mb-2">
+                <h4 class="text-md font-semibold text-purple-600 px-3 py-1">${cat.name}</h4>
+                <ul class="space-y-2 pl-6">
+                  ${(cat.topics || []).map(topic => {
+                    const icon = cat.id === "mouse" ? "🖱️" : cat.id === "keyboard" ? "⌨️" : "📖";
+                    if (termUnlocked) {
+                      return `<li>
+                        <button class="topicBtn block w-full text-left px-4 py-2 rounded-lg shadow text-gray-900 bg-white hover:shadow-md hover:bg-blue-50 transition flex items-center gap-2"
+                          data-title="${topic.title}"
+                          data-sample="${topic.sample}">
+                          <span>${icon}</span> ${topic.title}
+                        </button>
+                      </li>`;
+                    } else {
+                      return `<li>
+                        <span class="block px-4 py-2 rounded-lg shadow text-base bg-gray-200 text-gray-500 cursor-not-allowed flex items-center gap-2">
+                          <span>${icon}</span> ${topic.title} (Locked)
+                        </span>
+                      </li>`;
+                    }
+                  }).join("")}
+                </ul>
+              </div>
+            `).join("")}
+          </div>`;
+      }).join("");
+
+      card.appendChild(body);
+
+      header.addEventListener("click", () => {
+        const isOpen = body.style.maxHeight && body.style.maxHeight !== "0px";
+        container.querySelectorAll(".accordion-body").forEach(el => el.style.maxHeight = null);
+        container.querySelectorAll(".accordion-header span:last-child").forEach(icon => icon.style.transform = "rotate(0deg)");
+        if (!isOpen) {
+          body.style.maxHeight = body.scrollHeight + "px";
+          header.querySelector("span:last-child").style.transform = "rotate(45deg)";
+        }
+      });
+
+      container.appendChild(card);
+    });
+
+    // Open topic
+    container.addEventListener("click", e => {
+      if (e.target.closest(".topicBtn")) {
+        const btn = e.target.closest(".topicBtn");
+
+        // gather topics in same term
+        currentTopics = [...btn.closest("ul").querySelectorAll(".topicBtn")];
+        currentIndex = currentTopics.indexOf(btn);
+
+        loadTopic(btn);
+      }
+    });
+
+  } catch (err) {
+    console.error("Error loading JSON:", err);
+    container.innerHTML = '<p class="text-red-500">⚠️ Failed to load class data.</p>';
+  }
+
+  // Close modal
+  closeTutor.addEventListener("click", () => {
+    tutorModal.classList.add("hidden");
+  });
+
+  // Navigation buttons
+  btnNext.addEventListener("click", () => {
+    if (currentIndex < currentTopics.length - 1) {
+      currentIndex++;
+      loadTopic(currentTopics[currentIndex]);
+    }
+  });
+
+  btnPrev.addEventListener("click", () => {
+    if (currentIndex > 0) {
+      currentIndex--;
+      loadTopic(currentTopics[currentIndex]);
+    }
+  });
+
+  btnRestart.addEventListener("click", () => {
+    if (currentTopics.length > 0) {
+      loadTopic(currentTopics[currentIndex]);
+    }
+  });
+});
+</script>
+
+
+  <!--
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   const container = document.getElementById("accordion");
@@ -277,7 +530,7 @@ document.addEventListener("keyup", e => {
   });
 });
 </script>
-
+-->
 
 </body>
 </html>
