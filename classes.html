@@ -57,21 +57,191 @@
     <h2 class="text-3xl font-bold text-center mb-8">Select Your Class</h2>
     <div id="accordion" class="space-y-4"></div>
   </main>
-
-
 <!-- Typing Tutor Modal -->
+<div id="typingModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+  <div class="bg-white rounded-xl p-6 max-w-3xl w-full shadow-lg">
+    <h2 class="text-xl font-bold mb-4">Typing Tutor</h2>
+    <div id="typingText" class="text-lg mb-4">Type this sentence correctly.</div>
+    <input id="typingInput" type="text" class="border p-2 w-full mb-4 rounded" autofocus />
+
+    <!-- Virtual Keyboard -->
+    <div id="virtualKeyboard" class="mb-4"></div>
+
+    <!-- Score / WPM -->
+    <div class="flex justify-between text-sm mb-4">
+      <div>Score: <span id="score">0</span></div>
+      <div>Errors: <span id="errors">0</span></div>
+      <div>WPM: <span id="wpm">0</span></div>
+    </div>
+
+    <!-- Controls -->
+    <div class="flex justify-end gap-3">
+      <button id="prevBtn" class="bg-gray-300 hover:bg-gray-400 text-black px-3 py-1 rounded">Previous</button>
+      <button id="nextBtn" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded">Next</button>
+      <button id="restartBtn" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">Restart</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  #virtualKeyboard {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    user-select: none;
+  }
+  .key-row {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+  }
+  .key {
+    border: 2px solid #ccc;
+    border-radius: 6px;
+    padding: 10px 14px;
+    min-width: 40px;
+    text-align: center;
+    font-weight: 500;
+    transition: all 0.15s ease-in-out;
+  }
+  .key.highlight {
+    border-color: white;
+    background: blue;
+    color: white;
+    box-shadow: 0 0 12px white;
+  }
+  .key.flash {
+    animation: flash 0.3s ease;
+  }
+  @keyframes flash {
+    0% { box-shadow: 0 0 4px white; }
+    50% { box-shadow: 0 0 18px white; }
+    100% { box-shadow: 0 0 4px white; }
+  }
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const typingText = document.getElementById("typingText");
+  const typingInput = document.getElementById("typingInput");
+  const scoreEl = document.getElementById("score");
+  const errorsEl = document.getElementById("errors");
+  const wpmEl = document.getElementById("wpm");
+
+  let score = 0, errors = 0, startTime = null;
+
+  // Keyboard Layout (no function keys)
+  const keyboardLayout = [
+    ["`","1","2","3","4","5","6","7","8","9","0","-","=","Backspace"],
+    ["Tab","q","w","e","r","t","y","u","i","o","p","[","]","\\"],
+    ["CapsLock","a","s","d","f","g","h","j","k","l",";","'","Enter"],
+    ["Shift","z","x","c","v","b","n","m",",",".","/","Shift"],
+    ["Space"]
+  ];
+
+  // Build Virtual Keyboard
+  const vk = document.getElementById("virtualKeyboard");
+  keyboardLayout.forEach(row => {
+    const rowDiv = document.createElement("div");
+    rowDiv.classList.add("key-row");
+    row.forEach(key => {
+      const keyDiv = document.createElement("div");
+      keyDiv.classList.add("key");
+      keyDiv.id = "key-" + key.toLowerCase();
+      keyDiv.textContent = key;
+      rowDiv.appendChild(keyDiv);
+    });
+    vk.appendChild(rowDiv);
+  });
+
+  // Typing Input Handler
+  typingInput.addEventListener("input", () => {
+    if (!startTime) startTime = new Date();
+    const typed = typingInput.value;
+    const expected = typingText.textContent.substring(0, typed.length);
+    const nextChar = typingText.textContent.charAt(typed.length);
+
+    // Remove old highlights
+    document.querySelectorAll(".key").forEach(k => k.classList.remove("highlight"));
+
+    // Highlight next char
+    if (nextChar) {
+      let id = "key-" + nextChar.toLowerCase();
+      if (nextChar === " ") id = "key-space";
+      if (nextChar === "\n") id = "key-enter";
+      const keyEl = document.getElementById(id);
+      if (keyEl) keyEl.classList.add("highlight","flash");
+    }
+
+    if (typed === expected) {
+      score++;
+      scoreEl.textContent = score;
+    } else {
+      errors++;
+      errorsEl.textContent = errors;
+    }
+
+    // WPM calculation
+    const minutes = (new Date() - startTime) / 60000;
+    const words = typed.trim().split(/\s+/).length;
+    wpmEl.textContent = Math.round(words / minutes) || 0;
+  });
+
+  // Physical Keyboard Sync
+  document.addEventListener("keydown", e => {
+    const key = e.key.toLowerCase();
+    let id = "key-" + key;
+    if (key === " ") id = "key-space";
+    if (key === "enter") id = "key-enter";
+    const keyEl = document.getElementById(id);
+    if (keyEl) keyEl.classList.add("highlight","flash");
+  });
+  document.addEventListener("keyup", e => {
+    const key = e.key.toLowerCase();
+    let id = "key-" + key;
+    if (key === " ") id = "key-space";
+    if (key === "enter") id = "key-enter";
+    const keyEl = document.getElementById(id);
+    if (keyEl) keyEl.classList.remove("highlight");
+  });
+
+  // Controls
+  document.getElementById("nextBtn").addEventListener("click", () => {
+    typingText.textContent = "Next sentence to type...";
+    typingInput.value = "";
+    startTime = null; score = 0; errors = 0;
+    scoreEl.textContent = "0"; errorsEl.textContent = "0"; wpmEl.textContent = "0";
+  });
+  document.getElementById("prevBtn").addEventListener("click", () => {
+    typingText.textContent = "Previous sentence...";
+    typingInput.value = "";
+    startTime = null; score = 0; errors = 0;
+    scoreEl.textContent = "0"; errorsEl.textContent = "0"; wpmEl.textContent = "0";
+  });
+  document.getElementById("restartBtn").addEventListener("click", () => {
+    typingInput.value = "";
+    startTime = null; score = 0; errors = 0;
+    scoreEl.textContent = "0"; errorsEl.textContent = "0"; wpmEl.textContent = "0";
+  });
+});
+</script>
+
+
+  //Still works but disabled 
+
+<!-- Typing Tutor Modal --
 <div id="tutorModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
   <div class="bg-white rounded-xl p-6 max-w-2xl w-full shadow-lg relative">
     <button id="closeTutor" class="absolute top-2 right-2 text-red-600 text-xl font-bold">&times;</button>
     <h2 id="lessonTitle" class="text-xl font-bold mb-4">Typing Tutor</h2>
 
-    <!-- Highlighted Sample Text -->
+    <!-- Highlighted Sample Text --
     <div id="lessonText" class="mb-4 p-3 bg-gray-100 rounded text-lg leading-relaxed"></div>
 
-    <!-- Typing Area -->
+    <!-- Typing Area --
     <textarea id="typingArea" rows="4" class="w-full border p-3 rounded mb-4" placeholder="Start typing here..."></textarea>
 
-    <!-- Stats -->
+    <!-- Stats --
     <div class="flex justify-between text-sm font-semibold mb-4">
       <span>WPM: <span id="wpm">0</span></span>
       <span>Errors: <span id="errors">0</span></span>
@@ -84,7 +254,7 @@
 </div>
 
     
-    <!-- Virtual Keyboard -->
+    <!-- Virtual Keyboard --
     <div id="keyboard" class="p-2 bg-gray-200 rounded">
       <div>
         <span class="key">q</span><span class="key">w</span><span class="key">e</span><span class="key">r</span><span class="key">t</span><span class="key">y</span><span class="key">u</span><span class="key">i</span><span class="key">o</span><span class="key">p</span>
@@ -318,6 +488,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 </script> 
   
+  // below no longer Needed 
   <!--
   <script>
 document.addEventListener("DOMContentLoaded", async () => {
