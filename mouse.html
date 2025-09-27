@@ -9,14 +9,10 @@
     .accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; }
     .accordion-header span:last-child { transition: transform 0.3s ease; }
     .hidden { display: none; }
-    .target {
-      width: 50px; height: 50px; background: #3498db;
-      border-radius: 50%; position: absolute; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      color: white; font-weight: bold; user-select: none;
-      transition: transform 0.1s ease;
-    }
-    .stats span { margin-right: 15px; font-weight: bold; }
+    .current { text-decoration: underline; text-decoration-thickness: 2px; }
+    .modal { background: #fff; border-radius: 12px; padding: 16px; max-width: 600px; width: 100%; box-shadow: 0 4px 20px rgba(0,0,0,0.2);}
+    .mouse-task { background: #f0f0f0; padding: 12px; border-radius: 8px; margin-top: 12px; text-align:center; }
+    button { cursor:pointer; }
   </style>
 </head>
 <body class="bg-gray-50 text-gray-900 font-sans">
@@ -35,113 +31,40 @@
     <div id="accordion" class="space-y-4"></div>
   </main>
 
-  <!-- Modal -->
+  <!-- Mouse Practice Modal -->
   <div id="mouseModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-    <div class="bg-white rounded-xl p-6 max-w-2xl w-full shadow-lg relative">
+    <div class="modal relative">
       <button id="closeMouse" class="absolute top-2 right-2 text-red-600 text-xl font-bold">&times;</button>
       <h2 id="mouseTitle" class="text-xl font-bold mb-4">Mouse Practice</h2>
-
-      <!-- Instructions -->
-      <div id="mouseInstruction" class="mb-4 p-3 bg-gray-100 rounded text-lg leading-relaxed"></div>
-
-      <!-- Practice Area -->
-      <div id="practiceArea" class="relative w-full h-64 bg-gray-200 rounded mb-4 overflow-hidden"></div>
-
-      <!-- Stats -->
-      <div class="stats flex justify-start text-sm font-semibold mb-4">
-        <span>Clicks: <span id="clicks">0</span></span>
-        <span>Hits: <span id="hits">0</span></span>
-        <span>Accuracy: <span id="mouseAccuracy">100</span>%</span>
-      </div>
-
-      <div class="flex justify-between mt-4">
-        <button id="btnPrevMouse" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">⬅ Prev</button>
-        <button id="btnRestartMouse" class="px-4 py-2 bg-yellow-200 rounded hover:bg-yellow-300">🔄 Restart</button>
-        <button id="btnNextMouse" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Next ➡</button>
-      </div>
+      <div id="mouseInstructions" class="text-lg leading-relaxed"></div>
+      <div id="mouseTask" class="mouse-task">Click or drag to follow the instructions!</div>
     </div>
   </div>
 
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   const container = document.getElementById("accordion");
-  const today = new Date();
-
   const mouseModal = document.getElementById("mouseModal");
   const closeMouse = document.getElementById("closeMouse");
   const mouseTitle = document.getElementById("mouseTitle");
-  const mouseInstruction = document.getElementById("mouseInstruction");
-  const practiceArea = document.getElementById("practiceArea");
-  const clicksEl = document.getElementById("clicks");
-  const hitsEl = document.getElementById("hits");
-  const accuracyEl = document.getElementById("mouseAccuracy");
-
-  const btnPrevMouse = document.getElementById("btnPrevMouse");
-  const btnNextMouse = document.getElementById("btnNextMouse");
-  const btnRestartMouse = document.getElementById("btnRestartMouse");
+  const mouseInstructions = document.getElementById("mouseInstructions");
+  const mouseTask = document.getElementById("mouseTask");
 
   let currentTopics = [];
   let currentIndex = 0;
 
-  let clicks = 0;
-  let hits = 0;
-
-  function resetStats() {
-    clicks = 0;
-    hits = 0;
-    clicksEl.textContent = clicks;
-    hitsEl.textContent = hits;
-    accuracyEl.textContent = 100;
-  }
-
-  function spawnTarget() {
-    practiceArea.innerHTML = '';
-    const target = document.createElement("div");
-    target.className = "target";
-    target.textContent = "🎯";
-    const areaRect = practiceArea.getBoundingClientRect();
-    const size = 50;
-    const x = Math.random() * (areaRect.width - size);
-    const y = Math.random() * (areaRect.height - size);
-    target.style.left = x + "px";
-    target.style.top = y + "px";
-    practiceArea.appendChild(target);
-
-    target.addEventListener("click", e => {
-      hits++;
-      clicks++;
-      updateStats();
-      spawnTarget();
-    });
-  }
-
-  function updateStats() {
-    clicksEl.textContent = clicks;
-    hitsEl.textContent = hits;
-    const accuracy = clicks > 0 ? Math.round((hits / clicks) * 100) : 100;
-    accuracyEl.textContent = accuracy;
-  }
-
-  function loadMouseTopic(topic) {
-    mouseTitle.textContent = topic.dataset.title;
-    mouseInstruction.textContent = topic.dataset.sample;
-    resetStats();
-    spawnTarget();
-    mouseModal.classList.remove("hidden");
-  }
-
+  // Load JSON
   try {
-    const res = await fetch("data/classes.json");
+    const res = await fetch("data/mouse.json");
     const data = await res.json();
     const classes = Array.isArray(data) ? data : data.classes;
 
-    // Only mouse categories
     classes.forEach(cls => {
       const card = document.createElement("div");
       card.className = "bg-white rounded-xl shadow-md overflow-hidden mb-4";
 
       const header = document.createElement("button");
-      header.className = "accordion-header w-full flex justify-between items-center px-6 py-4 text-lg font-semibold bg-green-100 hover:bg-green-200 transition";
+      header.className = "accordion-header w-full flex justify-between items-center px-6 py-4 text-lg font-semibold bg-blue-100 hover:bg-blue-200 transition";
       header.innerHTML = `<span class="text-gray-900">${cls.name}</span><span class="text-gray-900">+</span>`;
       card.appendChild(header);
 
@@ -149,26 +72,22 @@ document.addEventListener("DOMContentLoaded", async () => {
       body.className = "accordion-body bg-gray-50";
 
       body.innerHTML = (cls.terms || []).map(term => {
-        const termUnlocked = true; // for simplicity
         return `
           <div class="mb-4">
-            <h3 class="text-lg font-semibold text-green-700 px-4 py-2">${term.title}</h3>
-            ${(term.categories || []).filter(cat => cat.id === "mouse").map(cat => `
+            <h3 class="text-lg font-semibold text-blue-700 px-4 py-2">${term.title}</h3>
+            ${(term.categories || []).map(cat => `
               <div class="ml-4 mb-2">
                 <h4 class="text-md font-semibold text-purple-600 px-3 py-1">${cat.name}</h4>
                 <ul class="space-y-2 pl-6">
-                  ${(cat.topics || []).map(topic => {
-                    return termUnlocked
-                      ? `<li>
-                          <button class="topicBtn block w-full text-left px-4 py-2 rounded-lg shadow text-gray-900 bg-white hover:shadow-md hover:bg-green-50 transition flex items-center gap-2"
-                            data-title="${topic.title}"
-                            data-sample="${topic.sample}">
-                            🖱️ ${topic.title}
-                          </button>
-                        </li>`
-                      : `<li><span class="block px-4 py-2 rounded-lg bg-gray-200 text-gray-500 cursor-not-allowed flex items-center gap-2">
-                          🖱️ ${topic.title} (Locked)</span></li>`;
-                  }).join("")}
+                  ${(cat.topics || []).map(topic => `
+                    <li>
+                      <button class="topicBtn block w-full text-left px-4 py-2 rounded-lg shadow text-gray-900 bg-white hover:shadow-md hover:bg-blue-50 transition flex items-center gap-2"
+                        data-title="${topic.title}"
+                        data-sample="${topic.sample}">
+                        🖱️ ${topic.title}
+                      </button>
+                    </li>
+                  `).join("")}
                 </ul>
               </div>
             `).join("")}
@@ -176,7 +95,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       }).join("");
 
       card.appendChild(body);
-
       header.addEventListener("click", () => {
         const isOpen = body.style.maxHeight && body.style.maxHeight !== "0px";
         container.querySelectorAll(".accordion-body").forEach(el => el.style.maxHeight = null);
@@ -186,57 +104,30 @@ document.addEventListener("DOMContentLoaded", async () => {
           header.querySelector("span:last-child").style.transform = "rotate(45deg)";
         }
       });
-
       container.appendChild(card);
     });
 
+    // Topic click → mouse modal
     container.addEventListener("click", e => {
       const btn = e.target.closest(".topicBtn");
       if (!btn) return;
       currentTopics = [...btn.closest("ul").querySelectorAll(".topicBtn")];
       currentIndex = currentTopics.indexOf(btn);
-      loadMouseTopic(btn);
+
+      mouseTitle.textContent = btn.dataset.title;
+      mouseInstructions.textContent = btn.dataset.sample;
+      mouseTask.textContent = "Try moving your mouse or clicking to follow the sample!";
+      mouseModal.classList.remove("hidden");
     });
 
   } catch (err) {
     console.error("Error loading JSON:", err);
-    container.innerHTML = '<p class="text-red-500">⚠️ Failed to load mouse data.</p>';
+    container.innerHTML = '<p class="text-red-500">⚠️ Failed to load mouse practice data.</p>';
   }
 
-  // Navigation
-  btnNextMouse.addEventListener("click", () => {
-    if (currentIndex < currentTopics.length - 1) {
-      currentIndex++;
-      loadMouseTopic(currentTopics[currentIndex]);
-    }
-  });
-  btnPrevMouse.addEventListener("click", () => {
-    if (currentIndex > 0) {
-      currentIndex--;
-      loadMouseTopic(currentTopics[currentIndex]);
-    }
-  });
+  closeMouse.addEventListener("click", () => mouseModal.classList.add("hidden"));
 
-  btnRestartMouse.addEventListener("click", () => {
-    if (currentTopics.length > 0) {
-      loadMouseTopic(currentTopics[currentIndex]);
-    }
-  });
-
-  closeMouse.addEventListener("click", () => {
-    mouseModal.classList.add("hidden");
-    practiceArea.innerHTML = ''; // clear targets
-  });
-
-  // Global click tracker to count misses
-  practiceArea.addEventListener("click", e => {
-    // Only count clicks outside the target as misses
-    if (!e.target.classList.contains("target")) {
-      clicks++;
-      updateStats();
-    }
-  });
-});
+}); // DOMContentLoaded
 </script>
 </body>
 </html>
