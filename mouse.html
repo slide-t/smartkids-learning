@@ -1,3 +1,175 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mouse Practice</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+      background: #f8f9fa;
+    }
+    h1 {
+      color: #333;
+    }
+    .practice-area {
+      margin: 20px auto;
+      padding: 20px;
+      border: 2px dashed #aaa;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 600px;
+      min-height: 300px;
+      background: #fff;
+      position: relative;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+      border: none;
+      background: #007BFF;
+      color: white;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .drag-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    .shape {
+      width: 60px;
+      height: 60px;
+      cursor: grab;
+    }
+    .circle {
+      background: red;
+      border-radius: 50%;
+    }
+    .square {
+      background: green;
+    }
+    .dropzone {
+      width: 80px;
+      height: 80px;
+      border: 2px dashed #aaa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 5px;
+      font-size: 14px;
+      background: #f1f1f1;
+    }
+    .success {
+      border-color: green;
+      background: #d4edda;
+    }
+    .fail {
+      border-color: red;
+      background: #f8d7da;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Mouse Practice</h1>
+
+  <!-- Option 1: Single and Double Click -->
+  <h2>Option 1: Single & Double Click</h2>
+  <div class="practice-area" id="clickArea">
+    <button id="clickBtn">Click Me</button>
+  </div>
+
+  <!-- Option 2: Drag and Drop -->
+  <h2>Option 2: Drag & Drop Shapes</h2>
+  <div class="drag-container">
+    <div class="shape circle" draggable="true" id="circle"></div>
+    <div class="shape square" draggable="true" id="square"></div>
+  </div>
+  <div class="drag-container">
+    <div class="dropzone" data-shape="circle">Circle</div>
+    <div class="dropzone" data-shape="square">Square</div>
+  </div>
+
+  <script>
+    // ---------- OPTION 1: SINGLE & DOUBLE CLICK ----------
+    const clickBtn = document.getElementById('clickBtn');
+    const clickArea = document.getElementById('clickArea');
+    const positions = [
+      { top: '20px', left: '20px' },
+      { top: '20px', right: '20px' },
+      { bottom: '20px', left: '20px' },
+      { bottom: '20px', right: '20px' },
+      { top: '50%', left: '40%' }
+    ];
+    let clickIndex = 0;
+    let dblClickIndex = 0;
+
+    function moveButton(pos) {
+      clickBtn.style.position = 'absolute';
+      clickBtn.style.top = pos.top || '';
+      clickBtn.style.left = pos.left || '';
+      clickBtn.style.right = pos.right || '';
+      clickBtn.style.bottom = pos.bottom || '';
+    }
+
+    clickBtn.addEventListener('click', () => {
+      moveButton(positions[clickIndex]);
+      clickIndex = (clickIndex + 1) % positions.length;
+    });
+
+    clickBtn.addEventListener('dblclick', () => {
+      moveButton(positions[dblClickIndex]);
+      dblClickIndex = (dblClickIndex + 1) % positions.length;
+    });
+
+    // ---------- OPTION 2: DRAG & DROP ----------
+    const shapes = document.querySelectorAll('.shape');
+    const dropzones = document.querySelectorAll('.dropzone');
+
+    shapes.forEach(shape => {
+      shape.addEventListener('dragstart', e => {
+        e.dataTransfer.setData('shapeId', shape.id);
+      });
+    });
+
+    dropzones.forEach(zone => {
+      zone.addEventListener('dragover', e => {
+        e.preventDefault();
+      });
+      zone.addEventListener('drop', e => {
+        e.preventDefault();
+        const shapeId = e.dataTransfer.getData('shapeId');
+        const shape = document.getElementById(shapeId);
+
+        if (zone.dataset.shape === shapeId) {
+          zone.classList.add('success');
+          zone.classList.remove('fail');
+          zone.innerHTML = '';
+          zone.appendChild(shape);
+          shape.style.cursor = "default";
+          shape.setAttribute("draggable", "false");
+        } else {
+          zone.classList.add('fail');
+          setTimeout(() => zone.classList.remove('fail'), 1000);
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
+
+
+
+<!--
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -43,10 +215,10 @@
     </div>
 
     <div class="play-area" id="playArea" aria-label="Practice area">
-      <!-- moving button -->
+      <!-- moving button --
       <button id="movingButton" class="moving-btn px-4 py-2 bg-indigo-600 text-white rounded-lg shadow">Click Me</button>
 
-      <!-- drag/drop area (overlays inside play area) -->
+      <!-- drag/drop area (overlays inside play area) --
       <div id="dragDropArea" class="drag-area hidden" style="pointer-events:auto;">
         <div id="shapes" class="shapes" aria-hidden="false">
           <div id="shape-circle" class="shape circle" data-shape="circle" draggable="true" title="circle"></div>
