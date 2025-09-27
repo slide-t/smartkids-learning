@@ -65,6 +65,190 @@
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   const container = document.getElementById("accordion");
+  const mouseModal = document.getElementById("mouseModal");
+  const closeMouse = document.getElementById("closeMouse");
+  const mouseTitle = document.getElementById("mouseTitle");
+  const mouseInstruction = document.getElementById("mouseInstruction");
+  const practiceArea = document.getElementById("practiceArea");
+  const clicksEl = document.getElementById("clicks");
+  const hitsEl = document.getElementById("hits");
+  const accuracyEl = document.getElementById("mouseAccuracy");
+
+  const btnPrevMouse = document.getElementById("btnPrevMouse");
+  const btnNextMouse = document.getElementById("btnNextMouse");
+  const btnRestartMouse = document.getElementById("btnRestartMouse");
+
+  let currentTopics = [];
+  let currentIndex = 0;
+  let clicks = 0;
+  let hits = 0;
+
+  function resetStats() {
+    clicks = 0;
+    hits = 0;
+    clicksEl.textContent = clicks;
+    hitsEl.textContent = hits;
+    accuracyEl.textContent = 100;
+  }
+
+  function spawnTarget() {
+    if (!practiceArea) return;
+    practiceArea.innerHTML = '';
+    const target = document.createElement("div");
+    target.className = "target";
+    target.textContent = "🎯";
+    const areaRect = practiceArea.getBoundingClientRect();
+    const size = 50;
+    const x = Math.random() * (areaRect.width - size);
+    const y = Math.random() * (areaRect.height - size);
+    target.style.left = x + "px";
+    target.style.top = y + "px";
+    practiceArea.appendChild(target);
+
+    target.addEventListener("click", () => {
+      hits++;
+      clicks++;
+      updateStats();
+      spawnTarget();
+    });
+  }
+
+  function updateStats() {
+    clicksEl.textContent = clicks;
+    hitsEl.textContent = hits;
+    const accuracy = clicks > 0 ? Math.round((hits / clicks) * 100) : 100;
+    accuracyEl.textContent = accuracy;
+  }
+
+  function loadMouseTopic(topic) {
+    mouseTitle.textContent = topic.dataset.title;
+    mouseInstruction.textContent = topic.dataset.sample;
+    resetStats();
+    spawnTarget();
+    mouseModal?.classList.remove("hidden");
+  }
+
+  try {
+    const res = await fetch("data/mouse.json");
+    const data = await res.json();
+    const classes = Array.isArray(data) ? data : data.classes;
+
+    classes.forEach(cls => {
+      const card = document.createElement("div");
+      card.className = "bg-white rounded-xl shadow-md overflow-hidden mb-4";
+
+      const header = document.createElement("button");
+      header.className = "accordion-header w-full flex justify-between items-center px-6 py-4 text-lg font-semibold bg-green-100 hover:bg-green-200 transition";
+      header.innerHTML = `<span class="text-gray-900">${cls.name}</span><span class="text-gray-900">+</span>`;
+      card.appendChild(header);
+
+      const body = document.createElement("div");
+      body.className = "accordion-body bg-gray-50";
+
+      // Populate all terms properly
+      let bodyContent = "";
+      (cls.terms || []).forEach(term => {
+        const termUnlocked = true;
+        let termHTML = `
+          <div class="mb-4">
+            <h3 class="text-lg font-semibold text-green-700 px-4 py-2">${term.title}</h3>
+            ${(term.categories || []).filter(cat => cat.id === "mouse").map(cat => {
+              return `
+              <div class="ml-4 mb-2">
+                <h4 class="text-md font-semibold text-purple-600 px-3 py-1">${cat.name}</h4>
+                <ul class="space-y-2 pl-6">
+                  ${(cat.topics || []).map(topic => {
+                    return termUnlocked
+                      ? `<li>
+                          <button class="topicBtn block w-full text-left px-4 py-2 rounded-lg shadow text-gray-900 bg-white hover:shadow-md hover:bg-green-50 transition flex items-center gap-2"
+                            data-title="${topic.title}"
+                            data-sample="${topic.sample}">
+                            🖱️ ${topic.title}
+                          </button>
+                        </li>`
+                      : `<li><span class="block px-4 py-2 rounded-lg bg-gray-200 text-gray-500 cursor-not-allowed flex items-center gap-2">
+                          🖱️ ${topic.title} (Locked)</span></li>`;
+                  }).join("")}
+                </ul>
+              </div>`;
+            }).join("")}
+          </div>`;
+        bodyContent += termHTML;
+      });
+
+      body.innerHTML = bodyContent;
+      card.appendChild(body);
+
+      // Accordion toggle
+      header.addEventListener("click", () => {
+        const isOpen = body.style.maxHeight && body.style.maxHeight !== "0px";
+        container.querySelectorAll(".accordion-body").forEach(el => el.style.maxHeight = null);
+        container.querySelectorAll(".accordion-header span:last-child").forEach(icon => {
+          if (icon) icon.style.transform = "rotate(0deg)";
+        });
+        if (!isOpen) {
+          body.style.maxHeight = body.scrollHeight + "px";
+          header.querySelector("span:last-child").style.transform = "rotate(45deg)";
+        }
+      });
+
+      container.appendChild(card);
+    });
+
+    // Topic click listener
+    container.addEventListener("click", e => {
+      const btn = e.target.closest(".topicBtn");
+      if (!btn) return;
+      currentTopics = [...btn.closest("ul").querySelectorAll(".topicBtn")];
+      currentIndex = currentTopics.indexOf(btn);
+      loadMouseTopic(btn);
+    });
+
+  } catch (err) {
+    console.error("Error loading JSON:", err);
+    container.innerHTML = '<p class="text-red-500">⚠️ Failed to load mouse data.</p>';
+  }
+
+  // Navigation buttons
+  btnNextMouse?.addEventListener("click", () => {
+    if (currentIndex < currentTopics.length - 1) {
+      currentIndex++;
+      loadMouseTopic(currentTopics[currentIndex]);
+    }
+  });
+  btnPrevMouse?.addEventListener("click", () => {
+    if (currentIndex > 0) {
+      currentIndex--;
+      loadMouseTopic(currentTopics[currentIndex]);
+    }
+  });
+  btnRestartMouse?.addEventListener("click", () => {
+    if (currentTopics.length > 0) {
+      loadMouseTopic(currentTopics[currentIndex]);
+    }
+  });
+
+  // Close modal
+  closeMouse?.addEventListener("click", () => {
+    mouseModal?.classList.add("hidden");
+    if (practiceArea) practiceArea.innerHTML = '';
+  });
+
+  // Count clicks outside target
+  practiceArea?.addEventListener("click", e => {
+    if (!e.target.classList.contains("target")) {
+      clicks++;
+      updateStats();
+    }
+  });
+});
+</script>
+
+
+  <!--
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  const container = document.getElementById("accordion");
   const today = new Date();
 
   const mouseModal = document.getElementById("mouseModal");
@@ -238,6 +422,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 });
 </script>
-  
+  -->
 </body>
 </html>
