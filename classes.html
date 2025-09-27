@@ -57,24 +57,24 @@
     <h2 class="text-3xl font-bold text-center mb-8">Select Your Class</h2>
     <div id="accordion" class="space-y-4"></div>
   </main>
-<!-- Typing Tutor Modal -->
+<!-- Typing Tutor Modal --
 <div id="typingModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
   <div class="bg-white rounded-xl p-6 max-w-3xl w-full shadow-lg">
     <h2 class="text-xl font-bold mb-4">Typing Tutor</h2>
     <div id="typingText" class="text-lg mb-4">Type this sentence correctly.</div>
     <input id="typingInput" type="text" class="border p-2 w-full mb-4 rounded" autofocus />
 
-    <!-- Virtual Keyboard -->
+    <!-- Virtual Keyboard --
     <div id="virtualKeyboard" class="mb-4"></div>
 
-    <!-- Score / WPM -->
+    <!-- Score / WPM --
     <div class="flex justify-between text-sm mb-4">
       <div>Score: <span id="score">0</span></div>
       <div>Errors: <span id="errors">0</span></div>
       <div>WPM: <span id="wpm">0</span></div>
     </div>
 
-    <!-- Controls -->
+    <!-- Controls --
     <div class="flex justify-end gap-3">
       <button id="prevBtn" class="bg-gray-300 hover:bg-gray-400 text-black px-3 py-1 rounded">Previous</button>
       <button id="nextBtn" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded">Next</button>
@@ -225,23 +225,23 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 </script>
-
+-->
 
 <!--Still works but disabled -->
 
-<!-- Typing Tutor Modal --
+<!-- Typing Tutor Modal -->
 <div id="tutorModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
   <div class="bg-white rounded-xl p-6 max-w-2xl w-full shadow-lg relative">
     <button id="closeTutor" class="absolute top-2 right-2 text-red-600 text-xl font-bold">&times;</button>
     <h2 id="lessonTitle" class="text-xl font-bold mb-4">Typing Tutor</h2>
 
-    <!-- Highlighted Sample Text --
+    <!-- Highlighted Sample Text -->
     <div id="lessonText" class="mb-4 p-3 bg-gray-100 rounded text-lg leading-relaxed"></div>
 
     <!-- Typing Area --
     <textarea id="typingArea" rows="4" class="w-full border p-3 rounded mb-4" placeholder="Start typing here..."></textarea>
 
-    <!-- Stats --
+    <!-- Stats -->
     <div class="flex justify-between text-sm font-semibold mb-4">
       <span>WPM: <span id="wpm">0</span></span>
       <span>Errors: <span id="errors">0</span></span>
@@ -254,7 +254,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </div>
 
     
-    <!-- Virtual Keyboard --
+    <!-- Virtual Keyboard -->
     <div id="keyboard" class="p-2 bg-gray-200 rounded">
       <div>
         <span class="key">q</span><span class="key">w</span><span class="key">e</span><span class="key">r</span><span class="key">t</span><span class="key">y</span><span class="key">u</span><span class="key">i</span><span class="key">o</span><span class="key">p</span>
@@ -271,7 +271,7 @@ document.addEventListener("DOMContentLoaded", () => {
     </div>
   </div>
 </div>
--->
+
  <script>
 document.addEventListener("DOMContentLoaded", async () => {
   const container = document.getElementById("accordion");
