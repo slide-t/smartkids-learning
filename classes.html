@@ -93,7 +93,247 @@
     </div>
   </div>
 </div>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  const container = document.getElementById("accordion");
+  const today = new Date();
+  const termUnlockDates = { 2: new Date("2026-01-04"), 3: new Date("2026-04-20") };
 
+  // Modal elements
+  const tutorModal = document.getElementById("tutorModal");
+  const closeTutor = document.getElementById("closeTutor");
+  const lessonTitle = document.getElementById("lessonTitle");
+  const lessonText = document.getElementById("lessonText");
+  const typingArea = document.getElementById("typingArea");
+  const virtualKeyboard = document.getElementById("virtualKeyboard");
+
+  // Navigation buttons
+  const prevBtn = document.getElementById("prevLesson");
+  const nextBtn = document.getElementById("nextLesson");
+  const restartBtn = document.getElementById("restartLesson");
+
+  // Stats
+  const wpmEl = document.getElementById("wpm");
+  const errorsEl = document.getElementById("errors");
+  const accuracyEl = document.getElementById("accuracy");
+
+  let sampleText = "";
+  let startTime = null;
+  let errors = 0;
+  let currentTopicIndex = 0;
+  let currentTopics = [];
+
+  // --- Virtual Keyboard ---
+  const keyboardLayout = [
+    ["`","1","2","3","4","5","6","7","8","9","0","-","=","Backspace"],
+    ["Tab","q","w","e","r","t","y","u","i","o","p","[","]","\\"],
+    ["CapsLock","a","s","d","f","g","h","j","k","l",";","'","Enter"],
+    ["Shift","z","x","c","v","b","n","m",",",".","/","Shift"],
+    ["Space"]
+  ];
+
+  function buildKeyboard() {
+    virtualKeyboard.innerHTML = "";
+    keyboardLayout.forEach(row => {
+      const rowEl = document.createElement("div");
+      rowEl.className = "flex justify-center mb-1";
+      row.forEach(key => {
+        const keyEl = document.createElement("div");
+        keyEl.className = "key border border-gray-400 rounded-md px-3 py-2 mx-1 text-center shadow-sm transition";
+        keyEl.setAttribute("data-key", key.toLowerCase());
+        keyEl.textContent = key === " " ? "␣" : key;
+        rowEl.appendChild(keyEl);
+      });
+      virtualKeyboard.appendChild(rowEl);
+    });
+  }
+  buildKeyboard();
+
+  // --- Highlight text ---
+  function renderHighlightedText(sample, typed) {
+    let result = "";
+    for (let i = 0; i < sample.length; i++) {
+      if (i < typed.length) {
+        result += sample[i] === typed[i]
+          ? `<span class="text-green-600 underline">${sample[i]}</span>`
+          : `<span class="text-red-600 underline">${sample[i]}</span>`;
+      } else if (i === typed.length) {
+        result += `<span class="current border-b-2 border-blue-500">${sample[i]}</span>`;
+      } else {
+        result += `<span class="text-gray-700">${sample[i]}</span>`;
+      }
+    }
+    return result;
+  }
+
+  // --- Stats ---
+  function updateStats(typed) {
+    if (!startTime) startTime = new Date();
+    errors = 0;
+    for (let i = 0; i < typed.length; i++) {
+      if (typed[i] !== sampleText[i]) errors++;
+    }
+    const elapsedMinutes = (new Date() - startTime) / 60000;
+    const words = typed.trim().split(/\s+/).filter(Boolean).length;
+    const wpm = elapsedMinutes > 0 ? Math.round(words / elapsedMinutes) : 0;
+    const accuracy = typed.length > 0
+      ? Math.max(0, Math.round(((typed.length - errors) / typed.length) * 100))
+      : 100;
+    wpmEl.textContent = wpm;
+    errorsEl.textContent = errors;
+    accuracyEl.textContent = accuracy;
+  }
+
+  // Typing listener
+  typingArea.addEventListener("input", () => {
+    const typed = typingArea.value;
+    lessonText.innerHTML = renderHighlightedText(sampleText, typed);
+    updateStats(typed);
+  });
+
+  // --- Keyboard flash effect ---
+  function flashKey(key) {
+    const keyEl = virtualKeyboard.querySelector(`[data-key="${key.toLowerCase()}"]`);
+    if (keyEl) {
+      keyEl.classList.add("bg-blue-500", "text-white", "ring-2", "ring-white");
+      setTimeout(() => {
+        keyEl.classList.remove("bg-blue-500", "text-white", "ring-2", "ring-white");
+      }, 150);
+    }
+  }
+
+  document.addEventListener("keydown", e => {
+    if (tutorModal.classList.contains("hidden")) return;
+    let key = e.key;
+    if (key === " ") key = "space";
+    flashKey(key);
+  });
+
+  // --- Lesson loader ---
+  function loadLesson(index) {
+    if (!currentTopics[index]) return;
+    currentTopicIndex = index;
+    const topic = currentTopics[index];
+    lessonTitle.textContent = topic.title;
+    sampleText = topic.sample.toLowerCase();
+    typingArea.value = "";
+    lessonText.innerHTML = renderHighlightedText(sampleText, "");
+    startTime = null;
+    errors = 0;
+    wpmEl.textContent = 0;
+    errorsEl.textContent = 0;
+    accuracyEl.textContent = 100;
+  }
+
+  // Nav buttons
+  prevBtn.addEventListener("click", () => {
+    if (currentTopicIndex > 0) loadLesson(currentTopicIndex - 1);
+  });
+  nextBtn.addEventListener("click", () => {
+    if (currentTopicIndex < currentTopics.length - 1) loadLesson(currentTopicIndex + 1);
+  });
+  restartBtn.addEventListener("click", () => {
+    loadLesson(currentTopicIndex);
+  });
+
+  // --- Load accordion from JSON ---
+  try {
+    const res = await fetch("data/classes.json");
+    const data = await res.json();
+    const classes = Array.isArray(data) ? data : data.classes;
+
+    classes.forEach(cls => {
+      const card = document.createElement("div");
+      card.className = "bg-white rounded-xl shadow-md overflow-hidden mb-4";
+
+      const header = document.createElement("button");
+      header.className = "accordion-header w-full flex justify-between items-center px-6 py-4 text-lg font-semibold bg-blue-100 hover:bg-blue-200 transition";
+      header.innerHTML = `<span class="text-gray-900">${cls.name}</span><span class="text-gray-900">+</span>`;
+      card.appendChild(header);
+
+      const body = document.createElement("div");
+      body.className = "accordion-body bg-gray-50";
+
+      body.innerHTML = (cls.terms || []).map(term => {
+        const termUnlocked = term.number === 1 || today >= termUnlockDates[term.number];
+        return `
+          <div class="mb-4">
+            <h3 class="text-lg font-semibold text-blue-700 px-4 py-2">${term.title}</h3>
+            ${(term.categories || []).map(cat => `
+              <div class="ml-4 mb-2">
+                <h4 class="text-md font-semibold text-purple-600 px-3 py-1">${cat.name}</h4>
+                <ul class="space-y-2 pl-6">
+                  ${(cat.topics || []).map((topic, idx) => {
+                    const icon = cat.id === "mouse" ? "🖱️" : cat.id === "keyboard" ? "⌨️" : "📖";
+                    if (termUnlocked) {
+                      return `<li>
+                        <button class="topicBtn block w-full text-left px-4 py-2 rounded-lg shadow text-gray-900 bg-white hover:shadow-md hover:bg-blue-50 transition flex items-center gap-2"
+                          data-title="${topic.title}"
+                          data-sample="${topic.sample}"
+                          data-idx="${idx}">
+                          <span>${icon}</span> ${topic.title}
+                        </button>
+                      </li>`;
+                    } else {
+                      return `<li>
+                        <span class="block px-4 py-2 rounded-lg shadow text-base bg-gray-200 text-gray-500 cursor-not-allowed flex items-center gap-2">
+                          <span>${icon}</span> ${topic.title} (Locked)
+                        </span>
+                      </li>`;
+                    }
+                  }).join("")}
+                </ul>
+              </div>
+            `).join("")}
+          </div>`;
+      }).join("");
+
+      card.appendChild(body);
+
+      // Accordion toggle
+      header.addEventListener("click", () => {
+        const isOpen = body.style.maxHeight && body.style.maxHeight !== "0px";
+        container.querySelectorAll(".accordion-body").forEach(el => el.style.maxHeight = null);
+        container.querySelectorAll(".accordion-header span:last-child").forEach(icon => icon.style.transform = "rotate(0deg)");
+        if (!isOpen) {
+          body.style.maxHeight = body.scrollHeight + "px";
+          header.querySelector("span:last-child").style.transform = "rotate(45deg)";
+        }
+      });
+
+      container.appendChild(card);
+    });
+
+    // Open topic
+    container.addEventListener("click", e => {
+      if (e.target.closest(".topicBtn")) {
+        const btn = e.target.closest(".topicBtn");
+        const parentList = btn.closest("ul");
+        currentTopics = Array.from(parentList.querySelectorAll(".topicBtn")).map(b => ({
+          title: b.dataset.title,
+          sample: b.dataset.sample
+        }));
+        const index = parseInt(btn.dataset.idx, 10);
+        loadLesson(index);
+        tutorModal.classList.remove("hidden");
+      }
+    });
+
+  } catch (err) {
+    console.error("Error loading JSON:", err);
+    container.innerHTML = '<p class="text-red-500">⚠️ Failed to load class data.</p>';
+  }
+
+  // Close modal
+  closeTutor.addEventListener("click", () => {
+    tutorModal.classList.add("hidden");
+  });
+});
+</script>
+
+
+
+  <!--
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   const tutorModal = document.getElementById("tutorModal");
@@ -234,5 +474,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   // (accordion fetch same as before, omitted for brevity)
 });
 </script>
+  -->
 </body>
 </html>
