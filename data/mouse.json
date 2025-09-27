@@ -1,42 +1,38 @@
 {
-  "classes": [
+  "years": [
     {
+      "id": "year1",
       "name": "Year 1",
       "topics": [
         {
-          "title": "Clicking Practice",
-          "sample": "Click the targets as they appear.",
-          "type": "clicking"
+          "title": "Clicking Basics",
+          "sample": "Practice clicking on the highlighted spots with the mouse."
         },
         {
-          "title": "Double-Click Basics",
-          "sample": "Double-click the blue box to confirm selection.",
-          "type": "doubleClick"
+          "title": "Double-Clicking",
+          "sample": "Double-click quickly on the shapes to open them."
         },
         {
-          "title": "Drag Shapes",
-          "sample": "Drag the box into the drop zone.",
-          "type": "dragDrop"
+          "title": "Mouse Movement",
+          "sample": "Move the mouse to follow the line on the screen."
         }
       ]
     },
     {
+      "id": "year2",
       "name": "Year 2",
       "topics": [
         {
-          "title": "Click Accuracy",
-          "sample": "Click the small moving target accurately.",
-          "type": "clicking"
+          "title": "Drag and Drop",
+          "sample": "Drag the objects into the correct boxes."
         },
         {
-          "title": "Double-Click Challenge",
-          "sample": "Double-click objects to confirm selection.",
-          "type": "doubleClick"
+          "title": "Right-Click Basics",
+          "sample": "Right-click on items to see context menus."
         },
         {
-          "title": "Drag and Place",
-          "sample": "Drag shapes into their matching outlines.",
-          "type": "dragDrop"
+          "title": "Click and Hold",
+          "sample": "Hold the mouse button to draw a straight line."
         }
       ]
     }
