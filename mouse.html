@@ -9,22 +9,14 @@
     .accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; }
     .accordion-header span:last-child { transition: transform 0.3s ease; }
     .hidden { display: none; }
-    .click-target { 
-      display: inline-block; 
-      margin: 10px; 
-      padding: 20px; 
-      background: #eee; 
-      border-radius: 8px; 
-      cursor: pointer; 
-      border: 2px solid transparent;
-      user-select: none;
+    .target {
+      width: 50px; height: 50px; background: #3498db;
+      border-radius: 50%; position: absolute; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-weight: bold; user-select: none;
+      transition: transform 0.1s ease;
     }
-    .click-target.correct { background: #4ade80; border-color: #16a34a; }
-    .click-target.incorrect { background: #f87171; border-color: #b91c1c; }
-    .drag-container { display: flex; gap: 40px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
-    .draggable { width: 60px; height: 60px; border-radius: 50%; background: #60a5fa; display:flex; align-items:center; justify-content:center; color:white; cursor: grab; }
-    .drop-zone { width: 60px; height: 60px; border: 2px dashed #ccc; border-radius: 50%; display:flex; align-items:center; justify-content:center; }
-    .drop-zone.correct { border-color: #16a34a; background: #4ade80; }
+    .stats span { margin-right: 15px; font-weight: bold; }
   </style>
 </head>
 <body class="bg-gray-50 text-gray-900 font-sans">
@@ -32,7 +24,7 @@
   <!-- Header -->
   <header class="bg-blue-600 text-white shadow-md fixed top-0 left-0 w-full z-50">
     <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-      <h1 class="text-2xl font-bold">Smart Learning Kids - Mouse</h1>
+      <h1 class="text-2xl font-bold">Smart Learning Kids</h1>
       <a href="index.html" class="bg-white text-blue-600 px-4 py-2 rounded-lg font-medium shadow hover:bg-blue-100 transition">Home</a>
     </div>
   </header>
@@ -49,10 +41,18 @@
       <button id="closeMouse" class="absolute top-2 right-2 text-red-600 text-xl font-bold">&times;</button>
       <h2 id="mouseTitle" class="text-xl font-bold mb-4">Mouse Practice</h2>
 
-      <div id="mouseInstruction" class="mb-4 bg-gray-100 p-3 rounded"></div>
+      <!-- Instructions -->
+      <div id="mouseInstruction" class="mb-4 p-3 bg-gray-100 rounded text-lg leading-relaxed"></div>
 
-      <div id="clickPractice" class="flex justify-center flex-wrap gap-4 mb-4"></div>
-      <div id="dragPractice" class="drag-container"></div>
+      <!-- Practice Area -->
+      <div id="practiceArea" class="relative w-full h-64 bg-gray-200 rounded mb-4 overflow-hidden"></div>
+
+      <!-- Stats -->
+      <div class="stats flex justify-start text-sm font-semibold mb-4">
+        <span>Clicks: <span id="clicks">0</span></span>
+        <span>Hits: <span id="hits">0</span></span>
+        <span>Accuracy: <span id="mouseAccuracy">100</span>%</span>
+      </div>
 
       <div class="flex justify-between mt-4">
         <button id="btnPrevMouse" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">⬅ Prev</button>
@@ -65,123 +65,177 @@
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   const container = document.getElementById("accordion");
+  const today = new Date();
+
   const mouseModal = document.getElementById("mouseModal");
   const closeMouse = document.getElementById("closeMouse");
   const mouseTitle = document.getElementById("mouseTitle");
   const mouseInstruction = document.getElementById("mouseInstruction");
-  const clickPractice = document.getElementById("clickPractice");
-  const dragPractice = document.getElementById("dragPractice");
+  const practiceArea = document.getElementById("practiceArea");
+  const clicksEl = document.getElementById("clicks");
+  const hitsEl = document.getElementById("hits");
+  const accuracyEl = document.getElementById("mouseAccuracy");
+
   const btnPrevMouse = document.getElementById("btnPrevMouse");
   const btnNextMouse = document.getElementById("btnNextMouse");
   const btnRestartMouse = document.getElementById("btnRestartMouse");
 
-  let topics = [];
+  let currentTopics = [];
   let currentIndex = 0;
 
-  // Fetch mouse.json
-  try {
-    const res = await fetch("data/mouse.json");
-    const data = await res.json();
-    topics = data.topics || [];
+  let clicks = 0;
+  let hits = 0;
 
-    topics.forEach((topic, idx) => {
-      const btn = document.createElement("button");
-      btn.className = "block w-full text-left px-4 py-2 rounded-lg shadow text-gray-900 bg-white hover:shadow-md hover:bg-green-50 transition mb-2";
-      btn.textContent = topic.title;
-      btn.dataset.index = idx;
-      btn.dataset.title = topic.title;
-      btn.dataset.instruction = topic.instruction;
-      btn.dataset.content = JSON.stringify(topic.sample);
-      container.appendChild(btn);
-    });
-
-  } catch (err) {
-    console.error("Failed to load mouse.json", err);
-    container.innerHTML = '<p class="text-red-500">⚠️ Failed to load mouse practice data.</p>';
+  function resetStats() {
+    clicks = 0;
+    hits = 0;
+    clicksEl.textContent = clicks;
+    hitsEl.textContent = hits;
+    accuracyEl.textContent = 100;
   }
 
-  function loadMouseTopic(btn) {
-    currentIndex = parseInt(btn.dataset.index);
-    mouseTitle.textContent = btn.dataset.title;
-    mouseInstruction.textContent = btn.dataset.instruction;
+  function spawnTarget() {
+    practiceArea.innerHTML = '';
+    const target = document.createElement("div");
+    target.className = "target";
+    target.textContent = "🎯";
+    const areaRect = practiceArea.getBoundingClientRect();
+    const size = 50;
+    const x = Math.random() * (areaRect.width - size);
+    const y = Math.random() * (areaRect.height - size);
+    target.style.left = x + "px";
+    target.style.top = y + "px";
+    practiceArea.appendChild(target);
 
-    const sample = JSON.parse(btn.dataset.content);
+    target.addEventListener("click", e => {
+      hits++;
+      clicks++;
+      updateStats();
+      spawnTarget();
+    });
+  }
 
-    clickPractice.innerHTML = '';
-    dragPractice.innerHTML = '';
+  function updateStats() {
+    clicksEl.textContent = clicks;
+    hitsEl.textContent = hits;
+    const accuracy = clicks > 0 ? Math.round((hits / clicks) * 100) : 100;
+    accuracyEl.textContent = accuracy;
+  }
 
-    if (btn.dataset.title === "Mouse Clicks") {
-      sample.forEach(item => {
-        const target = document.createElement("div");
-        target.className = "click-target";
-        target.textContent = item;
-        target.addEventListener("click", () => {
-          target.classList.add("correct");
-          setTimeout(() => target.classList.remove("correct"), 500);
-        });
-        clickPractice.appendChild(target);
-      });
-    }
-
-    if (btn.dataset.title === "Drag and Drop") {
-      sample.forEach((shape, i) => {
-        const draggable = document.createElement("div");
-        draggable.className = "draggable";
-        draggable.textContent = shape[0];
-        draggable.draggable = true;
-        draggable.id = "drag-" + i;
-
-        draggable.addEventListener("dragstart", e => {
-          e.dataTransfer.setData("text/plain", draggable.id);
-        });
-
-        dragPractice.appendChild(draggable);
-
-        const dropZone = document.createElement("div");
-        dropZone.className = "drop-zone";
-        dropZone.textContent = shape[0];
-        dropZone.addEventListener("dragover", e => e.preventDefault());
-        dropZone.addEventListener("drop", e => {
-          e.preventDefault();
-          const dragId = e.dataTransfer.getData("text/plain");
-          const dragEl = document.getElementById(dragId);
-          if (dragEl && dragEl.textContent === dropZone.textContent) {
-            dropZone.classList.add("correct");
-            dragEl.remove();
-          } else {
-            dropZone.classList.add("incorrect");
-            setTimeout(() => dropZone.classList.remove("incorrect"), 500);
-          }
-        });
-
-        dragPractice.appendChild(dropZone);
-      });
-    }
-
+  function loadMouseTopic(topic) {
+    mouseTitle.textContent = topic.dataset.title;
+    mouseInstruction.textContent = topic.dataset.sample;
+    resetStats();
+    spawnTarget();
     mouseModal.classList.remove("hidden");
   }
 
-  // Accordion button click
-  container.addEventListener("click", e => {
-    const btn = e.target.closest("button");
-    if (!btn) return;
-    loadMouseTopic(btn);
+  try {
+    const res = await fetch("data/classes.json");
+    const data = await res.json();
+    const classes = Array.isArray(data) ? data : data.classes;
+
+    // Only mouse categories
+    classes.forEach(cls => {
+      const card = document.createElement("div");
+      card.className = "bg-white rounded-xl shadow-md overflow-hidden mb-4";
+
+      const header = document.createElement("button");
+      header.className = "accordion-header w-full flex justify-between items-center px-6 py-4 text-lg font-semibold bg-green-100 hover:bg-green-200 transition";
+      header.innerHTML = `<span class="text-gray-900">${cls.name}</span><span class="text-gray-900">+</span>`;
+      card.appendChild(header);
+
+      const body = document.createElement("div");
+      body.className = "accordion-body bg-gray-50";
+
+      body.innerHTML = (cls.terms || []).map(term => {
+        const termUnlocked = true; // for simplicity
+        return `
+          <div class="mb-4">
+            <h3 class="text-lg font-semibold text-green-700 px-4 py-2">${term.title}</h3>
+            ${(term.categories || []).filter(cat => cat.id === "mouse").map(cat => `
+              <div class="ml-4 mb-2">
+                <h4 class="text-md font-semibold text-purple-600 px-3 py-1">${cat.name}</h4>
+                <ul class="space-y-2 pl-6">
+                  ${(cat.topics || []).map(topic => {
+                    return termUnlocked
+                      ? `<li>
+                          <button class="topicBtn block w-full text-left px-4 py-2 rounded-lg shadow text-gray-900 bg-white hover:shadow-md hover:bg-green-50 transition flex items-center gap-2"
+                            data-title="${topic.title}"
+                            data-sample="${topic.sample}">
+                            🖱️ ${topic.title}
+                          </button>
+                        </li>`
+                      : `<li><span class="block px-4 py-2 rounded-lg bg-gray-200 text-gray-500 cursor-not-allowed flex items-center gap-2">
+                          🖱️ ${topic.title} (Locked)</span></li>`;
+                  }).join("")}
+                </ul>
+              </div>
+            `).join("")}
+          </div>`;
+      }).join("");
+
+      card.appendChild(body);
+
+      header.addEventListener("click", () => {
+        const isOpen = body.style.maxHeight && body.style.maxHeight !== "0px";
+        container.querySelectorAll(".accordion-body").forEach(el => el.style.maxHeight = null);
+        container.querySelectorAll(".accordion-header span:last-child").forEach(icon => icon.style.transform = "rotate(0deg)");
+        if (!isOpen) {
+          body.style.maxHeight = body.scrollHeight + "px";
+          header.querySelector("span:last-child").style.transform = "rotate(45deg)";
+        }
+      });
+
+      container.appendChild(card);
+    });
+
+    container.addEventListener("click", e => {
+      const btn = e.target.closest(".topicBtn");
+      if (!btn) return;
+      currentTopics = [...btn.closest("ul").querySelectorAll(".topicBtn")];
+      currentIndex = currentTopics.indexOf(btn);
+      loadMouseTopic(btn);
+    });
+
+  } catch (err) {
+    console.error("Error loading JSON:", err);
+    container.innerHTML = '<p class="text-red-500">⚠️ Failed to load mouse data.</p>';
+  }
+
+  // Navigation
+  btnNextMouse.addEventListener("click", () => {
+    if (currentIndex < currentTopics.length - 1) {
+      currentIndex++;
+      loadMouseTopic(currentTopics[currentIndex]);
+    }
+  });
+  btnPrevMouse.addEventListener("click", () => {
+    if (currentIndex > 0) {
+      currentIndex--;
+      loadMouseTopic(currentTopics[currentIndex]);
+    }
+  });
+
+  btnRestartMouse.addEventListener("click", () => {
+    if (currentTopics.length > 0) {
+      loadMouseTopic(currentTopics[currentIndex]);
+    }
   });
 
   closeMouse.addEventListener("click", () => {
     mouseModal.classList.add("hidden");
-    clickPractice.innerHTML = '';
-    dragPractice.innerHTML = '';
+    practiceArea.innerHTML = ''; // clear targets
   });
 
-  // Navigation buttons
-  btnPrevMouse.addEventListener("click", () => {
-    if (currentIndex > 0) loadMouseTopic(container.children[currentIndex - 0]);
+  // Global click tracker to count misses
+  practiceArea.addEventListener("click", e => {
+    // Only count clicks outside the target as misses
+    if (!e.target.classList.contains("target")) {
+      clicks++;
+      updateStats();
+    }
   });
-  btnNextMouse.addEventListener("click", () => {
-    if (currentIndex < topics.length - 1) loadMouseTopic(container.children[currentIndex + 0]);
-  });
-  btnRestartMouse.addEventListener("click", () => loadMouseTopic(container.children[currentIndex]));
 });
 </script>
 </body>
