@@ -278,7 +278,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // --- TOPIC CLICK HANDLER ---
 
-    container.addEventListener("click", e => {
+   /* container.addEventListener("click", e => {
   const btn = e.target.closest(".topicBtn");
   if (!btn) return;
 
@@ -300,8 +300,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   currentIndex = currentTopics.indexOf(btn);
   loadTopic(btn);
 });
-
-    /*
+*/
+    
     container.addEventListener("click", e => {
       const btn = e.target.closest(".topicBtn");
       if (!btn) return;
@@ -313,7 +313,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   } catch (err) {
     console.error("Error loading JSON:", err);
     container.innerHTML = '<p class="text-red-500">⚠️ Failed to load class data.</p>';
-  }*/
+  }
 
   // --- NAVIGATION BUTTONS ---
   btnNext.addEventListener("click", () => {
