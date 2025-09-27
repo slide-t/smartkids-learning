@@ -1,107 +1,170 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mouse Practice - Smart Learning Kids</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Learning Kids - Mouse Practice</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    .accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; }
-    .accordion-header span:last-child { transition: transform 0.3s ease; }
     .hidden { display: none; }
-    .btn {
-      cursor: pointer;
-      padding: 0.75rem 1.5rem;
-      border-radius: 0.75rem;
-      font-weight: 600;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-      transition: all 0.3s ease;
+    .click-target { 
+      display: inline-block; 
+      margin: 5px; 
+      padding: 15px 20px; 
+      background: #eee; 
+      border-radius: 8px; 
+      cursor: pointer; 
+      border: 2px solid transparent;
+      user-select: none;
+      transition: all 0.2s ease;
     }
-    .btn:hover {
-      border: 2px solid white;
-      box-shadow: 0 0 12px white;
-    }
+    .click-target.correct { background: #4ade80; border-color: #16a34a; }
+    .click-target.incorrect { background: #f87171; border-color: #b91c1c; }
+    .drag-container { display: flex; gap: 30px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
+    .draggable { width: 60px; height: 60px; border-radius: 50%; background: #60a5fa; display:flex; align-items:center; justify-content:center; color:white; cursor: grab; user-select: none; transition: transform 0.2s ease; }
+    .drop-zone { width: 60px; height: 60px; border: 2px dashed #ccc; border-radius: 50%; display:flex; align-items:center; justify-content:center; transition: all 0.2s ease; }
+    .drop-zone.correct { border-color: #16a34a; background: #4ade80; }
+    .drop-zone.incorrect { border-color: #b91c1c; background: #f87171; }
   </style>
 </head>
 <body class="bg-gray-50 text-gray-900 font-sans">
 
-  <!-- Header -->
-  <header class="bg-gray-300 text-gray-900 shadow-md fixed top-0 left-0 w-full z-50">
+  <header class="bg-blue-600 text-white shadow-md fixed top-0 left-0 w-full z-50">
     <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-      <h1 class="text-2xl font-bold">Mouse Practice</h1>
-      <a href="index.html" class="bg-white text-gray-900 px-4 py-2 rounded-lg font-medium shadow hover:bg-gray-200 transition">Home</a>
+      <h1 class="text-2xl font-bold">Smart Learning Kids - Mouse</h1>
+      <a href="index.html" class="bg-white text-blue-600 px-4 py-2 rounded-lg font-medium shadow hover:bg-blue-100 transition">Home</a>
     </div>
   </header>
 
-  <!-- Content -->
   <main class="pt-24 max-w-4xl mx-auto px-4">
-    <h2 class="text-3xl font-bold text-center mb-8">Select a Mouse Practice</h2>
+    <h2 class="text-3xl font-bold text-center mb-8">Mouse Practice</h2>
     <div id="accordion" class="space-y-4"></div>
   </main>
 
-  <!-- Mouse Modal -->
   <div id="mouseModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
     <div class="bg-white rounded-xl p-6 max-w-2xl w-full shadow-lg relative">
-      <button id="closeMouseModal" class="absolute top-2 right-2 text-red-600 text-xl font-bold">&times;</button>
-      <h2 id="mouseTitle" class="text-xl font-bold mb-4">Mouse Practice</h2>
-      <p id="mouseInstruction" class="mb-4 text-gray-700"></p>
-      <div id="mouseContent" class="bg-gray-100 p-4 rounded text-lg flex flex-wrap gap-4 justify-center"></div>
+      <button id="closeModal" class="absolute top-2 right-2 text-red-600 text-xl font-bold">&times;</button>
+      <h2 id="topicTitle" class="text-xl font-bold mb-2"></h2>
+      <p id="topicInstruction" class="mb-4 bg-gray-100 p-3 rounded"></p>
+      
+      <div id="clickPractice" class="flex justify-center flex-wrap gap-4 mb-6"></div>
+      <div id="dragPractice" class="drag-container mb-6"></div>
+
+      <div class="flex justify-between mt-4">
+        <button id="btnPrev" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">⬅ Prev</button>
+        <button id="btnRestart" class="px-4 py-2 bg-yellow-200 rounded hover:bg-yellow-300">🔄 Restart</button>
+        <button id="btnNext" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Next ➡</button>
+      </div>
     </div>
   </div>
 
-<script>
-document.addEventListener("DOMContentLoaded", async () => {
-  const container = document.getElementById("accordion");
-  const mouseModal = document.getElementById("mouseModal");
-  const closeMouseModal = document.getElementById("closeMouseModal");
-  const mouseTitle = document.getElementById("mouseTitle");
-  const mouseInstruction = document.getElementById("mouseInstruction");
-  const mouseContent = document.getElementById("mouseContent");
+  <script>
+  document.addEventListener("DOMContentLoaded", async () => {
+    const container = document.getElementById("accordion");
+    const modal = document.getElementById("mouseModal");
+    const closeModal = document.getElementById("closeModal");
+    const topicTitle = document.getElementById("topicTitle");
+    const topicInstruction = document.getElementById("topicInstruction");
+    const clickPractice = document.getElementById("clickPractice");
+    const dragPractice = document.getElementById("dragPractice");
+    const btnPrev = document.getElementById("btnPrev");
+    const btnNext = document.getElementById("btnNext");
+    const btnRestart = document.getElementById("btnRestart");
 
-  try {
-    const res = await fetch("data/mouse.json");
-    const data = await res.json();
-    const classes = Array.isArray(data) ? data : data.classes;
+    let topics = [];
+    let currentIndex = 0;
 
-    classes.forEach(cls => {
-      if (cls.id !== "mouse") return; // only mouse
+    try {
+      const res = await fetch("data/mouse.json");
+      const data = await res.json();
+      topics = data.topics || [];
 
-      cls.topics.forEach(topic => {
+      topics.forEach((topic, idx) => {
         const btn = document.createElement("button");
-        btn.className = "btn bg-gray-300 text-gray-900 w-full md:w-auto";
+        btn.className = "block w-full text-left px-4 py-2 rounded-lg shadow text-gray-900 bg-white hover:shadow-md hover:bg-blue-50 transition mb-2";
         btn.textContent = topic.title;
-        btn.dataset.instruction = topic.instruction;
-        btn.dataset.content = JSON.stringify(topic.sample);
+        btn.dataset.index = idx;
         container.appendChild(btn);
       });
-    });
+    } catch (err) {
+      console.error("Failed to load mouse.json", err);
+      container.innerHTML = '<p class="text-red-500">⚠️ Failed to load mouse practice data.</p>';
+    }
 
-    // Topic click → open modal
+    function loadTopic(index) {
+      const topic = topics[index];
+      if (!topic) return;
+      currentIndex = index;
+      topicTitle.textContent = topic.title;
+      topicInstruction.textContent = topic.instruction;
+      clickPractice.innerHTML = "";
+      dragPractice.innerHTML = "";
+
+      // Click Practice
+      if (topic.sample) {
+        topic.sample.forEach(s => {
+          const btn = document.createElement("div");
+          btn.className = "click-target";
+          btn.textContent = s;
+          btn.addEventListener("click", () => {
+            btn.classList.add("correct");
+            setTimeout(() => btn.classList.remove("correct"), 500);
+          });
+          clickPractice.appendChild(btn);
+        });
+      }
+
+      // Drag & Drop Practice
+      if (topic.title === "Drag and Drop") {
+        topic.sample.forEach((shape, i) => {
+          const draggable = document.createElement("div");
+          draggable.className = "draggable";
+          draggable.textContent = shape[0];
+          draggable.draggable = true;
+          draggable.id = "drag-" + i;
+
+          draggable.addEventListener("dragstart", e => {
+            e.dataTransfer.setData("text/plain", draggable.id);
+          });
+          dragPractice.appendChild(draggable);
+
+          const dropZone = document.createElement("div");
+          dropZone.className = "drop-zone";
+          dropZone.textContent = shape[0];
+
+          dropZone.addEventListener("dragover", e => e.preventDefault());
+          dropZone.addEventListener("drop", e => {
+            e.preventDefault();
+            const dragId = e.dataTransfer.getData("text/plain");
+            const dragEl = document.getElementById(dragId);
+            if (dragEl && dragEl.textContent === dropZone.textContent) {
+              dropZone.classList.add("correct");
+              dragEl.remove();
+            } else {
+              dropZone.classList.add("incorrect");
+              setTimeout(() => dropZone.classList.remove("incorrect"), 500);
+            }
+          });
+
+          dragPractice.appendChild(dropZone);
+        });
+      }
+
+      modal.classList.remove("hidden");
+    }
+
     container.addEventListener("click", e => {
-      const btn = e.target.closest(".btn");
+      const btn = e.target.closest("button");
       if (!btn) return;
-      mouseTitle.textContent = btn.textContent;
-      mouseInstruction.textContent = btn.dataset.instruction;
-      mouseContent.innerHTML = "";
-      const samples = JSON.parse(btn.dataset.content);
-      samples.forEach(s => {
-        const item = document.createElement("div");
-        item.className = "px-4 py-2 bg-blue-200 rounded shadow text-center cursor-pointer hover:bg-blue-300";
-        item.textContent = s;
-        mouseContent.appendChild(item);
-      });
-      mouseModal.classList.remove("hidden");
+      loadTopic(parseInt(btn.dataset.index));
     });
 
-    closeMouseModal.addEventListener("click", () => {
-      mouseModal.classList.add("hidden");
-    });
+    closeModal.addEventListener("click", () => modal.classList.add("hidden"));
+    btnPrev.addEventListener("click", () => { if (currentIndex > 0) loadTopic(currentIndex - 1); });
+    btnNext.addEventListener("click", () => { if (currentIndex < topics.length -1) loadTopic(currentIndex + 1); });
+    btnRestart.addEventListener("click", () => loadTopic(currentIndex));
 
-  } catch (err) {
-    console.error("Error loading mouse JSON:", err);
-    container.innerHTML = '<p class="text-red-500">⚠️ Failed to load mouse practice data.</p>';
-  }
-});
-</script>
+  });
+  </script>
 </body>
 </html>
