@@ -14,20 +14,10 @@
               "topics": [
                 {
   "title": "Home Row Drill",
-  "instruction": "Repeat the home row letters, build speed, accuracy, and finger coordination.",
-  "sample": [
-    "A", "S", "D", "F", "J", "K", "L", ";",
-    " ;", "L", "K", "J", "F", "D", "S", "A",          // Reverse order
-    "AA", "SS", "DD", "FF", "JJ", "KK", "LL", ";;",  // Double letters
-    "AS", "SD", "DF", "FJ", "JK", "KL", "L;",        // Adjacent combos
-    "FA", "DJ", "KL", "SF",                            // Cross-hand combos
-    "ASD", "SDF", "DFJ", "FJK", "JKL", "KL;",         // Triple-letter sequences
-    "ADF", "SJK", "FJL", "DSA",                        // Random mixed triples
-    "ASDF", "DFJK", "SJKL", "FDSA", "JKLA", "KLFA"    // Random 4-letter sequences
-  ]
-
-                  
-                },
+  "instruction": "Repeat the home row letters, build speed and accuracy.",
+  "sample": ["A", "S", "D", "F", "J", "K", "L", ";"]
+}
+       },
                 {
                   "title": "Two Letter Words",
                   "instruction": "Type simple two-letter words using home-row letters.",
