@@ -73,7 +73,6 @@
       <div id="keyboard" class="p-2 bg-gray-200 rounded mt-4"></div>
     </div>
   </div>
-
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   const container = document.getElementById("accordion");
@@ -90,7 +89,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const errorsEl = document.getElementById("errors");
   const accuracyEl = document.getElementById("accuracy");
 
-  // Navigation
   const btnPrev = document.getElementById("btnPrev");
   const btnNext = document.getElementById("btnNext");
   const btnRestart = document.getElementById("btnRestart");
@@ -169,7 +167,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
-  // --- HIGHLIGHT SAMPLE TEXT ---
   function renderHighlightedText(sample, typed) {
     let result = "";
     for (let i = 0; i < sample.length; i++) {
@@ -186,7 +183,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     return result;
   }
 
-  // --- UPDATE STATS ---
   function updateStats(typed) {
     if (!startTime) startTime = new Date();
     errors = 0;
@@ -204,7 +200,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     accuracyEl.textContent = accuracy;
   }
 
-  // --- LOAD TOPIC ---
   function loadTopic(topic) {
     lessonTitle.textContent = topic.dataset.title;
     sampleText = topic.dataset.sample;
@@ -219,7 +214,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     highlightNextKey(sampleText[0]);
   }
 
-  // --- JSON AND ACCORDION ---
+// --- ACCORDION + JSON LOADING ---
   try {
     const res = await fetch("data/classes.json");
     const data = await res.json();
@@ -266,6 +261,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       }).join("");
 
       card.appendChild(body);
+
+      // Accordion toggle
       header.addEventListener("click", () => {
         const isOpen = body.style.maxHeight && body.style.maxHeight !== "0px";
         container.querySelectorAll(".accordion-body").forEach(el => el.style.maxHeight = null);
@@ -275,17 +272,17 @@ document.addEventListener("DOMContentLoaded", async () => {
           header.querySelector("span:last-child").style.transform = "rotate(45deg)";
         }
       });
+
       container.appendChild(card);
     });
 
-    // Topic click → modal
+    // --- TOPIC CLICK HANDLER ---
     container.addEventListener("click", e => {
-      if (e.target.closest(".topicBtn")) {
-        const btn = e.target.closest(".topicBtn");
-        currentTopics = [...btn.closest("ul").querySelectorAll(".topicBtn")];
-        currentIndex = currentTopics.indexOf(btn);
-        loadTopic(btn);
-      }
+      const btn = e.target.closest(".topicBtn");
+      if (!btn) return;
+      currentTopics = [...btn.closest("ul").querySelectorAll(".topicBtn")];
+      currentIndex = currentTopics.indexOf(btn);
+      loadTopic(btn);
     });
 
   } catch (err) {
@@ -293,6 +290,31 @@ document.addEventListener("DOMContentLoaded", async () => {
     container.innerHTML = '<p class="text-red-500">⚠️ Failed to load class data.</p>';
   }
 
-  // --- NAVIGATION ---
+  // --- NAVIGATION BUTTONS ---
   btnNext.addEventListener("click", () => {
-    if (currentIndex < currentTopics.length
+    if (currentIndex < currentTopics.length - 1) {
+      currentIndex++;
+      loadTopic(currentTopics[currentIndex]);
+    }
+  });
+  btnPrev.addEventListener("click", () => {
+    if (currentIndex > 0) {
+      currentIndex--;
+      loadTopic(currentTopics[currentIndex]);
+    }
+  });
+  btnRestart.addEventListener("click", () => {
+    if (currentTopics.length > 0) {
+      loadTopic(currentTopics[currentIndex]);
+    }
+  });
+
+  closeTutor.addEventListener("click", () => {
+    tutorModal.classList.add("hidden");
+  });
+
+}); // DOMContentLoaded end
+</script>
+</body>
+</html>
+                          
