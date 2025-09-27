@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart Learning Kids - Classes</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; }
+    .accordion-header span:last-child { transition: transform 0.3s ease; }
+    .hidden { display: none; }
+    .key {
+      display: inline-block;
+      padding: 8px 10px;
+      margin: 2px;
+      background: #eee;
+      border-radius: 6px;
+      border: 2px solid transparent;
+      transition: background 0.2s, border 0.2s, box-shadow 0.2s;
+      user-select: none;
+      text-align: center;
+      min-width: 35px;
+    }
+    .key.highlight { background: #3498db !important; color: #fff !important; }
+    .key.pressed { border: 2px solid white !important; box-shadow: 0 0 8px white; }
+    .correct { color: green; }
+    .incorrect { color: red; text-decoration: underline; }
+    .current { text-decoration: underline; text-decoration-thickness: 2px; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+
+  <!-- Header -->
+  <header class="bg-blue-600 text-white shadow-md fixed top-0 left-0 w-full z-50">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <h1 class="text-2xl font-bold">Smart Learning Kids</h1>
+      <a href="index.html" class="bg-white text-blue-600 px-4 py-2 rounded-lg font-medium shadow hover:bg-blue-100 transition">Home</a>
+    </div>
+  </header>
+
+  <!-- Content -->
+  <main class="pt-24 max-w-4xl mx-auto px-4">
+    <h2 class="text-3xl font-bold text-center mb-8">Select Your Class</h2>
+    <div id="accordion" class="space-y-4"></div>
+  </main>
+
+  <!-- Typing Tutor Modal -->
+  <div id="tutorModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-xl p-6 max-w-2xl w-full shadow-lg relative">
+      <button id="closeTutor" class="absolute top-2 right-2 text-red-600 text-xl font-bold">&times;</button>
+      <h2 id="lessonTitle" class="text-xl font-bold mb-4">Typing Tutor</h2>
+
+      <!-- Highlighted Sample Text -->
+      <div id="lessonText" class="mb-4 p-3 bg-gray-100 rounded text-lg leading-relaxed"></div>
+
+      <!-- Typing Area -->
+      <textarea id="typingArea" rows="4" class="w-full border p-3 rounded mb-4" placeholder="Start typing here..."></textarea>
+
+      <!-- Stats -->
+      <div class="flex justify-between text-sm font-semibold mb-4">
+        <span>WPM: <span id="wpm">0</span></span>
+        <span>Errors: <span id="errors">0</span></span>
+        <span>Accuracy: <span id="accuracy">100</span>%</span>
+      </div>
+
+      <div class="flex justify-between mt-4">
+        <button id="btnPrev" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">⬅ Prev</button>
+        <button id="btnRestart" class="px-4 py-2 bg-yellow-200 rounded hover:bg-yellow-300">🔄 Restart</button>
+        <button id="btnNext" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Next ➡</button>
+      </div>
+
+      <!-- Virtual Keyboard -->
+      <div id="keyboard" class="p-2 bg-gray-200 rounded mt-4"></div>
+    </div>
+  </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  const container = document.getElementById("accordion");
+  const today = new Date();
+  const termUnlockDates = { 2: new Date("2026-01-04"), 3: new Date("2026-04-20") };
+
+  // Modal elements
+  const tutorModal = document.getElementById("tutorModal");
+  const closeTutor = document.getElementById("closeTutor");
+  const lessonTitle = document.getElementById("lessonTitle");
+  const lessonText = document.getElementById("lessonText");
+  const typingArea = document.getElementById("typingArea");
+  const wpmEl = document.getElementById("wpm");
+  const errorsEl = document.getElementById("errors");
+  const accuracyEl = document.getElementById("accuracy");
+
+  // Navigation
+  const btnPrev = document.getElementById("btnPrev");
+  const btnNext = document.getElementById("btnNext");
+  const btnRestart = document.getElementById("btnRestart");
+
+  let sampleText = "";
+  let startTime = null;
+  let errors = 0;
+  let currentTopics = [];
+  let currentIndex = 0;
+
+  // --- FULL COMPUTER KEYBOARD ---
+  const keyIdMap = {
+    "`": "backtick","1":"1","2":"2","3":"3","4":"4","5":"5","6":"6","7":"7","8":"8","9":"9","0":"0",
+    "-":"minus","=":"equals","[":"bracket-left","]":"bracket-right","\\":"backslash",
+    ";":"semicolon","'":"quote",",":"comma",".":"period","/":"slash"," ":"space",
+    "enter":"enter","backspace":"backspace","tab":"tab","capslock":"capslock","shift":"shift",
+    "control":"control","alt":"alt"
+  };
+
+  const keyboardRows = [
+    ["`","1","2","3","4","5","6","7","8","9","0","-","=","Backspace"],
+    ["Tab","Q","W","E","R","T","Y","U","I","O","P","[","]","\\"],
+    ["CapsLock","A","S","D","F","G","H","J","K","L",";","'","Enter"],
+    ["Shift","Z","X","C","V","B","N","M",",",".","/","Shift"],
+    ["Control","Alt","Space","Alt","Control"]
+  ];
+
+  const keyboardContainer = document.getElementById("keyboard");
+  keyboardContainer.innerHTML = "";
+  keyboardRows.forEach(row => {
+    const rowDiv = document.createElement("div");
+    rowDiv.className = "flex justify-center mb-1 gap-1";
+    row.forEach(k => {
+      const keyBtn = document.createElement("div");
+      keyBtn.className = "key px-3 py-2 rounded shadow text-center bg-gray-100 select-none";
+      keyBtn.innerText = k;
+      let idKey = k.toLowerCase();
+      idKey = keyIdMap[idKey] || idKey.replace(/\s/g,'-');
+      keyBtn.id = "key-" + idKey;
+      rowDiv.appendChild(keyBtn);
+    });
+    keyboardContainer.appendChild(rowDiv);
+  });
+
+  // --- RESET AND HIGHLIGHT KEYS ---
+  function resetKeyboardHighlights() {
+    document.querySelectorAll(".key").forEach(k => k.classList.remove("highlight"));
+  }
+
+  function highlightNextKey(nextChar) {
+    resetKeyboardHighlights();
+    if (!nextChar) return;
+    let char = nextChar.toLowerCase();
+    char = keyIdMap[char] || char;
+    const keyEl = document.getElementById("key-" + char);
+    if (keyEl) keyEl.classList.add("highlight");
+  }
+
+  // Typing listener
+  typingArea.addEventListener("input", () => {
+    const typed = typingArea.value;
+    lessonText.innerHTML = renderHighlightedText(sampleText, typed);
+    updateStats(typed);
+    highlightNextKey(sampleText[typed.length]);
+  });
+
+  // Flash key on physical press
+  document.addEventListener("keydown", e => {
+    if (tutorModal.classList.contains("hidden")) return;
+    let key = e.key.toLowerCase();
+    key = keyIdMap[key] || key;
+    const keyEl = document.getElementById("key-" + key);
+    if (keyEl) {
+      keyEl.classList.add("pressed");
+      setTimeout(() => keyEl.classList.remove("pressed"), 150);
+    }
+  });
+
+  // --- HIGHLIGHT SAMPLE TEXT ---
+  function renderHighlightedText(sample, typed) {
+    let result = "";
+    for (let i = 0; i < sample.length; i++) {
+      if (i < typed.length) {
+        result += sample[i] === typed[i]
+          ? `<span class="text-green-600 underline">${sample[i]}</span>`
+          : `<span class="text-red-600 underline">${sample[i]}</span>`;
+      } else if (i === typed.length) {
+        result += `<span class="current underline">${sample[i]}</span>`;
+      } else {
+        result += `<span class="text-gray-700">${sample[i]}</span>`;
+      }
+    }
+    return result;
+  }
+
+  // --- UPDATE STATS ---
+  function updateStats(typed) {
+    if (!startTime) startTime = new Date();
+    errors = 0;
+    for (let i = 0; i < typed.length; i++) {
+      if (typed[i] !== sampleText[i]) errors++;
+    }
+    const elapsedMinutes = (new Date() - startTime) / 60000;
+    const words = typed.trim().split(/\s+/).filter(Boolean).length;
+    const wpm = elapsedMinutes > 0 ? Math.round(words / elapsedMinutes) : 0;
+    const accuracy = typed.length > 0
+      ? Math.max(0, Math.round(((typed.length - errors) / typed.length) * 100))
+      : 100;
+    wpmEl.textContent = wpm;
+    errorsEl.textContent = errors;
+    accuracyEl.textContent = accuracy;
+  }
+
+  // --- LOAD TOPIC ---
+  function loadTopic(topic) {
+    lessonTitle.textContent = topic.dataset.title;
+    sampleText = topic.dataset.sample;
+    typingArea.value = "";
+    lessonText.innerHTML = renderHighlightedText(sampleText, "");
+    startTime = null;
+    errors = 0;
+    wpmEl.textContent = 0;
+    errorsEl.textContent = 0;
+    accuracyEl.textContent = 100;
+    tutorModal.classList.remove("hidden");
+    highlightNextKey(sampleText[0]);
+  }
+
+  // --- JSON AND ACCORDION ---
+  try {
+    const res = await fetch("data/classes.json");
+    const data = await res.json();
+    const classes = Array.isArray(data) ? data : data.classes;
+
+    classes.forEach(cls => {
+      const card = document.createElement("div");
+      card.className = "bg-white rounded-xl shadow-md overflow-hidden mb-4";
+
+      const header = document.createElement("button");
+      header.className = "accordion-header w-full flex justify-between items-center px-6 py-4 text-lg font-semibold bg-blue-100 hover:bg-blue-200 transition";
+      header.innerHTML = `<span class="text-gray-900">${cls.name}</span><span class="text-gray-900">+</span>`;
+      card.appendChild(header);
+
+      const body = document.createElement("div");
+      body.className = "accordion-body bg-gray-50";
+
+      body.innerHTML = (cls.terms || []).map(term => {
+        const termUnlocked = term.number === 1 || today >= termUnlockDates[term.number];
+        return `
+          <div class="mb-4">
+            <h3 class="text-lg font-semibold text-blue-700 px-4 py-2">${term.title}</h3>
+            ${(term.categories || []).map(cat => `
+              <div class="ml-4 mb-2">
+                <h4 class="text-md font-semibold text-purple-600 px-3 py-1">${cat.name}</h4>
+                <ul class="space-y-2 pl-6">
+                  ${(cat.topics || []).map(topic => {
+                    const icon = cat.id === "mouse" ? "🖱️" : cat.id === "keyboard" ? "⌨️" : "📖";
+                    return termUnlocked
+                      ? `<li>
+                          <button class="topicBtn block w-full text-left px-4 py-2 rounded-lg shadow text-gray-900 bg-white hover:shadow-md hover:bg-blue-50 transition flex items-center gap-2"
+                            data-title="${topic.title}"
+                            data-sample="${topic.sample}">
+                            <span>${icon}</span> ${topic.title}
+                          </button>
+                        </li>`
+                      : `<li><span class="block px-4 py-2 rounded-lg bg-gray-200 text-gray-500 cursor-not-allowed flex items-center gap-2">
+                          <span>${icon}</span> ${topic.title} (Locked)</span></li>`;
+                  }).join("")}
+                </ul>
+              </div>
+            `).join("")}
+          </div>`;
+      }).join("");
+
+      card.appendChild(body);
+      header.addEventListener("click", () => {
+        const isOpen = body.style.maxHeight && body.style.maxHeight !== "0px";
+        container.querySelectorAll(".accordion-body").forEach(el => el.style.maxHeight = null);
+        container.querySelectorAll(".accordion-header span:last-child").forEach(icon => icon.style.transform = "rotate(0deg)");
+        if (!isOpen) {
+          body.style.maxHeight = body.scrollHeight + "px";
+          header.querySelector("span:last-child").style.transform = "rotate(45deg)";
+        }
+      });
+      container.appendChild(card);
+    });
+
+    // Topic click → modal
+    container.addEventListener("click", e => {
+      if (e.target.closest(".topicBtn")) {
+        const btn = e.target.closest(".topicBtn");
+        currentTopics = [...btn.closest("ul").querySelectorAll(".topicBtn")];
+        currentIndex = currentTopics.indexOf(btn);
+        loadTopic(btn);
+      }
+    });
+
+  } catch (err) {
+    console.error("Error loading JSON:", err);
+    container.innerHTML = '<p class="text-red-500">⚠️ Failed to load class data.</p>';
+  }
+
+  // --- NAVIGATION ---
+  btnNext.addEventListener("click", () => {
+    if (currentIndex < currentTopics.length
