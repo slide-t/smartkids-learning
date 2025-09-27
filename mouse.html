@@ -91,8 +91,76 @@ document.addEventListener("DOMContentLoaded", async () => {
     hitsEl.textContent = hits;
     accuracyEl.textContent = 100;
   }
+// framework for different mouse practice types
+const practiceTypes = {
+  clicking: () => {
+    practiceArea.innerHTML = '';
 
-  function spawnTarget() {
+    function spawnTarget() {
+      practiceArea.innerHTML = '';
+
+      const target = document.createElement("div");
+      target.className = "target absolute w-12 h-12 flex items-center justify-center cursor-pointer select-none";
+      target.textContent = "🎯";
+
+      const areaRect = practiceArea.getBoundingClientRect();
+      const size = 50;
+      const x = Math.random() * (areaRect.width - size);
+      const y = Math.random() * (areaRect.height - size);
+
+      target.style.position = "absolute";
+      target.style.left = x + "px";
+      target.style.top = y + "px";
+
+      practiceArea.appendChild(target);
+
+      target.addEventListener("click", () => {
+        hits++;
+        clicks++;
+        updateStats();
+        spawnTarget(); // spawn a new one immediately
+      });
+    }
+
+    spawnTarget(); // kick off first target
+  },
+
+  doubleClick: () => {
+    practiceArea.innerHTML = '';
+    const box = document.createElement("div");
+    box.className = "target w-32 h-32 flex items-center justify-center bg-blue-200 rounded cursor-pointer select-none";
+    box.textContent = "🟦 Double-click me";
+    practiceArea.appendChild(box);
+
+    box.addEventListener("dblclick", () => {
+      hits++;
+      clicks++;
+      updateStats();
+      box.textContent = "✅ Nice!";
+      setTimeout(() => practiceTypes.doubleClick(), 800); // reset
+    });
+  },
+
+  dragDrop: () => {
+    practiceArea.innerHTML = `
+      <div id="dragItem" draggable="true" 
+           class="w-16 h-16 bg-blue-400 text-white flex items-center justify-center rounded cursor-move">📦</div>
+      <div id="dropZone" 
+           class="w-32 h-32 mt-4 border-2 border-dashed border-gray-500 flex items-center justify-center">Drop Here</div>
+    `;
+    const item = document.getElementById("dragItem");
+    const zone = document.getElementById("dropZone");
+
+    item.addEventListener("dragstart", () => clicks++);
+    zone.addEventListener("dragover", e => e.preventDefault());
+    zone.addEventListener("drop", () => {
+      hits++;
+      updateStats();
+      zone.textContent = "✅ Dropped!";
+    });
+  }
+};
+ /* function spawnTarget() {
     practiceArea.innerHTML = '';
     const target = document.createElement("div");
     target.className = "target";
@@ -111,7 +179,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       updateStats();
       spawnTarget();
     });
-  }
+  }*/
 
   function updateStats() {
     clicksEl.textContent = clicks;
