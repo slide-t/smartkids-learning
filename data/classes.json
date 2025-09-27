@@ -15,7 +15,7 @@
                 {
                   "title": "Home Row Keys",
                   "instruction": "Place your fingers on A S D F J K L ; and press each key when prompted.",
-                  "samples": ["A", "S", "D", "F", "J", "K", "L", ";"]
+                  "sample": ["A", "S", "D", "F", "J", "K", "L", ";"]
                 },
                 {
                   "title": "Two Letter Words",
@@ -25,7 +25,7 @@
                 {
                   "title": "Three Letter Words",
                   "instruction": "Type these three-letter words slowly and correctly.",
-                  "samples": ["CAT", "DOG", "SUN", "HAT", "FUN"]
+                  "sample": ["CAT", "DOG", "SUN", "HAT", "FUN"]
                 }
               ]
             },
@@ -36,12 +36,12 @@
                 {
                   "title": "Mouse Clicks",
                   "instruction": "Practice left click, right click, and double-click on targets.",
-                  "samples": ["Left Click", "Right Click", "Double Click"]
+                  "sample": ["Left Click", "Right Click", "Double Click"]
                 },
                 {
                   "title": "Drag and Drop",
                   "instruction": "Drag small shapes to their matching outlines.",
-                  "samples": ["Drag Circle", "Drag Square", "Drop Triangle"]
+                  "sample": ["Drag Circle", "Drag Square", "Drop Triangle"]
                 }
               ]
             }
@@ -58,7 +58,7 @@
                 {
                   "title": "Simple Words",
                   "instruction": "Type these simple 3–4 letter words clearly.",
-                  "samples": ["BIRD", "FISH", "TREE", "STAR", "BALL"]
+                  "sample": ["BIRD", "FISH", "TREE", "STAR", "BALL"]
                 },
                 {
                   "title": "Common Sentences",
@@ -80,7 +80,7 @@
                 {
                   "title": "Phrases Practice",
                   "instruction": "Type short simple phrases; watch spacing and capitals.",
-                  "samples": ["Good day", "My cat", "Big fun", "Play now", "Nice hat"]
+                  "sample": ["Good day", "My cat", "Big fun", "Play now", "Nice hat"]
                 },
                 {
                   "title": "Timed Drill (3 min)",
