@@ -277,6 +277,31 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     // --- TOPIC CLICK HANDLER ---
+
+    container.addEventListener("click", e => {
+  const btn = e.target.closest(".topicBtn");
+  if (!btn) return;
+
+  // Find category id from parent container
+  const catDiv = btn.closest("div.ml-4"); 
+  const catName = catDiv.querySelector("h4")?.textContent.toLowerCase() || "";
+
+  if (catName.includes("mouse")) {
+    // Redirect to mouse practice page
+    // Pass title and sample as query params if needed
+    const title = encodeURIComponent(btn.dataset.title);
+    const sample = encodeURIComponent(btn.dataset.sample);
+    window.location.href = `mouse.html?title=${title}&sample=${sample}`;
+    return;
+  }
+
+  // Otherwise, load keyboard topic
+  currentTopics = [...btn.closest("ul").querySelectorAll(".topicBtn")];
+  currentIndex = currentTopics.indexOf(btn);
+  loadTopic(btn);
+});
+
+    /*
     container.addEventListener("click", e => {
       const btn = e.target.closest(".topicBtn");
       if (!btn) return;
@@ -288,7 +313,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   } catch (err) {
     console.error("Error loading JSON:", err);
     container.innerHTML = '<p class="text-red-500">⚠️ Failed to load class data.</p>';
-  }
+  }*/
 
   // --- NAVIGATION BUTTONS ---
   btnNext.addEventListener("click", () => {
