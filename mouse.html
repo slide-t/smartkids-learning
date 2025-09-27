@@ -91,7 +91,111 @@ document.addEventListener("DOMContentLoaded", async () => {
     accuracyEl.textContent = 100;
   }
 // framework for different mouse practice types
-   function spawnTarget() {
+// ==================== PRACTICE TYPES ====================
+const practiceTypes = {
+  // 🔹 Year 1: Clicking Basics
+  clicking: () => {
+    practiceArea.innerHTML = '';
+
+    function spawnClickingTarget() {
+      // spawn 3 targets at once
+      for (let i = 0; i < 3; i++) {
+        const target = document.createElement("div");
+        target.className = "target";
+        target.textContent = "🎯";
+
+        const areaRect = practiceArea.getBoundingClientRect();
+        const size = 40;
+        const x = Math.random() * (areaRect.width - size);
+        const y = Math.random() * (areaRect.height - size);
+
+        target.style.left = x + "px";
+        target.style.top = y + "px";
+        target.style.position = "absolute";
+        target.style.transition = "transform 0.2s ease";
+
+        practiceArea.appendChild(target);
+
+        target.addEventListener("click", () => {
+          hits++;
+          clicks++;
+          updateStats();
+          target.remove();
+
+          // respawn when all cleared
+          if (practiceArea.querySelectorAll(".target").length === 0) {
+            spawnClickingTarget();
+          }
+        });
+      }
+    }
+
+    spawnClickingTarget();
+  },
+
+  // 🔹 Year 1: Double-Clicking
+  doubleClick: () => {
+    practiceArea.innerHTML = '';
+
+    const box = document.createElement("div");
+    box.className = "target w-32 h-32 flex items-center justify-center bg-blue-200 rounded cursor-pointer select-none";
+    box.textContent = "🟦 Double-click me";
+
+    practiceArea.appendChild(box);
+
+    // require double-click
+    box.addEventListener("dblclick", () => {
+      hits++;
+      clicks++;
+      updateStats();
+      box.textContent = "✅ Opened!";
+      setTimeout(() => practiceTypes.doubleClick(), 1000); // restart
+    });
+
+    // count single clicks as mistakes
+    box.addEventListener("click", () => {
+      clicks++;
+      updateStats();
+    });
+  },
+
+  // 🔹 Year 1: Mouse Movement
+  movement: () => {
+    practiceArea.innerHTML = `
+      <div id="pathArea" class="relative w-full h-full flex items-center justify-center">
+        <div id="linePath" class="absolute top-1/2 left-1/4 w-1/2 h-2 bg-gray-400"></div>
+        <div id="startPoint" class="absolute left-1/4 top-1/2 -translate-y-1/2 w-6 h-6 bg-green-500 rounded-full cursor-pointer"></div>
+        <div id="endPoint" class="absolute right-1/4 top-1/2 -translate-y-1/2 w-6 h-6 bg-red-500 rounded-full"></div>
+      </div>
+    `;
+
+    const start = document.getElementById("startPoint");
+    const end = document.getElementById("endPoint");
+    let isFollowing = false;
+
+    start.addEventListener("mouseenter", () => {
+      isFollowing = true;
+      clicks++;
+      updateStats();
+    });
+
+    end.addEventListener("mouseenter", () => {
+      if (isFollowing) {
+        hits++;
+        updateStats();
+        end.textContent = "✅";
+        setTimeout(() => practiceTypes.movement(), 1500); // restart
+      }
+    });
+
+    practiceArea.addEventListener("mouseleave", () => {
+      isFollowing = false;
+    });
+  }
+};
+  
+  
+  /*function spawnTarget() {
     practiceArea.innerHTML = '';
     const target = document.createElement("div");
     target.className = "target";
@@ -111,6 +215,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       spawnTarget();
     });
   }
+  */
 function updateStats() {
     clicksEl.textContent = clicks;
     hitsEl.textContent = hits;
