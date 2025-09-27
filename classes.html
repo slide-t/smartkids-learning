@@ -278,31 +278,30 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // --- TOPIC CLICK HANDLER ---
 
-   /* container.addEventListener("click", e => {
+   container.addEventListener("click", e => {
   const btn = e.target.closest(".topicBtn");
   if (!btn) return;
 
-  // Find category id from parent container
-  const catDiv = btn.closest("div.ml-4"); 
-  const catName = catDiv.querySelector("h4")?.textContent.toLowerCase() || "";
+  // Determine category safely
+  const catDiv = btn.closest("div.ml-4");
+  const catHeader = catDiv?.querySelector("h4");
+  const catId = catHeader?.dataset?.id || catDiv?.dataset?.id || "";
 
-  if (catName.includes("mouse")) {
-    // Redirect to mouse practice page
-    // Pass title and sample as query params if needed
+  // If this is a mouse topic, open mouse page
+  if (catId === "mouse") {
     const title = encodeURIComponent(btn.dataset.title);
     const sample = encodeURIComponent(btn.dataset.sample);
     window.location.href = `mouse.html?title=${title}&sample=${sample}`;
-    return;
+    return; // exit to avoid loading keyboard tutor
   }
 
-  // Otherwise, load keyboard topic
+  // Otherwise, proceed with keyboard tutor
   currentTopics = [...btn.closest("ul").querySelectorAll(".topicBtn")];
   currentIndex = currentTopics.indexOf(btn);
   loadTopic(btn);
 });
-*/
     
-    container.addEventListener("click", e => {
+   /* container.addEventListener("click", e => {
       const btn = e.target.closest(".topicBtn");
       if (!btn) return;
       currentTopics = [...btn.closest("ul").querySelectorAll(".topicBtn")];
@@ -313,7 +312,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   } catch (err) {
     console.error("Error loading JSON:", err);
     container.innerHTML = '<p class="text-red-500">⚠️ Failed to load class data.</p>';
-  }
+  }*/
 
   // --- NAVIGATION BUTTONS ---
   btnNext.addEventListener("click", () => {
