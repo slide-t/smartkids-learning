@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart Learning Kids - Mouse Practice</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; }
+    .accordion-header span:last-child { transition: transform 0.3s ease; }
+    .hidden { display: none; }
+    .target {
+      width: 50px; height: 50px; background: #3498db;
+      border-radius: 50%; position: absolute; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-weight: bold; user-select: none;
+      transition: transform 0.1s ease;
+    }
+    .draggable { width: 60px; height: 60px; border-radius: 8px; background: #60a5fa; color: white; display:flex; justify-content:center; align-items:center; cursor: grab; }
+    .drop-zone { width: 60px; height: 60px; border: 2px dashed #ccc; border-radius: 8px; display:flex; justify-content:center; align-items:center; margin:5px; }
+    .drop-zone.correct { border-color: #16a34a; background: #4ade80; }
+    .drop-zone.incorrect { border-color: #b91c1c; background: #f87171; }
+    .stats span { margin-right: 15px; font-weight: bold; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+
+  <!-- Header -->
+  <header class="bg-blue-600 text-white shadow-md fixed top-0 left-0 w-full z-50">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <h1 class="text-2xl font-bold">Smart Learning Kids - Mouse</h1>
+      <a href="index.html" class="bg-white text-blue-600 px-4 py-2 rounded-lg font-medium shadow hover:bg-blue-100 transition">Home</a>
+    </div>
+  </header>
+
+  <!-- Content -->
+  <main class="pt-24 max-w-4xl mx-auto px-4">
+    <h2 class="text-3xl font-bold text-center mb-8">Mouse Practice</h2>
+    <div id="accordion" class="space-y-4"></div>
+  </main>
+
+  <!-- Modal -->
+  <div id="mouseModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-xl p-6 max-w-2xl w-full shadow-lg relative">
+      <button id="closeMouse" class="absolute top-2 right-2 text-red-600 text-xl font-bold">&times;</button>
+      <h2 id="mouseTitle" class="text-xl font-bold mb-4">Mouse Practice</h2>
+      <div id="mouseInstruction" class="mb-4 p-3 bg-gray-100 rounded text-lg leading-relaxed"></div>
+      <div id="practiceArea" class="relative w-full h-64 bg-gray-200 rounded mb-4 overflow-hidden flex flex-wrap justify-center items-center"></div>
+
+      <div class="stats flex justify-start text-sm font-semibold mb-4">
+        <span>Clicks: <span id="clicks">0</span></span>
+        <span>Hits: <span id="hits">0</span></span>
+        <span>Accuracy: <span id="mouseAccuracy">100</span>%</span>
+      </div>
+
+      <div class="flex justify-between mt-4">
+        <button id="btnPrevMouse" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">⬅ Prev</button>
+        <button id="btnRestartMouse" class="px-4 py-2 bg-yellow-200 rounded hover:bg-yellow-300">🔄 Restart</button>
+        <button id="btnNextMouse" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Next ➡</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  const container = document.getElementById("accordion");
+  const mouseModal = document.getElementById("mouseModal");
+  const closeMouse = document.getElementById("closeMouse");
+  const mouseTitle = document.getElementById("mouseTitle");
+  const mouseInstruction = document.getElementById("mouseInstruction");
+  const practiceArea = document.getElementById("practiceArea");
+  const clicksEl = document.getElementById("clicks");
+  const hitsEl = document.getElementById("hits");
+  const accuracyEl = document.getElementById("mouseAccuracy");
+  const btnPrevMouse = document.getElementById("btnPrevMouse");
+  const btnNextMouse = document.getElementById("btnNextMouse");
+  const btnRestartMouse = document.getElementById("btnRestartMouse");
+
+  let currentTopics = [];
+  let currentIndex = 0;
+  let clicks = 0;
+  let hits = 0;
+
+  function resetStats() {
+    clicks = 0;
+    hits = 0;
+    clicksEl.textContent = clicks;
+    hitsEl.textContent = hits;
+    accuracyEl.textContent = 100;
+  }
+
+  function updateStats() {
+    clicksEl.textContent = clicks;
+    hitsEl.textContent = hits;
+    accuracyEl.textContent = clicks > 0 ? Math.round((hits / clicks) * 100) : 100;
+  }
+
+  // --- Click Target for Mouse Clicks ---
+  function spawnTarget() {
+    practiceArea.innerHTML = '';
+    const target = document.createElement("div");
+    target.className = "target";
+    target.textContent = "🎯";
+    const areaRect = practiceArea.getBoundingClientRect();
+    const size = 50;
+    const x = Math.random() * (areaRect.width - size);
+    const y = Math.random() * (areaRect.height - size);
+    target.style.left = x + "px";
+    target.style.top = y + "px";
+    practiceArea.appendChild(target);
+
+    target.addEventListener("click", e => {
+      hits++;
+      clicks++;
+      updateStats();
+      spawnTarget();
+    });
+  }
+
+  function loadMouseTopic(topic) {
+    const title = topic.dataset.title;
+    const sample = topic.dataset.sample;
+
+    mouseTitle.textContent = title;
+    mouseInstruction.textContent = Array.isArray(sample) ? sample.join(", ") : sample;
+
+    resetStats();
+    practiceArea.innerHTML = '';
+
+    if (title === "Mouse Clicks") {
+      spawnTarget();
+    }
+
+    if (title === "Drag and Drop") {
+      // Build draggable items
+      const items = Array.isArray(sample) ? sample : sample.split(",");
+      const dragContainer = document.createElement("div");
+      dragContainer.className = "flex flex-wrap justify-center items-center gap-4";
+
+      items.forEach((s, i) => {
+        // Draggable
+        const drag = document.createElement("div");
+        drag.className = "draggable";
+        drag.textContent = s.split(" ")[1] || s;
+        drag.draggable = true;
+        drag.id = `drag-${i}`;
+        drag.addEventListener("dragstart", e => e.dataTransfer.setData("text/plain", drag.id));
+        dragContainer.appendChild(drag);
+
+        // Drop zone
+        const drop = document.createElement("div");
+        drop.className = "drop-zone";
+        drop.textContent = s.split(" ")[1] || s;
+
+        drop.addEventListener("dragover", e => e.preventDefault());
+        drop.addEventListener("drop", e => {
+          e.preventDefault();
+          const dragId = e.dataTransfer.getData("text/plain");
+          const dragEl = document.getElementById(dragId);
+          if (dragEl && dragEl.textContent === drop.textContent) {
+            drop.classList.add("correct");
+            dragEl.remove();
+            hits++;
+            clicks++;
+            updateStats();
+          } else {
+            drop.classList.add("incorrect");
+            setTimeout(() => drop.classList.remove("incorrect"), 500);
+            clicks++;
+            updateStats();
+          }
+        });
+
+        dragContainer.appendChild(drop);
+      });
+
+      practiceArea.appendChild(dragContainer);
+    }
+
+    mouseModal.classList.remove("hidden");
+  }
+
+  try {
+    const res = await fetch("data/mouse.json");
+    const data = await res.json();
+    const terms = data.terms || [];
+
+    terms.forEach(term => {
+      const card = document.createElement("div");
+      card.className = "bg-white rounded-xl shadow-md overflow-hidden mb-4";
+
+      const header = document.createElement("button");
+      header.className = "accordion-header w-full flex justify-between items-center px-6 py-4 text-lg font-semibold bg-green-100 hover:bg-green-200 transition";
+      header.innerHTML = `<span class="text-gray-900">${term.title}</span><span class="text-gray-900">+</span>`;
+      card.appendChild(header);
+
+      const body = document.createElement("div");
+      body.className = "accordion-body bg-gray-50";
+
+      body.innerHTML = (term.categories || []).map(cat => `
+        <div class="ml-4 mb-2">
+          <h4 class="text-md font-semibold text-purple-600 px-3 py-1">${cat.name}</h4>
+          <ul class="space-y-2 pl-6">
+            ${(cat.topics || []).map(topic => `
+              <li>
+                <button class="topicBtn block w-full text-left px-4 py-2 rounded-lg shadow text-gray-900 bg-white hover:shadow-md hover:bg-green-50 transition flex items-center gap-2"
+                  data-title="${topic.title}"
+                  data-sample='${JSON.stringify(topic.sample)}'>
+                  🖱️ ${topic.title}
+                </button>
+              </li>`).join("")}
+          </ul>
+        </div>
+      `).join("");
+
+      card.appendChild(body);
+
+      header.addEventListener("click", () => {
+        const isOpen = body.style.maxHeight && body.style.maxHeight !== "0px";
+        container.querySelectorAll(".accordion-body").forEach(el => el.style.maxHeight = null);
+        container.querySelectorAll(".accordion-header span:last-child").forEach(icon => icon.style.transform = "rotate(0deg)");
+        if (!isOpen) {
+          body.style.maxHeight = body.scrollHeight + "px";
+          header.querySelector("span:last-child").style.transform = "rotate(45deg)";
+        }
+      });
+
+      container.appendChild(card);
+    });
+
+    container.addEventListener("click", e => {
+      const btn = e.target.closest(".topicBtn");
+      if (!btn) return;
+      currentTopics = [...btn.closest("ul").querySelectorAll(".topicBtn")];
+      currentIndex = currentTopics.indexOf(btn);
+      loadMouseTopic(btn);
+    });
+
+  } catch (err) {
+    console.error("Error loading JSON:", err);
+    container.innerHTML = '<p class="text-red-500">⚠️ Failed to load mouse data.</p>';
+  }
+
+  // Navigation buttons
+  btnNextMouse.addEventListener("click", () => {
+    if (currentIndex < currentTopics.length - 1) {
+      currentIndex++;
+      loadMouseTopic(currentTopics[currentIndex]);
+    }
+  });
+  btnPrevMouse.addEventListener("click", () => {
+    if (currentIndex > 0) {
+      currentIndex--;
+      loadMouseTopic(currentTopics[currentIndex]);
+    }
+  });
+  btnRestartMouse.addEventListener("click", () => {
+    if (currentTopics.length > 0) loadMouseTopic(currentTopics[currentIndex]);
+  });
+
+  closeMouse.addEventListener("click", () => {
+    mouseModal.classList.add("hidden");
+    practiceArea.innerHTML = '';
+  });
+
+  // Count clicks outside targets for Mouse Clicks
+  practiceArea.addEventListener("click", e => {
+    if (e.target.classList.contains("target")) return;
+    clicks++;
+    updateStats();
+  });
+});
+</script>
+</body>
+</html>
