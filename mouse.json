@@ -1,0 +1,186 @@
+[
+  {
+    "year": 1,
+    "topics": [
+      {
+        "title": "Pointing",
+        "description": "Use your mouse to point at the 🖱️ emoji. Click when it turns green.",
+        "type": "click",
+        "emoji": "🖱️",
+        "positions": ["top-left", "top-right", "bottom-left", "bottom-right", "center"]
+      },
+      {
+        "title": "Single Click",
+        "description": "Click once on the 🖱️ emoji when it appears at different positions.",
+        "type": "click",
+        "emoji": "🖱️",
+        "positions": ["top-left", "top-right", "bottom-left", "bottom-right", "center"]
+      },
+      {
+        "title": "Double Click",
+        "description": "Double-click on the 🖱️ emoji when it appears.",
+        "type": "double-click",
+        "emoji": "🖱️",
+        "positions": ["top-left", "top-right", "bottom-left", "bottom-right", "center"]
+      },
+      {
+        "title": "Drag and Drop",
+        "description": "Click and drag the 🖱️ emoji to the target square.",
+        "type": "drag",
+        "emoji": "🖱️",
+        "target": "🎯"
+      }
+    ]
+  },
+  {
+    "year": 2,
+    "topics": [
+      {
+        "title": "Point and Click",
+        "description": "Point to the 🐭 emoji and click once. Repeat 5 times.",
+        "type": "click",
+        "emoji": "🐭",
+        "positions": ["top-left", "top-right", "bottom-left", "bottom-right", "center"]
+      },
+      {
+        "title": "Follow the Mouse",
+        "description": "Move your mouse along the path of arrows 🡆🡇🡄🡅 and click on each emoji.",
+        "type": "click-path",
+        "emoji": "🐭",
+        "positions": ["top-left", "top-right", "bottom-left", "bottom-right", "center"]
+      }
+    ]
+  },
+  {
+    "year": 3,
+    "topics": [
+      {
+        "title": "Click Any Shape",
+        "description": "Click on the shape that appears on the screen as fast as you can.",
+        "type": "shape-click",
+        "shapes": ["🔵", "🟢", "🟡", "🟠", "🔴"],
+        "positions": ["random"]
+      },
+      {
+        "title": "Right Click Practice",
+        "description": "Right-click on the shape that appears.",
+        "type": "right-click",
+        "shapes": ["🔵", "🟢", "🟡", "🟠", "🔴"],
+        "positions": ["random"]
+      }
+    ]
+  },
+  {
+    "year": 4,
+    "topics": [
+      {
+        "title": "Drag Shapes",
+        "description": "Drag each shape to its matching colored target.",
+        "type": "drag",
+        "shapes": ["🔵", "🟢", "🟡", "🟠", "🔴"],
+        "targets": ["🔵", "🟢", "🟡", "🟠", "🔴"]
+      },
+      {
+        "title": "Fast Click",
+        "description": "Click on moving shapes as quickly as you can.",
+        "type": "click-moving",
+        "shapes": ["🔵", "🟢", "🟡", "🟠", "🔴"]
+      }
+    ]
+  },
+  {
+    "year": 5,
+    "topics": [
+      {
+        "title": "Drag and Rotate",
+        "description": "Drag shapes to their targets and rotate them to match orientation.",
+        "type": "drag-rotate",
+        "shapes": ["🔺", "🔻", "◀️", "▶️"],
+        "targets": ["🔺", "🔻", "◀️", "▶️"]
+      }
+    ]
+  },
+  {
+    "year": 6,
+    "topics": [
+      {
+        "title": "Advanced Drag",
+        "description": "Drag multiple shapes simultaneously to targets.",
+        "type": "multi-drag",
+        "shapes": ["🔵", "🟢", "🟡", "🟠", "🔴"],
+        "targets": ["🔵", "🟢", "🟡", "🟠", "🔴"]
+      }
+    ]
+  },
+  {
+    "year": 7,
+    "topics": [
+      {
+        "title": "Precision Click",
+        "description": "Click on small shapes appearing quickly at random positions.",
+        "type": "precision-click",
+        "shapes": ["🔹", "🔸", "♦️", "◼️", "◻️"],
+        "positions": ["random"]
+      }
+    ]
+  },
+  {
+    "year": 8,
+    "topics": [
+      {
+        "title": "Combo Click",
+        "description": "Click on shapes in the correct sequence.",
+        "type": "sequence-click",
+        "shapes": ["🔵", "🔴", "🟢", "🟡"],
+        "sequence": [0, 1, 2, 3]
+      }
+    ]
+  },
+  {
+    "year": 9,
+    "topics": [
+      {
+        "title": "Right & Left Combo",
+        "description": "Perform a combo of left and right clicks on the shapes.",
+        "type": "combo-click",
+        "shapes": ["🔴", "🟢", "🔵", "🟡"]
+      }
+    ]
+  },
+  {
+    "year": 10,
+    "topics": [
+      {
+        "title": "Drag & Drop Combo",
+        "description": "Drag and drop multiple shapes in correct order.",
+        "type": "drag-combo",
+        "shapes": ["🔵", "🔴", "🟢", "🟡"],
+        "targets": ["🔵", "🔴", "🟢", "🟡"]
+      }
+    ]
+  },
+  {
+    "year": 11,
+    "topics": [
+      {
+        "title": "Speed Challenge",
+        "description": "Click and drag shapes as fast as possible within 10 seconds.",
+        "type": "speed",
+        "shapes": ["🔵", "🔴", "🟢", "🟡"],
+        "positions": ["random"]
+      }
+    ]
+  },
+  {
+    "year": 12,
+    "topics": [
+      {
+        "title": "Master Challenge",
+        "description": "Complete all previous mouse exercises in a sequence.",
+        "type": "master",
+        "shapes": ["🔵", "🔴", "🟢", "🟡", "🔺", "🔻", "◀️", "▶️"],
+        "sequence": "full"
+      }
+    ]
+  }
+]
