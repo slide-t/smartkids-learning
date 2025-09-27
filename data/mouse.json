@@ -6,15 +6,18 @@
       "topics": [
         {
           "title": "Clicking Basics",
-          "sample": "Practice clicking on the highlighted spots with the mouse."
+          "sample": "Practice clicking on the highlighted spots with the mouse.",
+          "type": "clicking"
         },
         {
           "title": "Double-Clicking",
-          "sample": "Double-click quickly on the shapes to open them."
+          "sample": "Double-click quickly on the shapes to open them.",
+          "type": "doubleClick"
         },
         {
           "title": "Mouse Movement",
-          "sample": "Move the mouse to follow the line on the screen."
+          "sample": "Move the mouse to follow the line on the screen.",
+          "type": "movement"
         }
       ]
     },
@@ -24,15 +27,18 @@
       "topics": [
         {
           "title": "Drag and Drop",
-          "sample": "Drag the objects into the correct boxes."
+          "sample": "Drag the objects into the correct boxes.",
+          "type": "dragDrop"
         },
         {
           "title": "Right-Click Basics",
-          "sample": "Right-click on items to see context menus."
+          "sample": "Right-click on items to see context menus.",
+          "type": "rightClick"
         },
         {
           "title": "Click and Hold",
-          "sample": "Hold the mouse button to draw a straight line."
+          "sample": "Hold the mouse button to draw a straight line.",
+          "type": "clickHold"
         }
       ]
     }
