@@ -92,7 +92,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 // framework for different mouse practice types
 // ==================== PRACTICE TYPES ====================
-const practiceTypes = {
+
+  
+  /*const practiceTypes = {
   // 🔹 Year 1: Clicking Basics
   clicking: () => {
     practiceArea.innerHTML = '';
@@ -193,9 +195,9 @@ const practiceTypes = {
     });
   }
 };
+  */
   
-  
-  /*function spawnTarget() {
+  function spawnTarget() {
     practiceArea.innerHTML = '';
     const target = document.createElement("div");
     target.className = "target";
@@ -215,7 +217,7 @@ const practiceTypes = {
       spawnTarget();
     });
   }
-  */
+  
 function updateStats() {
     clicksEl.textContent = clicks;
     hitsEl.textContent = hits;
