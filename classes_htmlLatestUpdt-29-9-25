@@ -9,37 +9,23 @@
     .accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; }
     .accordion-header span:last-child { transition: transform 0.3s ease; }
     .hidden { display: none; }
-    /*.key { display: inline-block; padding: 8px 10px; margin: 2px; background: #eee; border-radius: 6px; }*/
     .key {
-  display: inline-block;
-  padding: 8px 10px;
-  margin: 2px;
-  background: #eee;
-  border-radius: 6px;
-  border: 2px solid transparent;
-  transition: background 0.2s, border 0.2s, box-shadow 0.2s;
-}
-
-.key.active {
-  background: #3b82f6; /* Tailwind Blue-500 */
-  color: white;
-  border-color: white;
-  box-shadow: 0 0 12px white;
-}
-  /*  .key.active { background: white; box-shadow: 0 0 8px #000; }*/
+      display: inline-block;
+      padding: 8px 10px;
+      margin: 2px;
+      background: #eee;
+      border-radius: 6px;
+      border: 2px solid transparent;
+      transition: background 0.2s, border 0.2s, box-shadow 0.2s;
+      user-select: none;
+      text-align: center;
+      min-width: 35px;
+    }
+    .key.highlight { background: #3498db !important; color: #fff !important; }
+    .key.pressed { border: 2px solid white !important; box-shadow: 0 0 8px white; }
     .correct { color: green; }
     .incorrect { color: red; text-decoration: underline; }
     .current { text-decoration: underline; text-decoration-thickness: 2px; }
-
-    .key.highlight {
-  background: #3498db !important;
-  color: #fff !important;
-}
-
-.key.pressed {
-  border: 2px solid white !important;
-  box-shadow: 0 0 8px white;
-}
   </style>
 </head>
 <body class="bg-gray-50 text-gray-900 font-sans">
@@ -58,49 +44,35 @@
     <div id="accordion" class="space-y-4"></div>
   </main>
 
+  <!-- Typing Tutor Modal -->
+  <div id="tutorModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-xl p-6 max-w-2xl w-full shadow-lg relative">
+      <button id="closeTutor" class="absolute top-2 right-2 text-red-600 text-xl font-bold">&times;</button>
+      <h2 id="lessonTitle" class="text-xl font-bold mb-4">Typing Tutor</h2>
 
-<!-- Typing Tutor Modal -->
-<div id="tutorModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-  <div class="bg-white rounded-xl p-6 max-w-2xl w-full shadow-lg relative">
-    <button id="closeTutor" class="absolute top-2 right-2 text-red-600 text-xl font-bold">&times;</button>
-    <h2 id="lessonTitle" class="text-xl font-bold mb-4">Typing Tutor</h2>
+      <!-- Highlighted Sample Text -->
+      <div id="lessonText" class="mb-4 p-3 bg-gray-100 rounded text-lg leading-relaxed"></div>
 
-    <!-- Highlighted Sample Text -->
-    <div id="lessonText" class="mb-4 p-3 bg-gray-100 rounded text-lg leading-relaxed"></div>
+      <!-- Typing Area -->
+      <textarea id="typingArea" rows="4" class="w-full border p-3 rounded mb-4" placeholder="Start typing here..."></textarea>
 
-    <!-- Typing Area -->
-    <textarea id="typingArea" rows="4" class="w-full border p-3 rounded mb-4" placeholder="Start typing here..."></textarea>
-
-    <!-- Stats -->
-    <div class="flex justify-between text-sm font-semibold mb-4">
-      <span>WPM: <span id="wpm">0</span></span>
-      <span>Errors: <span id="errors">0</span></span>
-      <span>Accuracy: <span id="accuracy">100</span>%</span>
-    </div>
-<div class="flex justify-between mt-4">
-  <button id="btnPrev" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">⬅ Prev</button>
-  <button id="btnRestart" class="px-4 py-2 bg-yellow-200 rounded hover:bg-yellow-300">🔄 Restart</button>
-  <button id="btnNext" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Next ➡</button>
-</div>
-
-    
-    <!-- Virtual Keyboard -->
-    <div id="keyboard" class="p-2 bg-gray-200 rounded">
-      <div>
-        <span class="key">q</span><span class="key">w</span><span class="key">e</span><span class="key">r</span><span class="key">t</span><span class="key">y</span><span class="key">u</span><span class="key">i</span><span class="key">o</span><span class="key">p</span>
+      <!-- Stats -->
+      <div class="flex justify-between text-sm font-semibold mb-4">
+        <span>WPM: <span id="wpm">0</span></span>
+        <span>Errors: <span id="errors">0</span></span>
+        <span>Accuracy: <span id="accuracy">100</span>%</span>
       </div>
-      <div>
-        <span class="key">a</span><span class="key">s</span><span class="key">d</span><span class="key">f</span><span class="key">g</span><span class="key">h</span><span class="key">j</span><span class="key">k</span><span class="key">l</span>
+
+      <div class="flex justify-between mt-4">
+        <button id="btnPrev" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">⬅ Prev</button>
+        <button id="btnRestart" class="px-4 py-2 bg-yellow-200 rounded hover:bg-yellow-300">🔄 Restart</button>
+        <button id="btnNext" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Next ➡</button>
       </div>
-      <div>
-        <span class="key">z</span><span class="key">x</span><span class="key">c</span><span class="key">v</span><span class="key">b</span><span class="key">n</span><span class="key">m</span>
-      </div>
-      <div>
-        <span class="key"> </span>
-      </div>
+
+      <!-- Virtual Keyboard -->
+      <div id="keyboard" class="p-2 bg-gray-200 rounded mt-4"></div>
     </div>
   </div>
-</div>
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   const container = document.getElementById("accordion");
@@ -117,7 +89,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const errorsEl = document.getElementById("errors");
   const accuracyEl = document.getElementById("accuracy");
 
-  // Navigation
   const btnPrev = document.getElementById("btnPrev");
   const btnNext = document.getElementById("btnNext");
   const btnRestart = document.getElementById("btnRestart");
@@ -128,14 +99,74 @@ document.addEventListener("DOMContentLoaded", async () => {
   let currentTopics = [];
   let currentIndex = 0;
 
-  // Assign IDs to virtual keyboard keys
-  document.querySelectorAll(".key").forEach(k => {
-    const val = k.innerText.trim();
-    if (val === "") k.id = "key-space";
-    else k.id = "key-" + val.toLowerCase();
+  // --- FULL COMPUTER KEYBOARD ---
+  const keyIdMap = {
+    "`": "backtick","1":"1","2":"2","3":"3","4":"4","5":"5","6":"6","7":"7","8":"8","9":"9","0":"0",
+    "-":"minus","=":"equals","[":"bracket-left","]":"bracket-right","\\":"backslash",
+    ";":"semicolon","'":"quote",",":"comma",".":"period","/":"slash"," ":"space",
+    "enter":"enter","backspace":"backspace","tab":"tab","capslock":"capslock","shift":"shift",
+    "control":"control","alt":"alt"
+  };
+
+  const keyboardRows = [
+    ["`","1","2","3","4","5","6","7","8","9","0","-","=","Backspace"],
+    ["Tab","Q","W","E","R","T","Y","U","I","O","P","[","]","\\"],
+    ["CapsLock","A","S","D","F","G","H","J","K","L",";","'","Enter"],
+    ["Shift","Z","X","C","V","B","N","M",",",".","/","Shift"],
+    ["Control","Alt","Space","Alt","Control"]
+  ];
+
+  const keyboardContainer = document.getElementById("keyboard");
+  keyboardContainer.innerHTML = "";
+  keyboardRows.forEach(row => {
+    const rowDiv = document.createElement("div");
+    rowDiv.className = "flex justify-center mb-1 gap-1";
+    row.forEach(k => {
+      const keyBtn = document.createElement("div");
+      keyBtn.className = "key px-3 py-2 rounded shadow text-center bg-gray-100 select-none";
+      keyBtn.innerText = k;
+      let idKey = k.toLowerCase();
+      idKey = keyIdMap[idKey] || idKey.replace(/\s/g,'-');
+      keyBtn.id = "key-" + idKey;
+      rowDiv.appendChild(keyBtn);
+    });
+    keyboardContainer.appendChild(rowDiv);
   });
 
-  // Highlight sample text dynamically
+  // --- RESET AND HIGHLIGHT KEYS ---
+  function resetKeyboardHighlights() {
+    document.querySelectorAll(".key").forEach(k => k.classList.remove("highlight"));
+  }
+
+  function highlightNextKey(nextChar) {
+    resetKeyboardHighlights();
+    if (!nextChar) return;
+    let char = nextChar.toLowerCase();
+    char = keyIdMap[char] || char;
+    const keyEl = document.getElementById("key-" + char);
+    if (keyEl) keyEl.classList.add("highlight");
+  }
+
+  // Typing listener
+  typingArea.addEventListener("input", () => {
+    const typed = typingArea.value;
+    lessonText.innerHTML = renderHighlightedText(sampleText, typed);
+    updateStats(typed);
+    highlightNextKey(sampleText[typed.length]);
+  });
+
+  // Flash key on physical press
+  document.addEventListener("keydown", e => {
+    if (tutorModal.classList.contains("hidden")) return;
+    let key = e.key.toLowerCase();
+    key = keyIdMap[key] || key;
+    const keyEl = document.getElementById("key-" + key);
+    if (keyEl) {
+      keyEl.classList.add("pressed");
+      setTimeout(() => keyEl.classList.remove("pressed"), 150);
+    }
+  });
+
   function renderHighlightedText(sample, typed) {
     let result = "";
     for (let i = 0; i < sample.length; i++) {
@@ -152,7 +183,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     return result;
   }
 
-  // Update stats
   function updateStats(typed) {
     if (!startTime) startTime = new Date();
     errors = 0;
@@ -170,7 +200,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     accuracyEl.textContent = accuracy;
   }
 
-  // Reset + load topic
   function loadTopic(topic) {
     lessonTitle.textContent = topic.dataset.title;
     sampleText = topic.dataset.sample;
@@ -185,45 +214,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     highlightNextKey(sampleText[0]);
   }
 
-  // Reset keyboard highlights
-  function resetKeyboardHighlights() {
-    document.querySelectorAll(".key").forEach(k => k.classList.remove("highlight"));
-  }
-
-  // Highlight expected char
-  function highlightNextKey(nextChar) {
-    resetKeyboardHighlights();
-    if (!nextChar) return;
-    let char = nextChar.toLowerCase();
-    let keyId;
-    if (char === " ") keyId = "key-space";
-    else if (/^[a-z0-9]$/.test(char)) keyId = "key-" + char;
-    else keyId = "key-" + char; // fallback for punctuation if available
-    const keyEl = document.getElementById(keyId);
-    if (keyEl) keyEl.classList.add("highlight");
-  }
-
-  // Typing listener
-  typingArea.addEventListener("input", () => {
-    const typed = typingArea.value;
-    lessonText.innerHTML = renderHighlightedText(sampleText, typed);
-    updateStats(typed);
-    highlightNextKey(sampleText[typed.length]);
-  });
-
-  // Flash key on physical press
-  document.addEventListener("keydown", e => {
-    if (tutorModal.classList.contains("hidden")) return;
-    let key = e.key.toLowerCase();
-    if (key === " ") key = "space";
-    const keyEl = document.getElementById("key-" + key);
-    if (keyEl) {
-      keyEl.classList.add("pressed");
-      setTimeout(() => keyEl.classList.remove("pressed"), 150);
-    }
-  });
-
-  // Accordion + JSON
+// --- ACCORDION + JSON LOADING ---
   try {
     const res = await fetch("data/classes.json");
     const data = await res.json();
@@ -270,6 +261,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       }).join("");
 
       card.appendChild(body);
+
+      // Accordion toggle
       header.addEventListener("click", () => {
         const isOpen = body.style.maxHeight && body.style.maxHeight !== "0px";
         container.querySelectorAll(".accordion-body").forEach(el => el.style.maxHeight = null);
@@ -279,17 +272,42 @@ document.addEventListener("DOMContentLoaded", async () => {
           header.querySelector("span:last-child").style.transform = "rotate(45deg)";
         }
       });
+
       container.appendChild(card);
     });
 
-    // Topic click → modal
+    // --- TOPIC CLICK HANDLER ---
+
+   /* container.addEventListener("click", e => {
+  const btn = e.target.closest(".topicBtn");
+  if (!btn) return;
+
+  // Find category id from parent container
+  const catDiv = btn.closest("div.ml-4"); 
+  const catName = catDiv.querySelector("h4")?.textContent.toLowerCase() || "";
+
+  if (catName.includes("mouse")) {
+    // Redirect to mouse practice page
+    // Pass title and sample as query params if needed
+    const title = encodeURIComponent(btn.dataset.title);
+    const sample = encodeURIComponent(btn.dataset.sample);
+    window.location.href = `mouse.html?title=${title}&sample=${sample}`;
+    return;
+  }
+
+  // Otherwise, load keyboard topic
+  currentTopics = [...btn.closest("ul").querySelectorAll(".topicBtn")];
+  currentIndex = currentTopics.indexOf(btn);
+  loadTopic(btn);
+});
+*/
+    
     container.addEventListener("click", e => {
-      if (e.target.closest(".topicBtn")) {
-        const btn = e.target.closest(".topicBtn");
-        currentTopics = [...btn.closest("ul").querySelectorAll(".topicBtn")];
-        currentIndex = currentTopics.indexOf(btn);
-        loadTopic(btn);
-      }
+      const btn = e.target.closest(".topicBtn");
+      if (!btn) return;
+      currentTopics = [...btn.closest("ul").querySelectorAll(".topicBtn")];
+      currentIndex = currentTopics.indexOf(btn);
+      loadTopic(btn);
     });
 
   } catch (err) {
@@ -297,7 +315,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     container.innerHTML = '<p class="text-red-500">⚠️ Failed to load class data.</p>';
   }
 
-  // Navigation
+  // --- NAVIGATION BUTTONS ---
   btnNext.addEventListener("click", () => {
     if (currentIndex < currentTopics.length - 1) {
       currentIndex++;
@@ -319,8 +337,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   closeTutor.addEventListener("click", () => {
     tutorModal.classList.add("hidden");
   });
-});
+
+}); // DOMContentLoaded end
 </script>
-                                                                                                                                                                                                                 
 </body>
 </html>
+                          
