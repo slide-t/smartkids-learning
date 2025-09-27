@@ -9,26 +9,25 @@
     .hidden { display: none; }
     .click-target { 
       display: inline-block; 
-      margin: 5px; 
-      padding: 15px 20px; 
+      margin: 10px; 
+      padding: 20px; 
       background: #eee; 
       border-radius: 8px; 
       cursor: pointer; 
       border: 2px solid transparent;
       user-select: none;
-      transition: all 0.2s ease;
     }
     .click-target.correct { background: #4ade80; border-color: #16a34a; }
     .click-target.incorrect { background: #f87171; border-color: #b91c1c; }
-    .drag-container { display: flex; gap: 30px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
-    .draggable { width: 60px; height: 60px; border-radius: 50%; background: #60a5fa; display:flex; align-items:center; justify-content:center; color:white; cursor: grab; user-select: none; transition: transform 0.2s ease; }
-    .drop-zone { width: 60px; height: 60px; border: 2px dashed #ccc; border-radius: 50%; display:flex; align-items:center; justify-content:center; transition: all 0.2s ease; }
+    .drag-container { display: flex; gap: 40px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
+    .draggable { width: 60px; height: 60px; border-radius: 50%; background: #60a5fa; display:flex; align-items:center; justify-content:center; color:white; cursor: grab; }
+    .drop-zone { width: 60px; height: 60px; border: 2px dashed #ccc; border-radius: 50%; display:flex; align-items:center; justify-content:center; }
     .drop-zone.correct { border-color: #16a34a; background: #4ade80; }
-    .drop-zone.incorrect { border-color: #b91c1c; background: #f87171; }
   </style>
 </head>
 <body class="bg-gray-50 text-gray-900 font-sans">
 
+  <!-- Header -->
   <header class="bg-blue-600 text-white shadow-md fixed top-0 left-0 w-full z-50">
     <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
       <h1 class="text-2xl font-bold">Smart Learning Kids - Mouse</h1>
@@ -36,19 +35,24 @@
     </div>
   </header>
 
+  <!-- Content -->
   <main class="pt-24 max-w-4xl mx-auto px-4">
     <h2 class="text-3xl font-bold text-center mb-8">Mouse Practice</h2>
     <div id="accordion" class="space-y-4"></div>
   </main>
 
+  <!-- Modal -->
   <div id="mouseModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
     <div class="bg-white rounded-xl p-6 max-w-2xl w-full shadow-lg relative">
       <button id="closeModal" class="absolute top-2 right-2 text-red-600 text-xl font-bold">&times;</button>
-      <h2 id="topicTitle" class="text-xl font-bold mb-2"></h2>
+      <h2 id="topicTitle" class="text-xl font-bold mb-4"></h2>
       <p id="topicInstruction" class="mb-4 bg-gray-100 p-3 rounded"></p>
       
-      <div id="clickPractice" class="flex justify-center flex-wrap gap-4 mb-6"></div>
-      <div id="dragPractice" class="drag-container mb-6"></div>
+      <!-- Click Targets -->
+      <div id="clickPractice" class="flex justify-center flex-wrap gap-4 mb-4"></div>
+
+      <!-- Drag & Drop Area -->
+      <div id="dragPractice" class="drag-container"></div>
 
       <div class="flex justify-between mt-4">
         <button id="btnPrev" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">⬅ Prev</button>
@@ -74,6 +78,7 @@
     let topics = [];
     let currentIndex = 0;
 
+    // Fetch mouse.json
     try {
       const res = await fetch("data/mouse.json");
       const data = await res.json();
@@ -86,6 +91,7 @@
         btn.dataset.index = idx;
         container.appendChild(btn);
       });
+
     } catch (err) {
       console.error("Failed to load mouse.json", err);
       container.innerHTML = '<p class="text-red-500">⚠️ Failed to load mouse practice data.</p>';
@@ -97,12 +103,14 @@
       currentIndex = index;
       topicTitle.textContent = topic.title;
       topicInstruction.textContent = topic.instruction;
+
+      // Clear previous
       clickPractice.innerHTML = "";
       dragPractice.innerHTML = "";
 
-      // Click Practice
-      if (topic.sample) {
-        topic.sample.forEach(s => {
+      // --- Mouse Click Practice ---
+      if (topic.title === "Mouse Clicks") {
+        topic.sample.forEach((s, i) => {
           const btn = document.createElement("div");
           btn.className = "click-target";
           btn.textContent = s;
@@ -114,7 +122,7 @@
         });
       }
 
-      // Drag & Drop Practice
+      // --- Drag & Drop Practice ---
       if (topic.title === "Drag and Drop") {
         topic.sample.forEach((shape, i) => {
           const draggable = document.createElement("div");
@@ -126,12 +134,12 @@
           draggable.addEventListener("dragstart", e => {
             e.dataTransfer.setData("text/plain", draggable.id);
           });
+
           dragPractice.appendChild(draggable);
 
           const dropZone = document.createElement("div");
           dropZone.className = "drop-zone";
           dropZone.textContent = shape[0];
-
           dropZone.addEventListener("dragover", e => e.preventDefault());
           dropZone.addEventListener("drop", e => {
             e.preventDefault();
@@ -145,7 +153,6 @@
               setTimeout(() => dropZone.classList.remove("incorrect"), 500);
             }
           });
-
           dragPractice.appendChild(dropZone);
         });
       }
@@ -153,6 +160,7 @@
       modal.classList.remove("hidden");
     }
 
+    // Button handlers
     container.addEventListener("click", e => {
       const btn = e.target.closest("button");
       if (!btn) return;
@@ -160,8 +168,13 @@
     });
 
     closeModal.addEventListener("click", () => modal.classList.add("hidden"));
-    btnPrev.addEventListener("click", () => { if (currentIndex > 0) loadTopic(currentIndex - 1); });
-    btnNext.addEventListener("click", () => { if (currentIndex < topics.length -1) loadTopic(currentIndex + 1); });
+
+    btnPrev.addEventListener("click", () => {
+      if (currentIndex > 0) loadTopic(currentIndex - 1);
+    });
+    btnNext.addEventListener("click", () => {
+      if (currentIndex < topics.length -1) loadTopic(currentIndex + 1);
+    });
     btnRestart.addEventListener("click", () => loadTopic(currentIndex));
 
   });
