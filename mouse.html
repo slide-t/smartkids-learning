@@ -65,6 +65,186 @@
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   const container = document.getElementById("accordion");
+
+  const mouseModal = document.getElementById("mouseModal");
+  const closeMouse = document.getElementById("closeMouse");
+  const mouseTitle = document.getElementById("mouseTitle");
+  const mouseInstruction = document.getElementById("mouseInstruction");
+  const practiceArea = document.getElementById("practiceArea");
+  const clicksEl = document.getElementById("clicks");
+  const hitsEl = document.getElementById("hits");
+  const accuracyEl = document.getElementById("mouseAccuracy");
+
+  const btnPrevMouse = document.getElementById("btnPrevMouse");
+  const btnNextMouse = document.getElementById("btnNextMouse");
+  const btnRestartMouse = document.getElementById("btnRestartMouse");
+
+  let currentTopics = [];
+  let currentIndex = 0;
+
+  let clicks = 0;
+  let hits = 0;
+
+  function resetStats() {
+    clicks = 0;
+    hits = 0;
+    clicksEl.textContent = clicks;
+    hitsEl.textContent = hits;
+    accuracyEl.textContent = 100;
+  }
+
+  function updateStats() {
+    clicksEl.textContent = clicks;
+    hitsEl.textContent = hits;
+    const accuracy = clicks > 0 ? Math.round((hits / clicks) * 100) : 100;
+    accuracyEl.textContent = accuracy;
+  }
+
+  function clearPracticeArea() {
+    practiceArea.innerHTML = '';
+  }
+
+  function createClickTarget(label, type="left") {
+    const btn = document.createElement("div");
+    btn.className = "target";
+    btn.textContent = label;
+    btn.addEventListener("click", (e) => {
+      if (type === "left") hits++;
+      clicks++;
+      updateStats();
+    });
+    if (type === "right") {
+      btn.addEventListener("contextmenu", (e) => {
+        e.preventDefault();
+        hits++;
+        clicks++;
+        updateStats();
+      });
+    }
+    if (type === "double") {
+      btn.addEventListener("dblclick", () => {
+        hits++;
+        clicks++;
+        updateStats();
+      });
+    }
+    practiceArea.appendChild(btn);
+  }
+
+  function createDragDrop(shape) {
+    const draggable = document.createElement("div");
+    draggable.className = "draggable";
+    draggable.textContent = shape[0];
+    draggable.draggable = true;
+    draggable.id = "drag-" + Math.random().toString(36).substr(2, 9);
+
+    draggable.addEventListener("dragstart", e => {
+      e.dataTransfer.setData("text/plain", draggable.id);
+    });
+    practiceArea.appendChild(draggable);
+
+    const dropZone = document.createElement("div");
+    dropZone.className = "drop-zone";
+    dropZone.textContent = shape[0];
+    dropZone.addEventListener("dragover", e => e.preventDefault());
+    dropZone.addEventListener("drop", e => {
+      e.preventDefault();
+      const dragId = e.dataTransfer.getData("text/plain");
+      const dragEl = document.getElementById(dragId);
+      if (dragEl && dragEl.textContent === dropZone.textContent) {
+        dropZone.classList.add("correct");
+        dragEl.remove();
+        hits++;
+        clicks++;
+        updateStats();
+      } else {
+        dropZone.classList.add("incorrect");
+        setTimeout(() => dropZone.classList.remove("incorrect"), 500);
+      }
+    });
+    practiceArea.appendChild(dropZone);
+  }
+
+  function spawnPractice(topic) {
+    clearPracticeArea();
+    resetStats();
+    mouseInstruction.textContent = topic.instruction || "";
+
+    if (topic.title === "Mouse Clicks") {
+      topic.sample.forEach(s => {
+        let type = "left";
+        if (s.toLowerCase().includes("right")) type = "right";
+        if (s.toLowerCase().includes("double")) type = "double";
+        createClickTarget(s, type);
+      });
+    }
+
+    if (topic.title === "Drag and Drop") {
+      topic.sample.forEach(shape => {
+        createDragDrop(shape);
+      });
+    }
+
+    // Future: add other topic types here
+  }
+
+  function loadTopic(index) {
+    const topic = currentTopics[index];
+    if (!topic) return;
+    currentIndex = index;
+    mouseTitle.textContent = topic.title;
+    spawnPractice(topic);
+    mouseModal.classList.remove("hidden");
+  }
+
+  try {
+    const res = await fetch("data/mouse.json");
+    const data = await res.json();
+    currentTopics = data.topics || [];
+
+    // Build accordion
+    currentTopics.forEach((topic, idx) => {
+      const btn = document.createElement("button");
+      btn.className = "topicBtn block w-full text-left px-4 py-2 rounded-lg shadow text-gray-900 bg-white hover:shadow-md hover:bg-green-50 transition mb-2";
+      btn.textContent = topic.title;
+      btn.dataset.index = idx;
+      container.appendChild(btn);
+    });
+
+    container.addEventListener("click", e => {
+      const btn = e.target.closest(".topicBtn");
+      if (!btn) return;
+      loadTopic(parseInt(btn.dataset.index));
+    });
+
+  } catch (err) {
+    console.error("Error loading mouse.json", err);
+    container.innerHTML = '<p class="text-red-500">⚠️ Failed to load mouse data.</p>';
+  }
+
+  btnNextMouse.addEventListener("click", () => {
+    if (currentIndex < currentTopics.length - 1) loadTopic(currentIndex + 1);
+  });
+  btnPrevMouse.addEventListener("click", () => {
+    if (currentIndex > 0) loadTopic(currentIndex - 1);
+  });
+  btnRestartMouse.addEventListener("click", () => {
+    loadTopic(currentIndex);
+  });
+
+  closeMouse.addEventListener("click", () => {
+    mouseModal.classList.add("hidden");
+    clearPracticeArea();
+  });
+
+});
+</script>
+
+
+  <!--
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  const container = document.getElementById("accordion");
   const today = new Date();
 
   const mouseModal = document.getElementById("mouseModal");
@@ -238,5 +418,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 });
 </script>
+  -->
 </body>
 </html>
