@@ -21,7 +21,7 @@
                 {
                   "title": "Two Letter Words",
                   "instruction": "Type simple two-letter words using home-row letters.",
-                  "samples": ["AS", "AD", "FA", "JK", "KL"]
+                  "sample": ["AS", "AD", "FA", "JK", "KL"]
                 },
                 {
                   "title": "Three Letter Words",
