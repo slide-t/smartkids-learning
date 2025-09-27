@@ -15,7 +15,7 @@
                 {
   "title": "Home Row Drill",
   "instruction": "Repeat the home row letters, build speed and accuracy.",
-  "sample": ["A", "S", "D", "F", "J", "K", "L", ";"]
+  "sample": ["A", "S", "D", "F", "J", "K", "L", ";", ";", "L", "K", "J", "F", "D", "S", "A", "AAA", "SSS", "JJJ", "KKK", "DDD", "LKJ", "FDF", "DSA"]
 
        },
                 {
