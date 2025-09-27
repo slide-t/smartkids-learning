@@ -5,12 +5,12 @@
       "topics": [
         {
           "title": "Clicking Practice",
-          "sample": "Click on the targets as they appear.",
+          "sample": "Click the targets as they appear.",
           "type": "clicking"
         },
         {
           "title": "Double-Click Basics",
-          "sample": "Double-click the blue box.",
+          "sample": "Double-click the blue box to confirm selection.",
           "type": "doubleClick"
         },
         {
@@ -25,7 +25,7 @@
       "topics": [
         {
           "title": "Click Accuracy",
-          "sample": "Click the targets as quickly and accurately as possible.",
+          "sample": "Click the small moving target accurately.",
           "type": "clicking"
         },
         {
@@ -35,27 +35,7 @@
         },
         {
           "title": "Drag and Place",
-          "sample": "Drag the items into the correct area.",
-          "type": "dragDrop"
-        }
-      ]
-    },
-    {
-      "name": "Year 3",
-      "topics": [
-        {
-          "title": "Speed Clicking",
-          "sample": "Click targets before they disappear.",
-          "type": "clicking"
-        },
-        {
-          "title": "Precise Double-Click",
-          "sample": "Double-click small objects to test precision.",
-          "type": "doubleClick"
-        },
-        {
-          "title": "Multi-Object Dragging",
-          "sample": "Drag multiple boxes into drop zones.",
+          "sample": "Drag shapes into their matching outlines.",
           "type": "dragDrop"
         }
       ]
