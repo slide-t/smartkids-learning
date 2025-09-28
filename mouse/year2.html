@@ -1,1 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mouse Practice - Year 2</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .practice-area { width: 100%; height: 300px; background: #e2e8f0; border-radius: 0.5rem; position: relative; overflow: hidden; }
+    .draggable { width: 50px; height: 50px; background: #3498db; color: #fff; display: flex; align-items: center; justify-content: center; position: absolute; cursor: grab; border-radius: 0.25rem; }
+    .dropzone { width: 100px; height: 100px; border: 2px dashed #4ade80; border-radius: 0.25rem; position: absolute; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+    .stats span { margin-right: 15px; font-weight: bold; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
 
+<header class="bg-blue-600 text-white shadow-md fixed top-0 left-0 w-full z-50">
+  <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+    <h1 class="text-2xl font-bold">Smart Learning Kids</h1>
+    <a href="../index.html" class="bg-white text-blue-600 px-4 py-2 rounded-lg font-medium shadow hover:bg-blue-100 transition">Home</a>
+  </div>
+</header>
+
+<main class="pt-24 max-w-4xl mx-auto px-4">
+  <h2 class="text-3xl font-bold text-center mb-8">Mouse Practice - Year 2</h2>
+
+  <!-- Practice Selection -->
+  <div class="space-y-4">
+    <button class="practiceBtn w-full px-4 py-2 bg-green-100 hover:bg-green-200 rounded-lg text-left" data-topic="drag">🖱️ Drag and Drop</button>
+    <button class="practiceBtn w-full px-4 py-2 bg-green-100 hover:bg-green-200 rounded-lg text-left" data-topic="rightClick">🖱️ Right-Click Basics</button>
+    <button class="practiceBtn w-full px-4 py-2 bg-green-100 hover:bg-green-200 rounded-lg text-left" data-topic="clickHold">🖱️ Click and Hold</button>
+  </div>
+
+  <!-- Modal -->
+  <div id="practiceModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-xl p-6 max-w-2xl w-full shadow-lg relative">
+      <button id="closeModal" class="absolute top-2 right-2 text-red-600 text-xl font-bold">&times;</button>
+      <h2 id="modalTitle" class="text-xl font-bold mb-4">Practice</h2>
+      <div id="modalInstruction" class="mb-4 p-3 bg-gray-100 rounded text-lg"></div>
+      <div id="practiceArea" class="practice-area mb-4"></div>
+
+      <div class="stats flex justify-start text-sm font-semibold mb-4">
+        <span>Attempts: <span id="attempts">0</span></span>
+        <span>Success: <span id="success">0</span></span>
+      </div>
+
+      <div class="flex justify-between mt-4">
+        <button id="btnRestart" class="px-4 py-2 bg-yellow-200 rounded hover:bg-yellow-300">🔄 Restart</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const modal = document.getElementById("practiceModal");
+  const closeModal = document.getElementById("closeModal");
+  const modalTitle = document.getElementById("modalTitle");
+  const modalInstruction = document.getElementById("modalInstruction");
+  const practiceArea = document.getElementById("practiceArea");
+  const attemptsEl = document.getElementById("attempts");
+  const successEl = document.getElementById("success");
+  const btnRestart = document.getElementById("btnRestart");
+
+  let attempts = 0;
+  let success = 0;
+
+  function resetStats() {
+    attempts = 0;
+    success = 0;
+    attemptsEl.textContent = attempts;
+    successEl.textContent = success;
+  }
+
+  function clearPractice() {
+    practiceArea.innerHTML = '';
+  }
+
+  function startDragAndDrop() {
+    clearPractice();
+    modalTitle.textContent = "Drag and Drop";
+    modalInstruction.textContent = "Drag the blue square into the green box.";
+
+    const draggable = document.createElement("div");
+    draggable.className = "draggable";
+    draggable.textContent = "Drag";
+
+    const dropzone = document.createElement("div");
+    dropzone.className = "dropzone";
+    dropzone.textContent = "Drop";
+
+    // Random positions
+    draggable.style.top = "50px";
+    draggable.style.left = "50px";
+    dropzone.style.top = "150px";
+    dropzone.style.left = "250px";
+
+    practiceArea.appendChild(draggable);
+    practiceArea.appendChild(dropzone);
+
+    draggable.onmousedown = function(event) {
+      let shiftX = event.clientX - draggable.getBoundingClientRect().left;
+      let shiftY = event.clientY - draggable.getBoundingClientRect().top;
+
+      function moveAt(pageX, pageY) {
+        draggable.style.left = pageX - shiftX - practiceArea.getBoundingClientRect().left + "px";
+        draggable.style.top = pageY - shiftY - practiceArea.getBoundingClientRect().top + "px";
+      }
+
+      function onMouseMove(event) {
+        moveAt(event.pageX, event.pageY);
+      }
+
+      document.addEventListener('mousemove', onMouseMove);
+
+      draggable.onmouseup = function() {
+        document.removeEventListener('mousemove', onMouseMove);
+        draggable.onmouseup = null;
+
+        attempts++;
+        attemptsEl.textContent = attempts;
+
+        const draggableRect = draggable.getBoundingClientRect();
+        const dropRect = dropzone.getBoundingClientRect();
+
+        // Check collision
+        if (
+          draggableRect.left < dropRect.right &&
+          draggableRect.right > dropRect.left &&
+          draggableRect.top < dropRect.bottom &&
+          draggableRect.bottom > dropRect.top
+        ) {
+          success++;
+          successEl.textContent = success;
+          alert("Good job! Dropped correctly.");
+        }
+      };
+    };
+
+    draggable.ondragstart = function() {
+      return false;
+    };
+  }
+
+  function startRightClick() {
+    clearPractice();
+    modalTitle.textContent = "Right-Click Basics";
+    modalInstruction.textContent = "Right-click on the box to see the context menu.";
+
+    const box = document.createElement("div");
+    box.className = "draggable";
+    box.textContent = "Right-Click Me";
+    box.style.top = "100px";
+    box.style.left = "150px";
+
+    box.addEventListener("contextmenu", e => {
+      e.preventDefault();
+      attempts++;
+      success++;
+      attemptsEl.textContent = attempts;
+      successEl.textContent = success;
+      alert("Right-click detected!");
+    });
+
+    practiceArea.appendChild(box);
+  }
+
+  function startClickAndHold() {
+    clearPractice();
+    modalTitle.textContent = "Click and Hold";
+    modalInstruction.textContent = "Click and hold the blue square for 2 seconds.";
+
+    const box = document.createElement("div");
+    box.className = "draggable";
+    box.textContent = "Hold";
+    box.style.top = "100px";
+    box.style.left = "150px";
+
+    let holdTimeout;
+    box.addEventListener("mousedown", () => {
+      holdTimeout = setTimeout(() => {
+        attempts++;
+        success++;
+        attemptsEl.textContent = attempts;
+        successEl.textContent = success;
+        alert("Hold successful!");
+      }, 2000);
+    });
+    box.addEventListener("mouseup", () => {
+      clearTimeout(holdTimeout);
+      attempts++;
+      attemptsEl.textContent = attempts;
+    });
+
+    practiceArea.appendChild(box);
+  }
+
+  document.querySelectorAll(".practiceBtn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const topic = btn.dataset.topic;
+      resetStats();
+      modal.classList.remove("hidden");
+      if (topic === "drag") startDragAndDrop();
+      else if (topic === "rightClick") startRightClick();
+      else if (topic === "clickHold") startClickAndHold();
+    });
+  });
+
+  closeModal.addEventListener("click", () => modal.classList.add("hidden"));
+  btnRestart.addEventListener("click", () => {
+    const activeBtn = document.querySelector(".practiceBtn.active");
+    if (activeBtn) activeBtn.click();
+  });
+});
+</script>
+</body>
+</html>
