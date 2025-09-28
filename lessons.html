@@ -41,7 +41,7 @@
       const container = document.getElementById("accordion");
 
       try {
-        const res = await fetch('lessons.json');
+        const res = await fetch('data/lessons.json');
         const data = await res.json();
 
         // Iterate through categories (keyboard & mouse)
