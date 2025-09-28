@@ -5,29 +5,44 @@
   <title>Mouse Tutor</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    .highlight { background-color: yellow; cursor: pointer; }
-    .drop-zone { border: 2px dashed #aaa; padding: 20px; margin: 10px; }
-    .draggable { width: 60px; height: 60px; background: lightblue; margin: 5px; cursor: grab; }
+    .drop-zone {
+      border: 2px dashed #3b82f6; /* blue border */
+      padding: 20px;
+      margin: 10px;
+      text-align: center;
+    }
+    .draggable {
+      width: 60px;
+      height: 60px;
+      background: #93c5fd; /* light blue */
+      margin: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      cursor: grab;
+      border-radius: 8px;
+    }
   </style>
 </head>
-<body class="bg-gray-100 min-h-screen">
+<body class="bg-gray-100 min-h-screen flex flex-col">
 
   <!-- Header -->
-  <header class="bg-gray-800 text-white p-4 text-center text-2xl font-bold">
+  <header class="bg-blue-600 text-white p-4 text-center text-2xl font-bold shadow">
     🖱️ Mouse Practice Tutor
   </header>
 
   <!-- Accordion container -->
-  <main class="max-w-4xl mx-auto mt-6 p-4 bg-white shadow rounded">
+  <main class="flex-grow max-w-4xl w-full mx-auto mt-6 p-4 bg-white shadow rounded">
     <h2 class="text-xl font-semibold mb-4">Select a Mouse Practice</h2>
     <div id="container"></div>
   </main>
 
   <!-- Modal -->
   <div id="practiceModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-    <div class="bg-white rounded-lg p-6 w-96 max-w-full relative">
+    <div class="bg-white rounded-lg p-6 w-11/12 md:w-2/3 lg:w-1/2 max-w-2xl relative shadow-lg">
       <button id="closeModal" class="absolute top-2 right-2 text-gray-600 hover:text-black">✖</button>
-      <h2 id="modalTitle" class="text-lg font-bold mb-2"></h2>
+      <h2 id="modalTitle" class="text-lg font-bold mb-2 text-blue-700"></h2>
       <p id="modalInstruction" class="mb-4 text-gray-700"></p>
       <div id="practiceBoard" class="border p-4 rounded bg-gray-50 min-h-[200px] flex items-center justify-center">
         <!-- Interactive practice will render here -->
@@ -60,7 +75,7 @@
         section.className = "mb-2 border rounded";
 
         const header = document.createElement("button");
-        header.className = "w-full text-left p-3 font-semibold bg-gray-200 hover:bg-gray-300";
+        header.className = "w-full text-left p-3 font-semibold bg-blue-100 hover:bg-blue-200";
         header.textContent = year.name;
         header.onclick = () => {
           body.classList.toggle("hidden");
@@ -71,7 +86,7 @@
 
         year.topics.forEach(topic => {
           const btn = document.createElement("button");
-          btn.className = "block w-full text-left px-3 py-2 mb-1 bg-blue-100 hover:bg-blue-200 rounded";
+          btn.className = "block w-full text-left px-3 py-2 mb-1 bg-blue-500 text-white hover:bg-blue-600 rounded";
           btn.textContent = topic.title;
           btn.onclick = () => openPractice(topic);
           body.appendChild(btn);
@@ -91,14 +106,14 @@
       if (topic.title.includes("Clicking")) {
         const btn = document.createElement("button");
         btn.textContent = "Click Me!";
-        btn.className = "px-4 py-2 bg-blue-500 text-white rounded";
+        btn.className = "px-4 py-2 bg-blue-600 text-white rounded shadow";
         btn.onclick = () => alert("✅ Single Click detected!");
         practiceBoard.appendChild(btn);
       }
       else if (topic.title.includes("Double-Click")) {
         const btn = document.createElement("button");
         btn.textContent = "Double-Click Me!";
-        btn.className = "px-4 py-2 bg-green-500 text-white rounded";
+        btn.className = "px-4 py-2 bg-green-600 text-white rounded shadow";
         btn.ondblclick = () => alert("✅ Double-Click detected!");
         practiceBoard.appendChild(btn);
       }
