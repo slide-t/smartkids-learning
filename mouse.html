@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mouse Tutor</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .highlight { background-color: yellow; cursor: pointer; }
+    .drop-zone { border: 2px dashed #aaa; padding: 20px; margin: 10px; }
+    .draggable { width: 60px; height: 60px; background: lightblue; margin: 5px; cursor: grab; }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+  <!-- Header -->
+  <header class="bg-gray-800 text-white p-4 text-center text-2xl font-bold">
+    🖱️ Mouse Practice Tutor
+  </header>
+
+  <!-- Accordion container -->
+  <main class="max-w-4xl mx-auto mt-6 p-4 bg-white shadow rounded">
+    <h2 class="text-xl font-semibold mb-4">Select a Mouse Practice</h2>
+    <div id="container"></div>
+  </main>
+
+  <!-- Modal -->
+  <div id="practiceModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-6 w-96 max-w-full relative">
+      <button id="closeModal" class="absolute top-2 right-2 text-gray-600 hover:text-black">✖</button>
+      <h2 id="modalTitle" class="text-lg font-bold mb-2"></h2>
+      <p id="modalInstruction" class="mb-4 text-gray-700"></p>
+      <div id="practiceBoard" class="border p-4 rounded bg-gray-50 min-h-[200px] flex items-center justify-center">
+        <!-- Interactive practice will render here -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const container = document.getElementById("container");
+    const modal = document.getElementById("practiceModal");
+    const closeModal = document.getElementById("closeModal");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalInstruction = document.getElementById("modalInstruction");
+    const practiceBoard = document.getElementById("practiceBoard");
+
+    // Load JSON
+    fetch("mouse.json")
+      .then(res => res.json())
+      .then(data => {
+        renderAccordion(data.years);
+      })
+      .catch(err => {
+        console.error("Error loading JSON:", err);
+        container.innerHTML = '<p class="text-red-500">⚠️ Failed to load data.</p>';
+      });
+
+    function renderAccordion(years) {
+      years.forEach(year => {
+        const section = document.createElement("div");
+        section.className = "mb-2 border rounded";
+
+        const header = document.createElement("button");
+        header.className = "w-full text-left p-3 font-semibold bg-gray-200 hover:bg-gray-300";
+        header.textContent = year.name;
+        header.onclick = () => {
+          body.classList.toggle("hidden");
+        };
+
+        const body = document.createElement("div");
+        body.className = "hidden p-3 bg-gray-50";
+
+        year.topics.forEach(topic => {
+          const btn = document.createElement("button");
+          btn.className = "block w-full text-left px-3 py-2 mb-1 bg-blue-100 hover:bg-blue-200 rounded";
+          btn.textContent = topic.title;
+          btn.onclick = () => openPractice(topic);
+          body.appendChild(btn);
+        });
+
+        section.appendChild(header);
+        section.appendChild(body);
+        container.appendChild(section);
+      });
+    }
+
+    function openPractice(topic) {
+      modalTitle.textContent = topic.title;
+      modalInstruction.textContent = topic.sample;
+      practiceBoard.innerHTML = ""; // clear old content
+
+      if (topic.title.includes("Clicking")) {
+        const btn = document.createElement("button");
+        btn.textContent = "Click Me!";
+        btn.className = "px-4 py-2 bg-blue-500 text-white rounded";
+        btn.onclick = () => alert("✅ Single Click detected!");
+        practiceBoard.appendChild(btn);
+      }
+      else if (topic.title.includes("Double-Click")) {
+        const btn = document.createElement("button");
+        btn.textContent = "Double-Click Me!";
+        btn.className = "px-4 py-2 bg-green-500 text-white rounded";
+        btn.ondblclick = () => alert("✅ Double-Click detected!");
+        practiceBoard.appendChild(btn);
+      }
+      else if (topic.title.includes("Drag")) {
+        const dragItem = document.createElement("div");
+        dragItem.className = "draggable";
+        dragItem.draggable = true;
+        dragItem.textContent = "🔵";
+
+        const dropZone = document.createElement("div");
+        dropZone.className = "drop-zone";
+        dropZone.textContent = "Drop Here";
+
+        dragItem.addEventListener("dragstart", e => {
+          e.dataTransfer.setData("text/plain", "dragged");
+        });
+        dropZone.addEventListener("dragover", e => e.preventDefault());
+        dropZone.addEventListener("drop", e => {
+          e.preventDefault();
+          dropZone.textContent = "✅ Dropped!";
+        });
+
+        practiceBoard.appendChild(dragItem);
+        practiceBoard.appendChild(dropZone);
+      }
+      else {
+        practiceBoard.textContent = "⚠️ This practice is not interactive yet.";
+      }
+
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+    }
+
+    closeModal.onclick = () => {
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+    };
+  </script>
+</body>
+</html>
