@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartKids Mouse Practice- Year 7</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: sans-serif; background:#f3f4f6; margin:0; padding:0; }
+  header { background:#1e40af; color:white; padding:1rem; display:flex; justify-content:space-between; align-items:center; }
+  header a { background:white; color:#1e40af; padding:0.5rem 1rem; border-radius:0.5rem; font-weight:bold; text-decoration:none; }
+  main { padding:2rem; max-width:800px; margin:auto; }
+  h2 { margin-bottom:1rem; }
+  #drawArea { border:1px solid #9ca3af; background:white; height:300px; margin-bottom:20px; position:relative; cursor:crosshair; }
+  #targetArea { position:relative; width:100%; height:200px; background:#e5e7eb; border-radius:0.5rem; overflow:hidden; margin-bottom:20px; }
+  .target { width:40px; height:40px; background:#f59e0b; border-radius:50%; position:absolute; display:flex; justify-content:center; align-items:center; color:white; font-weight:bold; cursor:pointer; user-select:none; }
+  #scrollArea { height:150px; overflow:auto; border:1px solid #9ca3af; background:white; padding:10px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1 class="text-xl font-bold">SmartKids Year 7 Mouse Practice</h1>
+  <a href="https://slide-t.github.io/smartkids-learning/mouse.html">Back To Classes</a>
+</header>
+
+<main>
+  <h2>Using Drawing Tools</h2>
+  <p>Draw freehand lines with your mouse in the area below.</p>
+  <canvas id="drawArea"></canvas>
+
+  <h2>Precision Clicking</h2>
+  <p>Click the moving targets as quickly as you can!</p>
+  <div id="targetArea"></div>
+  <div class="stats mt-2">Clicks: <span id="clicks">0</span>, Hits: <span id="hits">0</span>, Accuracy: <span id="accuracy">100</span>%</div>
+
+  <h2>Scroll and Zoom</h2>
+  <p>Scroll the content below and use Ctrl+Scroll to zoom in/out.</p>
+  <div id="scrollArea">
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur euismod, nisl at convallis ultrices, nunc ligula luctus nisi, vel fringilla nulla arcu at nisl. Suspendisse potenti. Cras euismod sagittis elit, sed placerat sapien viverra eget.</p>
+    <p>Praesent nec orci ac arcu dapibus congue. Proin sed purus a justo hendrerit aliquet. Sed efficitur turpis non nisi tincidunt, nec finibus turpis laoreet.</p>
+    <p>Aliquam erat volutpat. Vestibulum a leo elit. Maecenas nec ex sed augue scelerisque viverra non a sapien. Integer eget massa nec diam consequat tincidunt.</p>
+    <p>Vivamus sed sapien vitae dolor pharetra aliquet. Morbi et sagittis purus. Nullam eu purus in justo tincidunt tempor.</p>
+  </div>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+
+  // Drawing Tools
+  const canvas = document.getElementById('drawArea');
+  const ctx = canvas.getContext('2d');
+  canvas.width = canvas.offsetWidth;
+  canvas.height = canvas.offsetHeight;
+  let drawing=false;
+
+  canvas.addEventListener('mousedown',()=>{drawing=true; ctx.beginPath();});
+  canvas.addEventListener('mouseup',()=>{drawing=false;});
+  canvas.addEventListener('mousemove',(e)=>{
+    if(!drawing) return;
+    const rect=canvas.getBoundingClientRect();
+    ctx.lineTo(e.clientX-rect.left, e.clientY-rect.top);
+    ctx.stroke();
+  });
+
+  // Precision Clicking
+  const targetArea=document.getElementById('targetArea');
+  const clicksEl=document.getElementById('clicks');
+  const hitsEl=document.getElementById('hits');
+  const accuracyEl=document.getElementById('accuracy');
+  let clicks=0,hits=0;
+
+  function spawnTarget(){
+    targetArea.innerHTML='';
+    const t=document.createElement('div');
+    t.className='target';
+    t.textContent='🎯';
+    const areaRect=targetArea.getBoundingClientRect();
+    const x=Math.random()*(areaRect.width-40);
+    const y=Math.random()*(areaRect.height-40);
+    t.style.left=x+'px';
+    t.style.top=y+'px';
+    targetArea.appendChild(t);
+
+    t.addEventListener('click',()=>{
+      hits++;
+      clicks++;
+      updateStats();
+      spawnTarget();
+    });
+  }
+
+  targetArea.addEventListener('click',e=>{
+    if(!e.target.classList.contains('target')){ clicks++; updateStats(); }
+  });
+
+  function updateStats(){
+    clicksEl.textContent=clicks;
+    hitsEl.textContent=hits;
+    accuracyEl.textContent=clicks>0?Math.round(hits/clicks*100):100;
+  }
+
+  spawnTarget();
+
+  // Scroll and Zoom
+  const scrollArea=document.getElementById('scrollArea');
+  scrollArea.addEventListener('wheel',e=>{
+    if(e.ctrlKey){
+      e.preventDefault();
+      let scale=parseFloat(scrollArea.style.zoom)||1;
+      scale+=e.deltaY>0?-0.1:0.1;
+      scale=Math.min(Math.max(scale,0.5),3);
+      scrollArea.style.zoom=scale;
+    }
+  });
+
+});
+</script>
+
+</body>
+</html>
