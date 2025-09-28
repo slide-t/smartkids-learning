@@ -241,9 +241,9 @@
           "content": "Click between open windows to switch tasks.<br><img src='images/multi_window.png' alt='Multi Window Navigation' class='w-64 mt-2 rounded shadow'>"
         }
       ]
-    },
+    }
+  ],
 
-{
   "keyboard": [
     {
       "year": "Year 7",
