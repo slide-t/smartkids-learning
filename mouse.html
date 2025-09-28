@@ -1,149 +1,175 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mouse Practice</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mouse Practices</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 min-h-screen flex flex-col">
-
+<body class="bg-gray-100 font-sans">
   <!-- HEADER -->
-  <header class="bg-blue-600 text-white p-4 shadow-md">
-    <h1 class="text-xl font-bold text-center">🐭 Smartkids Mouse Practice</h1>
+  <header class="bg-blue-600 text-white py-4 shadow-md">
+    <div class="container mx-auto text-center">
+      <h1 class="text-2xl font-bold">Mouse Practices</h1>
+    </div>
   </header>
 
   <!-- MAIN CONTENT -->
-  <main class="flex-grow p-4 max-w-3xl mx-auto">
-    <div id="accordion" class="space-y-4"></div>
+  <main class="container mx-auto mt-6 px-4">
+    <div id="mouseContainer" class="space-y-4"></div>
   </main>
 
   <!-- MODAL -->
-  <div id="practiceModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-    <div class="bg-white rounded-lg shadow-lg p-6 max-w-lg w-full relative">
-      <button id="closeModal" class="absolute top-2 right-2 text-gray-600 hover:text-red-600">✖</button>
-      <h2 id="modalTitle" class="text-lg font-bold mb-2"></h2>
-      <p id="modalSample" class="mb-4 text-gray-700"></p>
-      <div id="practiceArea" class="border border-dashed border-gray-400 rounded-lg p-4 text-center">
-        <!-- Interactive practice area will be loaded here -->
+  <div id="mouseModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+    <div class="bg-white rounded-xl shadow-lg w-11/12 max-w-md p-6 relative">
+      <button id="closeModal" class="absolute top-2 right-2 text-gray-500 hover:text-red-500 text-2xl font-bold">&times;</button>
+      <h2 id="modalTitle" class="text-xl font-bold mb-4 text-gray-900"></h2>
+      <p id="modalInstruction" class="text-gray-700 mb-4"></p>
+      <div id="modalContent" class="space-y-2"></div>
+      <div class="mt-6 text-right">
+        <button id="prevBtn" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400">Previous</button>
+        <button id="nextBtn" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Next</button>
       </div>
     </div>
   </div>
 
   <script>
-    document.addEventListener("DOMContentLoaded", async () => {
-      const container = document.getElementById("accordion");
-      const modal = document.getElementById("practiceModal");
-      const closeModal = document.getElementById("closeModal");
-      const modalTitle = document.getElementById("modalTitle");
-      const modalSample = document.getElementById("modalSample");
-      const practiceArea = document.getElementById("practiceArea");
+    const container = document.getElementById("mouseContainer");
+    const modal = document.getElementById("mouseModal");
+    const closeModal = document.getElementById("closeModal");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalInstruction = document.getElementById("modalInstruction");
+    const modalContent = document.getElementById("modalContent");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
 
-try {
-  const res = await fetch('data/mouse.json');
-  const data = await res.json();
+    let currentTopics = [];
+    let currentIndex = 0;
 
-  // Normalize to always use an array
-  const years = Array.isArray(data.years) ? data.years : [data.years];
+    // Load topic into modal
+    function loadMouseTopic(btn) {
+      const title = btn.getAttribute("data-title");
+      const instruction = btn.getAttribute("data-instruction") || "";
+      const samples = btn.getAttribute("data-sample");
 
-  years.forEach((year) => {
-    const topics = Array.isArray(year.topics) ? year.topics : [year.topics];
+      modalTitle.textContent = title;
+      modalInstruction.textContent = instruction;
+      modalContent.innerHTML = "";
 
-    // Build accordion sections
-    const section = document.createElement("div");
-    section.className = "bg-white rounded-lg shadow";
+      if (samples) {
+        const items = samples.split(",");
+        items.forEach(s => {
+          const button = document.createElement("button");
+          button.textContent = s.trim();
+          button.className =
+            "block w-full px-4 py-2 rounded-lg shadow text-gray-900 bg-gray-200 hover:shadow-md hover:bg-blue-50 transition";
+          button.addEventListener("click", () => {
+            button.style.border = "2px solid white";
+            setTimeout(() => (button.style.border = ""), 300);
+          });
+          modalContent.appendChild(button);
+        });
+      }
 
-    const header = document.createElement("button");
-    header.className =
-      "w-full text-left p-4 bg-blue-500 text-white font-semibold rounded-t-lg focus:outline-none";
-    header.textContent = year.name;
+      modal.classList.remove("hidden");
+    }
 
-    const content = document.createElement("div");
-    content.className = "hidden p-4 space-y-2";
-
-    topics.forEach((topic) => {
-      const btn = document.createElement("button");
-      btn.className =
-        "block w-full text-left p-2 bg-gray-200 hover:bg-blue-100 rounded";
-      btn.textContent = topic.title;
-      btn.addEventListener("click", () => {
-        modalTitle.textContent = topic.title;
-        modalSample.textContent = topic.sample;
-        practiceArea.innerHTML = `<p class="text-gray-500">👉 Practice for <b>${topic.title}</b> will appear here.</p>`;
-        modal.classList.remove("hidden");
-        modal.classList.add("flex");
-      });
-      content.appendChild(btn);
+    // Modal controls
+    closeModal.addEventListener("click", () => modal.classList.add("hidden"));
+    prevBtn.addEventListener("click", () => {
+      if (currentIndex > 0) {
+        currentIndex--;
+        loadMouseTopic(currentTopics[currentIndex]);
+      }
+    });
+    nextBtn.addEventListener("click", () => {
+      if (currentIndex < currentTopics.length - 1) {
+        currentIndex++;
+        loadMouseTopic(currentTopics[currentIndex]);
+      }
     });
 
-    header.addEventListener("click", () => {
-      content.classList.toggle("hidden");
-    });
-
-    section.appendChild(header);
-    section.appendChild(content);
-    container.appendChild(section);
-  });
-} catch (err) {
-  console.error("Error loading JSON:", err);
-  container.innerHTML =
-    '<p class="text-red-500">⚠️ Failed to load mouse data.</p>';
-}
-
-
-
-      /*
+    // Fetch JSON
+    async function loadMouseData() {
       try {
-        const res = await fetch('data/mouse.json');
+        const res = await fetch("data/mouse.json");
         const data = await res.json();
-        const years = data.years;
 
-        // Build accordion
-        years.forEach((year, yi) => {
-          const section = document.createElement("div");
-          section.className = "bg-white rounded-lg shadow";
+        // Normalize years
+        const years = Array.isArray(data.years) ? data.years : [data.years];
+
+        years.forEach(year => {
+          const topics = Array.isArray(year.topics) ? year.topics : [year.topics];
+
+          const card = document.createElement("div");
+          card.className = "bg-white rounded-xl shadow-md overflow-hidden mb-4";
 
           const header = document.createElement("button");
           header.className =
-            "w-full text-left p-4 bg-blue-500 text-white font-semibold rounded-t-lg focus:outline-none";
-          header.textContent = year.name;
+            "accordion-header w-full flex justify-between items-center px-6 py-4 text-lg font-semibold bg-blue-100 hover:bg-blue-200 transition";
+          header.innerHTML = `<span class="text-gray-900">${year.name}</span><span class="text-gray-900">+</span>`;
+          card.appendChild(header);
+
+          const body = document.createElement("div");
+          body.className = "accordion-body bg-gray-50";
+
+          body.innerHTML = topics
+            .map(topic => {
+              return `
+                <li>
+                  <button class="topicBtn block w-full text-left px-4 py-2 rounded-lg shadow text-gray-900 bg-white hover:shadow-md hover:bg-blue-50 transition flex items-center gap-2"
+                    data-title="${topic.title}"
+                    data-instruction="${topic.instruction || ""}"
+                    data-sample="${topic.sample}">
+                    🖱️ ${topic.title}
+                  </button>
+                </li>`;
+            })
+            .join("");
+
+          const listWrapper = document.createElement("ul");
+          listWrapper.className = "space-y-2 pl-6";
+          listWrapper.innerHTML = body.innerHTML;
+          body.innerHTML = "";
+          body.appendChild(listWrapper);
+
+          card.appendChild(body);
+
+          // Accordion toggle
           header.addEventListener("click", () => {
-            content.classList.toggle("hidden");
+            const isOpen = body.style.maxHeight && body.style.maxHeight !== "0px";
+            container.querySelectorAll(".accordion-body").forEach(
+              el => (el.style.maxHeight = null)
+            );
+            container
+              .querySelectorAll(".accordion-header span:last-child")
+              .forEach(icon => (icon.style.transform = "rotate(0deg)"));
+            if (!isOpen) {
+              body.style.maxHeight = body.scrollHeight + "px";
+              header.querySelector("span:last-child").style.transform =
+                "rotate(45deg)";
+            }
           });
 
-          const content = document.createElement("div");
-          content.className = "hidden p-4 space-y-2";
+          container.appendChild(card);
+        });
 
-          year.topics.forEach((topic, ti) => {
-            const btn = document.createElement("button");
-            btn.className =
-              "block w-full text-left p-2 bg-gray-200 hover:bg-blue-100 rounded";
-            btn.textContent = topic.title;
-            btn.addEventListener("click", () => {
-              modalTitle.textContent = topic.title;
-              modalSample.textContent = topic.sample;
-              practiceArea.innerHTML = `<p class="text-gray-500">👉 Practice for <b>${topic.title}</b> will appear here.</p>`;
-              modal.classList.remove("hidden");
-              modal.classList.add("flex");
-            });
-            content.appendChild(btn);
-          });
-
-          section.appendChild(header);
-          section.appendChild(content);
-          container.appendChild(section);
+        // Handle topic button clicks
+        container.addEventListener("click", e => {
+          const btn = e.target.closest(".topicBtn");
+          if (!btn) return;
+          currentTopics = [...btn.closest("ul").querySelectorAll(".topicBtn")];
+          currentIndex = currentTopics.indexOf(btn);
+          loadMouseTopic(btn);
         });
       } catch (err) {
         console.error("Error loading JSON:", err);
         container.innerHTML =
           '<p class="text-red-500">⚠️ Failed to load mouse data.</p>';
       }
-*/
-      closeModal.addEventListener("click", () => {
-        modal.classList.add("hidden");
-        modal.classList.remove("flex");
-      });
-    });
+    }
+
+    loadMouseData();
   </script>
 </body>
 </html>
