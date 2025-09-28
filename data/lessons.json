@@ -2,116 +2,38 @@
   "categories": [
     {
       "id": "keyboard",
-      "name": "Keyboard Lessons",
+      "name": "Keyboard",
       "topics": [
-        {
-          "id": "home_row_keys",
-          "title": "Home Row Keys"
-        },
-        {
-          "id": "typing_numbers",
-          "title": "Typing Numbers"
-        },
-        {
-          "id": "shift_capslock",
-          "title": "Shift and Caps Lock"
-        },
-        {
-          "id": "function_keys",
-          "title": "Function Keys"
-        },
-        {
-          "id": "shortcuts_basics",
-          "title": "Keyboard Shortcuts Basics"
-        },
-        {
-          "id": "navigation_keys",
-          "title": "Navigation Keys"
-        },
-        {
-          "id": "typing_paragraphs",
-          "title": "Typing Paragraphs"
-        }
+        { "id": "home_row", "title": "Home Row Keys" },
+        { "id": "typing_words", "title": "Typing Words and Sentences" },
+        { "id": "shift_capslock", "title": "Using Shift and Caps Lock" },
+        { "id": "punctuation", "title": "Punctuation Keys" },
+        { "id": "shortcuts", "title": "Keyboard Shortcuts" },
+        { "id": "numbers_symbols", "title": "Numbers and Symbols" }
       ]
     },
     {
       "id": "mouse",
-      "name": "Mouse Lessons",
+      "name": "Mouse",
       "topics": [
-        {
-          "id": "clicking_basics",
-          "title": "Clicking Basics"
-        },
-        {
-          "id": "double_clicking",
-          "title": "Double Clicking"
-        },
-        {
-          "id": "mouse_movement",
-          "title": "Mouse Movement"
-        },
-        {
-          "id": "drag_and_drop",
-          "title": "Drag and Drop"
-        },
-        {
-          "id": "right_click_basics",
-          "title": "Right Click Basics"
-        },
-        {
-          "id": "click_and_hold",
-          "title": "Click and Hold"
-        },
-        {
-          "id": "text_selection",
-          "title": "Text Selection"
-        },
-        {
-          "id": "scrolling",
-          "title": "Scrolling"
-        },
-        {
-          "id": "drawing_shapes",
-          "title": "Simple Shapes Drawing"
-        }
+        { "id": "basic_click", "title": "Single Click" },
+        { "id": "double_click", "title": "Double Click" },
+        { "id": "right_click", "title": "Right Click" },
+        { "id": "drag_drop", "title": "Drag and Drop" },
+        { "id": "click_hold", "title": "Click and Hold" },
+        { "id": "mouse_movement", "title": "Mouse Movement" }
       ]
     },
     {
-      "id": "ict",
-      "name": "General ICT Lessons",
+      "id": "general_ict",
+      "name": "General ICT",
       "topics": [
-        {
-          "id": "computer_parts",
-          "title": "Parts of a Computer"
-        },
-        {
-          "id": "input_devices",
-          "title": "Input Devices"
-        },
-        {
-          "id": "output_devices",
-          "title": "Output Devices"
-        },
-        {
-          "id": "storage_devices",
-          "title": "Storage Devices"
-        },
-        {
-          "id": "software_vs_hardware",
-          "title": "Software vs Hardware"
-        },
-        {
-          "id": "operating_systems",
-          "title": "Operating Systems"
-        },
-        {
-          "id": "internet_basics",
-          "title": "Internet Basics"
-        },
-        {
-          "id": "computer_care",
-          "title": "Care for the Computer"
-        }
+        { "id": "text_selection", "title": "Selecting Text" },
+        { "id": "scrolling", "title": "Scrolling Pages" },
+        { "id": "drawing_shapes", "title": "Drawing Simple Shapes" },
+        { "id": "file_folder_selection", "title": "File and Folder Selection" },
+        { "id": "resizing_windows", "title": "Resizing Windows" },
+        { "id": "gaming_controls", "title": "Simple Gaming Controls" }
       ]
     }
   ]
