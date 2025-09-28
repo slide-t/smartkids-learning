@@ -39,6 +39,60 @@
       const modalSample = document.getElementById("modalSample");
       const practiceArea = document.getElementById("practiceArea");
 
+try {
+  const res = await fetch('data/mouse.json');
+  const data = await res.json();
+
+  // Normalize to always use an array
+  const years = Array.isArray(data.years) ? data.years : [data.years];
+
+  years.forEach((year) => {
+    const topics = Array.isArray(year.topics) ? year.topics : [year.topics];
+
+    // Build accordion sections
+    const section = document.createElement("div");
+    section.className = "bg-white rounded-lg shadow";
+
+    const header = document.createElement("button");
+    header.className =
+      "w-full text-left p-4 bg-blue-500 text-white font-semibold rounded-t-lg focus:outline-none";
+    header.textContent = year.name;
+
+    const content = document.createElement("div");
+    content.className = "hidden p-4 space-y-2";
+
+    topics.forEach((topic) => {
+      const btn = document.createElement("button");
+      btn.className =
+        "block w-full text-left p-2 bg-gray-200 hover:bg-blue-100 rounded";
+      btn.textContent = topic.title;
+      btn.addEventListener("click", () => {
+        modalTitle.textContent = topic.title;
+        modalSample.textContent = topic.sample;
+        practiceArea.innerHTML = `<p class="text-gray-500">👉 Practice for <b>${topic.title}</b> will appear here.</p>`;
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+      });
+      content.appendChild(btn);
+    });
+
+    header.addEventListener("click", () => {
+      content.classList.toggle("hidden");
+    });
+
+    section.appendChild(header);
+    section.appendChild(content);
+    container.appendChild(section);
+  });
+} catch (err) {
+  console.error("Error loading JSON:", err);
+  container.innerHTML =
+    '<p class="text-red-500">⚠️ Failed to load mouse data.</p>';
+}
+
+
+
+      /*
       try {
         const res = await fetch('data/mouse.json');
         const data = await res.json();
@@ -84,7 +138,7 @@
         container.innerHTML =
           '<p class="text-red-500">⚠️ Failed to load mouse data.</p>';
       }
-
+*/
       closeModal.addEventListener("click", () => {
         modal.classList.add("hidden");
         modal.classList.remove("flex");
