@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Learning Kids - Lessons</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .accordion-header {
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .accordion-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease;
+    }
+    .accordion-header span:last-child {
+      transition: transform 0.3s ease;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 font-sans">
+
+  <!-- Header -->
+  <header class="bg-blue-600 text-white shadow-md fixed top-0 left-0 w-full z-50">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <h1 class="text-2xl font-bold">Smart Learning Kids</h1>
+      <a href="index.html" class="bg-white text-blue-600 px-4 py-2 rounded-lg font-medium shadow hover:bg-blue-100 transition">Home</a>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="pt-24 max-w-4xl mx-auto px-4">
+    <h2 class="text-3xl font-bold text-center mb-8 text-blue-700">Lessons: Keyboard & Mouse</h2>
+    <div id="accordion" class="space-y-4"></div>
+  </main>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const container = document.getElementById("accordion");
+
+      try {
+        const res = await fetch('lessons.json');
+        const data = await res.json();
+
+        // Iterate through categories (keyboard & mouse)
+        for (const [category, years] of Object.entries(data)) {
+          const catCard = document.createElement("div");
+          catCard.className = "bg-blue-50 rounded-xl shadow-md p-4";
+
+          const catHeader = document.createElement("h2");
+          catHeader.className = "text-xl font-bold text-blue-700 mb-2";
+          catHeader.textContent = category.charAt(0).toUpperCase() + category.slice(1);
+          catCard.appendChild(catHeader);
+
+          const yearContainer = document.createElement("div");
+          yearContainer.className = "space-y-2";
+
+          years.forEach(yearObj => {
+            const yearCard = document.createElement("div");
+            yearCard.className = "bg-white rounded-lg shadow overflow-hidden";
+
+            // Year header
+            const header = document.createElement("div");
+            header.className = "accordion-header flex justify-between items-center px-4 py-2 bg-blue-100 hover:bg-blue-200 transition text-blue-900 font-semibold rounded-t-lg";
+            header.innerHTML = `<span>${yearObj.year}</span><span>+</span>`;
+            yearCard.appendChild(header);
+
+            // Topics body
+            const body = document.createElement("div");
+            body.className = "accordion-body bg-blue-50 px-4 py-2";
+            body.innerHTML = yearObj.topics.map(topic => {
+              const topicId = topic.id || topic.title.toLowerCase().replace(/\s+/g, "_");
+              return `
+                <div class="mb-2">
+                  <a href="lessons-details.html?year=${encodeURIComponent(yearObj.year)}&subject=${encodeURIComponent(category)}&topic=${encodeURIComponent(topicId)}"
+                     class="block p-2 bg-white text-blue-900 rounded shadow hover:bg-blue-100 transition">
+                     📝 ${topic.title}
+                  </a>
+                </div>
+              `;
+            }).join("");
+            yearCard.appendChild(body);
+
+            // Accordion toggle
+            header.addEventListener("click", () => {
+              const isOpen = body.style.maxHeight && body.style.maxHeight !== "0px";
+              // Close all others
+              container.querySelectorAll(".accordion-body").forEach(b => b.style.maxHeight = null);
+              container.querySelectorAll(".accordion-header span:last-child").forEach(icon => icon.style.transform = "rotate(0deg)");
+              if (!isOpen) {
+                body.style.maxHeight = body.scrollHeight + "px";
+                header.querySelector("span:last-child").style.transform = "rotate(45deg)";
+              }
+            });
+
+            yearContainer.appendChild(yearCard);
+          });
+
+          catCard.appendChild(yearContainer);
+          container.appendChild(catCard);
+        }
+
+      } catch (err) {
+        console.error("Error loading lessons.json:", err);
+        container.innerHTML = '<p class="text-red-500">⚠️ Failed to load lessons data.</p>';
+      }
+    });
+  </script>
+
+</body>
+</html>
