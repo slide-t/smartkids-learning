@@ -1,16 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mouse Practices</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 font-sans">
+
   <!-- HEADER -->
-  <header class="bg-blue-600 text-white py-4 shadow-md">
-    <div class="container mx-auto text-center">
-      <h1 class="text-2xl font-bold">Mouse Practices</h1>
+  <header class="bg-blue-600 text-white shadow-md">
+    <div class="container mx-auto flex items-center justify-between px-4 py-4">
+      <!-- Home Button -->
+      <a href="index.html" class="bg-white text-blue-600 px-3 py-1 rounded-lg font-semibold shadow hover:bg-gray-200">
+        Home
+      </a>
+      <!-- Page Title -->
+      <h1 class="text-xl font-bold text-center flex-1">Smartkids Mouse Practices</h1>
+      <div class="w-16"></div> <!-- Spacer to balance -->
     </div>
   </header>
 
@@ -62,9 +69,9 @@
           const button = document.createElement("button");
           button.textContent = s.trim();
           button.className =
-            "block w-full px-4 py-2 rounded-lg shadow text-gray-900 bg-gray-200 hover:shadow-md hover:bg-blue-50 transition";
+            "block w-full px-4 py-2 rounded-lg shadow text-gray-900 bg-gray-200 hover:bg-blue-50 transition";
           button.addEventListener("click", () => {
-            button.style.border = "2px solid white";
+            button.style.border = "2px solid blue";
             setTimeout(() => (button.style.border = ""), 300);
           });
           modalContent.appendChild(button);
@@ -102,7 +109,7 @@
           const topics = Array.isArray(year.topics) ? year.topics : [year.topics];
 
           const card = document.createElement("div");
-          card.className = "bg-white rounded-xl shadow-md overflow-hidden mb-4";
+          card.className = "bg-white rounded-xl shadow-md overflow-hidden";
 
           const header = document.createElement("button");
           header.className =
@@ -111,28 +118,24 @@
           card.appendChild(header);
 
           const body = document.createElement("div");
-          body.className = "accordion-body bg-gray-50";
-
-          body.innerHTML = topics
-            .map(topic => {
-              return `
-                <li>
-                  <button class="topicBtn block w-full text-left px-4 py-2 rounded-lg shadow text-gray-900 bg-white hover:shadow-md hover:bg-blue-50 transition flex items-center gap-2"
-                    data-title="${topic.title}"
-                    data-instruction="${topic.instruction || ""}"
-                    data-sample="${topic.sample}">
-                    🖱️ ${topic.title}
-                  </button>
-                </li>`;
-            })
-            .join("");
+          body.className = "accordion-body bg-gray-50 overflow-hidden transition-all duration-300 max-h-0";
 
           const listWrapper = document.createElement("ul");
           listWrapper.className = "space-y-2 pl-6";
-          listWrapper.innerHTML = body.innerHTML;
-          body.innerHTML = "";
-          body.appendChild(listWrapper);
 
+          topics.forEach(topic => {
+            const li = document.createElement("li");
+            li.innerHTML = `
+              <button class="topicBtn block w-full text-left px-4 py-2 rounded-lg shadow text-gray-900 bg-white hover:bg-blue-50 transition flex items-center gap-2"
+                data-title="${topic.title}"
+                data-instruction="${topic.instruction || ""}"
+                data-sample="${topic.sample}">
+                🖱️ ${topic.title}
+              </button>`;
+            listWrapper.appendChild(li);
+          });
+
+          body.appendChild(listWrapper);
           card.appendChild(body);
 
           // Accordion toggle
@@ -143,11 +146,10 @@
             );
             container
               .querySelectorAll(".accordion-header span:last-child")
-              .forEach(icon => (icon.style.transform = "rotate(0deg)"));
+              .forEach(icon => (icon.textContent = "+"));
             if (!isOpen) {
               body.style.maxHeight = body.scrollHeight + "px";
-              header.querySelector("span:last-child").style.transform =
-                "rotate(45deg)";
+              header.querySelector("span:last-child").textContent = "−";
             }
           });
 
@@ -165,7 +167,7 @@
       } catch (err) {
         console.error("Error loading JSON:", err);
         container.innerHTML =
-          '<p class="text-red-500">⚠️ Failed to load mouse data.</p>';
+          '<p class="text-red-500">⚠️ Failed to load mouse data. Make sure <code>data/mouse.json</code> exists.</p>';
       }
     }
 
