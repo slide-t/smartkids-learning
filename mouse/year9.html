@@ -1,1 +1,160 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Learning Kids - Year 9 Mouse Practice</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family:sans-serif; background:#f3f4f6; margin:0; padding:0; }
+  header { background:#1e40af; color:white; padding:1rem; display:flex; justify-content:space-between; align-items:center; }
+  header a { background:white; color:#1e40af; padding:0.5rem 1rem; border-radius:0.5rem; font-weight:bold; text-decoration:none; }
+  main { padding:2rem; max-width:900px; margin:auto; }
+  h2 { margin-bottom:0.5rem; }
+  #designArea, #groupArea, #timelineArea { width:100%; height:200px; background:#e5e7eb; border-radius:0.5rem; position:relative; margin-bottom:20px; overflow:hidden; }
+  .object { width:50px; height:50px; background:#f59e0b; position:absolute; display:flex; justify-content:center; align-items:center; color:white; font-weight:bold; cursor:pointer; user-select:none; border-radius:0.25rem; }
+  .selected { border:2px dashed #1e40af; }
+  #playhead { width:10px; height:100%; background:#1e40af; position:absolute; left:0; cursor:pointer; }
+  .stats span { margin-right:10px; font-weight:bold; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1 class="text-xl font-bold">Year 9 Mouse Practice</h1>
+  <a href="https://slide-t.github.io/smartkids-learning/mouse.html">Back To Classes</a>
+</header>
+
+<main>
+
+<h2>Graphic Design Tools</h2>
+<p>Click and drag objects to move them around the area.</p>
+<div id="designArea"></div>
+
+<h2>Multi-Select and Grouping</h2>
+<p>Click multiple objects with Ctrl and move them together.</p>
+<div id="groupArea"></div>
+
+<h2>Timeline Navigation</h2>
+<p>Drag the playhead to simulate timeline navigation.</p>
+<div id="timelineArea">
+  <div id="playhead"></div>
+</div>
+
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+
+  // Graphic Design Tools
+  const designArea=document.getElementById('designArea');
+  const objects=[];
+  for(let i=0;i<3;i++){
+    const obj=document.createElement('div');
+    obj.className='object';
+    obj.textContent=i+1;
+    obj.style.left=(50+i*70)+'px';
+    obj.style.top='50px';
+    designArea.appendChild(obj);
+    makeDraggable(obj, designArea);
+    objects.push(obj);
+  }
+
+  // Multi-Select and Grouping
+  const groupArea=document.getElementById('groupArea');
+  const groupObjects=[];
+  for(let i=0;i<4;i++){
+    const obj=document.createElement('div');
+    obj.className='object';
+    obj.textContent=i+1;
+    obj.style.left=(50+i*60)+'px';
+    obj.style.top='50px';
+    groupArea.appendChild(obj);
+    makeSelectableDraggable(obj, groupArea);
+    groupObjects.push(obj);
+  }
+
+  let selectedObjects=[];
+
+  function makeSelectableDraggable(el, container){
+    let dragging=false, offsetX=0, offsetY=0;
+
+    el.addEventListener('mousedown', (e)=>{
+      if(!e.ctrlKey) {
+        selectedObjects.forEach(o=>o.classList.remove('selected'));
+        selectedObjects=[el];
+      } else {
+        if(!selectedObjects.includes(el)) selectedObjects.push(el);
+        else selectedObjects=selectedObjects.filter(o=>o!==el);
+      }
+      selectedObjects.forEach(o=>o.classList.add('selected'));
+
+      dragging=true;
+      const rect=el.getBoundingClientRect();
+      offsetX=e.clientX-rect.left;
+      offsetY=e.clientY-rect.top;
+    });
+
+    document.addEventListener('mouseup', ()=>dragging=false);
+
+    document.addEventListener('mousemove', e=>{
+      if(!dragging) return;
+      const rect=container.getBoundingClientRect();
+      const dx=e.movementX;
+      const dy=e.movementY;
+      selectedObjects.forEach(o=>{
+        let left=o.offsetLeft+dx;
+        let top=o.offsetTop+dy;
+        left=Math.max(0, Math.min(container.clientWidth-o.offsetWidth, left));
+        top=Math.max(0, Math.min(container.clientHeight-o.offsetHeight, top));
+        o.style.left=left+'px';
+        o.style.top=top+'px';
+      });
+    });
+  }
+
+  // Timeline Navigation
+  const playhead=document.getElementById('playhead');
+  let dragging=false, offsetX=0;
+
+  playhead.addEventListener('mousedown',(e)=>{
+    dragging=true;
+    offsetX=e.offsetX;
+  });
+  document.addEventListener('mouseup',()=>dragging=false);
+  document.addEventListener('mousemove',(e)=>{
+    if(!dragging) return;
+    const rect=playhead.parentElement.getBoundingClientRect();
+    let left=e.clientX-rect.left-offsetX;
+    left=Math.max(0, Math.min(rect.width-playhead.offsetWidth,left));
+    playhead.style.left=left+'px';
+  });
+
+  // Helper for designArea draggable
+  function makeDraggable(el, container){
+    let dragging=false, offsetX=0, offsetY=0;
+    el.addEventListener('mousedown', e=>{
+      dragging=true;
+      const rect=el.getBoundingClientRect();
+      offsetX=e.clientX-rect.left;
+      offsetY=e.clientY-rect.top;
+    });
+    document.addEventListener('mouseup',()=>dragging=false);
+    document.addEventListener('mousemove', e=>{
+      if(!dragging) return;
+      const rect=container.getBoundingClientRect();
+      let left=e.clientX-rect.left-offsetX;
+      let top=e.clientY-rect.top-offsetY;
+      left=Math.max(0, Math.min(container.clientWidth-el.offsetWidth,left));
+      top=Math.max(0, Math.min(container.clientHeight-el.offsetHeight,top));
+      el.style.left=left+'px';
+      el.style.top=top+'px';
+    });
+  }
+
+});
+</script>
+
+</body>
+</html>
