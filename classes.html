@@ -315,6 +315,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 }); // DOMContentLoaded end
 </script>
+  <div id="shared-footer"></div>
+
+<script>
+  fetch('/footer.html')
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById('shared-footer').innerHTML = data;
+    })
+    .catch(err => console.error('Footer load failed:', err));
+</script>
 </body>
 </html>
                           
