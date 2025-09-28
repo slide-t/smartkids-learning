@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartKids Learning</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-blue-100 text-gray-800 min-h-screen flex flex-col">
+
+  <!-- HEADER -->
+  <header class="bg-blue-700 text-white p-4 flex justify-between items-center shadow">
+    <h1 class="text-xl font-bold">Lesson Notes</h1>
+    <a href="lessons.html" class="bg-white text-blue-700 px-4 py-2 rounded-lg shadow hover:bg-blue-100">
+      Back to Lessons
+    </a>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="flex-1 flex items-center justify-center p-6">
+    <div id="lessonPanel" 
+         class="bg-blue-600 text-white p-6 rounded-2xl shadow-lg max-w-3xl w-full">
+      <h2 id="lessonTitle" class="text-2xl font-bold mb-4">Loading...</h2>
+      <div id="lessonContent" class="text-base leading-relaxed space-y-4">
+        Please wait while we load the lesson.
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-blue-700 text-white p-4 text-center text-sm">
+    SmartKids Learning © 2025 - All Rights Reserved
+  </footer>
+
+  <script>
+    async function loadLesson() {
+      // Get ID from URL query (?id=xxx)
+      const params = new URLSearchParams(window.location.search);
+      const lessonId = params.get("id");
+
+      if (!lessonId) {
+        document.getElementById("lessonTitle").innerText = "No Lesson Found";
+        document.getElementById("lessonContent").innerText = "Invalid or missing lesson ID.";
+        return;
+      }
+
+      try {
+        const res = await fetch("data/detail-notes.json");
+        const notes = await res.json();
+
+        // Find lesson by ID
+        const lesson = notes.find(item => item.id === lessonId);
+
+        if (lesson) {
+          document.getElementById("lessonTitle").innerText = lesson.title;
+          document.getElementById("lessonContent").innerHTML = lesson.content;
+        } else {
+          document.getElementById("lessonTitle").innerText = "Lesson Not Found";
+          document.getElementById("lessonContent").innerText = "We could not find notes for this lesson.";
+        }
+      } catch (error) {
+        console.error("Error loading lesson:", error);
+        document.getElementById("lessonTitle").innerText = "Error";
+        document.getElementById("lessonContent").innerText = "Could not load the lesson notes.";
+      }
+    }
+
+    loadLesson();
+  </script>
+</body>
+</html>
