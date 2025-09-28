@@ -1,1 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Learning Kids - Year 11 Mouse Practice</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family:sans-serif; background:#f3f4f6; margin:0; padding:0; }
+  header { background:#1e40af; color:white; padding:1rem; display:flex; justify-content:space-between; align-items:center; }
+  header a { background:white; color:#1e40af; padding:0.5rem 1rem; border-radius:0.5rem; font-weight:bold; text-decoration:none; }
+  main { padding:2rem; max-width:900px; margin:auto; }
+  h2 { margin-bottom:0.5rem; }
+  .practiceArea { width:100%; height:220px; background:#e5e7eb; border-radius:0.5rem; position:relative; margin-bottom:20px; overflow:hidden; }
+  .curve { width:10px; height:10px; background:#f59e0b; position:absolute; border-radius:50%; cursor:pointer; }
+  .cell { width:50px; height:50px; background:#10b981; position:absolute; display:flex; justify-content:center; align-items:center; color:white; font-weight:bold; cursor:pointer; border-radius:0.25rem; }
+  .cad { width:100px; height:100px; background:#f97316; position:absolute; top:50px; left:50px; display:flex; justify-content:center; align-items:center; color:white; font-weight:bold; cursor:grab; }
+</style>
+</head>
+<body>
 
+<header>
+  <h1 class="text-xl font-bold">Year 11 Mouse Practice</h1>
+  <a href="https://slide-t.github.io/smartkids-learning/mouse.html">Back To Classes</a>
+</header>
+
+<main>
+
+<h2>Professional Design Tools</h2>
+<p>Drag points to adjust a Bezier curve.</p>
+<div id="curveArea" class="practiceArea"></div>
+
+<h2>Complex Spreadsheet Skills</h2>
+<p>Drag cells to move formulas around.</p>
+<div id="spreadsheetArea" class="practiceArea"></div>
+
+<h2>CAD-like Interactions</h2>
+<p>Drag the orange box to rotate and zoom the diagram.</p>
+<div id="cadArea" class="practiceArea"></div>
+
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+
+  // Professional Design Tools - Bezier Curve
+  const curveArea=document.getElementById('curveArea');
+  const points=[];
+  for(let i=0;i<3;i++){
+    const pt=document.createElement('div');
+    pt.className='curve';
+    pt.style.left=(50+i*80)+'px';
+    pt.style.top='100px';
+    curveArea.appendChild(pt);
+    makeDraggable(pt);
+    points.push(pt);
+  }
+
+  function makeDraggable(el){
+    let offsetX=0,offsetY=0,dragging=false;
+    el.addEventListener('mousedown',e=>{
+      dragging=true;
+      offsetX=e.offsetX;
+      offsetY=e.offsetY;
+    });
+    document.addEventListener('mousemove',e=>{
+      if(!dragging) return;
+      const rect=el.parentElement.getBoundingClientRect();
+      let x=e.clientX-rect.left-offsetX;
+      let y=e.clientY-rect.top-offsetY;
+      x=Math.max(0,Math.min(rect.width-el.offsetWidth,x));
+      y=Math.max(0,Math.min(rect.height-el.offsetHeight,y));
+      el.style.left=x+'px';
+      el.style.top=y+'px';
+    });
+    document.addEventListener('mouseup',()=>{dragging=false;});
+  }
+
+  // Complex Spreadsheet Skills
+  const spreadsheetArea=document.getElementById('spreadsheetArea');
+  const cells=[];
+  for(let i=0;i<3;i++){
+    const cell=document.createElement('div');
+    cell.className='cell';
+    cell.textContent=i+1;
+    cell.style.left=(50+i*70)+'px';
+    cell.style.top='50px';
+    spreadsheetArea.appendChild(cell);
+    makeDraggable(cell);
+    cells.push(cell);
+  }
+
+  // CAD-like Interactions
+  const cadArea=document.getElementById('cadArea');
+  const cad=document.createElement('div');
+  cad.className='cad';
+  cad.textContent='CAD';
+  cadArea.appendChild(cad);
+
+  let dragging=false, startX=0, startY=0;
+  cad.addEventListener('mousedown',e=>{
+    dragging=true;
+    startX=e.clientX;
+    startY=e.clientY;
+    cad.style.cursor='grabbing';
+  });
+  document.addEventListener('mouseup',()=>{dragging=false; cad.style.cursor='grab';});
+  document.addEventListener('mousemove',e=>{
+    if(!dragging) return;
+    const dx=e.clientX-startX;
+    const dy=e.clientY-startY;
+    cad.style.transform=`rotate(${dx}deg) scale(${1+dy/200})`;
+  });
+
+});
+</script>
+
+</body>
+</html>
