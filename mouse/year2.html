@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mouse Practice - Year 2</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    .practice-area { width: 100%; height: 300px; background: #e2e8f0; border-radius: 0.5rem; position: relative; overflow: hidden; }
-    .draggable { width: 50px; height: 50px; background: #3498db; color: #fff; display: flex; align-items: center; justify-content: center; position: absolute; cursor: grab; border-radius: 0.25rem; }
-    .dropzone { width: 100px; height: 100px; border: 2px dashed #4ade80; border-radius: 0.25rem; position: absolute; display: flex; align-items: center; justify-content: center; font-weight: bold; }
-    .stats span { margin-right: 15px; font-weight: bold; }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Mouse Practice - Year 2</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  .practice-area { width: 100%; height: 300px; background: #e2e8f0; border-radius: 0.5rem; position: relative; overflow: hidden; }
+  .draggable { width: 60px; height: 50px; background: url('folder.png') no-repeat center/contain; position: absolute; cursor: grab; }
+  .dropzone { width: 100px; height: 100px; border: 2px dashed #4ade80; border-radius: 0.25rem; position: absolute; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+  .stats span { margin-right: 15px; font-weight: bold; }
+</style>
 </head>
 <body class="bg-gray-50 text-gray-900 font-sans">
 
@@ -24,12 +24,8 @@
 <main class="pt-24 max-w-4xl mx-auto px-4">
   <h2 class="text-3xl font-bold text-center mb-8">Mouse Practice - Year 2</h2>
 
-  <!-- Practice Selection -->
-  <div class="space-y-4">
-    <button class="practiceBtn w-full px-4 py-2 bg-green-100 hover:bg-green-200 rounded-lg text-left" data-topic="drag">🖱️ Drag and Drop</button>
-    <button class="practiceBtn w-full px-4 py-2 bg-green-100 hover:bg-green-200 rounded-lg text-left" data-topic="rightClick">🖱️ Right-Click Basics</button>
-    <button class="practiceBtn w-full px-4 py-2 bg-green-100 hover:bg-green-200 rounded-lg text-left" data-topic="clickHold">🖱️ Click and Hold</button>
-  </div>
+  <!-- Accordion links from mouse.html -->
+  <div id="accordion" class="space-y-4"></div>
 
   <!-- Modal -->
   <div id="practiceModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
@@ -52,7 +48,8 @@
 </main>
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+  const accordion = document.getElementById("accordion");
   const modal = document.getElementById("practiceModal");
   const closeModal = document.getElementById("closeModal");
   const modalTitle = document.getElementById("modalTitle");
@@ -62,6 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const successEl = document.getElementById("success");
   const btnRestart = document.getElementById("btnRestart");
 
+  let currentTopic = null;
   let attempts = 0;
   let success = 0;
 
@@ -76,107 +74,98 @@ document.addEventListener("DOMContentLoaded", () => {
     practiceArea.innerHTML = '';
   }
 
-  function startDragAndDrop() {
-    clearPractice();
-    modalTitle.textContent = "Drag and Drop";
-    modalInstruction.textContent = "Drag the blue square into the green box.";
+  function loadTopic(topic) {
+    resetStats();
+    currentTopic = topic.dataset.topic;
+    modalTitle.textContent = topic.dataset.title;
+    modalInstruction.textContent = topic.dataset.sample;
+    modal.classList.remove("hidden");
 
-    const draggable = document.createElement("div");
-    draggable.className = "draggable";
-    draggable.textContent = "Drag";
+    if (currentTopic === "dragDrop") startDragDrop();
+    else if (currentTopic === "rightClick") startRightClick();
+    else if (currentTopic === "clickHold") startClickHold();
+  }
+
+  // --- DRAG AND DROP ---
+  function startDragDrop() {
+    clearPractice();
+
+    const folder = document.createElement("div");
+    folder.className = "draggable";
+    folder.style.top = "50px";
+    folder.style.left = "50px";
 
     const dropzone = document.createElement("div");
     dropzone.className = "dropzone";
-    dropzone.textContent = "Drop";
-
-    // Random positions
-    draggable.style.top = "50px";
-    draggable.style.left = "50px";
+    dropzone.textContent = "Drop Here";
     dropzone.style.top = "150px";
     dropzone.style.left = "250px";
 
-    practiceArea.appendChild(draggable);
+    practiceArea.appendChild(folder);
     practiceArea.appendChild(dropzone);
 
-    draggable.onmousedown = function(event) {
-      let shiftX = event.clientX - draggable.getBoundingClientRect().left;
-      let shiftY = event.clientY - draggable.getBoundingClientRect().top;
+    folder.onmousedown = function(event) {
+      let shiftX = event.clientX - folder.getBoundingClientRect().left;
+      let shiftY = event.clientY - folder.getBoundingClientRect().top;
 
       function moveAt(pageX, pageY) {
-        draggable.style.left = pageX - shiftX - practiceArea.getBoundingClientRect().left + "px";
-        draggable.style.top = pageY - shiftY - practiceArea.getBoundingClientRect().top + "px";
+        folder.style.left = pageX - shiftX - practiceArea.getBoundingClientRect().left + "px";
+        folder.style.top = pageY - shiftY - practiceArea.getBoundingClientRect().top + "px";
       }
 
-      function onMouseMove(event) {
-        moveAt(event.pageX, event.pageY);
-      }
+      function onMouseMove(event) { moveAt(event.pageX, event.pageY); }
 
-      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener("mousemove", onMouseMove);
 
-      draggable.onmouseup = function() {
-        document.removeEventListener('mousemove', onMouseMove);
-        draggable.onmouseup = null;
+      folder.onmouseup = function() {
+        document.removeEventListener("mousemove", onMouseMove);
+        folder.onmouseup = null;
 
         attempts++;
         attemptsEl.textContent = attempts;
 
-        const draggableRect = draggable.getBoundingClientRect();
-        const dropRect = dropzone.getBoundingClientRect();
+        const f = folder.getBoundingClientRect();
+        const d = dropzone.getBoundingClientRect();
 
-        // Check collision
-        if (
-          draggableRect.left < dropRect.right &&
-          draggableRect.right > dropRect.left &&
-          draggableRect.top < dropRect.bottom &&
-          draggableRect.bottom > dropRect.top
-        ) {
+        if (f.left < d.right && f.right > d.left && f.top < d.bottom && f.bottom > d.top) {
           success++;
           successEl.textContent = success;
-          alert("Good job! Dropped correctly.");
+          alert("Good job! Folder dropped correctly.");
         }
       };
     };
-
-    draggable.ondragstart = function() {
-      return false;
-    };
+    folder.ondragstart = () => false;
   }
 
+  // --- RIGHT CLICK ---
   function startRightClick() {
     clearPractice();
-    modalTitle.textContent = "Right-Click Basics";
-    modalInstruction.textContent = "Right-click on the box to see the context menu.";
+    const folder = document.createElement("div");
+    folder.className = "draggable";
+    folder.style.top = "100px";
+    folder.style.left = "150px";
 
-    const box = document.createElement("div");
-    box.className = "draggable";
-    box.textContent = "Right-Click Me";
-    box.style.top = "100px";
-    box.style.left = "150px";
-
-    box.addEventListener("contextmenu", e => {
+    folder.addEventListener("contextmenu", e => {
       e.preventDefault();
       attempts++;
       success++;
       attemptsEl.textContent = attempts;
       successEl.textContent = success;
-      alert("Right-click detected!");
+      alert("Folder Properties Opened!");
     });
 
-    practiceArea.appendChild(box);
+    practiceArea.appendChild(folder);
   }
 
-  function startClickAndHold() {
+  // --- CLICK AND HOLD ---
+  function startClickHold() {
     clearPractice();
-    modalTitle.textContent = "Click and Hold";
-    modalInstruction.textContent = "Click and hold the blue square for 2 seconds.";
-
     const box = document.createElement("div");
     box.className = "draggable";
-    box.textContent = "Hold";
     box.style.top = "100px";
     box.style.left = "150px";
-
     let holdTimeout;
+
     box.addEventListener("mousedown", () => {
       holdTimeout = setTimeout(() => {
         attempts++;
@@ -195,21 +184,62 @@ document.addEventListener("DOMContentLoaded", () => {
     practiceArea.appendChild(box);
   }
 
-  document.querySelectorAll(".practiceBtn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const topic = btn.dataset.topic;
-      resetStats();
-      modal.classList.remove("hidden");
-      if (topic === "drag") startDragAndDrop();
-      else if (topic === "rightClick") startRightClick();
-      else if (topic === "clickHold") startClickAndHold();
-    });
-  });
-
+  // --- Close & Restart ---
   closeModal.addEventListener("click", () => modal.classList.add("hidden"));
   btnRestart.addEventListener("click", () => {
-    const activeBtn = document.querySelector(".practiceBtn.active");
-    if (activeBtn) activeBtn.click();
+    if (currentTopic === "dragDrop") startDragDrop();
+    else if (currentTopic === "rightClick") startRightClick();
+    else if (currentTopic === "clickHold") startClickHold();
+  });
+
+  // --- Accordion Rendering from mouse.json ---
+  const year2Data = {
+    "topics":[
+      {"title":"Drag and Drop","sample":"Drag the folder into the drop zone.","topic":"dragDrop"},
+      {"title":"Right-Click Basics","sample":"Right-click on the folder to see properties.","topic":"rightClick"},
+      {"title":"Click and Hold","sample":"Click and hold the folder for 2 seconds.","topic":"clickHold"}
+    ]
+  };
+
+  const card = document.createElement("div");
+  card.className = "bg-white rounded-xl shadow-md overflow-hidden mb-4";
+
+  const header = document.createElement("button");
+  header.className = "accordion-header w-full flex justify-between items-center px-6 py-4 text-lg font-semibold bg-green-100 hover:bg-green-200 transition";
+  header.innerHTML = `<span class="text-gray-900">Year 2 Mouse Skills</span><span class="text-gray-900">+</span>`;
+  card.appendChild(header);
+
+  const body = document.createElement("div");
+  body.className = "accordion-body bg-gray-50";
+
+  body.innerHTML = year2Data.topics.map(t => `
+    <div class="mb-4">
+      <button class="topicBtn block w-full text-left px-4 py-2 rounded-lg shadow text-gray-900 bg-white hover:shadow-md hover:bg-green-50 transition"
+        data-title="${t.title}" data-sample="${t.sample}" data-topic="${t.topic}">
+        🖱️ ${t.title}
+      </button>
+    </div>
+  `).join('');
+
+  card.appendChild(body);
+  accordion.appendChild(card);
+
+  // Accordion toggle
+  header.addEventListener("click", () => {
+    const isOpen = body.style.maxHeight && body.style.maxHeight !== "0px";
+    document.querySelectorAll(".accordion-body").forEach(el => el.style.maxHeight = null);
+    document.querySelectorAll(".accordion-header span:last-child").forEach(icon => icon.style.transform = "rotate(0deg)");
+    if (!isOpen) {
+      body.style.maxHeight = body.scrollHeight + "px";
+      header.querySelector("span:last-child").style.transform = "rotate(45deg)";
+    }
+  });
+
+  // Topic click → modal
+  accordion.addEventListener("click", e => {
+    const btn = e.target.closest(".topicBtn");
+    if (!btn) return;
+    loadTopic(btn);
   });
 });
 </script>
