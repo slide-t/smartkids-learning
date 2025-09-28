@@ -9,6 +9,18 @@ const PRECACHE_URLS = [
   '/classes.json',
   '/game-board.html',
   '/data/classes.json',
+  '/mouse/year1.html',
+  '/mouse/year2.html',
+  '/mouse/year3.html',
+  '/mouse/year4.html',
+  '/mouse/year5.html',
+  '/mouse/year6.html',
+  '/mouse/year7.html',
+  '/mouse/year8.html',
+  '/mouse/year9.html',
+  '/mouse/year10.html',
+  '/mouse/year11.html',
+  '/mouse/year12.html',
   '/styles.css',
   '/script.js'
 ];
