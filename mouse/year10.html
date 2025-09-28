@@ -1,1 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Learning Kids - Year 10 Mouse Practice</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family:sans-serif; background:#f3f4f6; margin:0; padding:0; }
+  header { background:#1e40af; color:white; padding:1rem; display:flex; justify-content:space-between; align-items:center; }
+  header a { background:white; color:#1e40af; padding:0.5rem 1rem; border-radius:0.5rem; font-weight:bold; text-decoration:none; }
+  main { padding:2rem; max-width:900px; margin:auto; }
+  h2 { margin-bottom:0.5rem; }
+  .practiceArea { width:100%; height:220px; background:#e5e7eb; border-radius:0.5rem; position:relative; margin-bottom:20px; overflow:hidden; }
+  .object { width:50px; height:50px; background:#f59e0b; position:absolute; display:flex; justify-content:center; align-items:center; color:white; font-weight:bold; cursor:pointer; user-select:none; border-radius:0.25rem; }
+  .selected { border:2px dashed #1e40af; }
+  .precision { width:70px; height:50px; border:2px solid #10b981; position:absolute; top:50px; left:50px; display:flex; justify-content:center; align-items:center; }
+</style>
+</head>
+<body>
 
+<header>
+  <h1 class="text-xl font-bold">Year 10 Mouse Practice</h1>
+  <a href="https://slide-t.github.io/smartkids-learning/mouse.html">Back To Classes</a>
+</header>
+
+<main>
+
+<h2>3D Object Manipulation</h2>
+<p>Click and drag to rotate objects.</p>
+<div id="rotateArea" class="practiceArea"></div>
+
+<h2>Layer Controls in Editing</h2>
+<p>Drag boxes to change stacking order.</p>
+<div id="layerArea" class="practiceArea"></div>
+
+<h2>Precision Selection Tools</h2>
+<p>Drag to outline the green rectangle.</p>
+<div id="precisionArea" class="practiceArea">
+  <div class="precision">Target</div>
+</div>
+
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+
+  // 3D Object Manipulation
+  const rotateArea=document.getElementById('rotateArea');
+  for(let i=0;i<3;i++){
+    const obj=document.createElement('div');
+    obj.className='object';
+    obj.textContent=i+1;
+    obj.style.left=(50+i*70)+'px';
+    obj.style.top='50px';
+    rotateArea.appendChild(obj);
+    makeRotatable(obj);
+  }
+
+  function makeRotatable(el){
+    let startX=0;
+    el.addEventListener('mousedown',e=>{
+      startX=e.clientX;
+      document.onmousemove=drag;
+      document.onmouseup=endDrag;
+    });
+    function drag(e){
+      const diff=e.clientX-startX;
+      el.style.transform=`rotateY(${diff}deg)`;
+    }
+    function endDrag(){
+      document.onmousemove=null;
+      document.onmouseup=null;
+    }
+  }
+
+  // Layer Controls
+  const layerArea=document.getElementById('layerArea');
+  const layers=[];
+  for(let i=0;i<3;i++){
+    const obj=document.createElement('div');
+    obj.className='object';
+    obj.textContent=i+1;
+    obj.style.left=(50+i*70)+'px';
+    obj.style.top='50px';
+    obj.style.zIndex=i+1;
+    layerArea.appendChild(obj);
+    makeLayerDraggable(obj);
+    layers.push(obj);
+  }
+
+  function makeLayerDraggable(el){
+    let dragging=false, offsetX=0, offsetY=0;
+    el.addEventListener('mousedown',e=>{
+      dragging=true;
+      offsetX=e.clientX-el.offsetLeft;
+      offsetY=e.clientY-el.offsetTop;
+      el.style.zIndex=1000; // bring to front
+    });
+    document.addEventListener('mouseup',()=>{dragging=false; el.style.zIndex=layers.indexOf(el)+1;});
+    document.addEventListener('mousemove',e=>{
+      if(!dragging) return;
+      let left=e.clientX-offsetX;
+      let top=e.clientY-offsetY;
+      left=Math.max(0, Math.min(layerArea.clientWidth-el.offsetWidth,left));
+      top=Math.max(0, Math.min(layerArea.clientHeight-el.offsetHeight,top));
+      el.style.left=left+'px';
+      el.style.top=top+'px';
+    });
+  }
+
+  // Precision Selection
+  const precisionArea=document.getElementById('precisionArea');
+  const target=precisionArea.querySelector('.precision');
+  let selecting=false;
+  let startX=0,startY=0;
+  const selection=document.createElement('div');
+  selection.style.position='absolute';
+  selection.style.border='2px dashed #ef4444';
+  selection.style.background='rgba(239,68,68,0.2)';
+  precisionArea.appendChild(selection);
+
+  precisionArea.addEventListener('mousedown',e=>{
+    selecting=true;
+    startX=e.offsetX;
+    startY=e.offsetY;
+    selection.style.left=startX+'px';
+    selection.style.top=startY+'px';
+    selection.style.width='0px';
+    selection.style.height='0px';
+  });
+
+  precisionArea.addEventListener('mousemove',e=>{
+    if(!selecting) return;
+    const w=e.offsetX-startX;
+    const h=e.offsetY-startY;
+    selection.style.width=Math.abs(w)+'px';
+    selection.style.height=Math.abs(h)+'px';
+    selection.style.left=(w<0?e.offsetX:startX)+'px';
+    selection.style.top=(h<0?e.offsetY:startY)+'px';
+  });
+
+  precisionArea.addEventListener('mouseup',e=>{
+    selecting=false;
+  });
+
+});
+</script>
+
+</body>
+</html>
