@@ -1,1 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartKids Mouse Practice - Year 4</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: sans-serif; background: #f0f4f8; }
+  header { background-color: #1e40af; color: white; padding: 1rem; text-align: center; position: sticky; top: 0; z-index: 50; }
+  header a { background: white; color: #1e40af; padding: 0.5rem 1rem; border-radius: 0.5rem; margin-left: 1rem; text-decoration: none; font-weight: bold; }
+  .accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; background: white; border-radius: 0.5rem; margin-bottom: 1rem; }
+  .accordion-header { cursor: pointer; padding: 1rem; background: #60a5fa; color: white; font-weight: bold; display: flex; justify-content: space-between; border-radius: 0.5rem; margin-bottom: 0.5rem; }
+  .practice-area { position: relative; width: 100%; height: 300px; background: #e2e8f0; border-radius: 0.5rem; overflow: hidden; margin-top: 1rem; padding: 1rem; }
+  .folder, .file { width: 80px; height: 50px; background: #fbbf24; margin: 0.5rem; display: inline-flex; justify-content: center; align-items: center; border-radius: 0.3rem; cursor: pointer; user-select: none; position: absolute; }
+  .resizable-window { position: absolute; width: 150px; height: 100px; background: #93c5fd; border: 2px solid #1e40af; resize: both; overflow: auto; }
+  .target { width: 50px; height: 50px; background: #ef4444; border-radius: 50%; position: absolute; display: flex; justify-content: center; align-items: center; color: white; font-weight: bold; cursor: pointer; }
+</style>
+</head>
+<body>
 
+<header>
+  SmartKids Mouse Practice - Year 4
+  <a href="https://slide-t.github.io/smartkids-learning/mouse.html">Back To Classes</a>
+</header>
+
+<main class="max-w-4xl mx-auto p-4">
+  <h2 class="text-2xl font-bold mb-4 text-center">Year 4 Topics</h2>
+
+  <div id="accordion">
+    <div>
+      <div class="accordion-header">File and Folder Selection <span>+</span></div>
+      <div class="accordion-body" id="fileFolderBody">
+        <p>Select multiple files by dragging a selection box.</p>
+        <div id="fileFolderArea" class="practice-area"></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="accordion-header">Resizing Windows <span>+</span></div>
+      <div class="accordion-body" id="resizeBody">
+        <p>Drag the edges of a window to resize it.</p>
+        <div id="resizeArea" class="practice-area"></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="accordion-header">Simple Gaming Controls <span>+</span></div>
+      <div class="accordion-body" id="gamingBody">
+        <p>Click targets that appear quickly on screen.</p>
+        <div id="gamingArea" class="practice-area"></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+// Accordion toggle
+document.querySelectorAll('.accordion-header').forEach(header => {
+  header.addEventListener('click', () => {
+    const body = header.nextElementSibling;
+    const open = body.style.maxHeight && body.style.maxHeight !== '0px';
+    document.querySelectorAll('.accordion-body').forEach(b => b.style.maxHeight = null);
+    document.querySelectorAll('.accordion-header span').forEach(s => s.style.transform = 'rotate(0deg)');
+    if(!open){
+      body.style.maxHeight = body.scrollHeight + 'px';
+      header.querySelector('span').style.transform = 'rotate(45deg)';
+    }
+  });
+});
+
+// Year 4: File and Folder Selection
+function startFileFolderSelection(){
+  const area = document.getElementById('fileFolderArea');
+  area.innerHTML = '';
+  const files = [];
+  for(let i=0;i<6;i++){
+    const file = document.createElement('div');
+    file.className = i<3 ? 'folder' : 'file';
+    file.textContent = i<3 ? 'Folder'+(i+1) : 'File'+(i-2);
+    file.style.top = (50 + i*60) + 'px';
+    file.style.left = '50px';
+    area.appendChild(file);
+    files.push(file);
+    // make draggable
+    file.onmousedown = function(e){
+      e.preventDefault();
+      const shiftX = e.clientX - file.getBoundingClientRect().left;
+      const shiftY = e.clientY - file.getBoundingClientRect().top;
+      function moveAt(pageX,pageY){
+        file.style.left = pageX - shiftX - area.getBoundingClientRect().left + 'px';
+        file.style.top = pageY - shiftY - area.getBoundingClientRect().top + 'px';
+      }
+      function onMouseMove(e){
+        moveAt(e.pageX,e.pageY);
+      }
+      document.addEventListener('mousemove', onMouseMove);
+      document.onmouseup = function(){
+        document.removeEventListener('mousemove', onMouseMove);
+        document.onmouseup = null;
+      };
+    };
+    file.ondragstart = () => false;
+    // right click alert
+    file.oncontextmenu = e => { e.preventDefault(); alert(file.textContent+' properties:\nSize: 50MB\nCreated: Today'); };
+  }
+}
+startFileFolderSelection();
+
+// Year 4: Resizing Windows
+function startResizingWindows(){
+  const area = document.getElementById('resizeArea');
+  area.innerHTML = '';
+  for(let i=0;i<2;i++){
+    const win = document.createElement('div');
+    win.className = 'resizable-window';
+    win.style.top = (50 + i*120)+'px';
+    win.style.left = '50px';
+    area.appendChild(win);
+  }
+}
+
+// Year 4: Simple Gaming Controls
+function startGamingControls(){
+  const area = document.getElementById('gamingArea');
+  area.innerHTML = '';
+  let score = 0;
+  const target = document.createElement('div');
+  target.className = 'target';
+  target.textContent = '🎯';
+  area.appendChild(target);
+
+  function moveTarget(){
+    const rect = area.getBoundingClientRect();
+    const size = 50;
+    target.style.top = Math.random()*(rect.height - size)+'px';
+    target.style.left = Math.random()*(rect.width - size)+'px';
+  }
+  moveTarget();
+  target.onclick = () => {
+    score++;
+    moveTarget();
+  };
+  setInterval(moveTarget,2000);
+}
+
+startResizingWindows();
+startGamingControls();
+</script>
+
+</body>
+</html>
