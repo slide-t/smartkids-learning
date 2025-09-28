@@ -16,6 +16,18 @@
       color: white; font-weight: bold; user-select: none;
       transition: transform 0.1s ease;
     }
+    .draggable {
+      width: 60px; height: 60px; margin: 10px; cursor: grab;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; font-weight: bold; color: white;
+      border-radius: 8px;
+    }
+    .droptarget {
+      width: 70px; height: 70px; margin: 10px;
+      border: 2px dashed #555; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; font-weight: bold;
+    }
     .stats span { margin-right: 15px; font-weight: bold; }
   </style>
 </head>
@@ -45,7 +57,7 @@
       <div id="mouseInstruction" class="mb-4 p-3 bg-gray-100 rounded text-lg leading-relaxed"></div>
 
       <!-- Practice Area -->
-      <div id="practiceArea" class="relative w-full h-64 bg-gray-200 rounded mb-4 overflow-hidden"></div>
+      <div id="practiceArea" class="relative w-full h-64 bg-gray-200 rounded mb-4 overflow-hidden flex items-center justify-center"></div>
 
       <!-- Stats -->
       <div class="stats flex justify-start text-sm font-semibold mb-4">
@@ -65,7 +77,6 @@
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   const container = document.getElementById("accordion");
-  const today = new Date();
 
   const mouseModal = document.getElementById("mouseModal");
   const closeMouse = document.getElementById("closeMouse");
@@ -94,7 +105,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     accuracyEl.textContent = 100;
   }
 
-  function spawnTarget() {
+  function updateStats() {
+    clicksEl.textContent = clicks;
+    hitsEl.textContent = hits;
+    const accuracy = clicks > 0 ? Math.round((hits / clicks) * 100) : 100;
+    accuracyEl.textContent = accuracy;
+  }
+
+  // === Practices ===
+  function spawnTarget(single = true) {
     practiceArea.innerHTML = '';
     const target = document.createElement("div");
     target.className = "target";
@@ -107,26 +126,85 @@ document.addEventListener("DOMContentLoaded", async () => {
     target.style.top = y + "px";
     practiceArea.appendChild(target);
 
-    target.addEventListener("click", e => {
-      hits++;
-      clicks++;
-      updateStats();
-      spawnTarget();
-    });
+    if (single) {
+      target.addEventListener("click", () => {
+        hits++; clicks++; updateStats(); spawnTarget(true);
+      });
+    } else {
+      target.addEventListener("dblclick", () => {
+        hits++; clicks++; updateStats(); spawnTarget(false);
+      });
+    }
   }
 
-  function updateStats() {
-    clicksEl.textContent = clicks;
-    hitsEl.textContent = hits;
-    const accuracy = clicks > 0 ? Math.round((hits / clicks) * 100) : 100;
-    accuracyEl.textContent = accuracy;
+  function spawnDragDrop() {
+    practiceArea.innerHTML = '';
+    const shapes = [
+      { shape: "⬛", color: "bg-red-500", name: "Square" },
+      { shape: "🔵", color: "bg-blue-500", name: "Circle" }
+    ];
+    const targets = ["Square", "Circle"];
+
+    const dragContainer = document.createElement("div");
+    dragContainer.className = "flex space-x-4";
+
+    shapes.forEach(s => {
+      const el = document.createElement("div");
+      el.className = `draggable ${s.color}`;
+      el.textContent = s.shape;
+      el.draggable = true;
+      el.dataset.shape = s.name;
+      dragContainer.appendChild(el);
+    });
+
+    const dropContainer = document.createElement("div");
+    dropContainer.className = "flex space-x-4";
+
+    targets.forEach(t => {
+      const zone = document.createElement("div");
+      zone.className = "droptarget";
+      zone.textContent = t;
+      zone.dataset.accept = t;
+      dropContainer.appendChild(zone);
+
+      zone.addEventListener("dragover", e => e.preventDefault());
+      zone.addEventListener("drop", e => {
+        const draggedShape = e.dataTransfer.getData("shape");
+        clicks++;
+        if (draggedShape === t) {
+          hits++;
+          zone.textContent = "✅";
+        } else {
+          zone.textContent = "❌";
+        }
+        updateStats();
+      });
+    });
+
+    practiceArea.appendChild(dragContainer);
+    practiceArea.appendChild(dropContainer);
+
+    practiceArea.querySelectorAll(".draggable").forEach(el => {
+      el.addEventListener("dragstart", e => {
+        e.dataTransfer.setData("shape", el.dataset.shape);
+      });
+    });
   }
 
   function loadMouseTopic(topic) {
     mouseTitle.textContent = topic.dataset.title;
     mouseInstruction.textContent = topic.dataset.sample;
     resetStats();
-    spawnTarget();
+    practiceArea.innerHTML = '';
+
+    const title = topic.dataset.title.toLowerCase();
+    if (title.includes("double")) {
+      spawnTarget(false);
+    } else if (title.includes("drag")) {
+      spawnDragDrop();
+    } else {
+      spawnTarget(true);
+    }
     mouseModal.classList.remove("hidden");
   }
 
@@ -135,7 +213,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     const data = await res.json();
     const classes = Array.isArray(data) ? data : data.classes;
 
-    // Only mouse categories
     classes.forEach(cls => {
       const card = document.createElement("div");
       card.className = "bg-white rounded-xl shadow-md overflow-hidden mb-4";
@@ -149,7 +226,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       body.className = "accordion-body bg-gray-50";
 
       body.innerHTML = (cls.terms || []).map(term => {
-        const termUnlocked = true; // for simplicity
+        const termUnlocked = true;
         return `
           <div class="mb-4">
             <h3 class="text-lg font-semibold text-green-700 px-4 py-2">${term.title}</h3>
@@ -158,16 +235,14 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <h4 class="text-md font-semibold text-purple-600 px-3 py-1">${cat.name}</h4>
                 <ul class="space-y-2 pl-6">
                   ${(cat.topics || []).map(topic => {
-                    return termUnlocked
-                      ? `<li>
-                          <button class="topicBtn block w-full text-left px-4 py-2 rounded-lg shadow text-gray-900 bg-white hover:shadow-md hover:bg-green-50 transition flex items-center gap-2"
-                            data-title="${topic.title}"
-                            data-sample="${topic.sample}">
-                            🖱️ ${topic.title}
-                          </button>
-                        </li>`
-                      : `<li><span class="block px-4 py-2 rounded-lg bg-gray-200 text-gray-500 cursor-not-allowed flex items-center gap-2">
-                          🖱️ ${topic.title} (Locked)</span></li>`;
+                    return `
+                      <li>
+                        <button class="topicBtn block w-full text-left px-4 py-2 rounded-lg shadow text-gray-900 bg-white hover:shadow-md hover:bg-green-50 transition flex items-center gap-2"
+                          data-title="${topic.title}"
+                          data-sample="${topic.instruction}">
+                          🖱️ ${topic.title}
+                        </button>
+                      </li>`;
                   }).join("")}
                 </ul>
               </div>
@@ -216,24 +291,21 @@ document.addEventListener("DOMContentLoaded", async () => {
       loadMouseTopic(currentTopics[currentIndex]);
     }
   });
-
   btnRestartMouse.addEventListener("click", () => {
     if (currentTopics.length > 0) {
       loadMouseTopic(currentTopics[currentIndex]);
     }
   });
-
   closeMouse.addEventListener("click", () => {
     mouseModal.classList.add("hidden");
-    practiceArea.innerHTML = ''; // clear targets
+    practiceArea.innerHTML = '';
   });
 
-  // Global click tracker to count misses
+  // Count misses in click games
   practiceArea.addEventListener("click", e => {
-    // Only count clicks outside the target as misses
-    if (!e.target.classList.contains("target")) {
-      clicks++;
-      updateStats();
+    if (e.target.classList.contains("target")) return;
+    if (mouseTitle.textContent.toLowerCase().includes("click")) {
+      clicks++; updateStats();
     }
   });
 });
