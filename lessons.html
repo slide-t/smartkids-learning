@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Learning Kids - Lessons</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family:sans-serif; background:#f3f4f6; margin:0; padding:0; }
+  header { background:#1e40af; color:white; padding:1rem; display:flex; justify-content:space-between; align-items:center; }
+  header a { background:white; color:#1e40af; padding:0.5rem 1rem; border-radius:0.5rem; font-weight:bold; text-decoration:none; }
+  main { padding:2rem; max-width:900px; margin:auto; }
+  .panel { background:#1e40af; color:white; border-radius:0.75rem; margin-bottom:1rem; overflow:hidden; }
+  .panel-header { padding:1rem; cursor:pointer; font-weight:bold; display:flex; justify-content:space-between; align-items:center; }
+  .panel-body { background:white; color:black; padding:1rem; display:none; border-bottom-left-radius:0.75rem; border-bottom-right-radius:0.75rem; }
+  .panel-body img { max-width:100%; border-radius:0.5rem; margin-top:0.5rem; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1 class="text-xl font-bold">Smart Learning Kids - Lessons</h1>
+  <a href="index.html">Back To Home</a>
+</header>
+
+<main id="lessonsContainer">
+  <!-- Lessons panels will be generated here -->
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+
+  const container = document.getElementById('lessonsContainer');
+
+  try {
+    // Fetch classes.json
+    const res = await fetch('data/classes.json');
+    const data = await res.json();
+    const classes = Array.isArray(data) ? data : data.classes;
+
+    classes.forEach(cls => {
+      cls.terms.forEach(term => {
+        (term.categories || []).forEach(cat => {
+          (cat.topics || []).forEach(topic => {
+
+            // Create panel
+            const panel = document.createElement('div');
+            panel.className = 'panel';
+
+            // Header
+            const header = document.createElement('div');
+            header.className = 'panel-header';
+            header.innerHTML = `<span>${topic.title}</span><span>▼</span>`;
+            panel.appendChild(header);
+
+            // Body
+            const body = document.createElement('div');
+            body.className = 'panel-body';
+            // You can expand topic.sample to more detailed notes or images
+            body.innerHTML = `
+              <p>${topic.sample}</p>
+              <p>Example illustration:</p>
+              <img src="images/${topic.title.toLowerCase().replace(/\s+/g,'_')}.png" alt="${topic.title} illustration" />
+            `;
+            panel.appendChild(body);
+
+            // Toggle
+            header.addEventListener('click', () => {
+              const isVisible = body.style.display === 'block';
+              document.querySelectorAll('.panel-body').forEach(b => b.style.display = 'none');
+              if (!isVisible) body.style.display = 'block';
+            });
+
+            container.appendChild(panel);
+          });
+        });
+      });
+    });
+
+  } catch (err) {
+    console.error('Error loading classes.json:', err);
+    container.innerHTML = '<p class="text-red-500">⚠️ Failed to load lessons.</p>';
+  }
+
+});
+</script>
+
+</body>
+</html>
