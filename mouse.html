@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -75,6 +74,14 @@
       border-color: red;
       background: #f8d7da;
     }
+    .progress {
+      margin-top: 10px;
+      font-weight: bold;
+      color: #555;
+    }
+    .completed {
+      color: green;
+    }
   </style>
 </head>
 <body>
@@ -86,6 +93,7 @@
   <div class="practice-area" id="clickArea">
     <button id="clickBtn">Click Me</button>
   </div>
+  <div class="progress" id="progressClick">Progress: 0/2 completed</div>
 
   <!-- Option 2: Drag and Drop -->
   <h2>Option 2: Drag & Drop Shapes</h2>
@@ -97,6 +105,7 @@
     <div class="dropzone" data-shape="circle">Circle</div>
     <div class="dropzone" data-shape="square">Square</div>
   </div>
+  <div class="progress" id="progressDrag">Progress: 0/2 completed</div>
 
   <script>
     // ---------- OPTION 1: SINGLE & DOUBLE CLICK ----------
@@ -111,6 +120,18 @@
     ];
     let clickIndex = 0;
     let dblClickIndex = 0;
+    let singleCompleted = false;
+    let doubleCompleted = false;
+    const progressClick = document.getElementById('progressClick');
+
+    function updateClickProgress() {
+      let count = (singleCompleted ? 1 : 0) + (doubleCompleted ? 1 : 0);
+      progressClick.textContent = `Progress: ${count}/2 completed`;
+      if (count === 2) {
+        progressClick.textContent = "✅ Option 1 Completed!";
+        progressClick.classList.add("completed");
+      }
+    }
 
     function moveButton(pos) {
       clickBtn.style.position = 'absolute';
@@ -122,17 +143,35 @@
 
     clickBtn.addEventListener('click', () => {
       moveButton(positions[clickIndex]);
-      clickIndex = (clickIndex + 1) % positions.length;
+      clickIndex++;
+      if (clickIndex >= positions.length) {
+        singleCompleted = true;
+        updateClickProgress();
+      }
     });
 
     clickBtn.addEventListener('dblclick', () => {
       moveButton(positions[dblClickIndex]);
-      dblClickIndex = (dblClickIndex + 1) % positions.length;
+      dblClickIndex++;
+      if (dblClickIndex >= positions.length) {
+        doubleCompleted = true;
+        updateClickProgress();
+      }
     });
 
     // ---------- OPTION 2: DRAG & DROP ----------
     const shapes = document.querySelectorAll('.shape');
     const dropzones = document.querySelectorAll('.dropzone');
+    const progressDrag = document.getElementById('progressDrag');
+    let dragProgress = 0;
+
+    function updateDragProgress() {
+      progressDrag.textContent = `Progress: ${dragProgress}/2 completed`;
+      if (dragProgress === 2) {
+        progressDrag.textContent = "✅ Option 2 Completed!";
+        progressDrag.classList.add("completed");
+      }
+    }
 
     shapes.forEach(shape => {
       shape.addEventListener('dragstart', e => {
@@ -150,6 +189,10 @@
         const shape = document.getElementById(shapeId);
 
         if (zone.dataset.shape === shapeId) {
+          if (!zone.classList.contains('success')) {
+            dragProgress++;
+            updateDragProgress();
+          }
           zone.classList.add('success');
           zone.classList.remove('fail');
           zone.innerHTML = '';
@@ -164,285 +207,5 @@
     });
   </script>
 
-</body>
-</html>
-
-
-
-<!--
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Mouse Practice</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body { -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
-    .play-area { position: relative; width: 100%; height: 420px; border: 2px dashed #d1d5db; border-radius: 12px; overflow: hidden; background: #fff; }
-    .moving-btn { position: absolute; transition: all 0.35s ease; z-index: 5; }
-    .drag-area { width:100%; height:100%; display:flex; align-items:center; justify-content:space-around; gap:18px; padding: 12px; box-sizing: border-box; }
-    .shapes { display:flex; gap:18px; align-items:center; }
-    .shape { width:64px; height:64px; cursor:grab; user-select:none; display:flex; align-items:center; justify-content:center; }
-    .circle { border-radius:50%; background:#fb7185; }
-    .square { background:#60a5fa; border-radius:8px; }
-    .triangle { width:0; height:0; border-left:32px solid transparent; border-right:32px solid transparent; border-bottom:64px solid #34d399; }
-    .drop-zone { width:84px; height:84px; border:2px dashed #9ca3af; border-radius:8px; display:flex; align-items:center; justify-content:center; }
-    .drop-zone.drop-circle { border-radius:50%; }
-    .drop-zone.drop-triangle { clip-path: polygon(50% 0, 0 100%, 100% 100%); }
-    .drop-zone.matched { border-style:solid; border-color:#16a34a; background:#bbf7d0; }
-    .drop-zone.incorrect { border-color:#ef4444; background:#fecaca; }
-    .status { margin-top:10px; min-height:22px; font-weight:600; }
-    .hidden { display:none; }
-  </style>
-</head>
-<body class="bg-gray-50 min-h-screen flex flex-col items-center py-12">
-
-  <header class="w-full max-w-4xl px-4 mb-6">
-    <div class="flex items-center justify-between">
-      <h1 class="text-xl font-bold">Smart Learning Kids — Mouse Practice</h1>
-      <a href="index.html" class="px-3 py-1 bg-white text-blue-600 rounded shadow">Home</a>
-    </div>
-  </header>
-
-  <main class="w-full max-w-4xl px-4">
-    <p class="text-center text-lg mb-4">Choose a practice mode and follow the instructions below.</p>
-
-    <div class="flex gap-3 justify-center mb-6">
-      <button id="singleClickBtn" class="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-500">Single Click</button>
-      <button id="doubleClickBtn" class="px-4 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-500">Double Click</button>
-      <button id="dragDropBtn" class="px-4 py-2 bg-gray-700 text-white rounded-lg shadow hover:bg-gray-600">Drag & Drop</button>
-    </div>
-
-    <div class="play-area" id="playArea" aria-label="Practice area">
-      <!-- moving button --
-      <button id="movingButton" class="moving-btn px-4 py-2 bg-indigo-600 text-white rounded-lg shadow">Click Me</button>
-
-      <!-- drag/drop area (overlays inside play area) --
-      <div id="dragDropArea" class="drag-area hidden" style="pointer-events:auto;">
-        <div id="shapes" class="shapes" aria-hidden="false">
-          <div id="shape-circle" class="shape circle" data-shape="circle" draggable="true" title="circle"></div>
-          <div id="shape-square" class="shape square" data-shape="square" draggable="true" title="square"></div>
-          <div id="shape-triangle" class="shape triangle" data-shape="triangle" draggable="true" title="triangle"></div>
-        </div>
-
-        <div id="dropZones" class="flex gap-6">
-          <div class="drop-zone drop-circle" data-target="circle" aria-label="drop circle"></div>
-          <div class="drop-zone drop-square" data-target="square" aria-label="drop square"></div>
-          <div class="drop-zone drop-triangle" data-target="triangle" aria-label="drop triangle"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="mt-4 text-center">
-      <div id="status" class="status text-gray-700"></div>
-      <div id="completion" class="mt-2 text-green-600 font-semibold hidden">🎉 All shapes matched — great job!</div>
-    </div>
-  </main>
-
-  <script>
-  (function(){
-    const movingBtn = document.getElementById('movingButton');
-    const playArea = document.getElementById('playArea');
-    const singleClickBtn = document.getElementById('singleClickBtn');
-    const doubleClickBtn = document.getElementById('doubleClickBtn');
-    const dragDropBtn = document.getElementById('dragDropBtn');
-    const dragDropArea = document.getElementById('dragDropArea');
-    const shapesContainer = document.getElementById('shapes');
-    const dropZones = document.querySelectorAll('#dropZones .drop-zone');
-    const status = document.getElementById('status');
-    const completion = document.getElementById('completion');
-
-    let mode = 'single'; // 'single' | 'double' | 'drag'
-    let posIndex = 0;
-
-    // 5 positions computed relative to play area so they fit regardless of size.
-    function computePositions() {
-      const pad = 16;
-      const w = playArea.clientWidth;
-      const h = playArea.clientHeight;
-      const btnRect = movingBtn.getBoundingClientRect();
-      const btnW = Math.min(120, Math.max(64, btnRect.width));
-      const btnH = Math.min(48, Math.max(32, btnRect.height));
-
-      // evenly spread positions
-      return [
-        { left: pad, top: pad },
-        { left: w - btnW - pad, top: pad },
-        { left: Math.max(pad, (w - btnW) / 2), top: Math.max(pad, (h - btnH) / 2) },
-        { left: pad, top: h - btnH - pad },
-        { left: w - btnW - pad, top: h - btnH - pad },
-      ];
-    }
-
-    let positions = computePositions();
-
-    // place button at next position
-    function moveButton() {
-      // recalc positions in case container resized
-      positions = computePositions();
-      const p = positions[posIndex % positions.length];
-      movingBtn.style.left = p.left + 'px';
-      movingBtn.style.top = p.top + 'px';
-      // ensure right/bottom not interfering
-      movingBtn.style.right = 'auto';
-      movingBtn.style.bottom = 'auto';
-      posIndex++;
-    }
-
-    // switch to click practice view
-    function showClickPractice() {
-      mode = 'single';
-      dragDropArea.classList.add('hidden');
-      movingBtn.classList.remove('hidden');
-      posIndex = 0;
-      moveButton();
-      status.textContent = 'Single click mode: click the button once to move it.';
-      completion.classList.add('hidden');
-    }
-
-    function showDoubleClickPractice() {
-      mode = 'double';
-      dragDropArea.classList.add('hidden');
-      movingBtn.classList.remove('hidden');
-      posIndex = 0;
-      moveButton();
-      status.textContent = 'Double click mode: double-click the button to move it.';
-      completion.classList.add('hidden');
-    }
-
-    function showDragPractice() {
-      mode = 'drag';
-      movingBtn.classList.add('hidden');
-      dragDropArea.classList.remove('hidden');
-      status.textContent = 'Drag & Drop: drag each shape into its matching outline.';
-      completion.classList.add('hidden');
-      // reset shapes to original container if previously dropped
-      const shapes = document.querySelectorAll('#shapes .shape, #dropZones .shape');
-      shapes.forEach(s => {
-        s.remove(); // remove any existing instances
-      });
-      // recreate shapes
-      const circle = document.createElement('div');
-      circle.id = 'shape-circle';
-      circle.className = 'shape circle';
-      circle.dataset.shape = 'circle';
-      circle.draggable = true;
-      const square = document.createElement('div');
-      square.id = 'shape-square';
-      square.className = 'shape square';
-      square.dataset.shape = 'square';
-      square.draggable = true;
-      const triangle = document.createElement('div');
-      triangle.id = 'shape-triangle';
-      triangle.className = 'shape triangle';
-      triangle.dataset.shape = 'triangle';
-      triangle.draggable = true;
-
-      shapesContainer.appendChild(circle);
-      shapesContainer.appendChild(square);
-      shapesContainer.appendChild(triangle);
-
-      // reset drop zones
-      dropZones.forEach(z => {
-        z.classList.remove('matched','incorrect','highlight');
-        z.innerHTML = '';
-      });
-
-      attachDragHandlers(); // reattach handlers to new shapes
-    }
-
-    // Attach dragstart handlers for currently present shapes
-    function attachDragHandlers(){
-      const shapes = document.querySelectorAll('#shapes .shape');
-      shapes.forEach(shape => {
-        shape.addEventListener('dragstart', e => {
-          // use text/plain for compatibility
-          e.dataTransfer.setData('text/plain', shape.id);
-          e.dataTransfer.effectAllowed = 'move';
-        });
-        // touch fallback: not implemented here (would need touch events)
-      });
-    }
-
-    // drop zone handlers
-    dropZones.forEach(zone => {
-      zone.addEventListener('dragover', e => {
-        e.preventDefault();
-        e.dataTransfer.dropEffect = 'move';
-        zone.classList.add('highlight');
-      });
-      zone.addEventListener('dragleave', () => {
-        zone.classList.remove('highlight');
-      });
-      zone.addEventListener('drop', e => {
-        e.preventDefault();
-        zone.classList.remove('highlight');
-        const shapeId = e.dataTransfer.getData('text/plain');
-        const dragged = document.getElementById(shapeId);
-        if (!dragged) {
-          zone.classList.add('incorrect');
-          setTimeout(() => zone.classList.remove('incorrect'), 600);
-          status.textContent = 'Couldn’t find the dragged shape — try again.';
-          return;
-        }
-        const draggedShape = dragged.dataset.shape;
-        const targetShape = zone.dataset.target;
-        if (draggedShape === targetShape) {
-          // correct
-          zone.classList.add('matched');
-          // append dragged into zone (snap)
-          dragged.style.cursor = 'default';
-          dragged.draggable = false;
-          dragged.remove(); // remove from shapes container (if present)
-          zone.appendChild(dragged);
-          dragged.style.position = 'relative';
-          dragged.style.left = '0';
-          dragged.style.top = '0';
-          dragged.style.margin = '0';
-          status.textContent = `Correct — placed ${draggedShape}!`;
-          // check completion
-          const matchedCount = document.querySelectorAll('#dropZones .matched').length;
-          if (matchedCount === dropZones.length) {
-            completion.classList.remove('hidden');
-            status.textContent = 'All shapes matched — well done!';
-          }
-        } else {
-          // incorrect
-          zone.classList.add('incorrect');
-          status.textContent = `That’s not the ${targetShape}. Try again.`;
-          setTimeout(() => zone.classList.remove('incorrect'), 700);
-        }
-      });
-    });
-
-    // button events
-    movingBtn.addEventListener('click', e => {
-      if (mode === 'single') moveButton();
-    });
-    movingBtn.addEventListener('dblclick', e => {
-      if (mode === 'double') moveButton();
-    });
-
-    // controls
-    singleClickBtn.addEventListener('click', showClickPractice);
-    doubleClickBtn.addEventListener('click', showDoubleClickPractice);
-    dragDropBtn.addEventListener('click', showDragPractice);
-
-    // initialize
-    // wait a tick so sizes stabilize then compute positions and place button
-    window.addEventListener('load', () => {
-      positions = computePositions();
-      posIndex = 0;
-      showClickPractice();
-    });
-    // also update positions on resize
-    window.addEventListener('resize', () => { positions = computePositions(); });
-
-    // initially attach for the starting shapes (if any)
-    attachDragHandlers();
-
-  })();
-  </script>
 </body>
 </html>
