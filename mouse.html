@@ -2,209 +2,136 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mouse Practice</title>
+  <title>Click the Circle Practice</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       text-align: center;
-      margin: 0;
-      padding: 20px;
-      background: #f8f9fa;
+      margin: 20px;
     }
-    h1 {
+
+    h2 {
       color: #333;
     }
-    .practice-area {
-      margin: 20px auto;
-      padding: 20px;
-      border: 2px dashed #aaa;
-      border-radius: 10px;
-      width: 90%;
-      max-width: 600px;
-      min-height: 300px;
-      background: #fff;
-      position: relative;
-    }
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
-      border-radius: 5px;
-      border: none;
-      background: #007BFF;
-      color: white;
-    }
-    button:hover {
-      background: #0056b3;
-    }
-    .drag-container {
+
+    #shapes {
       display: flex;
-      justify-content: space-around;
-      margin-top: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin: 30px 0;
     }
+
     .shape {
-      width: 60px;
-      height: 60px;
-      cursor: grab;
-    }
-    .circle {
-      background: red;
-      border-radius: 50%;
-    }
-    .square {
-      background: green;
-    }
-    .dropzone {
       width: 80px;
       height: 80px;
-      border: 2px dashed #aaa;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 5px;
+      display: inline-block;
+      cursor: pointer;
+    }
+
+    .circle {
+      background: lightblue;
+      border-radius: 50%;
+    }
+
+    .square {
+      background: lightcoral;
+    }
+
+    .triangle {
+      width: 0;
+      height: 0;
+      border-left: 40px solid transparent;
+      border-right: 40px solid transparent;
+      border-bottom: 80px solid lightgreen;
+    }
+
+    /* Progress bar */
+    #progress-container {
+      width: 80%;
+      margin: auto;
+      background: #eee;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    #progress-bar {
+      width: 0%;
+      height: 20px;
+      background: orange;
+      text-align: center;
+      color: white;
+      line-height: 20px;
       font-size: 14px;
-      background: #f1f1f1;
     }
-    .success {
-      border-color: green;
-      background: #d4edda;
-    }
-    .fail {
-      border-color: red;
-      background: #f8d7da;
-    }
-    .progress {
-      margin-top: 10px;
+
+    #message {
+      margin-top: 20px;
+      font-size: 18px;
       font-weight: bold;
-      color: #555;
-    }
-    .completed {
       color: green;
     }
   </style>
 </head>
 <body>
 
-  <h1>Mouse Practice</h1>
+  <h2>Mouse Practice: Click the Circle!</h2>
+  <p>Click only the circles. Fill the progress bar to win 🎉</p>
 
-  <!-- Option 1: Single and Double Click -->
-  <h2>Option 1: Single & Double Click</h2>
-  <div class="practice-area" id="clickArea">
-    <button id="clickBtn">Click Me</button>
-  </div>
-  <div class="progress" id="progressClick">Progress: 0/2 completed</div>
+  <div id="shapes"></div>
 
-  <!-- Option 2: Drag and Drop -->
-  <h2>Option 2: Drag & Drop Shapes</h2>
-  <div class="drag-container">
-    <div class="shape circle" draggable="true" id="circle"></div>
-    <div class="shape square" draggable="true" id="square"></div>
+  <!-- Progress Tracker -->
+  <div id="progress-container">
+    <div id="progress-bar">0%</div>
   </div>
-  <div class="drag-container">
-    <div class="dropzone" data-shape="circle">Circle</div>
-    <div class="dropzone" data-shape="square">Square</div>
-  </div>
-  <div class="progress" id="progressDrag">Progress: 0/2 completed</div>
+
+  <p id="message"></p>
 
   <script>
-    // ---------- OPTION 1: SINGLE & DOUBLE CLICK ----------
-    const clickBtn = document.getElementById('clickBtn');
-    const clickArea = document.getElementById('clickArea');
-    const positions = [
-      { top: '20px', left: '20px' },
-      { top: '20px', right: '20px' },
-      { bottom: '20px', left: '20px' },
-      { bottom: '20px', right: '20px' },
-      { top: '50%', left: '40%' }
-    ];
-    let clickIndex = 0;
-    let dblClickIndex = 0;
-    let singleCompleted = false;
-    let doubleCompleted = false;
-    const progressClick = document.getElementById('progressClick');
+    const shapesContainer = document.getElementById("shapes");
+    const progressBar = document.getElementById("progress-bar");
+    const message = document.getElementById("message");
 
-    function updateClickProgress() {
-      let count = (singleCompleted ? 1 : 0) + (doubleCompleted ? 1 : 0);
-      progressClick.textContent = `Progress: ${count}/2 completed`;
-      if (count === 2) {
-        progressClick.textContent = "✅ Option 1 Completed!";
-        progressClick.classList.add("completed");
+    let score = 0;
+    const targetScore = 5; // how many correct clicks needed
+
+    // Function to create random shapes
+    function createShapes() {
+      shapesContainer.innerHTML = "";
+      const types = ["circle", "square", "triangle"];
+      for (let i = 0; i < 6; i++) {
+        const type = types[Math.floor(Math.random() * types.length)];
+        const div = document.createElement("div");
+        div.classList.add("shape", type);
+        div.onclick = () => handleClick(type);
+        shapesContainer.appendChild(div);
       }
     }
 
-    function moveButton(pos) {
-      clickBtn.style.position = 'absolute';
-      clickBtn.style.top = pos.top || '';
-      clickBtn.style.left = pos.left || '';
-      clickBtn.style.right = pos.right || '';
-      clickBtn.style.bottom = pos.bottom || '';
+    function handleClick(type) {
+      if (type === "circle") {
+        score++;
+        updateProgress();
+      } else {
+        message.textContent = "Oops! That’s not a circle 😅";
+        setTimeout(() => (message.textContent = ""), 1000);
+      }
+      createShapes(); // refresh shapes
     }
 
-    clickBtn.addEventListener('click', () => {
-      moveButton(positions[clickIndex]);
-      clickIndex++;
-      if (clickIndex >= positions.length) {
-        singleCompleted = true;
-        updateClickProgress();
-      }
-    });
+    function updateProgress() {
+      let percent = (score / targetScore) * 100;
+      progressBar.style.width = percent + "%";
+      progressBar.textContent = Math.floor(percent) + "%";
 
-    clickBtn.addEventListener('dblclick', () => {
-      moveButton(positions[dblClickIndex]);
-      dblClickIndex++;
-      if (dblClickIndex >= positions.length) {
-        doubleCompleted = true;
-        updateClickProgress();
-      }
-    });
-
-    // ---------- OPTION 2: DRAG & DROP ----------
-    const shapes = document.querySelectorAll('.shape');
-    const dropzones = document.querySelectorAll('.dropzone');
-    const progressDrag = document.getElementById('progressDrag');
-    let dragProgress = 0;
-
-    function updateDragProgress() {
-      progressDrag.textContent = `Progress: ${dragProgress}/2 completed`;
-      if (dragProgress === 2) {
-        progressDrag.textContent = "✅ Option 2 Completed!";
-        progressDrag.classList.add("completed");
+      if (score >= targetScore) {
+        message.textContent = "🎉 Well done! You finished the practice!";
+        shapesContainer.innerHTML = "";
       }
     }
 
-    shapes.forEach(shape => {
-      shape.addEventListener('dragstart', e => {
-        e.dataTransfer.setData('shapeId', shape.id);
-      });
-    });
-
-    dropzones.forEach(zone => {
-      zone.addEventListener('dragover', e => {
-        e.preventDefault();
-      });
-      zone.addEventListener('drop', e => {
-        e.preventDefault();
-        const shapeId = e.dataTransfer.getData('shapeId');
-        const shape = document.getElementById(shapeId);
-
-        if (zone.dataset.shape === shapeId) {
-          if (!zone.classList.contains('success')) {
-            dragProgress++;
-            updateDragProgress();
-          }
-          zone.classList.add('success');
-          zone.classList.remove('fail');
-          zone.innerHTML = '';
-          zone.appendChild(shape);
-          shape.style.cursor = "default";
-          shape.setAttribute("draggable", "false");
-        } else {
-          zone.classList.add('fail');
-          setTimeout(() => zone.classList.remove('fail'), 1000);
-        }
-      });
-    });
+    // start game
+    createShapes();
   </script>
 
 </body>
