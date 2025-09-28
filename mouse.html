@@ -1,179 +1,316 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mouse Skills</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SmartKids Leaning- Mouse Practice</title>
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f4f7fa;
+    .accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; }
+    .accordion-header span:last-child { transition: transform 0.3s ease; }
+    .hidden { display: none; }
+    .target {
+      width: 50px; height: 50px; background: #1D4ED8; /* your blue */
+      border-radius: 50%; position: absolute; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-weight: bold; user-select: none;
+      transition: transform 0.1s ease;
     }
-
-    header {
-      background-color: #1e3a8a; /* Blue like classes.html */
-      color: white;
-      padding: 15px;
-      text-align: center;
-      position: relative;
+    .stats span { margin-right: 15px; font-weight: bold; }
+    .drag-object {
+      width: 50px; height: 50px; background: #F59E0B;
+      border-radius: 8px; position: absolute; cursor: grab;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-weight: bold; user-select: none;
     }
-
-    header a {
-      position: absolute;
-      left: 15px;
-      top: 15px;
-      background: white;
-      color: #1e3a8a;
-      padding: 6px 12px;
-      border-radius: 5px;
-      text-decoration: none;
+    .drop-zone {
+      width: 100px; height: 100px; background: #E5E7EB;
+      border: 2px dashed #6B7280; position: absolute;
+      display: flex; align-items: center; justify-content: center;
       font-weight: bold;
-    }
-
-    h1 {
-      margin: 0;
-    }
-
-    .year {
-      margin: 20px auto;
-      padding: 10px;
-      max-width: 700px;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-
-    .year h2 {
-      color: #1e3a8a;
-      margin-bottom: 10px;
-    }
-
-    .topic-btn {
-      display: block;
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border: none;
-      background: #e5e7eb; /* Light grey for mouse */
-      color: #1e3a8a;
-      font-size: 16px;
-      font-weight: bold;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    .topic-btn:hover {
-      border: 2px solid white;
-      background: #d1d5db;
-    }
-
-    /* Modal styles */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.6);
-      justify-content: center;
-      align-items: center;
-    }
-
-    .modal-content {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      max-width: 500px;
-      text-align: center;
-      position: relative;
-    }
-
-    .close {
-      position: absolute;
-      right: 15px;
-      top: 10px;
-      font-size: 20px;
-      cursor: pointer;
-      color: #1e3a8a;
     }
   </style>
 </head>
-<body>
-  <header>
-    <a href="index.html">Home</a>
-    <h1>Mouse Skills</h1>
+<body class="bg-gray-50 text-gray-900 font-sans">
+
+  <!-- Header -->
+  <header class="bg-blue-600 text-white shadow-md fixed top-0 left-0 w-full z-50">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <h1 class="text-2xl font-bold">SmartKids Mouse Tutor</h1>
+      <a href="index.html" class="bg-white text-blue-600 px-4 py-2 rounded-lg font-medium shadow hover:bg-blue-100 transition">Home</a>
+    </div>
   </header>
 
-  <main id="content"></main>
+  <!-- Content -->
+  <main class="pt-24 max-w-4xl mx-auto px-4">
+    <h2 class="text-3xl font-bold text-center mb-8">Mouse Practice</h2>
+    <div id="accordion" class="space-y-4"></div>
+  </main>
 
   <!-- Modal -->
-  <div id="modal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <h2 id="modal-title"></h2>
-      <p id="modal-text"></p>
+  <div id="mouseModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-xl p-6 max-w-2xl w-full shadow-lg relative">
+      <button id="closeMouse" class="absolute top-2 right-2 text-red-600 text-xl font-bold">&times;</button>
+      <h2 id="mouseTitle" class="text-xl font-bold mb-4">Mouse Practice</h2>
+
+      <!-- Instructions -->
+      <div id="mouseInstruction" class="mb-4 p-3 bg-gray-100 rounded text-lg leading-relaxed"></div>
+
+      <!-- Practice Area -->
+      <div id="practiceArea" class="relative w-full h-64 bg-gray-200 rounded mb-4 overflow-hidden"></div>
+
+      <!-- Stats -->
+      <div class="stats flex justify-start text-sm font-semibold mb-4">
+        <span>Clicks: <span id="clicks">0</span></span>
+        <span>Hits: <span id="hits">0</span></span>
+        <span>Accuracy: <span id="mouseAccuracy">100</span>%</span>
+      </div>
+
+      <div class="flex justify-between mt-4">
+        <button id="btnPrevMouse" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">⬅ Prev</button>
+        <button id="btnRestartMouse" class="px-4 py-2 bg-yellow-200 rounded hover:bg-yellow-300">🔄 Restart</button>
+        <button id="btnNextMouse" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Next ➡</button>
+      </div>
     </div>
   </div>
 
-  <script>
-    async function loadMouseSkills() {
-      try {
-        const res = await fetch('data/mouse.json');
-        const data = await res.json();
+<script>
+document.addEventListener("DOMContentLoaded", () => {
 
-        // Handle both array or object
-        const years = Array.isArray(data) ? data : data.years;
+  const data = {
+    "years": [
+      {
+        "id": "year1",
+        "name": "Year 1",
+        "topics": [
+          {"title": "Clicking Basics","sample": "Practice clicking on the highlighted spots with the mouse."},
+          {"title": "Double-Clicking","sample": "Double-click quickly on the shapes to open them."},
+          {"title": "Mouse Movement","sample": "Move the mouse to follow the line on the screen."}
+        ]
+      },
+      {
+        "id": "year2",
+        "name": "Year 2",
+        "topics": [
+          {"title": "Drag and Drop","sample": "Drag the objects into the correct boxes."},
+          {"title": "Right-Click Basics","sample": "Right-click on items to see context menus."},
+          {"title": "Click and Hold","sample": "Hold the mouse button to draw a straight line."}
+        ]
+      },
+      {
+        "id": "year3",
+        "name": "Year 3",
+        "topics": [
+          {"title": "Text Selection","sample": "Click and drag to highlight the given words."},
+          {"title": "Scrolling","sample": "Use the scroll wheel to move up and down the page."},
+          {"title": "Simple Shapes Drawing","sample": "Click and drag to draw circles and rectangles."}
+        ]
+      },
+      {
+        "id": "year4",
+        "name": "Year 4",
+        "topics": [
+          {"title": "File and Folder Selection","sample": "Select multiple files by dragging a selection box."},
+          {"title": "Resizing Windows","sample": "Drag the edges of a window to resize it."},
+          {"title": "Simple Gaming Controls","sample": "Click targets that appear quickly on screen."}
+        ]
+      },
+      {
+        "id": "year5",
+        "name": "Year 5",
+        "topics": [
+          {"title": "Using Toolbars","sample": "Click toolbar icons to apply bold or underline text."},
+          {"title": "Right-Click Advanced","sample": "Right-click files and select options from menus."},
+          {"title": "Shape Manipulation","sample": "Drag shapes to rotate or resize them."}
+        ]
+      },
+      {
+        "id": "year6",
+        "name": "Year 6",
+        "topics": [
+          {"title": "Copy, Cut, Paste with Mouse","sample": "Right-click to copy and paste text into a document."},
+          {"title": "Advanced Drag-and-Drop","sample": "Drag files into folders and applications."},
+          {"title": "Multi-Window Navigation","sample": "Click between open windows to switch tasks."}
+        ]
+      }
+    ]
+  };
 
-        const container = document.getElementById('content');
-        container.innerHTML = '';
+  const container = document.getElementById("accordion");
 
-        years.forEach(year => {
-          const yearDiv = document.createElement('div');
-          yearDiv.className = 'year';
+  const mouseModal = document.getElementById("mouseModal");
+  const closeMouse = document.getElementById("closeMouse");
+  const mouseTitle = document.getElementById("mouseTitle");
+  const mouseInstruction = document.getElementById("mouseInstruction");
+  const practiceArea = document.getElementById("practiceArea");
+  const clicksEl = document.getElementById("clicks");
+  const hitsEl = document.getElementById("hits");
+  const accuracyEl = document.getElementById("mouseAccuracy");
 
-          const yearTitle = document.createElement('h2');
-          yearTitle.textContent = year.name;
-          yearDiv.appendChild(yearTitle);
+  const btnPrevMouse = document.getElementById("btnPrevMouse");
+  const btnNextMouse = document.getElementById("btnNextMouse");
+  const btnRestartMouse = document.getElementById("btnRestartMouse");
 
-          year.topics.forEach(topic => {
-            const btn = document.createElement('button');
-            btn.className = 'topic-btn';
-            btn.textContent = topic.title;
+  let currentTopics = [];
+  let currentIndex = 0;
+  let clicks = 0;
+  let hits = 0;
 
-            btn.addEventListener('click', () => {
-              document.getElementById('modal-title').textContent = topic.title;
-              document.getElementById('modal-text').textContent = topic.sample;
-              document.getElementById('modal').style.display = 'flex';
-            });
+  function resetStats() {
+    clicks = 0; hits = 0;
+    clicksEl.textContent = clicks;
+    hitsEl.textContent = hits;
+    accuracyEl.textContent = 100;
+  }
 
-            yearDiv.appendChild(btn);
-          });
+  function updateStats() {
+    clicksEl.textContent = clicks;
+    hitsEl.textContent = hits;
+    accuracyEl.textContent = clicks>0?Math.round((hits/clicks)*100):100;
+  }
 
-          container.appendChild(yearDiv);
-        });
-      } catch (err) {
-        console.error('Error loading mouse.json:', err);
+  function spawnTarget() {
+    practiceArea.innerHTML = '';
+    const target = document.createElement("div");
+    target.className = "target";
+    target.textContent = "🎯";
+    const areaRect = practiceArea.getBoundingClientRect();
+    const size = 50;
+    const x = Math.random()*(areaRect.width-size);
+    const y = Math.random()*(areaRect.height-size);
+    target.style.left = x + "px";
+    target.style.top = y + "px";
+    practiceArea.appendChild(target);
+
+    target.addEventListener("click", () => {
+      hits++; clicks++;
+      updateStats();
+      spawnTarget();
+    });
+  }
+
+  function spawnDragDrop() {
+    practiceArea.innerHTML = '';
+    const obj = document.createElement("div");
+    obj.className = "drag-object";
+    obj.textContent = "Drag";
+    obj.style.left = "20px";
+    obj.style.top = "20px";
+
+    const drop = document.createElement("div");
+    drop.className = "drop-zone";
+    drop.textContent = "Drop";
+    drop.style.right = "20px";
+    drop.style.bottom = "20px";
+
+    practiceArea.appendChild(obj);
+    practiceArea.appendChild(drop);
+
+    let offsetX, offsetY;
+    obj.onmousedown = function(e){
+      offsetX = e.offsetX; offsetY = e.offsetY;
+      obj.style.cursor = "grabbing";
+      document.onmousemove = function(e2){
+        obj.style.left = (e2.clientX-practiceArea.getBoundingClientRect().left-offsetX)+"px";
+        obj.style.top = (e2.clientY-practiceArea.getBoundingClientRect().top-offsetY)+"px";
+      }
+      document.onmouseup = function(e3){
+        document.onmousemove = null;
+        document.onmouseup = null;
+        obj.style.cursor = "grab";
+        const objRect = obj.getBoundingClientRect();
+        const dropRect = drop.getBoundingClientRect();
+        if(objRect.x+objRect.width/2>dropRect.x && objRect.x+objRect.width/2<dropRect.x+dropRect.width &&
+           objRect.y+objRect.height/2>dropRect.y && objRect.y+objRect.height/2<dropRect.y+dropRect.height){
+          hits++; clicks++;
+          updateStats();
+          alert("Dropped successfully!");
+          spawnDragDrop();
+        } else {
+          clicks++;
+          updateStats();
+        }
       }
     }
+  }
 
-    // Close modal
-    document.querySelector('.close').addEventListener('click', () => {
-      document.getElementById('modal').style.display = 'none';
+  function loadTopic(topic) {
+    mouseTitle.textContent = topic.dataset.title;
+    mouseInstruction.textContent = topic.dataset.sample;
+    resetStats();
+
+    // Choose practice type
+    if(topic.dataset.title.toLowerCase().includes("drag")) {
+      spawnDragDrop();
+    } else {
+      spawnTarget();
+    }
+
+    mouseModal.classList.remove("hidden");
+  }
+
+  // Build accordion for years 1–6
+  data.years.forEach(year => {
+    const card = document.createElement("div");
+    card.className = "bg-white rounded-xl shadow-md overflow-hidden mb-4";
+
+    const header = document.createElement("button");
+    header.className = "accordion-header w-full flex justify-between items-center px-6 py-4 text-lg font-semibold bg-blue-100 hover:bg-blue-200 transition";
+    header.innerHTML = `<span>${year.name}</span><span>+</span>`;
+    card.appendChild(header);
+
+    const body = document.createElement("div");
+    body.className = "accordion-body bg-gray-50";
+    body.innerHTML = year.topics.map(topic=>{
+      return `<div class="mb-2">
+        <button class="topicBtn block w-full text-left px-4 py-2 rounded-lg shadow text-gray-900 bg-white hover:shadow-md hover:bg-blue-50 transition"
+        data-title="${topic.title}" data-sample="${topic.sample}">
+        🖱️ ${topic.title}</button>
+      </div>`;
+    }).join("");
+    card.appendChild(body);
+
+    header.addEventListener("click", ()=>{
+      const isOpen = body.style.maxHeight && body.style.maxHeight!=="0px";
+      container.querySelectorAll(".accordion-body").forEach(el=>el.style.maxHeight=null);
+      container.querySelectorAll(".accordion-header span:last-child").forEach(icon=>icon.style.transform="rotate(0deg)");
+      if(!isOpen){ body.style.maxHeight = body.scrollHeight+"px"; header.querySelector("span:last-child").style.transform="rotate(45deg)";}
     });
 
-    // Close modal on outside click
-    window.addEventListener('click', (e) => {
-      if (e.target === document.getElementById('modal')) {
-        document.getElementById('modal').style.display = 'none';
-      }
-    });
+    container.appendChild(card);
+  });
 
-    loadMouseSkills();
-  </script>
+  container.addEventListener("click", e=>{
+    const btn = e.target.closest(".topicBtn");
+    if(!btn) return;
+    currentTopics = [...btn.closest(".accordion-body").querySelectorAll(".topicBtn")];
+    currentIndex = currentTopics.indexOf(btn);
+    loadTopic(btn);
+  });
+
+  // Navigation
+  btnNextMouse.addEventListener("click", ()=>{
+    if(currentIndex<currentTopics.length-1){ currentIndex++; loadTopic(currentTopics[currentIndex]); }
+  });
+  btnPrevMouse.addEventListener("click", ()=>{
+    if(currentIndex>0){ currentIndex--; loadTopic(currentTopics[currentIndex]); }
+  });
+  btnRestartMouse.addEventListener("click", ()=>{
+    if(currentTopics.length>0){ loadTopic(currentTopics[currentIndex]); }
+  });
+  closeMouse.addEventListener("click", ()=>{
+    mouseModal.classList.add("hidden");
+    practiceArea.innerHTML='';
+  });
+
+  // Count clicks outside targets
+  practiceArea.addEventListener("click", e=>{
+    if(!e.target.classList.contains("target") && !e.target.classList.contains("drag-object")){
+      clicks++; updateStats();
+    }
+  });
+
+});
+</script>
 </body>
 </html>
