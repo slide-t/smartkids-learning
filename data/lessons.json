@@ -1,0 +1,246 @@
+{
+  "keyboard": [
+    {
+      "year": "Year 1",
+      "topics": [
+        {
+          "title": "Home Row Drill",
+          "id": "home_row_drill",
+          "content": "Practice the home row keys: A S D F J K L ;. Place your fingers correctly on the keys.<br><img src='images/keyboard_home_row.png' alt='Home Row Keys' class='w-64 mt-2 rounded shadow'>"
+        },
+        {
+          "title": "Finger Placement",
+          "id": "finger_placement",
+          "content": "Learn which fingers to use for each key.<br><img src='images/finger_placement.png' alt='Finger Placement' class='w-64 mt-2 rounded shadow'>"
+        },
+        {
+          "title": "Basic Words Typing",
+          "id": "basic_words_typing",
+          "content": "Type simple words using correct finger positioning.<br><img src='images/basic_words.png' alt='Basic Words' class='w-64 mt-2 rounded shadow'>"
+        }
+      ]
+    },
+    {
+      "year": "Year 2",
+      "topics": [
+        {
+          "title": "Capital Letters",
+          "id": "capital_letters",
+          "content": "Practice typing capital letters using Shift key.<br><img src='images/capital_letters.png' alt='Capital Letters' class='w-64 mt-2 rounded shadow'>"
+        },
+        {
+          "title": "Numbers Row",
+          "id": "numbers_row",
+          "content": "Type numbers from 1 to 0 above the letters.<br><img src='images/numbers_row.png' alt='Numbers Row' class='w-64 mt-2 rounded shadow'>"
+        },
+        {
+          "title": "Simple Sentences",
+          "id": "simple_sentences",
+          "content": "Type simple sentences with correct spacing and punctuation.<br><img src='images/simple_sentences.png' alt='Simple Sentences' class='w-64 mt-2 rounded shadow'>"
+        }
+      ]
+    },
+    {
+      "year": "Year 3",
+      "topics": [
+        {
+          "title": "Punctuation Marks",
+          "id": "punctuation_marks",
+          "content": "Practice common punctuation marks: .,!?;:<br><img src='images/punctuation.png' alt='Punctuation Marks' class='w-64 mt-2 rounded shadow'>"
+        },
+        {
+          "title": "Typing Paragraphs",
+          "id": "typing_paragraphs",
+          "content": "Type short paragraphs maintaining speed and accuracy.<br><img src='images/typing_paragraphs.png' alt='Typing Paragraphs' class='w-64 mt-2 rounded shadow'>"
+        },
+        {
+          "title": "Home Row Speed",
+          "id": "home_row_speed",
+          "content": "Increase typing speed using home row keys.<br><img src='images/home_row_speed.png' alt='Home Row Speed' class='w-64 mt-2 rounded shadow'>"
+        }
+      ]
+    },
+    {
+      "year": "Year 4",
+      "topics": [
+        {
+          "title": "Shift and Symbol Keys",
+          "id": "shift_symbol_keys",
+          "content": "Practice using Shift with symbols: ! @ # $ % etc.<br><img src='images/shift_symbols.png' alt='Shift and Symbols' class='w-64 mt-2 rounded shadow'>"
+        },
+        {
+          "title": "Typing Practice Test",
+          "id": "typing_practice_test",
+          "content": "Complete timed typing tests to check accuracy.<br><img src='images/typing_test.png' alt='Typing Test' class='w-64 mt-2 rounded shadow'>"
+        },
+        {
+          "title": "Common Words",
+          "id": "common_words",
+          "content": "Practice typing common words quickly and accurately.<br><img src='images/common_words.png' alt='Common Words' class='w-64 mt-2 rounded shadow'>"
+        }
+      ]
+    },
+    {
+      "year": "Year 5",
+      "topics": [
+        {
+          "title": "Paragraphs with Capitalization",
+          "id": "paragraphs_capitalization",
+          "content": "Type paragraphs using proper capitalization.<br><img src='images/capital_paragraphs.png' alt='Paragraphs Capitalization' class='w-64 mt-2 rounded shadow'>"
+        },
+        {
+          "title": "Speed Drill",
+          "id": "speed_drill",
+          "content": "Increase typing speed with timed drills.<br><img src='images/speed_drill.png' alt='Speed Drill' class='w-64 mt-2 rounded shadow'>"
+        },
+        {
+          "title": "Accuracy Drill",
+          "id": "accuracy_drill",
+          "content": "Focus on reducing mistakes while typing.<br><img src='images/accuracy_drill.png' alt='Accuracy Drill' class='w-64 mt-2 rounded shadow'>"
+        }
+      ]
+    },
+    {
+      "year": "Year 6",
+      "topics": [
+        {
+          "title": "Paragraph Composition",
+          "id": "paragraph_composition",
+          "content": "Type full paragraphs with correct grammar and punctuation.<br><img src='images/paragraph_composition.png' alt='Paragraph Composition' class='w-64 mt-2 rounded shadow'>"
+        },
+        {
+          "title": "Typing Story",
+          "id": "typing_story",
+          "content": "Type short stories improving speed and accuracy.<br><img src='images/typing_story.png' alt='Typing Story' class='w-64 mt-2 rounded shadow'>"
+        },
+        {
+          "title": "Practice Test",
+          "id": "practice_test",
+          "content": "Complete full typing tests combining all skills.<br><img src='images/typing_test_full.png' alt='Typing Test' class='w-64 mt-2 rounded shadow'>"
+        }
+      ]
+    }
+  ],
+  "mouse": [
+    {
+      "year": "Year 1",
+      "topics": [
+        {
+          "title": "Clicking Basics",
+          "id": "clicking_basics",
+          "content": "Practice clicking on highlighted spots with the mouse.<br><img src='images/click_basics.png' alt='Clicking Basics' class='w-64 mt-2 rounded shadow'>"
+        },
+        {
+          "title": "Double-Clicking",
+          "id": "double_clicking",
+          "content": "Double-click quickly on shapes to open them.<br><img src='images/double_click.png' alt='Double Click' class='w-64 mt-2 rounded shadow'>"
+        },
+        {
+          "title": "Mouse Movement",
+          "id": "mouse_movement",
+          "content": "Move the mouse to follow a line on screen.<br><img src='images/mouse_movement.png' alt='Mouse Movement' class='w-64 mt-2 rounded shadow'>"
+        }
+      ]
+    },
+    {
+      "year": "Year 2",
+      "topics": [
+        {
+          "title": "Drag and Drop",
+          "id": "drag_drop",
+          "content": "Drag shapes into the correct areas.<br><img src='images/drag_drop.png' alt='Drag and Drop' class='w-64 mt-2 rounded shadow'>"
+        },
+        {
+          "title": "Right-Click Basics",
+          "id": "right_click_basics",
+          "content": "Right-click on items to see context menus.<br><img src='images/right_click.png' alt='Right Click' class='w-64 mt-2 rounded shadow'>"
+        },
+        {
+          "title": "Click and Hold",
+          "id": "click_hold",
+          "content": "Hold the mouse button to draw a straight line.<br><img src='images/click_hold.png' alt='Click and Hold' class='w-64 mt-2 rounded shadow'>"
+        }
+      ]
+    },
+    {
+      "year": "Year 3",
+      "topics": [
+        {
+          "title": "Text Selection",
+          "id": "text_selection",
+          "content": "Click and drag to highlight words.<br><img src='images/text_selection.png' alt='Text Selection' class='w-64 mt-2 rounded shadow'>"
+        },
+        {
+          "title": "Scrolling",
+          "id": "scrolling",
+          "content": "Use the scroll wheel to move up and down the page.<br><img src='images/scrolling.png' alt='Scrolling' class='w-64 mt-2 rounded shadow'>"
+        },
+        {
+          "title": "Simple Shapes Drawing",
+          "id": "simple_shapes",
+          "content": "Click and drag to draw circles and rectangles.<br><img src='images/simple_shapes.png' alt='Simple Shapes' class='w-64 mt-2 rounded shadow'>"
+        }
+      ]
+    },
+    {
+      "year": "Year 4",
+      "topics": [
+        {
+          "title": "File and Folder Selection",
+          "id": "file_folder_selection",
+          "content": "Select multiple files by dragging a selection box.<br><img src='images/file_folder.png' alt='File and Folder Selection' class='w-64 mt-2 rounded shadow'>"
+        },
+        {
+          "title": "Resizing Windows",
+          "id": "resizing_windows",
+          "content": "Drag window edges to resize them.<br><img src='images/resize_window.png' alt='Resizing Windows' class='w-64 mt-2 rounded shadow'>"
+        },
+        {
+          "title": "Simple Gaming Controls",
+          "id": "gaming_controls",
+          "content": "Click targets quickly on screen as they appear.<br><img src='images/gaming_controls.png' alt='Gaming Controls' class='w-64 mt-2 rounded shadow'>"
+        }
+      ]
+    },
+    {
+      "year": "Year 5",
+      "topics": [
+        {
+          "title": "Using Toolbars",
+          "id": "using_toolbars",
+          "content": "Click toolbar icons like Bold, Italic, Underline.<br><img src='images/toolbars.png' alt='Using Toolbars' class='w-64 mt-2 rounded shadow'>"
+        },
+        {
+          "title": "Right-Click Advanced",
+          "id": "right_click_advanced",
+          "content": "Right-click files and select options from menus.<br><img src='images/right_click_adv.png' alt='Right Click Advanced' class='w-64 mt-2 rounded shadow'>"
+        },
+        {
+          "title": "Shape Manipulation",
+          "id": "shape_manipulation",
+          "content": "Drag shapes to rotate or resize.<br><img src='images/shape_manip.png' alt='Shape Manipulation' class='w-64 mt-2 rounded shadow'>"
+        }
+      ]
+    },
+    {
+      "year": "Year 6",
+      "topics": [
+        {
+          "title": "Copy, Cut, Paste with Mouse",
+          "id": "copy_cut_paste",
+          "content": "Right-click to copy and paste text into a document.<br><img src='images/copy_cut_paste.png' alt='Copy Cut Paste' class='w-64 mt-2 rounded shadow'>"
+        },
+        {
+          "title": "Advanced Drag-and-Drop",
+          "id": "advanced_drag_drop",
+          "content": "Drag files into folders or apps.<br><img src='images/adv_drag_drop.png' alt='Advanced Drag and Drop' class='w-64 mt-2 rounded shadow'>"
+        },
+        {
+          "title": "Multi-Window Navigation",
+          "id": "multi_window_navigation",
+          "content": "Click between open windows to switch tasks.<br><img src='images/multi_window.png' alt='Multi Window Navigation' class='w-64 mt-2 rounded shadow'>"
+        }
+      ]
+    }
+  ]
+}
