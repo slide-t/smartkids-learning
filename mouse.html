@@ -10,15 +10,24 @@
     .accordion-header span:last-child { transition: transform 0.3s ease; }
     .hidden { display: none; }
     .target {
-      width: 50px; height: 50px; background: #1d4ed8;
+      width: 50px; height: 50px; background: #1E40AF;
       border-radius: 50%; position: absolute; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
       color: white; font-weight: bold; user-select: none;
       transition: transform 0.1s ease;
     }
-    .draggable { cursor: grab; }
+    .drag-item {
+      width: 50px; height: 50px; background: #1E40AF; color:white; display:flex; justify-content:center; align-items:center;
+      border-radius: 8px; cursor: grab; position:absolute; user-select:none;
+    }
+    .drop-zone {
+      width: 100px; height: 100px; background:#CBD5E1; border:2px dashed #1E40AF; position:absolute;
+      display:flex; justify-content:center; align-items:center; font-weight:bold; color:#1E40AF;
+    }
     .stats span { margin-right: 15px; font-weight: bold; }
-    #practiceArea { touch-action: none; }
+    .mouse-path {
+      position: absolute; height: 4px; background: red; top: 50%; left: 0; transform-origin: left center;
+    }
   </style>
 </head>
 <body class="bg-gray-50 text-gray-900 font-sans">
@@ -42,13 +51,20 @@
     <div class="bg-white rounded-xl p-6 max-w-2xl w-full shadow-lg relative">
       <button id="closeMouse" class="absolute top-2 right-2 text-red-600 text-xl font-bold">&times;</button>
       <h2 id="mouseTitle" class="text-xl font-bold mb-4">Mouse Practice</h2>
+
+      <!-- Instructions -->
       <div id="mouseInstruction" class="mb-4 p-3 bg-gray-100 rounded text-lg leading-relaxed"></div>
+
+      <!-- Practice Area -->
       <div id="practiceArea" class="relative w-full h-64 bg-gray-200 rounded mb-4 overflow-hidden"></div>
+
+      <!-- Stats -->
       <div class="stats flex justify-start text-sm font-semibold mb-4">
         <span>Clicks: <span id="clicks">0</span></span>
         <span>Hits: <span id="hits">0</span></span>
         <span>Accuracy: <span id="mouseAccuracy">100</span>%</span>
       </div>
+
       <div class="flex justify-between mt-4">
         <button id="btnPrevMouse" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">⬅ Prev</button>
         <button id="btnRestartMouse" class="px-4 py-2 bg-yellow-200 rounded hover:bg-yellow-300">🔄 Restart</button>
@@ -58,67 +74,29 @@
   </div>
 
 <script>
-// Embedded JSON for Years 1–6
-const mouseData = {
-  "years": [
-    {
-      "id": "year1",
-      "name": "Year 1",
-      "topics": [
-        { "title": "Clicking Basics", "sample": "Practice clicking on the highlighted spots with the mouse.", "type": "singleClick" },
-        { "title": "Double-Clicking", "sample": "Double-click quickly on the shapes to open them.", "type": "doubleClick" },
-        { "title": "Mouse Movement", "sample": "Move the mouse to follow the line on the screen.", "type": "movementFollow" }
-      ]
-    },
-    {
-      "id": "year2",
-      "name": "Year 2",
-      "topics": [
-        { "title": "Drag and Drop", "sample": "Drag the objects into the correct boxes.", "type": "dragDrop" },
-        { "title": "Right-Click Basics", "sample": "Right-click on items to see context menus.", "type": "rightClick" },
-        { "title": "Click and Hold", "sample": "Hold the mouse button to draw a straight line.", "type": "clickHold" }
-      ]
-    },
-    {
-      "id": "year3",
-      "name": "Year 3",
-      "topics": [
-        { "title": "Text Selection", "sample": "Click and drag to highlight the given words.", "type": "dragText" },
-        { "title": "Scrolling", "sample": "Use the scroll wheel to move up and down the page.", "type": "scroll" },
-        { "title": "Simple Shapes Drawing", "sample": "Click and drag to draw circles and rectangles.", "type": "shapeDraw" }
-      ]
-    },
-    {
-      "id": "year4",
-      "name": "Year 4",
-      "topics": [
-        { "title": "File and Folder Selection", "sample": "Select multiple files by dragging a selection box.", "type": "dragSelect" },
-        { "title": "Resizing Windows", "sample": "Drag the edges of a window to resize it.", "type": "resizeWindow" },
-        { "title": "Simple Gaming Controls", "sample": "Click targets that appear quickly on screen.", "type": "gameClick" }
-      ]
-    },
-    {
-      "id": "year5",
-      "name": "Year 5",
-      "topics": [
-        { "title": "Using Toolbars", "sample": "Click toolbar icons to apply bold or underline text.", "type": "toolbarClick" },
-        { "title": "Right-Click Advanced", "sample": "Right-click files and select options from menus.", "type": "rightClick" },
-        { "title": "Shape Manipulation", "sample": "Drag shapes to rotate or resize them.", "type": "dragShape" }
-      ]
-    },
-    {
-      "id": "year6",
-      "name": "Year 6",
-      "topics": [
-        { "title": "Copy, Cut, Paste with Mouse", "sample": "Right-click to copy and paste text into a document.", "type": "rightClick" },
-        { "title": "Advanced Drag-and-Drop", "sample": "Drag files into folders and applications.", "type": "dragDrop" },
-        { "title": "Multi-Window Navigation", "sample": "Click between open windows to switch tasks.", "type": "singleClick" }
-      ]
-    }
-  ]
-};
-
 document.addEventListener("DOMContentLoaded", () => {
+
+  const years = [
+    { id: "year1", name: "Year 1", topics:[
+      { title:"Clicking Basics", sample:"Practice clicking on the highlighted spots with the mouse.", type:"basicClick"},
+      { title:"Double-Clicking", sample:"Double-click quickly on the shapes to open them.", type:"doubleClick"},
+      { title:"Mouse Movement", sample:"Move the mouse to follow the line on the screen.", type:"mouseMovement"}
+    ]},
+    { id:"year2", name:"Year 2", topics:[
+      { title:"Drag and Drop", sample:"Drag the objects into the correct boxes.", type:"dragDrop"},
+      { title:"Right-Click Basics", sample:"Right-click on items to see context menus.", type:"rightClick"},
+      { title:"Click and Hold", sample:"Hold the mouse button to draw a straight line.", type:"clickHold"}
+    ]},
+    { id:"year3", name:"Year 3", topics:[
+      { title:"Text Selection", sample:"Click and drag to highlight the given words.", type:"clickDrag"},
+      { title:"Scrolling", sample:"Use the scroll wheel to move up and down the page.", type:"scroll"},
+      { title:"Simple Shapes Drawing", sample:"Click and drag to draw circles and rectangles.", type:"shapes"}
+    ]},
+    { id:"year4", name:"Year 4", topics:[] },
+    { id:"year5", name:"Year 5", topics:[] },
+    { id:"year6", name:"Year 6", topics:[] }
+  ];
+
   const container = document.getElementById("accordion");
   const mouseModal = document.getElementById("mouseModal");
   const closeMouse = document.getElementById("closeMouse");
@@ -135,196 +113,163 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentTopics = [];
   let currentIndex = 0;
   let clicks = 0, hits = 0;
-  let activePractice = null;
 
   function resetStats() {
-    clicks = 0; hits = 0;
-    clicksEl.textContent = clicks;
-    hitsEl.textContent = hits;
-    accuracyEl.textContent = 100;
+    clicks=0; hits=0;
+    clicksEl.textContent=clicks; hitsEl.textContent=hits; accuracyEl.textContent=100;
   }
 
   function updateStats() {
-    clicksEl.textContent = clicks;
-    hitsEl.textContent = hits;
-    accuracyEl.textContent = clicks > 0 ? Math.round((hits / clicks) * 100) : 100;
+    clicksEl.textContent=clicks;
+    hitsEl.textContent=hits;
+    accuracyEl.textContent = clicks>0? Math.round(hits/clicks*100):100;
   }
 
-  function clearPracticeArea() {
-    practiceArea.innerHTML = '';
-    if(activePractice && activePractice.cleanup) activePractice.cleanup();
-    activePractice = null;
-  }
-
-  function spawnSingleClick() {
-    clearPracticeArea();
+  function spawnTarget() {
+    practiceArea.innerHTML='';
     const target = document.createElement("div");
-    target.className = "target"; target.textContent="🎯";
+    target.className="target";
+    target.textContent="🎯";
+    const rect = practiceArea.getBoundingClientRect();
+    const size = 50;
+    const x = Math.random()*(rect.width-size);
+    const y = Math.random()*(rect.height-size);
+    target.style.left = x+"px"; target.style.top = y+"px";
     practiceArea.appendChild(target);
-    const positions = [];
-    for(let i=0;i<5;i++){
-      positions.push({x:Math.random()*(practiceArea.clientWidth-50),y:Math.random()*(practiceArea.clientHeight-50)});
-    }
-    let idx=0;
-    function moveTarget(){
-      const pos = positions[idx%positions.length];
-      target.style.left = pos.x+"px";
-      target.style.top = pos.y+"px";
-    }
-    moveTarget();
-    target.addEventListener("click",()=>{
-      hits++; clicks++;
-      updateStats();
-      idx++;
-      moveTarget();
+
+    target.addEventListener("click", e=>{
+      hits++; clicks++; updateStats(); spawnTarget();
     });
-    practiceArea.addEventListener("click",e=>{
-      if(e.target!==target) { clicks++; updateStats(); }
-    });
-    activePractice = {cleanup:()=>{practiceArea.removeEventListener("click",()=>{});}};
   }
 
-  function spawnDoubleClick() {
-    clearPracticeArea();
-    const target = document.createElement("div"); target.className="target"; target.textContent="🎯";
-    practiceArea.appendChild(target);
-    const positions = [];
-    for(let i=0;i<5;i++){
-      positions.push({x:Math.random()*(practiceArea.clientWidth-50),y:Math.random()*(practiceArea.clientHeight-50)});
-    }
-    let idx=0;
-    function moveTarget(){
-      const pos = positions[idx%positions.length];
-      target.style.left = pos.x+"px";
-      target.style.top = pos.y+"px";
-    }
-    moveTarget();
-    target.addEventListener("dblclick",()=>{
-      hits++; clicks++;
-      updateStats();
-      idx++;
-      moveTarget();
-    });
-    practiceArea.addEventListener("click",e=>{
-      if(e.target!==target) { clicks++; updateStats(); }
-    });
-    activePractice = {cleanup:()=>{practiceArea.removeEventListener("click",()=>{});}};
-  }
-
-  function spawnDragDrop() {
-    clearPracticeArea();
-    const box = document.createElement("div");
-    box.style.width="100px"; box.style.height="100px"; box.style.background="#f59e0b";
-    box.style.position="absolute"; box.style.left="50px"; box.style.top="50px";
-    box.textContent="Drag me"; box.classList.add("draggable");
-    practiceArea.appendChild(box);
-    let isDragging=false, offsetX=0, offsetY=0;
-    box.addEventListener("mousedown",e=>{
-      isDragging=true;
-      offsetX=e.offsetX; offsetY=e.offsetY;
-      box.style.cursor="grabbing";
-    });
-    document.addEventListener("mouseup",()=>{isDragging=false; box.style.cursor="grab";});
-    document.addEventListener("mousemove",e=>{
-      if(isDragging){
-        let x=e.clientX-practiceArea.getBoundingClientRect().left-offsetX;
-        let y=e.clientY-practiceArea.getBoundingClientRect().top-offsetY;
-        box.style.left=Math.max(0,Math.min(x,practiceArea.clientWidth-100))+"px";
-        box.style.top=Math.max(0,Math.min(y,practiceArea.clientHeight-100))+"px";
-      }
-    });
-    activePractice={cleanup:()=>{}};
-  }
-
-  const practiceMap = {
-    "singleClick": spawnSingleClick,
-    "doubleClick": spawnDoubleClick,
-    "dragDrop": spawnDragDrop,
-    // other types can be added here later
-  };
-
-  function loadMouseTopic(topicBtn){
-    mouseTitle.textContent=topicBtn.dataset.title;
-    mouseInstruction.textContent=topicBtn.dataset.sample;
+  function renderPractice(topic) {
+    practiceArea.innerHTML='';
     resetStats();
-    const type = topicBtn.dataset.type;
-    if(practiceMap[type]) practiceMap[type]();
-    mouseModal.classList.remove("hidden");
+    switch(topic.type){
+      case "basicClick": spawnTarget(); break;
+      case "doubleClick":
+        const t = document.createElement("div"); t.className="target"; t.textContent="🎯";
+        const rect = practiceArea.getBoundingClientRect();
+        t.style.left = (rect.width/2-25)+"px"; t.style.top = (rect.height/2-25)+"px";
+        practiceArea.appendChild(t);
+        t.addEventListener("dblclick", e=>{
+          hits++; clicks++; updateStats();
+          mouseModal.classList.add("hidden");
+        });
+        break;
+      case "mouseMovement":
+        const path = document.createElement("div"); path.className="mouse-path"; path.style.width="80%";
+        practiceArea.appendChild(path);
+        practiceArea.addEventListener("mousemove", function mmove(){
+          hits++; clicks++; updateStats();
+          practiceArea.removeEventListener("mousemove", mmove);
+        });
+        break;
+      case "dragDrop":
+        const dragItem = document.createElement("div"); dragItem.className="drag-item"; dragItem.textContent="Drag";
+        dragItem.style.left="20px"; dragItem.style.top="20px";
+        const dropZone = document.createElement("div"); dropZone.className="drop-zone"; dropZone.textContent="Drop";
+        dropZone.style.right="20px"; dropZone.style.bottom="20px";
+        practiceArea.appendChild(dragItem); practiceArea.appendChild(dropZone);
+        dragItem.addEventListener("mousedown", e=>{
+          e.preventDefault();
+          let offsetX = e.offsetX, offsetY = e.offsetY;
+          function moveHandler(ev){
+            dragItem.style.left = (ev.clientX-practiceArea.getBoundingClientRect().left - offsetX)+"px";
+            dragItem.style.top = (ev.clientY-practiceArea.getBoundingClientRect().top - offsetY)+"px";
+          }
+          function upHandler(ev){
+            document.removeEventListener("mousemove", moveHandler);
+            document.removeEventListener("mouseup", upHandler);
+            const dragRect=dragItem.getBoundingClientRect(), dropRect=dropZone.getBoundingClientRect();
+            if(!(dragRect.right<dropRect.left || dragRect.left>dropRect.right || dragRect.bottom<dropRect.top || dragRect.top>dropRect.bottom)){
+              hits++; clicks++; updateStats();
+              dragItem.style.left=dropZone.style.left||"auto"; dragItem.style.top=dropZone.style.top||"auto";
+            }
+          }
+          document.addEventListener("mousemove", moveHandler);
+          document.addEventListener("mouseup", upHandler);
+        });
+        break;
+      case "rightClick":
+        practiceArea.addEventListener("contextmenu", function rc(e){
+          e.preventDefault(); hits++; clicks++; updateStats();
+          practiceArea.removeEventListener("contextmenu", rc);
+        });
+        break;
+      case "clickHold":
+        const hold = document.createElement("div"); hold.className="target"; hold.textContent="Hold";
+        hold.style.left="50%"; hold.style.top="50%"; hold.style.transform="translate(-50%,-50%)";
+        practiceArea.appendChild(hold);
+        let holdTimer;
+        hold.addEventListener("mousedown", ()=>{
+          holdTimer=setTimeout(()=>{hits++; clicks++; updateStats();}, 1000);
+        });
+        hold.addEventListener("mouseup", ()=>clearTimeout(holdTimer));
+        break;
+    }
   }
 
-  // Render accordion
-  mouseData.years.forEach(year=>{
-    const card = document.createElement("div");
-    card.className="bg-white rounded-xl shadow-md overflow-hidden mb-4";
-
-    const header = document.createElement("button");
-    header.className="accordion-header w-full flex justify-between items-center px-6 py-4 text-lg font-semibold bg-blue-100 hover:bg-blue-200 transition";
-    header.innerHTML=`<span class="text-gray-900">${year.name}</span><span class="text-gray-900">+</span>`;
-    card.appendChild(header);
-
+  // Build accordion
+  years.forEach(y=>{
+    const card = document.createElement("div"); card.className="bg-white rounded-xl shadow-md overflow-hidden mb-4";
+    const header = document.createElement("button"); header.className="accordion-header w-full flex justify-between items-center px-6 py-4 text-lg font-semibold bg-blue-100 hover:bg-blue-200 transition";
+    header.innerHTML=`<span>${y.name}</span><span>+</span>`;
     const body = document.createElement("div"); body.className="accordion-body bg-gray-50";
-    body.innerHTML = year.topics.map(topic=>{
-      return `<li>
-        <button class="topicBtn block w-full text-left px-4 py-2 rounded-lg shadow text-gray-900 bg-white hover:shadow-md hover:bg-blue-50 transition flex items-center gap-2"
-          data-title="${topic.title}" data-sample="${topic.sample}" data-type="${topic.type}">
-          🖱️ ${topic.title}
-        </button>
-      </li>`;
-    }).join("");
-    const ul=document.createElement("ul"); ul.className="pl-6 space-y-2"; ul.innerHTML=body.innerHTML;
-    body.innerHTML=""; body.appendChild(ul);
-    card.appendChild(body);
 
-    header.addEventListener("click",()=>{
-      const isOpen=body.style.maxHeight && body.style.maxHeight!=="0px";
+    body.innerHTML = y.topics.map(t=>`
+      <li class="mb-1">
+        <button class="topicBtn block w-full text-left px-4 py-2 rounded-lg shadow text-gray-900 bg-white hover:shadow-md hover:bg-blue-50 transition flex items-center gap-2"
+        data-title="${t.title}" data-sample="${t.sample}" data-type="${t.type}">🖱️ ${t.title}</button>
+      </li>
+    `).join("");
+
+    card.appendChild(header); card.appendChild(body);
+    header.addEventListener("click", ()=>{
+      const isOpen = body.style.maxHeight && body.style.maxHeight!=="0px";
       container.querySelectorAll(".accordion-body").forEach(el=>el.style.maxHeight=null);
-      container.querySelectorAll(".accordion-header span:last-child").forEach(icon=>icon.style.transform="rotate(0deg)");
+      container.querySelectorAll(".accordion-header span:last-child").forEach(ic=>ic.style.transform="rotate(0deg)");
       if(!isOpen){ body.style.maxHeight=body.scrollHeight+"px"; header.querySelector("span:last-child").style.transform="rotate(45deg)"; }
     });
-
     container.appendChild(card);
   });
 
-  // Topic click
-  container.addEventListener("click",e=>{
-    const btn=e.target.closest(".topicBtn"); if(!btn) return;
-    currentTopics=[...btn.closest("ul").querySelectorAll(".topicBtn")];
-    currentIndex=currentTopics.indexOf(btn);
-    loadMouseTopic(btn);
+  container.addEventListener("click", e=>{
+    const btn = e.target.closest(".topicBtn"); if(!btn) return;
+    currentTopics = [...btn.closest("ul")?.querySelectorAll(".topicBtn")||[btn]];
+    currentIndex = currentTopics.indexOf(btn);
+    mouseTitle.textContent=btn.dataset.title;
+    mouseInstruction.textContent=btn.dataset.sample;
+    renderPractice({type:btn.dataset.type});
+    mouseModal.classList.remove("hidden");
   });
 
-  btnNextMouse.addEventListener("click",()=>{
-if(currentIndex < currentTopics.length - 1) {
-      currentIndex++;
-      loadMouseTopic(currentTopics[currentIndex]);
+  btnNextMouse.addEventListener("click", ()=>{ if(currentIndex<currentTopics.length-1){currentIndex++; const btn=currentTopics[currentIndex]; mouseTitle.textContent=btn.dataset.title; mouseInstruction.textContent=btn.dataset.sample; renderPractice({type:btn.dataset.type}); }});
+  btnPrevMouse.addEventListener("click", ()=>{ if(currentIndex>0){currentIndex--; const btn=currentTopics[currentIndex]; mouseTitle.textContent=btn.dataset.title; mouseInstruction.textContent=btn.dataset.sample; renderPractice({type:btn.dataset.type}); }});
+
+  btnRestartMouse.addEventListener("click", ()=>{
+    if(currentTopics.length>0){
+      const btn=currentTopics[currentIndex];
+      mouseTitle.textContent=btn.dataset.title;
+      mouseInstruction.textContent=btn.dataset.sample;
+      renderPractice({type:btn.dataset.type});
     }
   });
 
-  btnPrevMouse.addEventListener("click", () => {
-    if(currentIndex > 0) {
-      currentIndex--;
-      loadMouseTopic(currentTopics[currentIndex]);
-    }
-  });
-
-  btnRestartMouse.addEventListener("click", () => {
-    if(currentTopics.length > 0) {
-      loadMouseTopic(currentTopics[currentIndex]);
-    }
-  });
-
-  closeMouse.addEventListener("click", () => {
+  closeMouse.addEventListener("click", ()=>{
     mouseModal.classList.add("hidden");
-    clearPracticeArea();
+    practiceArea.innerHTML="";
   });
 
+  // Global click tracker for misses
+  practiceArea.addEventListener("click", e=>{
+    if(!e.target.classList.contains("target") && !e.target.classList.contains("drag-item")){
+      clicks++; updateStats();
+    }
+  });
 });
 </script>
 </body>
 </html>
 
-
   
-    
-
-    
