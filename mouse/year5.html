@@ -1,160 +1,146 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mouse Practice - Year 5</title>
+<title>SmartKids  -Mouse Practice</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-  body { font-family: sans-serif; background: #f0f4f8; }
-  header { background-color: #1e40af; color: white; padding: 1rem; text-align: center; position: sticky; top: 0; z-index: 50; }
-  header a { background: white; color: #1e40af; padding: 0.5rem 1rem; border-radius: 0.5rem; margin-left: 1rem; text-decoration: none; font-weight: bold; }
-  .accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; background: white; border-radius: 0.5rem; margin-bottom: 1rem; }
-  .accordion-header { cursor: pointer; padding: 1rem; background: #60a5fa; color: white; font-weight: bold; display: flex; justify-content: space-between; border-radius: 0.5rem; margin-bottom: 0.5rem; }
-  .practice-area { position: relative; width: 100%; height: 300px; background: #e2e8f0; border-radius: 0.5rem; overflow: hidden; margin-top: 1rem; padding: 1rem; }
-  .toolbar-button { display: inline-block; width: 60px; height: 40px; margin: 0.5rem; background: #fbbf24; border-radius: 0.3rem; text-align: center; line-height: 40px; font-weight: bold; cursor: pointer; user-select: none; }
-  .shape { width: 50px; height: 50px; background: #f87171; position: absolute; border-radius: 0.3rem; cursor: pointer; }
+  body { font-family: sans-serif; background: #f3f4f6; margin:0; padding:0; }
+  header { background: #1e40af; color: white; padding: 1rem; display:flex; justify-content:space-between; align-items:center; }
+  header a { background: white; color:#1e40af; padding:0.5rem 1rem; border-radius:0.5rem; font-weight:bold; text-decoration:none; }
+  main { padding: 2rem; max-width:800px; margin:auto; }
+  .stats span { margin-right: 15px; font-weight:bold; }
+  #toolbarArea button, .toolbar-button { margin-right: 5px; padding:5px 10px; background:#3b82f6; color:white; border:none; border-radius:0.25rem; cursor:pointer; }
+  #editableText { width:100%; height:150px; border:1px solid #9ca3af; padding:10px; margin-top:10px; background:white; }
+  #shapeArea { position:relative; width:100%; height:300px; background:#e5e7eb; margin-top:20px; overflow:hidden; border-radius:0.5rem; }
+  .shape { position:absolute; background:#f59e0b; cursor:move; display:flex; justify-content:center; align-items:center; color:white; font-weight:bold; user-select:none; }
+  .resize-handle { width:10px; height:10px; background:black; position:absolute; right:0; bottom:0; cursor:se-resize; }
 </style>
 </head>
 <body>
 
 <header>
-  Mouse Practice - Year 5
-  <a href="mouse.html">Home</a>
+  <h1 class="text-xl font-bold">SmartKids Mouse Practice</h1>
+  <a href="https://slide-t.github.io/smartkids-learning/mouse.html">Back To Classes</a>
 </header>
 
-<main class="max-w-4xl mx-auto p-4">
-  <h2 class="text-2xl font-bold mb-4 text-center">Year 5 Topics</h2>
+<main>
+  <h2 class="text-2xl font-bold mb-4">Using Toolbars & Shape Manipulation</h2>
+  <p>Practice clicking toolbar buttons and manipulating shapes with the mouse.</p>
 
-  <div id="accordion">
-    <div>
-      <div class="accordion-header">Using Toolbars <span>+</span></div>
-      <div class="accordion-body" id="toolbarBody">
-        <p>Click toolbar icons to apply bold or underline text.</p>
-        <div id="toolbarArea" class="practice-area"></div>
-      </div>
-    </div>
+  <!-- Toolbar practice -->
+  <div id="toolbarArea"></div>
 
-    <div>
-      <div class="accordion-header">Right-Click Advanced <span>+</span></div>
-      <div class="accordion-body" id="rightClickBody">
-        <p>Right-click files and select options from menus.</p>
-        <div id="rightClickArea" class="practice-area"></div>
-      </div>
-    </div>
-
-    <div>
-      <div class="accordion-header">Shape Manipulation <span>+</span></div>
-      <div class="accordion-body" id="shapeBody">
-        <p>Drag shapes to rotate or resize them.</p>
-        <div id="shapeArea" class="practice-area"></div>
-      </div>
-    </div>
-  </div>
+  <!-- Shape practice -->
+  <div id="shapeArea"></div>
 </main>
 
 <script>
-// Accordion toggle
-document.querySelectorAll('.accordion-header').forEach(header => {
-  header.addEventListener('click', () => {
-    const body = header.nextElementSibling;
-    const open = body.style.maxHeight && body.style.maxHeight !== '0px';
-    document.querySelectorAll('.accordion-body').forEach(b => b.style.maxHeight = null);
-    document.querySelectorAll('.accordion-header span').forEach(s => s.style.transform = 'rotate(0deg)');
-    if(!open){
-      body.style.maxHeight = body.scrollHeight + 'px';
-      header.querySelector('span').style.transform = 'rotate(45deg)';
-    }
-  });
-});
+document.addEventListener('DOMContentLoaded',()=>{
+  // Toolbar functionality
+  function startToolbars(){
+    const area = document.getElementById('toolbarArea');
+    area.innerHTML = '';
+    const buttons = ['B','I','U'];
+    const text = document.createElement('div');
+    text.contentEditable = true;
+    text.id = 'editableText';
+    area.appendChild(text);
 
-// Year 5: Using Toolbars
-function startToolbars(){
-  const area = document.getElementById('toolbarArea');
-  area.innerHTML = '';
-  const buttons = ['B','I','U'];
-  const text = document.createElement('div');
-  text.contentEditable = true;
-  text.style.width = '100%';
-  text.style.height = '200px';
-  text.style.background = 'white';
-  text.style.padding = '10px';
-  text.style.border = '1px solid #9ca3af';
-  text.style.marginTop = '10px';
-  area.appendChild(text);
-
-  buttons.forEach(btn => {
-    const b = document.createElement('div');
-    b.className = 'toolbar-button';
-    b.textContent = btn;
-    b.onclick = () => {
-      document.execCommand(btn.toLowerCase(), false, null);
-    };
-    area.appendChild(b);
-  });
-}
-startToolbars();
-
-// Year 5: Right-Click Advanced
-function startRightClickAdvanced(){
-  const area = document.getElementById('rightClickArea');
-  area.innerHTML = '';
-  const file = document.createElement('div');
-  file.textContent = 'Document';
-  file.style.width = '100px';
-  file.style.height = '50px';
-  file.style.background = '#fbbf24';
-  file.style.position = 'absolute';
-  file.style.top = '50px';
-  file.style.left = '50px';
-  file.style.display = 'flex';
-  file.style.alignItems = 'center';
-  file.style.justifyContent = 'center';
-  file.style.borderRadius = '0.3rem';
-  file.style.cursor = 'pointer';
-  area.appendChild(file);
-
-  file.oncontextmenu = e => {
-    e.preventDefault();
-    alert('Right-Click Menu:\nOpen\nCopy\nDelete\nProperties');
-  };
-}
-startRightClickAdvanced();
-
-// Year 5: Shape Manipulation
-function startShapeManipulation(){
-  const area = document.getElementById('shapeArea');
-  area.innerHTML = '';
-  for(let i=0;i<3;i++){
-    const shape = document.createElement('div');
-    shape.className = 'shape';
-    shape.style.top = (50+i*80)+'px';
-    shape.style.left = '50px';
-    area.appendChild(shape);
-
-    // Dragging
-    shape.onmousedown = e => {
-      e.preventDefault();
-      const shiftX = e.clientX - shape.getBoundingClientRect().left;
-      const shiftY = e.clientY - shape.getBoundingClientRect().top;
-      function moveAt(pageX,pageY){
-        shape.style.left = pageX - shiftX - area.getBoundingClientRect().left + 'px';
-        shape.style.top = pageY - shiftY - area.getBoundingClientRect().top + 'px';
-      }
-      function onMouseMove(e){
-        moveAt(e.pageX,e.pageY);
-      }
-      document.addEventListener('mousemove', onMouseMove);
-      document.onmouseup = () => {
-        document.removeEventListener('mousemove', onMouseMove);
-        document.onmouseup = null;
+    buttons.forEach(btn => {
+      const b = document.createElement('button');
+      b.className = 'toolbar-button';
+      b.textContent = btn;
+      b.onclick = () => {
+        const sel = window.getSelection();
+        if(sel.rangeCount){
+          const range = sel.getRangeAt(0);
+          if(range.toString()){
+            const span = document.createElement('span');
+            if(btn==='B') span.style.fontWeight='bold';
+            if(btn==='I') span.style.fontStyle='italic';
+            if(btn==='U') span.style.textDecoration='underline';
+            span.textContent = range.toString();
+            range.deleteContents();
+            range.insertNode(span);
+          }
+        }
       };
-    };
-    shape.ondragstart = () => false;
+      area.appendChild(b);
+    });
   }
-}
-startShapeManipulation();
+
+  // Shape manipulation
+  function startShapeManipulation(){
+    const area = document.getElementById('shapeArea');
+    area.innerHTML='';
+    for(let i=0;i<3;i++){
+      const shape = document.createElement('div');
+      shape.className='shape';
+      shape.style.top=(50+i*80)+'px';
+      shape.style.left='50px';
+      shape.style.width='50px';
+      shape.style.height='50px';
+      shape.textContent='□';
+      area.appendChild(shape);
+
+      // Drag
+      shape.onmousedown=e=>{
+        if(e.target.classList.contains('resize-handle')) return;
+        e.preventDefault();
+        const shiftX=e.clientX-shape.getBoundingClientRect().left;
+        const shiftY=e.clientY-shape.getBoundingClientRect().top;
+        function moveAt(pageX,pageY){
+          shape.style.left=pageX-shiftX-area.getBoundingClientRect().left+'px';
+          shape.style.top=pageY-shiftY-area.getBoundingClientRect().top+'px';
+        }
+        function onMouseMove(e){
+          moveAt(e.pageX,e.pageY);
+        }
+        document.addEventListener('mousemove',onMouseMove);
+        document.onmouseup=()=>{
+          document.removeEventListener('mousemove',onMouseMove);
+          document.onmouseup=null;
+        };
+      };
+      shape.ondragstart=()=>false;
+
+      // Resize handle
+      const handle=document.createElement('div');
+      handle.className='resize-handle';
+      shape.appendChild(handle);
+      handle.onmousedown=e=>{
+        e.stopPropagation();
+        e.preventDefault();
+        const startWidth=shape.offsetWidth;
+        const startHeight=shape.offsetHeight;
+        const startX=e.clientX;
+        const startY=e.clientY;
+        function onMouseMove(ev){
+          const newWidth=Math.max(30,startWidth+(ev.clientX-startX));
+          const newHeight=Math.max(30,startHeight+(ev.clientY-startY));
+          shape.style.width=newWidth+'px';
+          shape.style.height=newHeight+'px';
+        }
+        document.addEventListener('mousemove',onMouseMove);
+        document.onmouseup=()=>{
+          document.removeEventListener('mousemove',onMouseMove);
+          document.onmouseup=null;
+        };
+      };
+
+      // Right click
+      shape.oncontextmenu=e=>{
+        e.preventDefault();
+        alert('Right-click menu for this shape!');
+      };
+    }
+  }
+
+  startToolbars();
+  startShapeManipulation();
+});
 </script>
 
 </body>
