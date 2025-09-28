@@ -1,1 +1,143 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Learning Kids - Year 6 Mouse Practice</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: sans-serif; background: #f3f4f6; margin:0; padding:0; }
+  header { background: #1e40af; color: white; padding: 1rem; display:flex; justify-content:space-between; align-items:center; }
+  header a { background: white; color:#1e40af; padding:0.5rem 1rem; border-radius:0.5rem; font-weight:bold; text-decoration:none; }
+  main { padding: 2rem; max-width:800px; margin:auto; }
+  h2 { margin-bottom:1rem; }
+  #clipboardArea { border:1px solid #9ca3af; background:white; padding:10px; min-height:100px; margin-bottom:20px; }
+  #dragArea { position:relative; width:100%; height:200px; background:#e5e7eb; border-radius:0.5rem; margin-bottom:20px; overflow:hidden; }
+  .file { width:60px; height:60px; background:#f59e0b; color:white; display:flex; justify-content:center; align-items:center; position:absolute; cursor:grab; user-select:none; border-radius:0.25rem; }
+  .folder { width:100px; height:100px; background:#3b82f6; position:absolute; top:50px; right:50px; border-radius:0.25rem; display:flex; justify-content:center; align-items:center; color:white; font-weight:bold; }
+  #windowsArea { margin-top:20px; display:flex; gap:10px; flex-wrap:wrap; }
+  .window { width:150px; height:100px; background:white; border:1px solid #9ca3af; border-radius:0.25rem; padding:5px; cursor:pointer; display:flex; justify-content:center; align-items:center; }
+  .selected { outline:2px solid #f59e0b; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1 class="text-xl font-bold">Year 6 Mouse Practice</h1>
+  <a href="mouse.html">Home</a>
+</header>
+
+<main>
+  <h2>Copy, Cut, Paste Practice</h2>
+  <p>Select text below and use right-click to Copy, Cut, Paste.</p>
+  <div id="clipboardArea" contenteditable="true">
+    This is some editable text. Try selecting, copying, cutting, and pasting.
+  </div>
+
+  <h2>Advanced Drag-and-Drop</h2>
+  <p>Drag the files into the blue folder.</p>
+  <div id="dragArea">
+    <div class="folder">Folder</div>
+    <div class="file" style="top:10px; left:10px;">File 1</div>
+    <div class="file" style="top:10px; left:80px;">File 2</div>
+    <div class="file" style="top:80px; left:10px;">File 3</div>
+  </div>
+
+  <h2>Multi-Window Navigation</h2>
+  <p>Click between windows to select active one.</p>
+  <div id="windowsArea">
+    <div class="window">Window 1</div>
+    <div class="window">Window 2</div>
+    <div class="window">Window 3</div>
+  </div>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+
+  // Clipboard functionality (Copy, Cut, Paste)
+  const clipboardArea = document.getElementById('clipboardArea');
+  clipboardArea.addEventListener('contextmenu',e=>{
+    e.preventDefault();
+    const selection = window.getSelection().toString();
+    const action = prompt('Enter action: copy, cut, paste');
+    if(action==='copy'){
+      navigator.clipboard.writeText(selection);
+    } else if(action==='cut'){
+      navigator.clipboard.writeText(selection);
+      const sel = window.getSelection();
+      if(sel.rangeCount){
+        sel.getRangeAt(0).deleteContents();
+      }
+    } else if(action==='paste'){
+      navigator.clipboard.readText().then(text=>{
+        const sel = window.getSelection();
+        if(sel.rangeCount){
+          sel.getRangeAt(0).deleteContents();
+          sel.getRangeAt(0).insertNode(document.createTextNode(text));
+        }
+      });
+    }
+  });
+
+  // Drag and Drop
+  const dragArea = document.getElementById('dragArea');
+  const files = dragArea.querySelectorAll('.file');
+  const folder = dragArea.querySelector('.folder');
+
+  files.forEach(file=>{
+    file.onmousedown = e=>{
+      e.preventDefault();
+      let shiftX = e.clientX - file.getBoundingClientRect().left;
+      let shiftY = e.clientY - file.getBoundingClientRect().top;
+
+      function moveAt(pageX,pageY){
+        let x = pageX - shiftX - dragArea.getBoundingClientRect().left;
+        let y = pageY - shiftY - dragArea.getBoundingClientRect().top;
+        file.style.left = Math.max(0,Math.min(x, dragArea.clientWidth - file.offsetWidth)) + 'px';
+        file.style.top = Math.max(0,Math.min(y, dragArea.clientHeight - file.offsetHeight)) + 'px';
+      }
+
+      function onMouseMove(e){
+        moveAt(e.pageX,e.pageY);
+      }
+
+      document.addEventListener('mousemove',onMouseMove);
+      document.onmouseup = ()=>{
+        document.removeEventListener('mousemove',onMouseMove);
+        document.onmouseup=null;
+
+        // Check drop inside folder
+        const fileRect = file.getBoundingClientRect();
+        const folderRect = folder.getBoundingClientRect();
+        if(fileRect.left > folderRect.left && fileRect.right < folderRect.right &&
+           fileRect.top > folderRect.top && fileRect.bottom < folderRect.bottom){
+             alert(file.textContent + ' dropped into folder!');
+             file.style.display='none';
+        }
+      };
+    };
+    file.ondragstart = ()=>false;
+
+    // Right-click on file
+    file.oncontextmenu = e=>{
+      e.preventDefault();
+      alert('Right-click menu for '+file.textContent);
+    };
+  });
+
+  // Multi-window navigation
+  const windows = document.querySelectorAll('.window');
+  windows.forEach(win=>{
+    win.onclick = ()=>{
+      windows.forEach(w=>w.classList.remove('selected'));
+      win.classList.add('selected');
+    };
+  });
+
+});
+</script>
+
+</body>
+</html>
