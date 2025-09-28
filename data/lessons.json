@@ -2,38 +2,42 @@
   "categories": [
     {
       "id": "keyboard",
-      "name": "Keyboard",
+      "name": "Computer Keyboard",
       "topics": [
-        { "id": "home_row", "title": "Home Row Keys" },
-        { "id": "typing_words", "title": "Typing Words and Sentences" },
-        { "id": "shift_capslock", "title": "Using Shift and Caps Lock" },
-        { "id": "punctuation", "title": "Punctuation Keys" },
+        { "id": "keyboard_definition", "title": "What is a Computer Keyboard?" },
+        { "id": "keyboard_layout", "title": "Layout of the Keyboard" },
+        { "id": "categories_of_keys", "title": "Categories of Keys" },
+        { "id": "typing_skills", "title": "How to Use the Keyboard for Typing" },
+        { "id": "function_keys", "title": "Function Keys (F1–F12)" },
         { "id": "shortcuts", "title": "Keyboard Shortcuts" },
-        { "id": "numbers_symbols", "title": "Numbers and Symbols" }
+        { "id": "numeric_keys", "title": "Numeric and Symbol Keys" }
       ]
     },
     {
       "id": "mouse",
-      "name": "Mouse",
+      "name": "Computer Mouse",
       "topics": [
-        { "id": "basic_click", "title": "Single Click" },
-        { "id": "double_click", "title": "Double Click" },
-        { "id": "right_click", "title": "Right Click" },
+        { "id": "mouse_definition", "title": "What is a Computer Mouse?" },
+        { "id": "types_of_mouse", "title": "Types of Computer Mouse" },
+        { "id": "mouse_buttons", "title": "Mouse Buttons and Their Uses" },
+        { "id": "mouse_actions", "title": "Mouse Actions" },
         { "id": "drag_drop", "title": "Drag and Drop" },
-        { "id": "click_hold", "title": "Click and Hold" },
-        { "id": "mouse_movement", "title": "Mouse Movement" }
+        { "id": "scrolling", "title": "Scrolling with the Mouse" },
+        { "id": "mouse_practice", "title": "Mouse Practice Activities" }
       ]
     },
     {
       "id": "general_ict",
-      "name": "General ICT",
+      "name": "General ICT for Kids",
       "topics": [
-        { "id": "text_selection", "title": "Selecting Text" },
-        { "id": "scrolling", "title": "Scrolling Pages" },
-        { "id": "drawing_shapes", "title": "Drawing Simple Shapes" },
-        { "id": "file_folder_selection", "title": "File and Folder Selection" },
-        { "id": "resizing_windows", "title": "Resizing Windows" },
-        { "id": "gaming_controls", "title": "Simple Gaming Controls" }
+        { "id": "what_is_computer", "title": "What is a Computer?" },
+        { "id": "parts_of_computer", "title": "Parts of a Computer" },
+        { "id": "uses_of_computer", "title": "Uses of a Computer" },
+        { "id": "safe_computer_use", "title": "Safe Use of Computers" },
+        { "id": "introduction_to_coding", "title": "Introduction to Coding" },
+        { "id": "scratch_basics", "title": "Scratch and Block Coding" },
+        { "id": "algorithms_for_kids", "title": "Algorithms for Kids" },
+        { "id": "internet_basics", "title": "Introduction to the Internet" }
       ]
     }
   ]
