@@ -3,68 +3,67 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lessons</title>
+  <title>SmartKids Lessons</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-50 font-sans">
-  <!-- Header -->
-  <header class="bg-blue-600 text-white p-4 flex justify-between items-center">
-    <h1 class="text-lg font-bold">Computer Lessons</h1>
-    <a href="index.html" class="text-sm bg-white text-blue-600 px-3 py-1 rounded hover:bg-gray-200">⬅ Back Home</a>
-  </header>
 
-  <!-- Main container -->
   <div class="max-w-4xl mx-auto py-8 px-4">
-    <div id="accordion" class="space-y-4"></div>
+    <h1 class="text-3xl font-bold text-blue-700 mb-6 text-center">Computer Lessons</h1>
+
+    <!-- Topics container -->
+    <div id="lessonsContainer" class="grid gap-4"></div>
+
+    <!-- Back button -->
+    <div class="mt-8 text-center">
+      <a href="subjects-curric.html" 
+         class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">
+        ⬅ Back to Classes
+      </a>
+    </div>
   </div>
 
-  <script>
-  async function loadLessons() {
-    try {
-      const res = await fetch("data/lessons.json");
-      const data = await res.json();
-      const container = document.getElementById("accordion");
+<script>
+async function loadLessons() {
+  const container = document.getElementById('lessonsContainer');
+  container.innerHTML = "<p class='text-gray-500'>Loading lessons...</p>";
 
-      container.innerHTML = "";
+  try {
+    const res = await fetch('data/lessons.json');
+    const data = await res.json();
 
-      data.categories.forEach(category => {
-        const section = document.createElement("div");
-        section.className = "bg-white shadow rounded-lg overflow-hidden";
+    container.innerHTML = '';
 
-        // Accordion header
-        const header = document.createElement("button");
-        header.className =
-          "w-full text-left px-4 py-3 bg-blue-600 text-white font-semibold focus:outline-none";
-        header.textContent = category.name;
+    data.forEach(category => {
+      // Category Title
+      const catDiv = document.createElement('div');
+      catDiv.innerHTML = `<h2 class="text-xl font-semibold text-blue-600 mb-3">${category.name}</h2>`;
+      container.appendChild(catDiv);
 
-        // Accordion content
-        const content = document.createElement("div");
-        content.className = "hidden px-4 py-3 space-y-2 bg-gray-50";
+      // Topics inside category
+      category.topics.forEach(topic => {
+        const topicDiv = document.createElement('div');
+        topicDiv.className = "p-4 bg-blue-100 rounded-lg shadow hover:bg-blue-200 transition";
 
-        category.topics.forEach(topic => {
-          const btn = document.createElement("a");
-          btn.href = `detail-notes.html?topic=${encodeURIComponent(topic.id)}`;
-          btn.className =
-            "block px-4 py-2 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition";
-          btn.textContent = topic.title;
-          content.appendChild(btn);
-        });
+        topicDiv.innerHTML = `
+          <h3 class="text-lg font-medium text-blue-800">${topic.title}</h3>
+          <a href="detail-notes.html?id=${encodeURIComponent(topic.id)}" 
+             class="mt-2 inline-block text-sm text-blue-700 hover:underline">
+             Read Lesson →
+          </a>
+        `;
 
-        header.addEventListener("click", () => {
-          content.classList.toggle("hidden");
-        });
-
-        section.appendChild(header);
-        section.appendChild(content);
-        container.appendChild(section);
+        container.appendChild(topicDiv);
       });
-    } catch (err) {
-      document.getElementById("accordion").innerHTML =
-        "<p class='text-red-600'>Error loading lessons.json</p>";
-    }
-  }
+    });
 
-  document.addEventListener("DOMContentLoaded", loadLessons);
-  </script>
+  } catch (err) {
+    container.innerHTML = "<p class='text-red-600'>Error loading lessons file.</p>";
+  }
+}
+
+document.addEventListener('DOMContentLoaded', loadLessons);
+</script>
+
 </body>
 </html>
