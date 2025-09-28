@@ -1,138 +1,242 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Click the Circle Practice</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart Learning Kids - Mouse Practice</title>
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin: 20px;
+    .accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; }
+    .accordion-header span:last-child { transition: transform 0.3s ease; }
+    .hidden { display: none; }
+    .target {
+      width: 50px; height: 50px; background: #3498db;
+      border-radius: 50%; position: absolute; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-weight: bold; user-select: none;
+      transition: transform 0.1s ease;
     }
-
-    h2 {
-      color: #333;
-    }
-
-    #shapes {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 20px;
-      margin: 30px 0;
-    }
-
-    .shape {
-      width: 80px;
-      height: 80px;
-      display: inline-block;
-      cursor: pointer;
-    }
-
-    .circle {
-      background: lightblue;
-      border-radius: 50%;
-    }
-
-    .square {
-      background: lightcoral;
-    }
-
-    .triangle {
-      width: 0;
-      height: 0;
-      border-left: 40px solid transparent;
-      border-right: 40px solid transparent;
-      border-bottom: 80px solid lightgreen;
-    }
-
-    /* Progress bar */
-    #progress-container {
-      width: 80%;
-      margin: auto;
-      background: #eee;
-      border-radius: 10px;
-      overflow: hidden;
-    }
-
-    #progress-bar {
-      width: 0%;
-      height: 20px;
-      background: orange;
-      text-align: center;
-      color: white;
-      line-height: 20px;
-      font-size: 14px;
-    }
-
-    #message {
-      margin-top: 20px;
-      font-size: 18px;
-      font-weight: bold;
-      color: green;
-    }
+    .stats span { margin-right: 15px; font-weight: bold; }
   </style>
 </head>
-<body>
+<body class="bg-gray-50 text-gray-900 font-sans">
 
-  <h2>Mouse Practice: Click the Circle!</h2>
-  <p>Click only the circles. Fill the progress bar to win 🎉</p>
+  <!-- Header -->
+  <header class="bg-blue-600 text-white shadow-md fixed top-0 left-0 w-full z-50">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <h1 class="text-2xl font-bold">Smart Learning Kids</h1>
+      <a href="index.html" class="bg-white text-blue-600 px-4 py-2 rounded-lg font-medium shadow hover:bg-blue-100 transition">Home</a>
+    </div>
+  </header>
 
-  <div id="shapes"></div>
+  <!-- Content -->
+  <main class="pt-24 max-w-4xl mx-auto px-4">
+    <h2 class="text-3xl font-bold text-center mb-8">Mouse Practice</h2>
+    <div id="accordion" class="space-y-4"></div>
+  </main>
 
-  <!-- Progress Tracker -->
-  <div id="progress-container">
-    <div id="progress-bar">0%</div>
+  <!-- Modal -->
+  <div id="mouseModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-xl p-6 max-w-2xl w-full shadow-lg relative">
+      <button id="closeMouse" class="absolute top-2 right-2 text-red-600 text-xl font-bold">&times;</button>
+      <h2 id="mouseTitle" class="text-xl font-bold mb-4">Mouse Practice</h2>
+
+      <!-- Instructions -->
+      <div id="mouseInstruction" class="mb-4 p-3 bg-gray-100 rounded text-lg leading-relaxed"></div>
+
+      <!-- Practice Area -->
+      <div id="practiceArea" class="relative w-full h-64 bg-gray-200 rounded mb-4 overflow-hidden"></div>
+
+      <!-- Stats -->
+      <div class="stats flex justify-start text-sm font-semibold mb-4">
+        <span>Clicks: <span id="clicks">0</span></span>
+        <span>Hits: <span id="hits">0</span></span>
+        <span>Accuracy: <span id="mouseAccuracy">100</span>%</span>
+      </div>
+
+      <div class="flex justify-between mt-4">
+        <button id="btnPrevMouse" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">⬅ Prev</button>
+        <button id="btnRestartMouse" class="px-4 py-2 bg-yellow-200 rounded hover:bg-yellow-300">🔄 Restart</button>
+        <button id="btnNextMouse" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Next ➡</button>
+      </div>
+    </div>
   </div>
 
-  <p id="message"></p>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  const container = document.getElementById("accordion");
+  const today = new Date();
 
-  <script>
-    const shapesContainer = document.getElementById("shapes");
-    const progressBar = document.getElementById("progress-bar");
-    const message = document.getElementById("message");
+  const mouseModal = document.getElementById("mouseModal");
+  const closeMouse = document.getElementById("closeMouse");
+  const mouseTitle = document.getElementById("mouseTitle");
+  const mouseInstruction = document.getElementById("mouseInstruction");
+  const practiceArea = document.getElementById("practiceArea");
+  const clicksEl = document.getElementById("clicks");
+  const hitsEl = document.getElementById("hits");
+  const accuracyEl = document.getElementById("mouseAccuracy");
 
-    let score = 0;
-    const targetScore = 5; // how many correct clicks needed
+  const btnPrevMouse = document.getElementById("btnPrevMouse");
+  const btnNextMouse = document.getElementById("btnNextMouse");
+  const btnRestartMouse = document.getElementById("btnRestartMouse");
 
-    // Function to create random shapes
-    function createShapes() {
-      shapesContainer.innerHTML = "";
-      const types = ["circle", "square", "triangle"];
-      for (let i = 0; i < 6; i++) {
-        const type = types[Math.floor(Math.random() * types.length)];
-        const div = document.createElement("div");
-        div.classList.add("shape", type);
-        div.onclick = () => handleClick(type);
-        shapesContainer.appendChild(div);
-      }
+  let currentTopics = [];
+  let currentIndex = 0;
+
+  let clicks = 0;
+  let hits = 0;
+
+  function resetStats() {
+    clicks = 0;
+    hits = 0;
+    clicksEl.textContent = clicks;
+    hitsEl.textContent = hits;
+    accuracyEl.textContent = 100;
+  }
+
+  function spawnTarget() {
+    practiceArea.innerHTML = '';
+    const target = document.createElement("div");
+    target.className = "target";
+    target.textContent = "🎯";
+    const areaRect = practiceArea.getBoundingClientRect();
+    const size = 50;
+    const x = Math.random() * (areaRect.width - size);
+    const y = Math.random() * (areaRect.height - size);
+    target.style.left = x + "px";
+    target.style.top = y + "px";
+    practiceArea.appendChild(target);
+
+    target.addEventListener("click", e => {
+      hits++;
+      clicks++;
+      updateStats();
+      spawnTarget();
+    });
+  }
+
+  function updateStats() {
+    clicksEl.textContent = clicks;
+    hitsEl.textContent = hits;
+    const accuracy = clicks > 0 ? Math.round((hits / clicks) * 100) : 100;
+    accuracyEl.textContent = accuracy;
+  }
+
+  function loadMouseTopic(topic) {
+    mouseTitle.textContent = topic.dataset.title;
+    mouseInstruction.textContent = topic.dataset.sample;
+    resetStats();
+    spawnTarget();
+    mouseModal.classList.remove("hidden");
+  }
+
+  try {
+    const res = await fetch("data/classes.json");
+    const data = await res.json();
+    const classes = Array.isArray(data) ? data : data.classes;
+
+    // Only mouse categories
+    classes.forEach(cls => {
+      const card = document.createElement("div");
+      card.className = "bg-white rounded-xl shadow-md overflow-hidden mb-4";
+
+      const header = document.createElement("button");
+      header.className = "accordion-header w-full flex justify-between items-center px-6 py-4 text-lg font-semibold bg-green-100 hover:bg-green-200 transition";
+      header.innerHTML = `<span class="text-gray-900">${cls.name}</span><span class="text-gray-900">+</span>`;
+      card.appendChild(header);
+
+      const body = document.createElement("div");
+      body.className = "accordion-body bg-gray-50";
+
+      body.innerHTML = (cls.terms || []).map(term => {
+        const termUnlocked = true; // for simplicity
+        return `
+          <div class="mb-4">
+            <h3 class="text-lg font-semibold text-green-700 px-4 py-2">${term.title}</h3>
+            ${(term.categories || []).filter(cat => cat.id === "mouse").map(cat => `
+              <div class="ml-4 mb-2">
+                <h4 class="text-md font-semibold text-purple-600 px-3 py-1">${cat.name}</h4>
+                <ul class="space-y-2 pl-6">
+                  ${(cat.topics || []).map(topic => {
+                    return termUnlocked
+                      ? `<li>
+                          <button class="topicBtn block w-full text-left px-4 py-2 rounded-lg shadow text-gray-900 bg-white hover:shadow-md hover:bg-green-50 transition flex items-center gap-2"
+                            data-title="${topic.title}"
+                            data-sample="${topic.sample}">
+                            🖱️ ${topic.title}
+                          </button>
+                        </li>`
+                      : `<li><span class="block px-4 py-2 rounded-lg bg-gray-200 text-gray-500 cursor-not-allowed flex items-center gap-2">
+                          🖱️ ${topic.title} (Locked)</span></li>`;
+                  }).join("")}
+                </ul>
+              </div>
+            `).join("")}
+          </div>`;
+      }).join("");
+
+      card.appendChild(body);
+
+      header.addEventListener("click", () => {
+        const isOpen = body.style.maxHeight && body.style.maxHeight !== "0px";
+        container.querySelectorAll(".accordion-body").forEach(el => el.style.maxHeight = null);
+        container.querySelectorAll(".accordion-header span:last-child").forEach(icon => icon.style.transform = "rotate(0deg)");
+        if (!isOpen) {
+          body.style.maxHeight = body.scrollHeight + "px";
+          header.querySelector("span:last-child").style.transform = "rotate(45deg)";
+        }
+      });
+
+      container.appendChild(card);
+    });
+
+    container.addEventListener("click", e => {
+      const btn = e.target.closest(".topicBtn");
+      if (!btn) return;
+      currentTopics = [...btn.closest("ul").querySelectorAll(".topicBtn")];
+      currentIndex = currentTopics.indexOf(btn);
+      loadMouseTopic(btn);
+    });
+
+  } catch (err) {
+    console.error("Error loading JSON:", err);
+    container.innerHTML = '<p class="text-red-500">⚠️ Failed to load mouse data.</p>';
+  }
+
+  // Navigation
+  btnNextMouse.addEventListener("click", () => {
+    if (currentIndex < currentTopics.length - 1) {
+      currentIndex++;
+      loadMouseTopic(currentTopics[currentIndex]);
     }
-
-    function handleClick(type) {
-      if (type === "circle") {
-        score++;
-        updateProgress();
-      } else {
-        message.textContent = "Oops! That’s not a circle 😅";
-        setTimeout(() => (message.textContent = ""), 1000);
-      }
-      createShapes(); // refresh shapes
+  });
+  btnPrevMouse.addEventListener("click", () => {
+    if (currentIndex > 0) {
+      currentIndex--;
+      loadMouseTopic(currentTopics[currentIndex]);
     }
+  });
 
-    function updateProgress() {
-      let percent = (score / targetScore) * 100;
-      progressBar.style.width = percent + "%";
-      progressBar.textContent = Math.floor(percent) + "%";
-
-      if (score >= targetScore) {
-        message.textContent = "🎉 Well done! You finished the practice!";
-        shapesContainer.innerHTML = "";
-      }
+  btnRestartMouse.addEventListener("click", () => {
+    if (currentTopics.length > 0) {
+      loadMouseTopic(currentTopics[currentIndex]);
     }
+  });
 
-    // start game
-    createShapes();
-  </script>
+  closeMouse.addEventListener("click", () => {
+    mouseModal.classList.add("hidden");
+    practiceArea.innerHTML = ''; // clear targets
+  });
 
+  // Global click tracker to count misses
+  practiceArea.addEventListener("click", e => {
+    // Only count clicks outside the target as misses
+    if (!e.target.classList.contains("target")) {
+      clicks++;
+      updateStats();
+    }
+  });
+});
+</script>
 </body>
 </html>
