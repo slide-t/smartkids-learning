@@ -1,1 +1,130 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartKids - Mouse Practice</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family:sans-serif; background:#f3f4f6; margin:0; padding:0; }
+  header { background:#1e40af; color:white; padding:1rem; display:flex; justify-content:space-between; align-items:center; }
+  header a { background:white; color:#1e40af; padding:0.5rem 1rem; border-radius:0.5rem; font-weight:bold; text-decoration:none; }
+  main { padding:2rem; max-width:800px; margin:auto; }
+  h2 { margin-bottom:0.5rem; }
+  .grid { display:grid; grid-template-columns:repeat(5,1fr); gap:5px; margin-bottom:20px; }
+  .cell { background:white; border:1px solid #9ca3af; height:40px; display:flex; align-items:center; justify-content:center; cursor:pointer; user-select:none; }
+  #gameArea { width:100%; height:200px; background:#e5e7eb; border-radius:0.5rem; position:relative; margin-bottom:20px; }
+  .target { width:40px; height:40px; background:#f59e0b; border-radius:50%; position:absolute; display:flex; justify-content:center; align-items:center; color:white; font-weight:bold; cursor:pointer; user-select:none; }
+  #imageArea { width:300px; height:200px; border:1px solid #9ca3af; position:relative; overflow:hidden; margin-bottom:20px; }
+  #draggableImage { width:100px; height:100px; position:absolute; top:50px; left:50px; cursor:grab; }
+  .stats span { margin-right:10px; font-weight:bold; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1 class="text-xl font-bold">Year 8 Mouse Practice</h1>
+  <a href="https://slide-t.github.io/smartkids-learning/mouse.html">Back To Classes</a>
+</header>
+
+<main>
+
+<h2>Spreadsheet Navigation</h2>
+<p>Click cells to select, then drag to fill multiple cells.</p>
+<div class="grid" id="spreadsheet"></div>
+
+<h2>Advanced Gaming Controls</h2>
+<p>Click targets using left or right mouse buttons.</p>
+<div id="gameArea"></div>
+<div class="stats mt-2">Clicks: <span id="clicks">0</span>, Hits: <span id="hits">0</span>, Accuracy: <span id="accuracy">100</span>%</div>
+
+<h2>Image Editing Basics</h2>
+<p>Drag the image around and resize using corner handles.</p>
+<div id="imageArea">
+  <img id="draggableImage" src="https://via.placeholder.com/100" draggable="false">
+</div>
+
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+
+  // Spreadsheet Navigation
+  const spreadsheet=document.getElementById('spreadsheet');
+  const rows=5, cols=5;
+  for(let i=0;i<rows*cols;i++){
+    const cell=document.createElement('div');
+    cell.className='cell';
+    cell.addEventListener('mousedown',()=>{cell.style.background='#fbbf24';});
+    cell.addEventListener('mouseup',()=>{cell.style.background='white';});
+    spreadsheet.appendChild(cell);
+  }
+
+  // Advanced Gaming Controls
+  const gameArea=document.getElementById('gameArea');
+  const clicksEl=document.getElementById('clicks');
+  const hitsEl=document.getElementById('hits');
+  const accuracyEl=document.getElementById('accuracy');
+  let clicks=0,hits=0;
+
+  function spawnTarget(){
+    gameArea.innerHTML='';
+    const t=document.createElement('div');
+    t.className='target';
+    t.textContent='🎯';
+    const areaRect=gameArea.getBoundingClientRect();
+    const x=Math.random()*(areaRect.width-40);
+    const y=Math.random()*(areaRect.height-40);
+    t.style.left=x+'px';
+    t.style.top=y+'px';
+    gameArea.appendChild(t);
+
+    t.addEventListener('mousedown',(e)=>{
+      if(e.button===0 || e.button===2){ // left or right click
+        hits++; clicks++;
+        updateStats();
+        spawnTarget();
+      }
+    });
+  }
+
+  gameArea.addEventListener('mousedown',e=>{
+    if(!e.target.classList.contains('target')){ clicks++; updateStats(); }
+  });
+
+  function updateStats(){
+    clicksEl.textContent=clicks;
+    hitsEl.textContent=hits;
+    accuracyEl.textContent=clicks>0?Math.round(hits/clicks*100):100;
+  }
+
+  spawnTarget();
+
+  // Image Editing Basics (drag)
+  const img=document.getElementById('draggableImage');
+  let dragging=false,offsetX=0,offsetY=0;
+
+  img.addEventListener('mousedown',(e)=>{
+    dragging=true;
+    offsetX=e.offsetX;
+    offsetY=e.offsetY;
+    img.style.cursor='grabbing';
+  });
+  document.addEventListener('mouseup',()=>{ dragging=false; img.style.cursor='grab'; });
+  document.addEventListener('mousemove',(e)=>{
+    if(!dragging) return;
+    const rect=img.parentElement.getBoundingClientRect();
+    let left=e.clientX-rect.left-offsetX;
+    let top=e.clientY-rect.top-offsetY;
+    left=Math.max(0,Math.min(rect.width-img.offsetWidth,left));
+    top=Math.max(0,Math.min(rect.height-img.offsetHeight,top));
+    img.style.left=left+'px';
+    img.style.top=top+'px';
+  });
+
+});
+</script>
+
+</body>
+</html>
