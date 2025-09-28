@@ -1,255 +1,330 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Smart Learning Kids - Mouse Practice</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<style>
-  .accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; }
-  .accordion-header span:last-child { transition: transform 0.3s ease; }
-  .hidden { display: none; }
-  .target, .drag-object { 
-    width: 50px; height: 50px; background: #3498db;
-    border-radius: 50%; position: absolute; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    color: white; font-weight: bold; user-select: none;
-    transition: transform 0.1s ease; 
-  }
-  .drop-zone {
-    width: 80px; height: 80px; background: #facc15;
-    position: absolute; display:flex; align-items:center; justify-content:center;
-    color:black; font-weight:bold; border-radius:12px;
-  }
-  .stats span { margin-right: 15px; font-weight: bold; }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart Learning Kids - Mouse Practice</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; }
+    .accordion-header span:last-child { transition: transform 0.3s ease; }
+    .hidden { display: none; }
+    .target {
+      width: 50px; height: 50px; background: #1d4ed8;
+      border-radius: 50%; position: absolute; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-weight: bold; user-select: none;
+      transition: transform 0.1s ease;
+    }
+    .draggable { cursor: grab; }
+    .stats span { margin-right: 15px; font-weight: bold; }
+    #practiceArea { touch-action: none; }
+  </style>
 </head>
 <body class="bg-gray-50 text-gray-900 font-sans">
 
-<!-- Header -->
-<header class="bg-blue-600 text-white shadow-md fixed top-0 left-0 w-full z-50">
-  <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-    <h1 class="text-2xl font-bold">Smart Learning Kids</h1>
-    <a href="index.html" class="bg-white text-blue-600 px-4 py-2 rounded-lg font-medium shadow hover:bg-blue-100 transition">Home</a>
-  </div>
-</header>
-
-<!-- Content -->
-<main class="pt-24 max-w-4xl mx-auto px-4">
-  <h2 class="text-3xl font-bold text-center mb-8">Mouse Practice</h2>
-  <div id="accordion" class="space-y-4"></div>
-</main>
-
-<!-- Modal -->
-<div id="mouseModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-  <div class="bg-white rounded-xl p-6 max-w-2xl w-full shadow-lg relative">
-    <button id="closeMouse" class="absolute top-2 right-2 text-red-600 text-xl font-bold">&times;</button>
-    <h2 id="mouseTitle" class="text-xl font-bold mb-4">Mouse Practice</h2>
-    <div id="mouseInstruction" class="mb-4 p-3 bg-gray-100 rounded text-lg leading-relaxed"></div>
-    <div id="practiceArea" class="relative w-full h-64 bg-gray-200 rounded mb-4 overflow-hidden"></div>
-    <div class="stats flex justify-start text-sm font-semibold mb-4">
-      <span>Clicks: <span id="clicks">0</span></span>
-      <span>Hits: <span id="hits">0</span></span>
-      <span>Accuracy: <span id="mouseAccuracy">100</span>%</span>
+  <!-- Header -->
+  <header class="bg-blue-600 text-white shadow-md fixed top-0 left-0 w-full z-50">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <h1 class="text-2xl font-bold">Smart Learning Kids</h1>
+      <a href="index.html" class="bg-white text-blue-600 px-4 py-2 rounded-lg font-medium shadow hover:bg-blue-100 transition">Home</a>
     </div>
-    <div class="flex justify-between mt-4">
-      <button id="btnPrevMouse" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">⬅ Prev</button>
-      <button id="btnRestartMouse" class="px-4 py-2 bg-yellow-200 rounded hover:bg-yellow-300">🔄 Restart</button>
-      <button id="btnNextMouse" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Next ➡</button>
+  </header>
+
+  <!-- Content -->
+  <main class="pt-24 max-w-4xl mx-auto px-4">
+    <h2 class="text-3xl font-bold text-center mb-8">Mouse Practice</h2>
+    <div id="accordion" class="space-y-4"></div>
+  </main>
+
+  <!-- Modal -->
+  <div id="mouseModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-xl p-6 max-w-2xl w-full shadow-lg relative">
+      <button id="closeMouse" class="absolute top-2 right-2 text-red-600 text-xl font-bold">&times;</button>
+      <h2 id="mouseTitle" class="text-xl font-bold mb-4">Mouse Practice</h2>
+      <div id="mouseInstruction" class="mb-4 p-3 bg-gray-100 rounded text-lg leading-relaxed"></div>
+      <div id="practiceArea" class="relative w-full h-64 bg-gray-200 rounded mb-4 overflow-hidden"></div>
+      <div class="stats flex justify-start text-sm font-semibold mb-4">
+        <span>Clicks: <span id="clicks">0</span></span>
+        <span>Hits: <span id="hits">0</span></span>
+        <span>Accuracy: <span id="mouseAccuracy">100</span>%</span>
+      </div>
+      <div class="flex justify-between mt-4">
+        <button id="btnPrevMouse" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">⬅ Prev</button>
+        <button id="btnRestartMouse" class="px-4 py-2 bg-yellow-200 rounded hover:bg-yellow-300">🔄 Restart</button>
+        <button id="btnNextMouse" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Next ➡</button>
+      </div>
     </div>
   </div>
-</div>
 
 <script>
-// EMBEDDED JSON (Years 1–6)
-window.mouseData = {
-  "years":[
-    {"id":"year1","name":"Year 1","topics":[{"title":"Clicking Basics","sample":"Practice clicking on the highlighted spots with the mouse."},{"title":"Double-Clicking","sample":"Double-click quickly on the shapes to open them."},{"title":"Mouse Movement","sample":"Move the mouse to follow the line on the screen."}]},
-    {"id":"year2","name":"Year 2","topics":[{"title":"Drag and Drop","sample":"Drag the objects into the correct boxes."},{"title":"Right-Click Basics","sample":"Right-click on items to see context menus."},{"title":"Click and Hold","sample":"Hold the mouse button to draw a straight line."}]},
-    {"id":"year3","name":"Year 3","topics":[{"title":"Text Selection","sample":"Click and drag to highlight the given words."},{"title":"Scrolling","sample":"Use the scroll wheel to move up and down the page."},{"title":"Simple Shapes Drawing","sample":"Click and drag to draw circles and rectangles."}]},
-    {"id":"year4","name":"Year 4","topics":[{"title":"File and Folder Selection","sample":"Select multiple files by dragging a selection box."},{"title":"Resizing Windows","sample":"Drag the edges of a window to resize it."},{"title":"Simple Gaming Controls","sample":"Click targets that appear quickly on screen."}]},
-    {"id":"year5","name":"Year 5","topics":[{"title":"Using Toolbars","sample":"Click toolbar icons to apply bold or underline text."},{"title":"Right-Click Advanced","sample":"Right-click files and select options from menus."},{"title":"Shape Manipulation","sample":"Drag shapes to rotate or resize them."}]},
-    {"id":"year6","name":"Year 6","topics":[{"title":"Copy, Cut, Paste with Mouse","sample":"Right-click to copy and paste text into a document."},{"title":"Advanced Drag-and-Drop","sample":"Drag files into folders and applications."},{"title":"Multi-Window Navigation","sample":"Click between open windows to switch tasks."}]}
+// Embedded JSON for Years 1–6
+const mouseData = {
+  "years": [
+    {
+      "id": "year1",
+      "name": "Year 1",
+      "topics": [
+        { "title": "Clicking Basics", "sample": "Practice clicking on the highlighted spots with the mouse.", "type": "singleClick" },
+        { "title": "Double-Clicking", "sample": "Double-click quickly on the shapes to open them.", "type": "doubleClick" },
+        { "title": "Mouse Movement", "sample": "Move the mouse to follow the line on the screen.", "type": "movementFollow" }
+      ]
+    },
+    {
+      "id": "year2",
+      "name": "Year 2",
+      "topics": [
+        { "title": "Drag and Drop", "sample": "Drag the objects into the correct boxes.", "type": "dragDrop" },
+        { "title": "Right-Click Basics", "sample": "Right-click on items to see context menus.", "type": "rightClick" },
+        { "title": "Click and Hold", "sample": "Hold the mouse button to draw a straight line.", "type": "clickHold" }
+      ]
+    },
+    {
+      "id": "year3",
+      "name": "Year 3",
+      "topics": [
+        { "title": "Text Selection", "sample": "Click and drag to highlight the given words.", "type": "dragText" },
+        { "title": "Scrolling", "sample": "Use the scroll wheel to move up and down the page.", "type": "scroll" },
+        { "title": "Simple Shapes Drawing", "sample": "Click and drag to draw circles and rectangles.", "type": "shapeDraw" }
+      ]
+    },
+    {
+      "id": "year4",
+      "name": "Year 4",
+      "topics": [
+        { "title": "File and Folder Selection", "sample": "Select multiple files by dragging a selection box.", "type": "dragSelect" },
+        { "title": "Resizing Windows", "sample": "Drag the edges of a window to resize it.", "type": "resizeWindow" },
+        { "title": "Simple Gaming Controls", "sample": "Click targets that appear quickly on screen.", "type": "gameClick" }
+      ]
+    },
+    {
+      "id": "year5",
+      "name": "Year 5",
+      "topics": [
+        { "title": "Using Toolbars", "sample": "Click toolbar icons to apply bold or underline text.", "type": "toolbarClick" },
+        { "title": "Right-Click Advanced", "sample": "Right-click files and select options from menus.", "type": "rightClick" },
+        { "title": "Shape Manipulation", "sample": "Drag shapes to rotate or resize them.", "type": "dragShape" }
+      ]
+    },
+    {
+      "id": "year6",
+      "name": "Year 6",
+      "topics": [
+        { "title": "Copy, Cut, Paste with Mouse", "sample": "Right-click to copy and paste text into a document.", "type": "rightClick" },
+        { "title": "Advanced Drag-and-Drop", "sample": "Drag files into folders and applications.", "type": "dragDrop" },
+        { "title": "Multi-Window Navigation", "sample": "Click between open windows to switch tasks.", "type": "singleClick" }
+      ]
+    }
   ]
 };
 
-document.addEventListener("DOMContentLoaded",()=>{
-  const container=document.getElementById("accordion");
-  const mouseModal=document.getElementById("mouseModal");
-  const closeMouse=document.getElementById("closeMouse");
-  const mouseTitle=document.getElementById("mouseTitle");
-  const mouseInstruction=document.getElementById("mouseInstruction");
-  const practiceArea=document.getElementById("practiceArea");
-  const clicksEl=document.getElementById("clicks");
-  const hitsEl=document.getElementById("hits");
-  const accuracyEl=document.getElementById("mouseAccuracy");
-  const btnPrevMouse=document.getElementById("btnPrevMouse");
-  const btnNextMouse=document.getElementById("btnNextMouse");
-  const btnRestartMouse=document.getElementById("btnRestartMouse");
+document.addEventListener("DOMContentLoaded", () => {
+  const container = document.getElementById("accordion");
+  const mouseModal = document.getElementById("mouseModal");
+  const closeMouse = document.getElementById("closeMouse");
+  const mouseTitle = document.getElementById("mouseTitle");
+  const mouseInstruction = document.getElementById("mouseInstruction");
+  const practiceArea = document.getElementById("practiceArea");
+  const clicksEl = document.getElementById("clicks");
+  const hitsEl = document.getElementById("hits");
+  const accuracyEl = document.getElementById("mouseAccuracy");
+  const btnPrevMouse = document.getElementById("btnPrevMouse");
+  const btnNextMouse = document.getElementById("btnNextMouse");
+  const btnRestartMouse = document.getElementById("btnRestartMouse");
 
-  let currentTopics=[],currentIndex=0,clicks=0,hits=0;
+  let currentTopics = [];
+  let currentIndex = 0;
+  let clicks = 0, hits = 0;
+  let activePractice = null;
 
-  function resetStats(){ clicks=0; hits=0; clicksEl.textContent=0; hitsEl.textContent=0; accuracyEl.textContent=100; }
-  function updateStats(){ accuracyEl.textContent = clicks>0?Math.round((hits/clicks)*100):100; clicksEl.textContent=clicks; hitsEl.textContent=hits; }
+  function resetStats() {
+    clicks = 0; hits = 0;
+    clicksEl.textContent = clicks;
+    hitsEl.textContent = hits;
+    accuracyEl.textContent = 100;
+  }
 
-  // PRACTICE FUNCTIONS
-  function practiceClick(){
-    practiceArea.innerHTML='';
-    const target=document.createElement("div");
-    target.className="target"; target.textContent="🎯";
-    const areaRect=practiceArea.getBoundingClientRect();
-    const size=50;
-    target.style.left=Math.random()*(areaRect.width-size)+"px";
-    target.style.top=Math.random()*(areaRect.height-size)+"px";
+  function updateStats() {
+    clicksEl.textContent = clicks;
+    hitsEl.textContent = hits;
+    accuracyEl.textContent = clicks > 0 ? Math.round((hits / clicks) * 100) : 100;
+  }
+
+  function clearPracticeArea() {
+    practiceArea.innerHTML = '';
+    if(activePractice && activePractice.cleanup) activePractice.cleanup();
+    activePractice = null;
+  }
+
+  function spawnSingleClick() {
+    clearPracticeArea();
+    const target = document.createElement("div");
+    target.className = "target"; target.textContent="🎯";
     practiceArea.appendChild(target);
-    target.addEventListener("click",()=>{ hits++; clicks++; updateStats(); practiceClick(); });
-  }
-
-  function practiceDoubleClick(){
-    practiceArea.innerHTML='';
-    const target=document.createElement("div");
-    target.className="target"; target.textContent="🖱️";
-    const areaRect=practiceArea.getBoundingClientRect();
-    const size=50;
-    target.style.left=Math.random()*(areaRect.width-size)+"px";
-    target.style.top=Math.random()*(areaRect.height-size)+"px";
-    practiceArea.appendChild(target);
-    target.addEventListener("dblclick",()=>{ hits++; clicks++; updateStats(); practiceDoubleClick(); });
-    target.addEventListener("click",()=>{ clicks++; updateStats(); });
-  }
-
-  function practiceDragDrop(){
-    practiceArea.innerHTML='';
-    const obj=document.createElement("div");
-    obj.className="drag-object"; obj.textContent="Drag"; obj.style.left="20px"; obj.style.top="20px";
-    const drop=document.createElement("div");
-    drop.className="drop-zone"; drop.textContent="Drop"; drop.style.right="20px"; drop.style.bottom="20px";
-    practiceArea.appendChild(obj); practiceArea.appendChild(drop);
-
-    let offsetX,offsetY;
-    obj.onmousedown=function(e){
-      offsetX=e.offsetX; offsetY=e.offsetY; obj.style.cursor="grabbing";
-      document.onmousemove=function(e2){
-        let x = e2.clientX - practiceArea.getBoundingClientRect().left - offsetX;
-        let y = e2.clientY - practiceArea.getBoundingClientRect().top - offsetY;
-        // Keep object inside practice area
-        x = Math.max(0, Math.min(practiceArea.clientWidth - obj.offsetWidth, x));
-        y = Math.max(0, Math.min(practiceArea.clientHeight - obj.offsetHeight, y));
-        obj.style.left = x + "px";
-        obj.style.top = y + "px";
-      };
-    };
-    obj.onmouseup=function(e){
-      document.onmousemove=null;
-      obj.style.cursor="pointer";
-      clicks++;
-      // Check if dropped inside drop-zone
-      const objRect = obj.getBoundingClientRect();
-      const dropRect = drop.getBoundingClientRect();
-      if(!(objRect.right<dropRect.left || objRect.left>dropRect.right || objRect.bottom<dropRect.top || objRect.top>dropRect.bottom)){
-        hits++;
-        updateStats();
-        practiceDragDrop(); // respawn
-      } else {
-        updateStats();
-      }
-    };
-  }
-
-  function practiceClickHold(){
-    practiceArea.innerHTML='';
-    const holdTarget=document.createElement("div");
-    holdTarget.className="target"; holdTarget.textContent="🖐️";
-    const areaRect=practiceArea.getBoundingClientRect();
-    holdTarget.style.left=Math.random()*(areaRect.width-50)+"px";
-    holdTarget.style.top=Math.random()*(areaRect.height-50)+"px";
-    practiceArea.appendChild(holdTarget);
-
-    let holdTimer=null;
-    holdTarget.onmousedown=function(){
-      holdTimer=setTimeout(()=>{
-        hits++; clicks++; updateStats(); practiceClickHold();
-      },1000); // hold for 1 sec
-      clicks++;
+    const positions = [];
+    for(let i=0;i<5;i++){
+      positions.push({x:Math.random()*(practiceArea.clientWidth-50),y:Math.random()*(practiceArea.clientHeight-50)});
+    }
+    let idx=0;
+    function moveTarget(){
+      const pos = positions[idx%positions.length];
+      target.style.left = pos.x+"px";
+      target.style.top = pos.y+"px";
+    }
+    moveTarget();
+    target.addEventListener("click",()=>{
+      hits++; clicks++;
       updateStats();
-    };
-    holdTarget.onmouseup=function(){ clearTimeout(holdTimer); };
+      idx++;
+      moveTarget();
+    });
+    practiceArea.addEventListener("click",e=>{
+      if(e.target!==target) { clicks++; updateStats(); }
+    });
+    activePractice = {cleanup:()=>{practiceArea.removeEventListener("click",()=>{});}};
   }
 
-  function loadMouseTopic(topic){
-    mouseTitle.textContent = topic.dataset.title;
-    mouseInstruction.textContent = topic.dataset.sample;
+  function spawnDoubleClick() {
+    clearPracticeArea();
+    const target = document.createElement("div"); target.className="target"; target.textContent="🎯";
+    practiceArea.appendChild(target);
+    const positions = [];
+    for(let i=0;i<5;i++){
+      positions.push({x:Math.random()*(practiceArea.clientWidth-50),y:Math.random()*(practiceArea.clientHeight-50)});
+    }
+    let idx=0;
+    function moveTarget(){
+      const pos = positions[idx%positions.length];
+      target.style.left = pos.x+"px";
+      target.style.top = pos.y+"px";
+    }
+    moveTarget();
+    target.addEventListener("dblclick",()=>{
+      hits++; clicks++;
+      updateStats();
+      idx++;
+      moveTarget();
+    });
+    practiceArea.addEventListener("click",e=>{
+      if(e.target!==target) { clicks++; updateStats(); }
+    });
+    activePractice = {cleanup:()=>{practiceArea.removeEventListener("click",()=>{});}};
+  }
+
+  function spawnDragDrop() {
+    clearPracticeArea();
+    const box = document.createElement("div");
+    box.style.width="100px"; box.style.height="100px"; box.style.background="#f59e0b";
+    box.style.position="absolute"; box.style.left="50px"; box.style.top="50px";
+    box.textContent="Drag me"; box.classList.add("draggable");
+    practiceArea.appendChild(box);
+    let isDragging=false, offsetX=0, offsetY=0;
+    box.addEventListener("mousedown",e=>{
+      isDragging=true;
+      offsetX=e.offsetX; offsetY=e.offsetY;
+      box.style.cursor="grabbing";
+    });
+    document.addEventListener("mouseup",()=>{isDragging=false; box.style.cursor="grab";});
+    document.addEventListener("mousemove",e=>{
+      if(isDragging){
+        let x=e.clientX-practiceArea.getBoundingClientRect().left-offsetX;
+        let y=e.clientY-practiceArea.getBoundingClientRect().top-offsetY;
+        box.style.left=Math.max(0,Math.min(x,practiceArea.clientWidth-100))+"px";
+        box.style.top=Math.max(0,Math.min(y,practiceArea.clientHeight-100))+"px";
+      }
+    });
+    activePractice={cleanup:()=>{}};
+  }
+
+  const practiceMap = {
+    "singleClick": spawnSingleClick,
+    "doubleClick": spawnDoubleClick,
+    "dragDrop": spawnDragDrop,
+    // other types can be added here later
+  };
+
+  function loadMouseTopic(topicBtn){
+    mouseTitle.textContent=topicBtn.dataset.title;
+    mouseInstruction.textContent=topicBtn.dataset.sample;
     resetStats();
-    practiceArea.innerHTML='';
-    const t=topic.dataset.title.toLowerCase();
-    if(t.includes("drag")) practiceDragDrop();
-    else if(t.includes("double")) practiceDoubleClick();
-    else if(t.includes("hold")) practiceClickHold();
-    else practiceClick();
+    const type = topicBtn.dataset.type;
+    if(practiceMap[type]) practiceMap[type]();
     mouseModal.classList.remove("hidden");
   }
 
-  // RENDER ACCORDION
-  function renderAccordion(){
-    container.innerHTML='';
-    mouseData.years.forEach(year=>{
-      const card=document.createElement("div");
-      card.className="bg-white rounded-xl shadow-md overflow-hidden mb-4";
-      const header=document.createElement("button");
-      header.className="accordion-header w-full flex justify-between items-center px-6 py-4 text-lg font-semibold bg-blue-100 hover:bg-blue-200 transition";
-      header.innerHTML=`<span class="text-gray-900">${year.name}</span><span class="text-gray-900">+</span>`;
-      const body=document.createElement("div"); body.className="accordion-body bg-gray-50";
+  // Render accordion
+  mouseData.years.forEach(year=>{
+    const card = document.createElement("div");
+    card.className="bg-white rounded-xl shadow-md overflow-hidden mb-4";
 
-      body.innerHTML=year.topics.map(topic=>{
-        return `<div class="mb-2">
-          <button class="topicBtn block w-full text-left px-4 py-2 rounded-lg shadow text-gray-900 bg-white hover:shadow-md hover:bg-blue-50 transition flex items-center gap-2"
-            data-title="${topic.title}" data-sample="${topic.sample}">
-            🖱️ ${topic.title}
-          </button>
-        </div>`;
-      }).join('');
+    const header = document.createElement("button");
+    header.className="accordion-header w-full flex justify-between items-center px-6 py-4 text-lg font-semibold bg-blue-100 hover:bg-blue-200 transition";
+    header.innerHTML=`<span class="text-gray-900">${year.name}</span><span class="text-gray-900">+</span>`;
+    card.appendChild(header);
 
-      header.addEventListener("click",()=>{
-        const isOpen=body.style.maxHeight && body.style.maxHeight!="0px";
-        container.querySelectorAll(".accordion-body").forEach(el=>el.style.maxHeight=null);
-        container.querySelectorAll(".accordion-header span:last-child").forEach(icon=>icon.style.transform="rotate(0deg)");
-        if(!isOpen){
-          body.style.maxHeight=body.scrollHeight+"px";
-          header.querySelector("span:last-child").style.transform="rotate(45deg)";
-        }
-      });
+    const body = document.createElement("div"); body.className="accordion-body bg-gray-50";
+    body.innerHTML = year.topics.map(topic=>{
+      return `<li>
+        <button class="topicBtn block w-full text-left px-4 py-2 rounded-lg shadow text-gray-900 bg-white hover:shadow-md hover:bg-blue-50 transition flex items-center gap-2"
+          data-title="${topic.title}" data-sample="${topic.sample}" data-type="${topic.type}">
+          🖱️ ${topic.title}
+        </button>
+      </li>`;
+    }).join("");
+    const ul=document.createElement("ul"); ul.className="pl-6 space-y-2"; ul.innerHTML=body.innerHTML;
+    body.innerHTML=""; body.appendChild(ul);
+    card.appendChild(body);
 
-      card.appendChild(header); card.appendChild(body);
-      container.appendChild(card);
+    header.addEventListener("click",()=>{
+      const isOpen=body.style.maxHeight && body.style.maxHeight!=="0px";
+      container.querySelectorAll(".accordion-body").forEach(el=>el.style.maxHeight=null);
+      container.querySelectorAll(".accordion-header span:last-child").forEach(icon=>icon.style.transform="rotate(0deg)");
+      if(!isOpen){ body.style.maxHeight=body.scrollHeight+"px"; header.querySelector("span:last-child").style.transform="rotate(45deg)"; }
     });
 
-    // Topic click
-    container.addEventListener("click",e=>{
-      const btn=e.target.closest(".topicBtn"); if(!btn) return;
-      currentTopics=[...btn.closest(".accordion-body").querySelectorAll(".topicBtn")];
-      currentIndex=currentTopics.indexOf(btn);
-      loadMouseTopic(btn);
-    });
-  }
+    container.appendChild(card);
+  });
 
-  renderAccordion();
+  // Topic click
+  container.addEventListener("click",e=>{
+    const btn=e.target.closest(".topicBtn"); if(!btn) return;
+    currentTopics=[...btn.closest("ul").querySelectorAll(".topicBtn")];
+    currentIndex=currentTopics.indexOf(btn);
+    loadMouseTopic(btn);
+  });
 
-  // NAVIGATION BUTTONS
   btnNextMouse.addEventListener("click",()=>{
-    if(currentIndex<currentTopics.length-1){ currentIndex++; loadMouseTopic(currentTopics[currentIndex]); }
+if(currentIndex < currentTopics.length - 1) {
+      currentIndex++;
+      loadMouseTopic(currentTopics[currentIndex]);
+    }
   });
-  btnPrevMouse.addEventListener("click",()=>{
-    if(currentIndex>0){ currentIndex--; loadMouseTopic(currentTopics[currentIndex]); }
-  });
-  btnRestartMouse.addEventListener("click",()=>{ if(currentTopics.length>0) loadMouseTopic(currentTopics[currentIndex]); });
-  closeMouse.addEventListener("click",()=>{ mouseModal.classList.add("hidden"); practiceArea.innerHTML=''; });
 
-  // Clicks outside target count as miss
-  practiceArea.addEventListener("click",e=>{ if(!e.target.classList.contains("target") && !e.target.classList.contains("drag-object")){ clicks++; updateStats(); } });
+  btnPrevMouse.addEventListener("click", () => {
+    if(currentIndex > 0) {
+      currentIndex--;
+      loadMouseTopic(currentTopics[currentIndex]);
+    }
+  });
+
+  btnRestartMouse.addEventListener("click", () => {
+    if(currentTopics.length > 0) {
+      loadMouseTopic(currentTopics[currentIndex]);
+    }
+  });
+
+  closeMouse.addEventListener("click", () => {
+    mouseModal.classList.add("hidden");
+    clearPracticeArea();
+  });
+
 });
 </script>
 </body>
 </html>
-      
 
-        
+
+  
+    
+
+    
