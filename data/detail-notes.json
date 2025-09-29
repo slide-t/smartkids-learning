@@ -1,135 +1,129 @@
 {
   "lessons": [
     {
-      "id": "keyboard",
-      "title": "Computer Keyboard",
-      "topics": [
-        { "id": "keyboard_definition", "title": "What is a Keyboard?", "content": "A keyboard is an input device used to type letters, numbers, and commands into a computer." },
-        { "id": "keyboard_layout", "title": "Keyboard Layout", "content": "Most keyboards use the QWERTY layout. Keys are grouped into letters, numbers, function keys, navigation keys, and special keys." },
-        { "id": "categories_of_keys", "title": "Categories of Keys", "content": "Keys include: Alphanumeric (letters/numbers), Function keys (F1–F12), Control keys (Ctrl, Alt, Esc), Navigation (Arrows, Home, End), Numeric keypad, and Special keys like Enter, Shift, Spacebar." },
-        { "id": "typing_skills", "title": "Typing Position", "content": "Place fingers on the home row (ASDF JKL;). Sit upright, wrists straight, and type without looking at the keyboard." },
-        { "id": "typing_practice", "title": "Typing Skills Practice", "content": "Start with letters, then words, then sentences. Daily practice improves speed and accuracy." },
-        { "id": "function_keys", "title": "Function Keys", "content": "F1 opens Help, F2 renames, F5 refreshes, F11 toggles full screen, etc." },
-        { "id": "keyboard_shortcuts", "title": "Keyboard Shortcuts", "content": "Examples: Ctrl + C (Copy), Ctrl + V (Paste), Ctrl + Z (Undo), Alt + Tab (Switch windows)." },
-        { "id": "numeric_keys", "title": "Numeric and Symbol Keys", "content": "The number row and numeric keypad are used for digits, symbols (!, @, #), and calculations." }
-      ]
+      "id": "keyboard_definition",
+      "title": "What is a Keyboard?",
+      "content": "A keyboard is an input device used to type letters, numbers, and commands into a computer. <br><br>👉 It allows users to interact with programs and enter text. <br><br><img src='images/keyboard.png' alt='Keyboard' class='w-64 mt-2 rounded shadow'>"
     },
     {
-      "id": "mouse",
-      "title": "Computer Mouse",
-      "topics": [
-        { "id": "mouse_definition", "title": "What is a Mouse?", "content": "A mouse is an input device that moves a pointer on the screen and helps interact with programs." },
-        { "id": "types_of_mouse", "title": "Types of Mouse", "content": "Mechanical (ball), Optical (light sensor), Wireless (Bluetooth/USB), Touchpad (on laptops)." },
-        { "id": "mouse_buttons", "title": "Mouse Buttons", "content": "Left button (select, click), Right button (context menu), Middle button/scroll wheel (scroll or open links in new tab)." },
-        { "id": "mouse_actions", "title": "Mouse Actions", "content": "Click (select), Double-click (open), Right-click (options), Drag-and-drop (move items), Scrolling (move page)." },
-        { "id": "drag_drop", "title": "Drag and Drop", "content": "Click, hold, and move an item, then release it to drop." },
-        { "id": "scrolling", "title": "Scrolling", "content": "Use the scroll wheel to move up/down a page or zoom in some apps." },
-        { "id": "mouse_practice", "title": "Mouse Practice", "content": "Games and exercises like painting, dragging shapes, and clicking targets improve mouse control." }
-      ]
+      "id": "keyboard_layout",
+      "title": "Keyboard Layout",
+      "content": "Most keyboards use the QWERTY layout. Keys are grouped into letters, numbers, function keys, navigation keys, and special keys. <br><br>👉 Standard layout helps speed and accuracy.<br><br><img src='images/keyboard_layout.png' alt='Keyboard Layout' class='w-64 mt-2 rounded shadow'>"
     },
     {
-      "id": "hardware",
-      "title": "Computer Hardware",
-      "topics": [
-        { "id": "hardware_definition", "title": "Definition of Hardware", "content": "Hardware is the physical part of a computer that you can touch." },
-        { "id": "hardware_examples", "title": "Examples of Hardware", "content": "CPU, Monitor, Keyboard, Mouse, Printer, Scanner, USB drives." },
-        { "id": "input_devices", "title": "Input Devices", "content": "Devices used to put data into the computer: keyboard, mouse, microphone, camera." },
-        { "id": "output_devices", "title": "Output Devices", "content": "Devices used to get results from the computer: monitor, speakers, printer." },
-        { "id": "storage_devices", "title": "Storage Devices", "content": "Hard drives, SSDs, Flash drives, CDs/DVDs, Memory cards." },
-        { "id": "cpu_memory", "title": "CPU and Memory", "content": "The CPU is the brain of the computer; RAM stores data temporarily for fast use." }
-      ]
+      "id": "categories_of_keys",
+      "title": "Categories of Keys",
+      "content": "Keyboard keys are categorized as: <br>• Alphanumeric keys (letters and numbers)<br>• Function keys (F1–F12)<br>• Control keys (Ctrl, Alt, Esc)<br>• Navigation keys (Arrows, Home, End)<br>• Numeric keypad<br>• Special keys (Enter, Shift, Spacebar)<br><br><img src='images/keyboard_categories.png' alt='Keyboard Categories' class='w-64 mt-2 rounded shadow'>"
+    },
+    {
+      "id": "typing_skills",
+      "title": "How to Use the Keyboard for Typing",
+      "content": "Place your fingers on the home row (A, S, D, F for left hand, J, K, L, ; for right hand). <br>👉 Keep thumbs on the spacebar. <br>👉 Use proper finger placement to increase speed and accuracy.<br><br><img src='images/typing_skills.png' alt='Typing Skills' class='w-64 mt-2 rounded shadow'>"
+    },
+    {
+      "id": "function_keys",
+      "title": "Function Keys (F1–F12)",
+      "content": "Function keys perform special actions depending on the program. <br>👉 F1 = Help <br>👉 F2 = Rename <br>👉 F5 = Refresh <br>… etc.<br><br><img src='images/function_keys.png' alt='Function Keys' class='w-64 mt-2 rounded shadow'>"
+    },
+    {
+      "id": "shortcuts",
+      "title": "Keyboard Shortcuts",
+      "content": "Shortcuts help work faster. <br>👉 Ctrl + C = Copy<br>👉 Ctrl + V = Paste<br>👉 Ctrl + Z = Undo<br>👉 Ctrl + S = Save<br><br><img src='images/keyboard_shortcuts.png' alt='Keyboard Shortcuts' class='w-64 mt-2 rounded shadow'>"
+    },
+    {
+      "id": "numeric_keys",
+      "title": "Numeric and Symbol Keys",
+      "content": "Numeric keys allow typing numbers; symbol keys allow punctuation and other characters. <br>👉 Use Shift + number keys for symbols.<br><br><img src='images/keyboard_numeric.png' alt='Numeric Keys' class='w-64 mt-2 rounded shadow'>"
+    },
+    {
+      "id": "mouse_definition",
+      "title": "What is a Mouse?",
+      "content": "A mouse is a pointing device used to interact with items on the screen. <br><br>👉 Move pointer, click, drag, scroll.<br><br><img src='images/mouse.png' alt='Computer Mouse' class='w-64 mt-2 rounded shadow'>"
+    },
+    {
+      "id": "types_of_mouse",
+      "title": "Types of Mouse",
+      "content": "Types include: <br>• Optical Mouse <br>• Wireless Mouse <br>• Trackball Mouse <br>• Gaming Mouse<br><br><img src='images/mouse_types.png' alt='Types of Mouse' class='w-64 mt-2 rounded shadow'>"
+    },
+    {
+      "id": "mouse_buttons",
+      "title": "Mouse Buttons and Their Uses",
+      "content": "A mouse typically has: <br>• Left button – select items <br>• Right button – context menu <br>• Scroll wheel – move up/down <br>• Additional buttons for gaming or shortcuts<br><br><img src='images/mouse_buttons.png' alt='Mouse Buttons' class='w-64 mt-2 rounded shadow'>"
+    },
+    {
+      "id": "mouse_actions",
+      "title": "Mouse Actions",
+      "content": "Mouse actions include: <br>• Single click – select <br>• Double click – open <br>• Drag and drop – move items <br>• Scroll – navigate content <br>• Right click – context menu<br><br><img src='images/mouse_actions.png' alt='Mouse Actions' class='w-64 mt-2 rounded shadow'>"
+    },
+    {
+      "id": "drag_drop",
+      "title": "Drag and Drop",
+      "content": "Click and hold the mouse button to move an object to a new location. <br><br>👉 Useful for moving files, icons, or shapes.<br><br><img src='images/drag_drop.png' alt='Drag and Drop' class='w-64 mt-2 rounded shadow'>"
+    },
+    {
+      "id": "scrolling",
+      "title": "Scrolling with the Mouse",
+      "content": "Use the scroll wheel or trackpad to move up and down a page. <br><br>👉 Scrolling helps navigate long documents or web pages.<br><br><img src='images/scrolling.png' alt='Scrolling' class='w-64 mt-2 rounded shadow'>"
+    },
+    {
+      "id": "mouse_practice",
+      "title": "Mouse Practice Activities",
+      "content": "Practice activities include clicking on targets, dragging objects, and scrolling lists. <br><br>👉 Start with simple clicks, then drag-and-drop exercises.<br><br><img src='images/mouse_practice.png' alt='Mouse Practice' class='w-64 mt-2 rounded shadow'>"
+    },
+    {
+      "id": "what_is_computer",
+      "title": "What is a Computer?",
+      "content": "A computer is an electronic device that processes data and performs tasks according to instructions. <br><br><img src='images/computer.png' alt='Computer' class='w-64 mt-2 rounded shadow'>"
+    },
+    {
+      "id": "parts_of_computer",
+      "title": "Parts of a Computer",
+      "content": "Main parts: <br>• CPU <br>• Monitor <br>• Keyboard <br>• Mouse <br>• Storage <br>• Speakers<br><br><img src='images/computer_parts.png' alt='Computer Parts' class='w-64 mt-2 rounded shadow'>"
+    },
+    {
+      "id": "uses_of_computer",
+      "title": "Uses of a Computer",
+      "content": "Computers are used for: <br>• Education <br>• Gaming <br>• Office Work <br>• Communication <br>• Research<br><br><img src='images/computer_uses.png' alt='Uses of Computer' class='w-64 mt-2 rounded shadow'>"
+    },
+    {
+      "id": "safe_computer_use",
+      "title": "Safe Use of Computers",
+      "content": "Always follow safety guidelines: <br>• Keep screen at eye level <br>• Avoid long periods without breaks <br>• Use strong passwords <br>• Ask adults before downloading<br><br><img src='images/safe_use.png' alt='Safe Use' class='w-64 mt-2 rounded shadow'>"
+    },
+    {
+      "id": "introduction_to_coding",
+      "title": "Introduction to Coding",
+      "content": "Coding is giving instructions to a computer to perform tasks. <br><br>👉 Start with simple block coding or Scratch.<br><br><img src='images/coding.png' alt='Coding' class='w-64 mt-2 rounded shadow'>"
+    },
+    {
+      "id": "scratch_basics",
+      "title": "Scratch and Block Coding",
+      "content": "Scratch uses visual blocks to teach coding logic to kids. <br><br>👉 Drag and drop blocks to make characters move or perform actions.<br><br><img src='images/scratch.png' alt='Scratch Coding' class='w-64 mt-2 rounded shadow'>"
+    },
+    {
+      "id": "algorithms_for_kids",
+      "title": "Algorithms for Kids",
+      "content": "Algorithms are step-by-step instructions to solve a problem. <br><br>👉 Example: steps to make a sandwich, stepwise movement in games.<br><br><img src='images/algorithms.png' alt='Algorithms' class='w-64 mt-2 rounded shadow'>"
+    },
+    {
+      "id": "internet_basics",
+      "title": "Introduction to the Internet",
+      "content": "The internet connects computers worldwide. <br><br>👉 Use a browser safely. <br>👉 Search information, watch videos, and communicate. <br><br><img src='images/internet.png' alt='Internet' class='w-64 mt-2 rounded shadow'>"
     },
     {
       "id": "operating_systems",
       "title": "Operating Systems",
-      "topics": [
-        { "id": "os_definition", "title": "Definition of OS", "content": "An operating system is the main software that manages computer hardware and software." },
-        { "id": "os_types", "title": "Types of OS", "content": "Windows, macOS, Linux, Android, iOS." },
-        { "id": "os_functions", "title": "Functions of OS", "content": "File management, running apps, controlling input/output devices, managing memory and security." },
-        { "id": "os_installation", "title": "Installing an OS", "content": "Boot with installation media, follow setup, format drives, and install drivers." },
-        { "id": "os_user_accounts", "title": "User Accounts", "content": "OS allows multiple users with different profiles and passwords." }
-      ]
+      "content": "An operating system (OS) manages hardware and software. <br><br>Types: Windows, macOS, Linux. <br>👉 Guides how programs run.<br><br><img src='images/os.png' alt='Operating System' class='w-64 mt-2 rounded shadow'>"
     },
     {
-      "id": "software",
-      "title": "Computer Software",
-      "topics": [
-        { "id": "software_definition", "title": "Definition of Software", "content": "Software is a set of instructions that tell the computer what to do." },
-        { "id": "system_software", "title": "System Software", "content": "Includes operating systems and drivers." },
-        { "id": "application_software", "title": "Application Software", "content": "Programs like Microsoft Word, games, browsers, media players." },
-        { "id": "security_software", "title": "Security Software", "content": "Antivirus, firewalls, and antispyware protect the computer from threats." },
-        { "id": "utility_software", "title": "Utility Software", "content": "Helps with maintenance: disk cleaners, backup tools, file compressors." }
-      ]
+      "id": "types_of_software",
+      "title": "Types of Software",
+      "content": "Software types: <br>• System Software <br>• Application Software <br>• Security Software <br>• Productivity Software (Word, Excel, Access)<br><br><img src='images/software.png' alt='Software Types' class='w-64 mt-2 rounded shadow'>"
     },
     {
       "id": "microsoft_office",
-      "title": "Microsoft Office Suite",
-      "topics": [
-        { "id": "ms_word", "title": "Microsoft Word", "content": "A word processor for typing and editing documents." },
-        { "id": "ms_excel", "title": "Microsoft Excel", "content": "Used for tables, charts, and calculations." },
-        { "id": "ms_powerpoint", "title": "Microsoft PowerPoint", "content": "Used for creating slides and presentations." },
-        { "id": "ms_access", "title": "Microsoft Access", "content": "Used for managing data with databases." },
-        { "id": "ms_outlook", "title": "Other Tools", "content": "Outlook (emails), Publisher (designs)." }
-      ]
-    },
-    {
-      "id": "internet",
-      "title": "Internet and the Web",
-      "topics": [
-        { "id": "internet_definition", "title": "What is the Internet?", "content": "The internet is a global network that connects millions of computers worldwide." },
-        { "id": "internet_uses", "title": "Uses of Internet", "content": "Education, entertainment, communication, shopping, and research." },
-        { "id": "web_browsers", "title": "Web Browsers", "content": "Examples: Chrome, Firefox, Safari, Edge." },
-        { "id": "search_engines", "title": "Search Engines", "content": "Examples: Google, Bing, Yahoo. Used to find information." },
-        { "id": "email_basics", "title": "Email Basics", "content": "Electronic mail is used for sending and receiving messages." },
-        { "id": "social_media", "title": "Social Media", "content": "Platforms like Facebook, WhatsApp, TikTok, and YouTube allow people to connect and share." },
-        { "id": "safe_internet_use", "title": "Safe Internet Use", "content": "Do not share personal details, avoid strangers, use antivirus, and ask adults for help." }
-      ]
-    },
-    {
-      "id": "cybersecurity",
-      "title": "Cyber Safety",
-      "topics": [
-        { "id": "passwords", "title": "Passwords", "content": "Use strong, unique passwords that mix letters, numbers, and symbols." },
-        { "id": "safe_browsing", "title": "Safe Browsing", "content": "Avoid unknown websites and do not click on suspicious links." },
-        { "id": "email_safety", "title": "Email Safety", "content": "Never open unknown attachments. Watch out for scams." },
-        { "id": "digital_etiquette", "title": "Digital Etiquette", "content": "Be polite online, respect others, and avoid cyberbullying." },
-        { "id": "protecting_devices", "title": "Protecting Devices", "content": "Install antivirus and keep systems updated." }
-      ]
-    },
-    {
-      "id": "file_management",
-      "title": "File and Folder Management",
-      "topics": [
-        { "id": "file_definition", "title": "What is a File?", "content": "A file stores information like text, pictures, or music." },
-        { "id": "folder_definition", "title": "What is a Folder?", "content": "A folder is used to organize files." },
-        { "id": "file_extensions", "title": "File Extensions", "content": ".docx (Word), .xlsx (Excel), .jpg (Image), .mp3 (Audio)." },
-        { "id": "saving_files", "title": "Saving Files", "content": "Save files with proper names in correct folders." },
-        { "id": "copy_cut_paste", "title": "Copy, Cut, Paste", "content": "Helps move or duplicate files easily." },
-        { "id": "file_backup", "title": "File Backup", "content": "Keep copies of important files on USB or cloud storage." }
-      ]
-    },
-    {
-      "id": "coding",
-      "title": "Introduction to Coding",
-      "topics": [
-        { "id": "what_is_coding", "title": "What is Coding?", "content": "Coding is writing instructions for computers to follow." },
-        { "id": "why_learn_coding", "title": "Why Learn Coding?", "content": "It helps problem-solving, logical thinking, and creativity." },
-        { "id": "block_coding", "title": "Block Coding", "content": "Scratch and Blockly use blocks instead of text." },
-        { "id": "first_scratch_project", "title": "First Scratch Project", "content": "Make a character move, jump, or talk." },
-        { "id": "intro_python", "title": "Introduction to Python", "content": "Python uses text commands. Example: print('Hello, World!')." },
-        { "id": "algorithms_for_kids", "title": "Algorithms for Kids", "content": "An algorithm is a step-by-step plan to solve a problem." }
-      ]
-    },
-    {
-      "id": "multimedia",
-      "title": "Multimedia Basics",
-      "topics": [
-        { "id": "multimedia_definition", "title": "What is Multimedia?", "content": "Multimedia combines text, images, audio, and video." },
-        { "id": "image_files", "title": "Image Files", "content": "JPEG, PNG, GIF formats are used for pictures." },
-        { "id": "audio_files", "title": "Audio Files", "content": "MP3, WAV are used for sound recordings and music." },
-        { "id": "video_files", "title": "Video Files", "content": "MP4, AVI are used for movies and lessons." },
-        { "id": "basic_editing", "title": "Basic Editing", "content": "Kids can use Paint, Canva, or simple editors to edit pictures and videos." }
-      ]
+      "title": "Microsoft Office Basics",
+      "content": "Microsoft Office includes Word, Excel, PowerPoint, and Access. <br><br>👉 Word: Documents <br>👉 Excel: Spreadsheets <br>👉 PowerPoint: Presentations <br>👉 Access: Databases<br><br><img src='images/office.png' alt='Microsoft Office' class='w-64 mt-2 rounded shadow'>"
     }
   ]
 }
