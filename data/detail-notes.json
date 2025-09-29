@@ -1,5 +1,5 @@
 {
-  "lessons:" = [
+  "lessons": = [
   {
     "id": "keyboard_definition",
     "title": "What is a Computer Keyboard?",
@@ -56,3 +56,4 @@
     "content": "Shortcuts help you work faster. <br><br>👉 **Ctrl + C** = Copy <br>👉 **Ctrl + V** = Paste <br>👉 **Ctrl + X** = Cut <br>👉 **Ctrl + Z** = Undo <br>👉 **Ctrl + S** = Save <br><br>Practice shortcuts to save time while working.<br><br><img src='images/keyboard_shortcuts.png' alt='Keyboard Shortcuts' class='w-64 mt-2 rounded shadow'>"
   }
 ]
+}
