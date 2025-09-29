@@ -4,6 +4,12 @@
       "id": "keyboard",
       "name": "Computer Keyboard",
       "topics": [
+        { "id": "keyboard_definition", "title": "What is a Computer Keyboard?" },
+        { "id": "keyboard_layout", "title": "Layout of the Keyboard" },
+        { "id": "categories_of_keys", "title": "Categories of Keys" },
+        { "id": "typing_skills", "title": "How to Use the Keyboard for Typing" },
+        { "id": "function_keys", "title": "Function Keys (F1–F12)" },
+        { "id": "numeric_keys", "title": "Numeric and Symbol Keys" },
         { "id": "keyboard_home_row", "title": "Home Row Keys" },
         { "id": "keyboard_top_row", "title": "Top Row Keys" },
         { "id": "keyboard_bottom_row", "title": "Bottom Row Keys" },
@@ -15,17 +21,85 @@
       "id": "mouse",
       "name": "Computer Mouse",
       "topics": [
+        { "id": "mouse_definition", "title": "What is a Computer Mouse?" },
+        { "id": "types_of_mouse", "title": "Types of Computer Mouse" },
+        { "id": "mouse_buttons", "title": "Mouse Buttons and Their Uses" },
+        { "id": "mouse_actions", "title": "Mouse Actions" },
+        { "id": "drag_drop", "title": "Drag and Drop" },
+        { "id": "scrolling", "title": "Scrolling with the Mouse" },
         { "id": "mouse_clicking", "title": "Clicking Basics" },
         { "id": "mouse_dragging", "title": "Clicking and Dragging" },
-        { "id": "mouse_precision", "title": "High-Speed Precision Tasks" }
+        { "id": "mouse_precision", "title": "High-Speed Precision Tasks" },
+        { "id": "mouse_practice", "title": "Mouse Practice Activities" }
       ]
     },
     {
       "id": "general_ict",
       "name": "General ICT for Kids",
       "topics": [
+        { "id": "what_is_computer", "title": "What is a Computer?" },
+        { "id": "parts_of_computer", "title": "Parts of a Computer" },
+        { "id": "uses_of_computer", "title": "Uses of a Computer" },
+        { "id": "safe_computer_use", "title": "Safe Use of Computers" },
+        { "id": "introduction_to_coding", "title": "Introduction to Coding" },
+        { "id": "scratch_basics", "title": "Scratch and Block Coding" },
+        { "id": "algorithms_for_kids", "title": "Algorithms for Kids" },
+        { "id": "internet_basics", "title": "Introduction to the Internet" },
         { "id": "ict_files", "title": "Working with Files" },
         { "id": "ict_internet", "title": "Using the Internet" }
+      ]
+    },
+    {
+      "id": "operating_systems",
+      "name": "Operating Systems",
+      "topics": [
+        { "id": "os_definition", "title": "What is an Operating System?" },
+        { "id": "os_types", "title": "Types of Operating Systems (Windows, Mac, Linux)" },
+        { "id": "os_installation", "title": "How to Install an Operating System" },
+        { "id": "os_functions", "title": "Functions of an Operating System" }
+      ]
+    },
+    {
+      "id": "software",
+      "name": "Computer Software",
+      "topics": [
+        { "id": "software_definition", "title": "What is Computer Software?" },
+        { "id": "software_types", "title": "Types of Software (System, Application, Utility)" },
+        { "id": "security_software", "title": "Security Software (Antivirus, Firewalls)" },
+        { "id": "productivity_software", "title": "Productivity Software (Office, Browsers, Tools)" }
+      ]
+    },
+    {
+      "id": "microsoft_office",
+      "name": "Microsoft Office Tools",
+      "topics": [
+        { "id": "ms_word", "title": "Microsoft Word - Writing and Formatting" },
+        { "id": "ms_excel", "title": "Microsoft Excel - Spreadsheets and Charts" },
+        { "id": "ms_powerpoint", "title": "Microsoft PowerPoint - Presentations" },
+        { "id": "ms_access", "title": "Microsoft Access - Databases" },
+        { "id": "ms_outlook", "title": "Microsoft Outlook - Emails and Calendars" }
+      ]
+    },
+    {
+      "id": "internet_and_safety",
+      "name": "Internet and Online Safety",
+      "topics": [
+        { "id": "web_browsers", "title": "Web Browsers and Search Engines" },
+        { "id": "email_basics", "title": "Email Basics" },
+        { "id": "social_media", "title": "Introduction to Social Media" },
+        { "id": "cybersecurity", "title": "Cybersecurity for Kids" },
+        { "id": "online_safety_rules", "title": "Rules for Safe Internet Use" }
+      ]
+    },
+    {
+      "id": "coding_basics",
+      "name": "Coding Basics",
+      "topics": [
+        { "id": "what_is_coding", "title": "What is Coding?" },
+        { "id": "coding_languages", "title": "Programming Languages for Kids" },
+        { "id": "block_coding", "title": "Block Coding with Scratch" },
+        { "id": "text_coding", "title": "Introduction to Text-Based Coding" },
+        { "id": "coding_projects", "title": "Simple Coding Projects for Kids" }
       ]
     }
   ]
