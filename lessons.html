@@ -9,11 +9,125 @@
 <body class="bg-gray-50 font-sans">
 
   <div class="max-w-4xl mx-auto py-8 px-4">
-    <h1 class="text-3xl font-bold text-blue-700 mb-6 text-center">Computer Lessons</h1>
+    <h1 class="text-3xl font-bold text-blue-700 mb-4 text-center">Computer Lessons</h1>
+
+    <!-- Search Bar -->
+    <div class="mb-6 text-center">
+      <input id="searchInput" type="text" placeholder="Search lessons or topics..."
+        class="w-full sm:w-2/3 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
+      >
+    </div>
 
     <!-- Topics container -->
     <div id="lessonsContainer" class="space-y-6"></div>
-<!-- Back buttons -->
+
+    <!-- Back buttons -->
+    <div class="mt-8 flex justify-center space-x-4">
+      <a href="https://slide-t.github.io/smartkids-learning/classes.html" 
+         class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">
+        ⬅ Keyboard Drill
+      </a>
+      <a href="https://slide-t.github.io/smartkids-learning/mouse.html" 
+         class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">
+        ⬅ Mouse Practice 
+      </a>
+    </div>
+  </div>
+    
+<script>
+let allCategories = [];
+
+async function loadLessons() {
+  const container = document.getElementById('lessonsContainer');
+  const searchInput = document.getElementById('searchInput');
+
+  container.innerHTML = "<p class='text-gray-500'>Loading lessons...</p>";
+
+  try {
+    const res = await fetch('data/lessons.json');
+    const data = await res.json();
+    allCategories = data.categories;
+
+    renderLessons(allCategories);
+
+    // Search event
+    searchInput.addEventListener('input', () => {
+      const query = searchInput.value.toLowerCase();
+      const filtered = allCategories.map(cat => {
+        const matchedTopics = cat.topics.filter(topic =>
+          topic.title.toLowerCase().includes(query) || cat.name.toLowerCase().includes(query)
+        );
+        return { ...cat, topics: matchedTopics };
+      }).filter(cat => cat.topics.length > 0);
+
+      renderLessons(filtered);
+    });
+
+  } catch (err) {
+    container.innerHTML = "<p class='text-red-600'>Error loading lessons file.</p>";
+    console.error(err);
+  }
+}
+
+// Function to render categories and topics
+function renderLessons(categories) {
+  const container = document.getElementById('lessonsContainer');
+  container.innerHTML = '';
+
+  categories.forEach(category => {
+    const catDiv = document.createElement('div');
+    catDiv.className = "bg-white p-4 rounded-lg shadow";
+
+    catDiv.innerHTML = `<h2 class="text-xl font-semibold text-blue-600 mb-3">${category.name}</h2>`;
+
+    const topicsGrid = document.createElement('div');
+    topicsGrid.className = "grid sm:grid-cols-2 gap-4";
+
+    category.topics.forEach(topic => {
+      const topicDiv = document.createElement('div');
+      topicDiv.className = "p-4 bg-blue-50 rounded-lg shadow hover:bg-blue-100 transition";
+
+      topicDiv.innerHTML = `
+        <h3 class="text-lg font-medium text-blue-800">${topic.title}</h3>
+        <a href="detail-notes.html?id=${encodeURIComponent(topic.id)}" 
+           class="mt-2 inline-block text-sm text-blue-700 hover:underline">
+           Read Lesson →
+        </a>
+      `;
+      topicsGrid.appendChild(topicDiv);
+    });
+
+    catDiv.appendChild(topicsGrid);
+    container.appendChild(catDiv);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', loadLessons);
+</script>
+
+</body>
+</html>
+
+
+
+
+<!--
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartKids Lessons</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 font-sans">
+
+  <div class="max-w-4xl mx-auto py-8 px-4">
+    <h1 class="text-3xl font-bold text-blue-700 mb-6 text-center">Computer Lessons</h1>
+
+    <!-- Topics container --
+    <div id="lessonsContainer" class="space-y-6"></div>
+<!-- Back buttons --
 <div class="mt-8 flex justify-center space-x-4">
   <a href="https://slide-t.github.io/smartkids-learning/classes.html" 
      class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">
