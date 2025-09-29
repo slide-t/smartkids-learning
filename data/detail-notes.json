@@ -1,0 +1,27 @@
+[
+  {
+    "id": "define_keyboard",
+    "title": "What is a Computer Keyboard?",
+    "content": "A keyboard is an input device used to type letters, numbers, and commands into the computer.<br><br><img src='images/keyboard_basic.png' alt='Computer Keyboard' class='w-72 mt-3 rounded shadow'>"
+  },
+  {
+    "id": "keyboard_key_types",
+    "title": "Types of Keys on the Keyboard",
+    "content": "The keyboard has different groups of keys:<ul class='list-disc ml-6 mt-2'><li>Alphabet keys (A–Z)</li><li>Number keys (0–9)</li><li>Function keys (F1–F12)</li><li>Special keys (Enter, Shift, Spacebar, Ctrl, Alt, etc.)</li></ul><br><img src='images/keyboard_keys.png' alt='Types of Keys' class='w-80 mt-3 rounded shadow'>"
+  },
+  {
+    "id": "define_mouse",
+    "title": "What is a Computer Mouse?",
+    "content": "A mouse is an input device that helps move the pointer and select things on the screen.<br><br><img src='images/mouse_basic.png' alt='Computer Mouse' class='w-64 mt-3 rounded shadow'>"
+  },
+  {
+    "id": "mouse_actions",
+    "title": "Basic Mouse Actions",
+    "content": "The mouse is used in different ways:<ul class='list-disc ml-6 mt-2'><li><b>Single Click:</b> Select an item.</li><li><b>Double Click:</b> Open a file or folder.</li><li><b>Right Click:</b> Open a shortcut menu.</li><li><b>Drag and Drop:</b> Move objects around.</li></ul><br><img src='images/mouse_actions.png' alt='Mouse Actions' class='w-72 mt-3 rounded shadow'>"
+  },
+  {
+    "id": "coding_basics",
+    "title": "Introduction to Coding",
+    "content": "Coding is giving instructions to a computer using special languages. Kids can start with fun coding blocks like <b>Scratch</b> or simple <b>Python</b> commands.<br><br><img src='images/coding_blocks.png' alt='Coding Basics for Kids' class='w-80 mt-3 rounded shadow'>"
+  }
+]
