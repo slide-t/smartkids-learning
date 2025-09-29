@@ -73,8 +73,377 @@
       <div id="keyboard" class="p-2 bg-gray-200 rounded mt-4"></div>
     </div>
   </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  const container = document.getElementById("accordion");
+  const today = new Date();
+  const termUnlockDates = { 2: new Date("2026-01-04"), 3: new Date("2026-04-20") };
+
+  // Modal elements (keep the same IDs used in your HTML)
+  const tutorModal = document.getElementById("tutorModal");
+  const closeTutor = document.getElementById("closeTutor");
+  const lessonTitle = document.getElementById("lessonTitle");
+  const lessonText = document.getElementById("lessonText");
+  const typingArea = document.getElementById("typingArea");
+  const wpmEl = document.getElementById("wpm");
+  const errorsEl = document.getElementById("errors");
+  const accuracyEl = document.getElementById("accuracy");
+
+  const btnPrev = document.getElementById("btnPrev");
+  const btnNext = document.getElementById("btnNext");
+  const btnRestart = document.getElementById("btnRestart");
+  const keyboardContainer = document.getElementById("keyboard");
+
+  let sampleText = "";
+  let startTime = null;
+  let errors = 0;
+  let currentTopics = [];
+  let currentIndex = 0;
+
+  // Map punctuation/special characters to safe DOM id fragments
+  const punctuationIdMap = {
+    "!":"exclamation","@":"at","#":"hash","$":"dollar","%":"percent","^":"caret","&":"ampersand","*":"asterisk",
+    "(":"paren-left",")":"paren-right","-":"minus","_":"underscore","+":"plus","=":"equals",
+    "[":"bracket-left","]":"bracket-right","{":"brace-left","}":"brace-right",";":"semicolon",":":"colon",
+    "'":"quote","\"":"quote-double",",":"comma",".":"period","<":"less-than",">":"greater-than","/":"slash","?":"question",
+    "\\":"backslash","|":"pipe","`":"backtick","~":"tilde","%":"percent"
+  };
+
+  // A few named keys
+  const namedKeyMap = {
+    "backspace":"backspace","tab":"tab","capslock":"capslock","enter":"enter","shift":"shift",
+    "control":"control","alt":"alt","space":"space","escape":"escape"
+  };
+
+  // Full layouts (letters uses a QWERTY-style arrangement; specials shows common shifted symbols)
+  const layouts = {
+    letters: [
+      ["`","1","2","3","4","5","6","7","8","9","0","-","=","Backspace"],
+      ["Tab","Q","W","E","R","T","Y","U","I","O","P","[","]","\\"],
+      ["CapsLock","A","S","D","F","G","H","J","K","L",";","'","Enter"],
+      ["Shift","Z","X","C","V","B","N","M",",",".","/","Shift"],
+      ["Control","Alt","Space","Alt","Control"]
+    ],
+    specials: [
+      ["!","@","#","$","%","^","&","*","(",")","-","="],
+      ["[","]","{","}",";",":","'","\"",",",".","/","?"],
+      ["`","~","\\","|"]
+    ]
+  };
+
+  // utility: compute safe id fragment for a key label
+  function keyIdForLabel(label) {
+    if (!label) return "";
+    // exact named keys (Tab, Enter, etc.)
+    const lowLabel = String(label).toLowerCase();
+    if (namedKeyMap[lowLabel]) return namedKeyMap[lowLabel];
+    // whitespace / space
+    if (label === " " || lowLabel === "space") return "space";
+    // punctuation / special
+    if (punctuationIdMap[label]) return punctuationIdMap[label];
+    if (punctuationIdMap[lowLabel]) return punctuationIdMap[lowLabel];
+    // letter or number or word - normalize spaces
+    return lowLabel.replace(/\s+/g, "-");
+  }
+
+  // Render keyboard layout dynamically
+  function renderKeyboard(type = "letters") {
+    keyboardContainer.innerHTML = "";
+    const rows = layouts[type] || layouts.letters;
+    rows.forEach(row => {
+      const rowDiv = document.createElement("div");
+      rowDiv.className = "flex justify-center mb-1 gap-1";
+      row.forEach(keyLabel => {
+        const keyBtn = document.createElement("div");
+        keyBtn.className = "key px-3 py-2 rounded shadow text-center bg-gray-100 select-none";
+        // Show the label as-is (preserve case for visual clarity)
+        keyBtn.innerText = keyLabel;
+        const idFrag = keyIdForLabel(keyLabel);
+        keyBtn.id = "key-" + idFrag;
+        rowDiv.appendChild(keyBtn);
+      });
+      keyboardContainer.appendChild(rowDiv);
+    });
+  }
+
+  // reset highlights
+  function resetKeyboardHighlights() {
+    keyboardContainer.querySelectorAll(".key").forEach(k => {
+      k.classList.remove("highlight");
+      k.classList.remove("pressed");
+    });
+  }
+
+  // determine whether a character is alphabetic
+  function isAlphaChar(ch) {
+    return /^[A-Za-z]$/.test(ch);
+  }
+
+  // highlight the next required key; will auto-switch keyboard layout
+  function highlightNextKey(nextChar) {
+    resetKeyboardHighlights();
+    if (!nextChar) return;
+    // If nextChar is a space, show letters and highlight space
+    if (nextChar === " ") {
+      renderKeyboard("letters");
+      const el = document.getElementById("key-space") || document.getElementById("key-space");
+      if (el) el.classList.add("highlight");
+      return;
+    }
+
+    // choose layout
+    const alpha = isAlphaChar(nextChar);
+    renderKeyboard(alpha ? "letters" : "specials");
+
+    // uppercase? - highlight shift also
+    const isUpper = nextChar >= "A" && nextChar <= "Z";
+    const base = isUpper ? nextChar.toLowerCase() : nextChar;
+
+    const idFrag = keyIdForLabel(nextChar) || keyIdForLabel(base);
+    const keyEl = document.getElementById("key-" + idFrag);
+    if (keyEl) keyEl.classList.add("highlight");
+
+    if (isUpper) {
+      const shiftEl = document.getElementById("key-shift");
+      if (shiftEl) shiftEl.classList.add("highlight");
+    }
+  }
+
+  // render text area with highlights / current char marker
+  function renderHighlightedText(sample, typed) {
+    let result = "";
+    for (let i = 0; i < sample.length; i++) {
+      const ch = sample[i];
+      if (i < typed.length) {
+        if (typed[i] === ch) {
+          result += `<span class="text-green-600 underline">${escapeHtml(ch)}</span>`;
+        } else {
+          result += `<span class="text-red-600 underline">${escapeHtml(ch)}</span>`;
+        }
+      } else if (i === typed.length) {
+        result += `<span class="current underline">${escapeHtml(ch)}</span>`;
+      } else {
+        result += `<span class="text-gray-700">${escapeHtml(ch)}</span>`;
+      }
+    }
+    return result;
+  }
+
+  // small helper to avoid injecting raw HTML characters
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+  }
+
+  // Stats update
+  function updateStats(typed) {
+    if (!startTime && typed.length > 0) startTime = Date.now();
+    errors = 0;
+    for (let i = 0; i < typed.length; i++) {
+      if (typed[i] !== sampleText[i]) errors++;
+    }
+    const elapsedMinutes = startTime ? ((Date.now() - startTime) / 60000) : 0;
+    const words = typed.trim().split(/\s+/).filter(Boolean).length;
+    const wpm = elapsedMinutes > 0 ? Math.round(words / elapsedMinutes) : 0;
+    const accuracy = typed.length > 0 ? Math.max(0, Math.round(((typed.length - errors) / typed.length) * 100)) : 100;
+
+    wpmEl.textContent = wpm;
+    errorsEl.textContent = errors;
+    accuracyEl.textContent = accuracy;
+  }
+
+  // load a topic into the tutor
+  function loadTopic(topicBtn) {
+    lessonTitle.textContent = topicBtn.dataset.title || "Typing Tutor";
+
+    // sanitize sample: remove trailing commas, replace internal comma separators with spaces
+    sampleText = (topicBtn.dataset.sample || "")
+      .replace(/,\s*$/g, "")   // remove trailing commas
+      .replace(/,\s*/g, " ");  // convert commas to spaces
+
+    typingArea.value = "";
+    lessonText.innerHTML = renderHighlightedText(sampleText, "");
+    startTime = null;
+    errors = 0;
+    wpmEl.textContent = 0;
+    errorsEl.textContent = 0;
+    accuracyEl.textContent = 100;
+    tutorModal.classList.remove("hidden");
+    renderKeyboard("letters");
+    highlightNextKey(sampleText[0] || "");
+    // focus so typing works immediately
+    setTimeout(() => typingArea.focus(), 60);
+  }
+
+  // --- JSON + Accordion build (kept from your original structure) ---
+  try {
+    const res = await fetch("data/classes.json");
+    const data = await res.json();
+    const classes = Array.isArray(data) ? data : data.classes || [];
+
+    classes.forEach(cls => {
+      const card = document.createElement("div");
+      card.className = "bg-white rounded-xl shadow-md overflow-hidden mb-4";
+
+      const header = document.createElement("button");
+      header.className = "accordion-header w-full flex justify-between items-center px-6 py-4 text-lg font-semibold bg-blue-100 hover:bg-blue-200 transition";
+      header.innerHTML = `<span class="text-gray-900">${cls.name}</span><span class="text-gray-900">+</span>`;
+      card.appendChild(header);
+
+      const body = document.createElement("div");
+      body.className = "accordion-body bg-gray-50";
+
+      body.innerHTML = (cls.terms || []).map(term => {
+        const termUnlocked = term.number === 1 || today >= termUnlockDates[term.number];
+        return `
+          <div class="mb-4">
+            <h3 class="text-lg font-semibold text-blue-700 px-4 py-2">${term.title}</h3>
+            ${(term.categories || []).map(cat => `
+              <div class="ml-4 mb-2">
+                <h4 class="text-md font-semibold text-purple-600 px-3 py-1">${cat.name}</h4>
+                <ul class="space-y-2 pl-6">
+                  ${(cat.topics || []).map(topic => {
+                    const icon = cat.id === "mouse" ? "🖱️" : cat.id === "keyboard" ? "⌨️" : "📖";
+                    // note: we keep data-sample raw here, cleaning happens when topic loads
+                    return termUnlocked
+                      ? `<li>
+                          <button class="topicBtn block w-full text-left px-4 py-2 rounded-lg shadow text-gray-900 bg-white hover:shadow-md hover:bg-blue-50 transition flex items-center gap-2"
+                            data-title="${escapeHtml(topic.title)}"
+                            data-sample="${escapeHtml(topic.sample)}">
+                            <span>${icon}</span> ${escapeHtml(topic.title)}
+                          </button>
+                        </li>`
+                      : `<li><span class="block px-4 py-2 rounded-lg bg-gray-200 text-gray-500 cursor-not-allowed flex items-center gap-2">
+                          <span>${icon}</span> ${escapeHtml(topic.title)} (Locked)</span></li>`;
+                  }).join("")}
+                </ul>
+              </div>
+            `).join("")}
+          </div>`;
+      }).join("");
+
+      card.appendChild(body);
+
+      // Accordion toggle
+      header.addEventListener("click", () => {
+        const isOpen = body.style.maxHeight && body.style.maxHeight !== "0px";
+        container.querySelectorAll(".accordion-body").forEach(el => el.style.maxHeight = null);
+        container.querySelectorAll(".accordion-header span:last-child").forEach(icon => icon.style.transform = "rotate(0deg)");
+        if (!isOpen) {
+          body.style.maxHeight = body.scrollHeight + "px";
+          header.querySelector("span:last-child").style.transform = "rotate(45deg)";
+        }
+      });
+
+      container.appendChild(card);
+    });
+
+    // topic click handler (delegated)
+    container.addEventListener("click", e => {
+      const btn = e.target.closest(".topicBtn");
+      if (!btn) return;
+      currentTopics = [...btn.closest("ul").querySelectorAll(".topicBtn")];
+      currentIndex = currentTopics.indexOf(btn);
+      loadTopic(btn);
+    });
+
+  } catch (err) {
+    console.error("Error loading JSON:", err);
+    container.innerHTML = '<p class="text-red-500">⚠️ Failed to load class data.</p>';
+  }
+
+  // --- TYPING AREA input handling ---
+  typingArea.addEventListener("input", () => {
+    const typed = typingArea.value;
+    lessonText.innerHTML = renderHighlightedText(sampleText, typed);
+    updateStats(typed);
+    // highlight next
+    highlightNextKey(sampleText[typed.length] || "");
+  });
+
+  // Navigation buttons (Prev / Next / Restart)
+  btnNext.addEventListener("click", () => {
+    if (currentIndex < currentTopics.length - 1) {
+      currentIndex++;
+      loadTopic(currentTopics[currentIndex]);
+    }
+  });
+  btnPrev.addEventListener("click", () => {
+    if (currentIndex > 0) {
+      currentIndex--;
+      loadTopic(currentTopics[currentIndex]);
+    }
+  });
+  btnRestart.addEventListener("click", () => {
+    if (currentTopics.length > 0) {
+      loadTopic(currentTopics[currentIndex]);
+    }
+  });
+
+  closeTutor.addEventListener("click", () => {
+    tutorModal.classList.add("hidden");
+  });
+
+  // --- Physical-key press highlighting (handles Shift+digit -> punctuation like @) ---
+  function getIdFromEventKey(evKey) {
+    if (evKey === " " || evKey === "Spacebar" || evKey === "Space") return "space";
+    const low = String(evKey).toLowerCase();
+    if (namedKeyMap[low]) return namedKeyMap[low];
+    if (punctuationIdMap[evKey]) return punctuationIdMap[evKey]; // exact char (like '@')
+    if (punctuationIdMap[low]) return punctuationIdMap[low];
+    // alphanumeric
+    if (/^[a-z0-9]$/.test(low)) return low;
+    // fallback sanitize
+    return low.replace(/\W+/g, "-");
+  }
+
+  document.addEventListener("keydown", (e) => {
+    if (tutorModal.classList.contains("hidden")) return;
+    const evKey = e.key;
+    const idFrag = getIdFromEventKey(evKey);
+    // Ensure the correct layout is present for the pressed key
+    const shouldAlpha = isAlphaChar(evKey);
+    if (!document.getElementById("key-" + idFrag)) {
+      // switch layout so the key exists visually (use specials for punctuation)
+      renderKeyboard(shouldAlpha ? "letters" : "specials");
+      // small delay not strictly necessary; DOM rendering is synchronous here
+    }
+
+    const el = document.getElementById("key-" + idFrag);
+    if (el) {
+      el.classList.add("pressed");
+      setTimeout(() => el.classList.remove("pressed"), 150);
+    }
+
+    // if uppercase letter or shift pressed, flash shift key
+    const isUpper = typeof evKey === "string" && evKey.length === 1 && /[A-Z]/.test(evKey);
+    if (isUpper || e.shiftKey) {
+      const shiftEl = document.getElementById("key-shift");
+      if (shiftEl) {
+        shiftEl.classList.add("pressed");
+        setTimeout(() => shiftEl.classList.remove("pressed"), 150);
+      }
+    }
+  });
+
+  // Keep highlights for the next required key after keyup
+  document.addEventListener("keyup", (e) => {
+    if (tutorModal.classList.contains("hidden")) return;
+    const next = sampleText[typingArea.value.length] || "";
+    // small timeout to allow pressed->removed transition above finish
+    setTimeout(() => highlightNextKey(next), 40);
+  });
+
+  // Render initial keyboard to letters
+  renderKeyboard("letters");
+
+}); // DOMContentLoaded end
+</script>
   
-  <!-- Approved script -->
+  <!-- Approved script --
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   const container = document.getElementById("accordion");
