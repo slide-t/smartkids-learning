@@ -8,28 +8,31 @@
 </head>
 <body class="bg-gray-50 font-sans">
 
-  <div class="max-w-3xl mx-auto py-8 px-4">
-    <!-- Title -->
-    <h1 id="lessonTitle" class="text-3xl font-bold text-blue-700 mb-6">Loading...</h1>
+  <div class="max-w-4xl mx-auto py-8 px-4">
+    <h1 id="lessonTitle" class="text-3xl font-bold text-blue-700 mb-6 text-center">Loading...</h1>
 
-    <!-- Lesson content -->
-    <div id="lessonContent" class="p-6 bg-blue-50 rounded-xl shadow text-gray-800 leading-relaxed">
-      <p class="text-gray-500">Please wait, loading lesson content...</p>
+    <!-- Lesson content panel -->
+    <div id="lessonContent" class="p-6 bg-blue-50 rounded-lg shadow text-gray-800">
+      <p>Loading content...</p>
     </div>
 
-    <!-- Back button -->
-    <div class="mt-8 text-center">
-      <a href="lessons.html" 
+    <!-- Back buttons -->
+    <div class="mt-8 flex justify-center space-x-4">
+      <a href="https://slide-t.github.io/smartkids-learning/classes.html" 
          class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">
-        ⬅ Back to Lessons
+        ⬅ Keyboard Drill
+      </a>
+      <a href="https://slide-t.github.io/smartkids-learning/mouse.html" 
+         class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">
+        ⬅ Mouse Practice 
       </a>
     </div>
   </div>
 
 <script>
-function getQueryParam(param) {
+function getQueryParam(key) {
   const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get(param);
+  return urlParams.get(key);
 }
 
 async function loadLesson() {
@@ -38,8 +41,8 @@ async function loadLesson() {
   const contentEl = document.getElementById('lessonContent');
 
   if (!lessonId) {
-    titleEl.textContent = "Error";
-    contentEl.innerHTML = "<p class='text-red-600'>No lesson selected.</p>";
+    titleEl.textContent = "Error: Missing lesson ID";
+    contentEl.innerHTML = "<p class='text-red-600'>No lesson specified.</p>";
     return;
   }
 
@@ -49,23 +52,20 @@ async function loadLesson() {
 
     const lesson = data.find(l => l.id === lessonId);
 
-    if (!lesson) {
-      titleEl.textContent = "Not Found";
-      contentEl.innerHTML = "<p class='text-red-600'>Lesson not found in notes.</p>";
-      return;
+    if (lesson) {
+      titleEl.textContent = lesson.title;
+      contentEl.innerHTML = `
+        <div class="prose max-w-none">
+          ${lesson.content}
+        </div>
+      `;
+    } else {
+      titleEl.textContent = "Lesson Not Found";
+      contentEl.innerHTML = "<p class='text-red-600'>No content available for this lesson.</p>";
     }
-
-    titleEl.textContent = lesson.title;
-    contentEl.innerHTML = `
-      <div class="space-y-4">
-        <p>${lesson.content}</p>
-        ${lesson.image ? `<img src="${lesson.image}" alt="${lesson.title}" class="w-64 rounded shadow mt-4">` : ""}
-      </div>
-    `;
-
   } catch (err) {
-    titleEl.textContent = "Error";
-    contentEl.innerHTML = "<p class='text-red-600'>Could not load detail-notes.json.</p>";
+    titleEl.textContent = "Error Loading Lesson";
+    contentEl.innerHTML = "<p class='text-red-600'>Failed to load detail-notes.json</p>";
   }
 }
 
