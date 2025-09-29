@@ -20,11 +20,12 @@
     "title": "How to Use the Keyboard for Typing",
     "content": "Typing skills help you write quickly and accurately. <br><br>👉 Place your fingers on the **home row keys** (A, S, D, F for left hand, J, K, L, ; for right hand). <br>👉 Thumbs rest on the **spacebar**. <br>👉 Keep fingers curved and use the correct finger for each key. <br>👉 Practice improves speed and accuracy.<br><br><img src='images/typing_skills.png' alt='Typing Skills' class='w-64 mt-2 rounded shadow'>"
   },
-  {
-    "id": "function_keys",
-    "title": "Function Keys (F1–F12)",
-    "content": "Function keys are located at the top of the keyboard and perform special functions depending on the program. <br><br>👉 **F1**: Help <br>👉 **F2**: Rename <br>👉 **F3**: Search <br>👉 **F5**: Refresh <br>👉 **F12**: Save As (in many programs) <br><br>Some applications assign unique tasks to function keys. <br><br><img src='images/function_keys.png' alt='Function Keys' class='w-64 mt-2 rounded shadow'>"
-  },
+{
+  "id": "function_keys",
+  "title": "Function Keys (F1–F12)",
+  "content": "Function keys are located at the top of the keyboard and perform special functions depending on the program. <br><br>👉 **F1**: Help – opens help menu in most programs.<br>👉 **F2**: Rename – rename selected files or items.<br>👉 **F3**: Search – opens search function in many applications.<br>👉 **F4**: Address bar / Close window – Alt + F4 closes the current window.<br>👉 **F5**: Refresh – reloads the page or document.<br>👉 **F6**: Move cursor – cycles through elements in a window or browser.<br>👉 **F7**: Spell check – opens spelling and grammar check in Word.<br>👉 **F8**: Boot menu – used in some systems to access startup options.<br>👉 **F9**: Refresh document / Send & Receive email in Outlook.<br>👉 **F10**: Menu activation – activates the menu bar in many apps.<br>👉 **F11**: Full screen – toggles full-screen mode in browsers.<br>👉 **F12**: Save As – opens the Save As dialog in most programs.<br><br>Some applications assign unique tasks to function keys based on software design.<br><br><img src='images/function_keys.png' alt='Function Keys' class='w-64 mt-2 rounded shadow'>"
+},
+    
   {
     "id": "numeric_keys",
     "title": "Numeric and Symbol Keys",
