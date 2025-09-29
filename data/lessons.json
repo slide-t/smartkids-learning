@@ -1,0 +1,32 @@
+{
+  "categories": [
+    {
+      "id": "keyboard",
+      "name": "Computer Keyboard",
+      "topics": [
+        { "id": "keyboard_home_row", "title": "Home Row Keys" },
+        { "id": "keyboard_top_row", "title": "Top Row Keys" },
+        { "id": "keyboard_bottom_row", "title": "Bottom Row Keys" },
+        { "id": "keyboard_punctuation", "title": "Punctuation Keys" },
+        { "id": "keyboard_shortcuts", "title": "Keyboard Shortcuts" }
+      ]
+    },
+    {
+      "id": "mouse",
+      "name": "Computer Mouse",
+      "topics": [
+        { "id": "mouse_clicking", "title": "Clicking Basics" },
+        { "id": "mouse_dragging", "title": "Clicking and Dragging" },
+        { "id": "mouse_precision", "title": "High-Speed Precision Tasks" }
+      ]
+    },
+    {
+      "id": "general_ict",
+      "name": "General ICT for Kids",
+      "topics": [
+        { "id": "ict_files", "title": "Working with Files" },
+        { "id": "ict_internet", "title": "Using the Internet" }
+      ]
+    }
+  ]
+}
