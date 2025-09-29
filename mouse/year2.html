@@ -54,7 +54,177 @@
     </div>
   </div>
 </main>
+<script>
+// Accordion toggle
+document.querySelectorAll('.accordion-header').forEach(header => {
+  header.addEventListener('click', () => {
+    const body = header.nextElementSibling;
+    const open = body.style.maxHeight && body.style.maxHeight !== '0px';
+    document.querySelectorAll('.accordion-body').forEach(b => b.style.maxHeight = null);
+    document.querySelectorAll('.accordion-header span').forEach(s => s.style.transform = 'rotate(0deg)');
+    if(!open){
+      body.style.maxHeight = body.scrollHeight + 'px';
+      header.querySelector('span').style.transform = 'rotate(45deg)';
+    }
+  });
+});
 
+// Year 2: Drag & Drop
+function startDragDrop(){
+  const area = document.getElementById('dragDropArea');
+  area.innerHTML = '';
+
+  const dropzone = document.createElement('div');
+  dropzone.className = 'dropzone';
+  dropzone.style.top = '100px';
+  dropzone.style.left = '250px';
+  dropzone.textContent = 'Drop Here';
+  area.appendChild(dropzone);
+
+  for(let i=0;i<3;i++){
+    const shape = document.createElement('div');
+    shape.className = 'draggable';
+    shape.textContent = '📁';
+    shape.style.top = `${20+i*60}px`;
+    shape.style.left = `${20+i*80}px`;
+
+    shape.onmousedown = function(e){
+      let shiftX = e.clientX - shape.getBoundingClientRect().left;
+      let shiftY = e.clientY - shape.getBoundingClientRect().top;
+
+      function moveAt(pageX,pageY){
+        const rect = area.getBoundingClientRect();
+        shape.style.left = pageX - shiftX - rect.left + 'px';
+        shape.style.top = pageY - shiftY - rect.top + 'px';
+
+        // highlight when over dropzone
+        const s = shape.getBoundingClientRect();
+        const d = dropzone.getBoundingClientRect();
+        if(s.left < d.right && s.right > d.left && s.top < d.bottom && s.bottom > d.top){
+          dropzone.style.background = "#bbf7d0";
+        } else {
+          dropzone.style.background = "";
+        }
+      }
+
+      function onMouseMove(e){ moveAt(e.pageX,e.pageY); }
+      document.addEventListener('mousemove', onMouseMove);
+
+      shape.onmouseup = function(){
+        document.removeEventListener('mousemove', onMouseMove);
+        shape.onmouseup = null;
+        dropzone.style.background = "";
+        // check drop
+        const s = shape.getBoundingClientRect();
+        const d = dropzone.getBoundingClientRect();
+        if(s.left < d.right && s.right > d.left && s.top < d.bottom && s.bottom > d.top){
+          shape.remove();
+          dropzone.textContent = "✅ Dropped!";
+          setTimeout(()=> dropzone.textContent = "Drop Here",1000);
+        }
+      };
+    };
+
+    shape.ondragstart = () => false;
+    shape.oncontextmenu = e => { e.preventDefault(); alert('Folder properties opened!'); };
+    area.appendChild(shape);
+  }
+}
+startDragDrop();
+
+// Year 2: Right-Click Basics
+function startRightClick(){
+  const area = document.getElementById('rightClickArea');
+  area.innerHTML = '';
+
+  const obj = document.createElement('div');
+  obj.className = 'draggable';
+  obj.textContent = '📄';
+  obj.style.top = '100px';
+  obj.style.left = '150px';
+  area.appendChild(obj);
+
+  // custom context menu
+  const menu = document.createElement('div');
+  menu.style.position = 'absolute';
+  menu.style.background = 'white';
+  menu.style.border = '1px solid #ccc';
+  menu.style.padding = '0.5rem';
+  menu.style.display = 'none';
+  menu.style.borderRadius = '6px';
+  menu.innerHTML = `<div style="cursor:pointer; padding:0.25rem;">Rename</div>
+                    <div style="cursor:pointer; padding:0.25rem;">Delete</div>`;
+  area.appendChild(menu);
+
+  obj.oncontextmenu = e => {
+    e.preventDefault();
+    menu.style.left = e.offsetX + 'px';
+    menu.style.top = e.offsetY + 'px';
+    menu.style.display = 'block';
+  };
+
+  menu.querySelectorAll('div').forEach(item=>{
+    item.onclick = ()=>{
+      alert(item.textContent + " clicked!");
+      menu.style.display = 'none';
+    };
+  });
+
+  area.addEventListener('click',()=> menu.style.display='none');
+}
+startRightClick();
+
+// Year 2: Click and Hold
+function startClickHold(){
+  const area = document.getElementById('clickHoldArea');
+  area.innerHTML = '';
+  const canvas = document.createElement('canvas');
+  canvas.width = area.clientWidth;
+  canvas.height = area.clientHeight;
+  canvas.style.border = '1px solid #94a3b8';
+  area.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+
+  let drawing = false;
+  let holdStart = null;
+
+  canvas.onmousedown = e => { 
+    holdStart = Date.now(); 
+  };
+
+  canvas.onmouseup = e => {
+    const heldTime = Date.now() - holdStart;
+    if(heldTime < 1000){
+      alert("⏱ Hold longer before drawing!");
+    } else {
+      drawing = true; 
+      ctx.beginPath(); 
+      ctx.moveTo(e.offsetX,e.offsetY);
+
+      // allow drawing for 3 seconds max
+      const drawInterval = setInterval(()=>{
+        if(drawing){
+          ctx.lineTo(e.offsetX,e.offsetY);
+          ctx.stroke();
+        }
+      },100);
+
+      setTimeout(()=>{
+        if(drawing){
+          drawing = false;
+          alert("✅ Great! You held and drew successfully!");
+          clearInterval(drawInterval);
+        }
+      },3000);
+    }
+  };
+
+  canvas.onmouseleave = () => drawing = false;
+}
+startClickHold();
+</script>
+
+  <!--
 <script>
 // Accordion toggle
 document.querySelectorAll('.accordion-header').forEach(header => {
@@ -155,8 +325,7 @@ function startClickHold(){
 }
 startClickHold();
 </script>
-<div id="shared-footer"></div>
-
+-->
 
 </body>
 </html>
