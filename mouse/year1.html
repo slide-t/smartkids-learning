@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SmartKids Mouse Practice</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: sans-serif; background-color: #f9fafb; }
+  header { background-color: #1e40af; color: white; }
+  header a { color: #1e40af; }
+  .practice-area { position: relative; width: 100%; height: 250px; background: #e5e7eb; border-radius: 0.5rem; margin-top: 1rem; overflow: hidden; }
+  .target { width: 50px; height: 50px; background: #3b82f6; border-radius: 50%; color: white; font-weight: bold; display: flex; justify-content: center; align-items: center; position: absolute; cursor: pointer; user-select: none; transition: left .2s, top .2s; }
+  .draggable { width: 60px; height: 60px; background: #f97316; border-radius: 0.5rem; color: white; display: flex; justify-content: center; align-items: center; position: absolute; cursor: grab; }
+  .drop-zone { width: 120px; height: 120px; border: 2px dashed #3b82f6; border-radius: 0.5rem; position: absolute; top: 50%; left: 70%; transform: translate(-50%, -50%); display: flex; justify-content: center; align-items: center; color: #3b82f6; font-weight: bold; transition: background .3s; }
+  .stats span { margin-right: 15px; font-weight: bold; }
+  .flash-miss { background: #fecaca !important; } /* red flash on miss */
+</style>
+</head>
+<body>
+
+<header class="fixed top-0 left-0 w-full z-50 shadow-md">
+  <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+    <h1 class="text-2xl font-bold">Smart Learning Kids - Year 1</h1>
+    <a href="../mouse.html" class="bg-white px-4 py-2 rounded-lg shadow hover:bg-blue-100 transition">Back</a>
+  </div>
+</header>
+
+<main class="pt-24 max-w-4xl mx-auto px-4 space-y-8">
+  <h2 class="text-3xl font-bold text-center">Mouse Practices</h2>
+
+  <!-- Stats -->
+  <div class="stats flex justify-start text-sm font-semibold mb-4">
+    <span>Clicks: <span id="clicks">0</span></span>
+    <span>Hits: <span id="hits">0</span></span>
+    <span>Accuracy: <span id="accuracy">100</span>%</span>
+  </div>
+
+  <!-- Practice Area -->
+  <div id="practiceArea" class="practice-area"></div>
+
+  <!-- Instructions -->
+  <div id="instructions" class="p-3 bg-gray-100 rounded text-lg"></div>
+
+  <!-- Controls -->
+  <div class="flex justify-between mt-4">
+    <button id="prevPractice" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">⬅ Prev</button>
+    <button id="restartPractice" class="px-4 py-2 bg-yellow-200 rounded hover:bg-yellow-300">🔄 Restart</button>
+    <button id="nextPractice" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Next ➡</button>
+  </div>
+</main>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const practiceArea = document.getElementById("practiceArea");
+  const instructions = document.getElementById("instructions");
+  const clicksEl = document.getElementById("clicks");
+  const hitsEl = document.getElementById("hits");
+  const accuracyEl = document.getElementById("accuracy");
+  const prevBtn = document.getElementById("prevPractice");
+  const nextBtn = document.getElementById("nextPractice");
+  const restartBtn = document.getElementById("restartPractice");
+
+  let clicks = 0, hits = 0;
+  let currentPractice = 0;
+
+  const practices = [
+    {title: "Basic Click", sample: "Click the target as it moves.", type:"click"},
+    {title: "Double Click", sample: "Double-click the target quickly.", type:"doubleclick"},
+    {title: "Mouse Movement", sample: "Move the mouse to follow the target.", type:"mousemove"},
+    {title: "Drag and Drop", sample: "Drag the square into the drop zone.", type:"dragdrop"},
+    {title: "Click and Hold", sample: "Click and hold the target for 2 seconds.", type:"clickhold"},
+    {title: "Text Selection", sample: "Click and drag to highlight the text.", type:"textselect"}
+  ];
+
+  function resetStats() {
+    clicks = 0; hits = 0;
+    clicksEl.textContent = clicks;
+    hitsEl.textContent = hits;
+    accuracyEl.textContent = 100;
+  }
+
+  function updateStats() {
+    clicksEl.textContent = clicks;
+    hitsEl.textContent = hits;
+    accuracyEl.textContent = clicks > 0 ? Math.round((hits/clicks)*100) : 100;
+  }
+
+  function flashMiss() {
+    practiceArea.classList.add("flash-miss");
+    setTimeout(()=> practiceArea.classList.remove("flash-miss"), 150);
+  }
+
+  function loadPractice(index) {
+    practiceArea.innerHTML = '';
+    resetStats();
+    const practice = practices[index];
+    instructions.textContent = practice.sample;
+
+    if(practice.type === "click" || practice.type === "doubleclick") {
+      const target = document.createElement("div");
+      target.className = "target";
+      target.textContent = "🎯";
+      practiceArea.appendChild(target);
+      moveTarget(target);
+
+      if (practice.type === "click") {
+        target.addEventListener("click", () => {
+          hits++; clicks++;
+          updateStats();
+          moveTarget(target);
+        });
+      } else {
+        target.addEventListener("dblclick", () => {
+          hits++; clicks++;
+          updateStats();
+          moveTarget(target);
+        });
+        // Prevent single clicks counting
+        target.addEventListener("click", e => e.stopPropagation());
+      }
+
+      practiceArea.addEventListener("click", e=>{
+        if(!e.target.classList.contains("target")) { 
+          clicks++; updateStats(); flashMiss(); 
+        }
+      });
+
+    } else if(practice.type==="mousemove") {
+      const target = document.createElement("div");
+      target.className = "target";
+      target.textContent = "🐭";
+      practiceArea.appendChild(target);
+      moveTarget(target);
+      practiceArea.addEventListener("mousemove", e=>{
+        const rect = target.getBoundingClientRect();
+        const x = e.clientX;
+        const y = e.clientY;
+        if(x>=rect.left && x<=rect.right && y>=rect.top && y<=rect.bottom){
+          hits++; updateStats(); 
+          setTimeout(()=> moveTarget(target), 300); // small delay
+        }
+      });
+    } else if(practice.type==="dragdrop") {
+      const draggable = document.createElement("div");
+      draggable.className = "draggable";
+      draggable.textContent = "Drag";
+      draggable.style.left = "20px";
+      draggable.style.top = "50px";
+
+      const dropZone = document.createElement("div");
+      dropZone.className = "drop-zone";
+      dropZone.textContent = "Drop Here";
+
+      practiceArea.appendChild(draggable);
+      practiceArea.appendChild(dropZone);
+
+      draggable.onmousedown = function(e){
+        let shiftX = e.clientX - draggable.getBoundingClientRect().left;
+        let shiftY = e.clientY - draggable.getBoundingClientRect().top;
+
+        function moveAt(pageX, pageY){
+          draggable.style.left = pageX - shiftX - practiceArea.getBoundingClientRect().left + "px";
+          draggable.style.top = pageY - shiftY - practiceArea.getBoundingClientRect().top + "px";
+        }
+
+        function onMouseMove(e){
+          moveAt(e.pageX, e.pageY);
+        }
+
+        document.addEventListener("mousemove", onMouseMove);
+
+        draggable.onmouseup = function(){
+          document.removeEventListener("mousemove", onMouseMove);
+          draggable.onmouseup = null;
+
+          const dragRect = draggable.getBoundingClientRect();
+          const dropRect = dropZone.getBoundingClientRect();
+          if(dragRect.left < dropRect.right &&
+             dragRect.right > dropRect.left &&
+             dragRect.top < dropRect.bottom &&
+             dragRect.bottom > dropRect.top){
+               hits++; clicks++; updateStats();
+               dropZone.style.background = "#bbf7d0"; // green highlight
+               setTimeout(()=> dropZone.style.background = "", 500);
+               draggable.style.left = "20px"; draggable.style.top="50px";
+          } else {
+               clicks++; updateStats();
+               flashMiss();
+          }
+        };
+      };
+
+      draggable.ondragstart = () => false;
+
+    } else if(practice.type==="clickhold") {
+      const target = document.createElement("div");
+      target.className = "target";
+      target.textContent = "Hold";
+      practiceArea.appendChild(target);
+      moveTarget(target);
+
+      let timer;
+      target.onmousedown = function(){
+        timer = setTimeout(()=>{
+          hits++; clicks++; updateStats(); moveTarget(target);
+        },2000);
+      };
+      target.onmouseup = function(){
+        if (timer) clearTimeout(timer);
+        clicks++; updateStats();
+        if (accuracyEl.textContent < 100) {
+          instructions.textContent = "Try holding longer!";
+        }
+      };
+    } else if(practice.type==="textselect") {
+      const textDiv = document.createElement("div");
+      textDiv.textContent = "Highlight this sentence using your mouse.";
+      textDiv.style.userSelect="text";
+      textDiv.style.padding="20px";
+      textDiv.style.background="#fff";
+      textDiv.style.borderRadius="0.5rem";
+      practiceArea.appendChild(textDiv);
+      textDiv.onmouseup = function(){
+        const selection = window.getSelection().toString();
+        if(selection.length >= 5){
+          hits++; clicks++; updateStats();
+        } else {
+          clicks++; updateStats(); flashMiss();
+        }
+      };
+    }
+  }
+
+  function moveTarget(target){
+    const areaRect = practiceArea.getBoundingClientRect();
+    const size = 50;
+    const x = Math.random()*(areaRect.width - size);
+    const y = Math.random()*(areaRect.height - size);
+    target.style.left = x + "px";
+    target.style.top = y + "px";
+  }
+
+  loadPractice(currentPractice);
+
+  nextBtn.onclick = ()=>{currentPractice=(currentPractice+1)%practices.length; loadPractice(currentPractice);}
+  prevBtn.onclick = ()=>{currentPractice=(currentPractice-1+practices.length)%practices.length; loadPractice(currentPractice);}
+  restartBtn.onclick = ()=>{loadPractice(currentPractice);}});
+</script>
+
+</body>
+</html>
