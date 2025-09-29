@@ -1,0 +1,58 @@
+{
+  "lessons:" = [
+  {
+    "id": "keyboard_definition",
+    "title": "What is a Computer Keyboard?",
+    "content": "A computer keyboard is an input device that allows users to type letters, numbers, and commands into a computer. <br><br>👉 It is essential for writing documents, entering data, and controlling software. <br>👉 Keyboards can be physical or on-screen. <br><br><img src='images/keyboard.png' alt='Computer Keyboard' class='w-64 mt-2 rounded shadow'>"
+  },
+  {
+    "id": "keyboard_layout",
+    "title": "Layout of the Keyboard",
+    "content": "Most keyboards use the **QWERTY layout**. Keys are grouped into different sections: letters, numbers, function keys, navigation keys, and special keys. <br><br>👉 QWERTY layout helps users type quickly and accurately. <br>👉 Some keyboards have alternative layouts like AZERTY or DVORAK. <br><br><img src='images/keyboard_layout.png' alt='Keyboard Layout' class='w-64 mt-2 rounded shadow'>"
+  },
+  {
+    "id": "categories_of_keys",
+    "title": "Categories of Keys",
+    "content": "Keyboard keys are divided into several categories: <br>• **Alphanumeric keys**: letters and numbers <br>• **Function keys (F1–F12)**: perform special tasks <br>• **Control keys**: Ctrl, Alt, Esc <br>• **Navigation keys**: Arrows, Home, End <br>• **Numeric keypad**: numbers and symbols <br>• **Special keys**: Enter, Shift, Spacebar, Backspace <br><br><img src='images/keyboard_categories.png' alt='Categories of Keys' class='w-64 mt-2 rounded shadow'>"
+  },
+  {
+    "id": "typing_skills",
+    "title": "How to Use the Keyboard for Typing",
+    "content": "Typing skills help you write quickly and accurately. <br><br>👉 Place your fingers on the **home row keys** (A, S, D, F for left hand, J, K, L, ; for right hand). <br>👉 Thumbs rest on the **spacebar**. <br>👉 Keep fingers curved and use the correct finger for each key. <br>👉 Practice improves speed and accuracy.<br><br><img src='images/typing_skills.png' alt='Typing Skills' class='w-64 mt-2 rounded shadow'>"
+  },
+  {
+    "id": "function_keys",
+    "title": "Function Keys (F1–F12)",
+    "content": "Function keys are located at the top of the keyboard and perform special functions depending on the program. <br><br>👉 **F1**: Help <br>👉 **F2**: Rename <br>👉 **F3**: Search <br>👉 **F5**: Refresh <br>👉 **F12**: Save As (in many programs) <br><br>Some applications assign unique tasks to function keys. <br><br><img src='images/function_keys.png' alt='Function Keys' class='w-64 mt-2 rounded shadow'>"
+  },
+  {
+    "id": "numeric_keys",
+    "title": "Numeric and Symbol Keys",
+    "content": "Numeric keys are used to type numbers. Symbol keys allow punctuation and special characters. <br><br>👉 Press **Shift + number keys** for symbols (!, @, #, $ etc.). <br>👉 The numeric keypad helps type numbers quickly, especially in calculations. <br><br><img src='images/keyboard_numeric.png' alt='Numeric and Symbol Keys' class='w-64 mt-2 rounded shadow'>"
+  },
+  {
+    "id": "keyboard_home_row",
+    "title": "Home Row Keys",
+    "content": "The **home row** is where your fingers rest when typing. <br><br>👉 Left hand: A, S, D, F <br>👉 Right hand: J, K, L, ; <br>👉 Thumbs rest on the spacebar. <br>👉 From this position, you reach all other keys quickly.<br><br><img src='images/keyboard_home.png' alt='Home Row Keys' class='w-64 mt-2 rounded shadow'>"
+  },
+  {
+    "id": "keyboard_top_row",
+    "title": "Top Row Keys",
+    "content": "The top row contains the letters **Q to P**. <br><br>👉 Accessed by stretching fingers from the home row. <br>👉 Includes numbers and symbols above the letters. <br><br><img src='images/keyboard_top.png' alt='Top Row Keys' class='w-64 mt-2 rounded shadow'>"
+  },
+  {
+    "id": "keyboard_bottom_row",
+    "title": "Bottom Row Keys",
+    "content": "The bottom row has letters **Z, X, C, V, B, N, M**. <br><br>👉 Typed by stretching fingers down from the home row. <br>👉 Also includes punctuation keys like comma and period. <br><br><img src='images/keyboard_bottom.png' alt='Bottom Row Keys' class='w-64 mt-2 rounded shadow'>"
+  },
+  {
+    "id": "keyboard_punctuation",
+    "title": "Punctuation Keys",
+    "content": "Punctuation keys are important for writing sentences. <br><br>👉 **Comma (,)** and **period (.)** end sentences. <br>👉 **Question mark (?)** and **exclamation mark (!)** show feelings. <br>👉 Use punctuation correctly to make writing clear. <br><br><img src='images/keyboard_punctuation.png' alt='Punctuation Keys' class='w-64 mt-2 rounded shadow'>"
+  },
+  {
+    "id": "keyboard_shortcuts",
+    "title": "Keyboard Shortcuts",
+    "content": "Shortcuts help you work faster. <br><br>👉 **Ctrl + C** = Copy <br>👉 **Ctrl + V** = Paste <br>👉 **Ctrl + X** = Cut <br>👉 **Ctrl + Z** = Undo <br>👉 **Ctrl + S** = Save <br><br>Practice shortcuts to save time while working.<br><br><img src='images/keyboard_shortcuts.png' alt='Keyboard Shortcuts' class='w-64 mt-2 rounded shadow'>"
+  }
+]
