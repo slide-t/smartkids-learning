@@ -104,6 +104,58 @@
     "id": "mouse_practice",
     "title": "Mouse Practice Activities",
     "content": "Practice exercises help improve speed and accuracy: <br>• Clicking on targets <br>• Dragging objects <br>• Scrolling lists <br><br>👉 Start with simple exercises and progress to complex tasks. <br><br><img src='images/mouse_practice.png' alt='Mouse Practice' class='w-64 mt-2 rounded shadow'>"
+  },
+  {
+    "id": "what_is_computer",
+    "title": "What is a Computer?",
+    "content": "A computer is an electronic device that receives, processes, and stores data. <br><br>👉 Computers perform tasks quickly and accurately. <br>👉 They can be used for learning, gaming, research, and communication.<br><br><img src='images/computer.png' alt='Computer' class='w-64 mt-2 rounded shadow'>"
+  },
+  {
+    "id": "parts_of_computer",
+    "title": "Parts of a Computer",
+    "content": "A computer has several important parts: <br>• **CPU**: Brain of the computer, processes data. <br>• **Monitor**: Displays information. <br>• **Keyboard**: Input device for typing. <br>• **Mouse**: Controls pointer on the screen. <br>• **Storage**: Saves files and programs. <br>• **Speakers**: Output sound.<br><br><img src='images/computer_parts.png' alt='Computer Parts' class='w-64 mt-2 rounded shadow'>"
+  },
+  {
+    "id": "uses_of_computer",
+    "title": "Uses of a Computer",
+    "content": "Computers are useful in many areas: <br>• **Education**: Learning and research. <br>• **Gaming**: Entertainment and skill development. <br>• **Office Work**: Writing documents, calculations. <br>• **Communication**: Emails, video calls. <br>• **Research**: Gathering and analyzing information.<br><br><img src='images/computer_uses.png' alt='Uses of Computer' class='w-64 mt-2 rounded shadow'>"
+  },
+  {
+    "id": "safe_computer_use",
+    "title": "Safe Use of Computers",
+    "content": "Always follow safety guidelines: <br>• Keep your screen at eye level. <br>• Take regular breaks to avoid strain. <br>• Use strong passwords. <br>• Ask an adult before downloading files or visiting websites. <br>• Avoid sharing personal information online.<br><br><img src='images/safe_use.png' alt='Safe Use' class='w-64 mt-2 rounded shadow'>"
+  },
+  {
+    "id": "introduction_to_coding",
+    "title": "Introduction to Coding",
+    "content": "Coding is giving instructions to a computer to perform tasks. <br><br>👉 Start with simple programs to understand logic and commands. <br>👉 Coding can be fun and creative.<br><br><img src='images/coding.png' alt='Coding' class='w-64 mt-2 rounded shadow'>"
+  },
+  {
+    "id": "scratch_basics",
+    "title": "Scratch and Block Coding",
+    "content": "Scratch uses visual blocks to teach coding concepts to kids. <br><br>👉 Drag and drop blocks to make characters move, jump, or perform actions. <br>👉 Learn sequencing, loops, and events easily.<br><br><img src='images/scratch.png' alt='Scratch Coding' class='w-64 mt-2 rounded shadow'>"
+  },
+  {
+    "id": "algorithms_for_kids",
+    "title": "Algorithms for Kids",
+    "content": "Algorithms are step-by-step instructions to solve a problem. <br><br>👉 Example: Steps to make a sandwich or play a game. <br>👉 Helps plan and organize actions logically.<br><br><img src='images/algorithms.png' alt='Algorithms' class='w-64 mt-2 rounded shadow'>"
+  },
+  {
+    "id": "internet_basics",
+    "title": "Introduction to the Internet",
+    "content": "The Internet connects computers worldwide. <br><br>👉 Use browsers to search for information. <br>👉 Communicate via email or messaging. <br>👉 Always ask an adult before visiting new websites.<br><br><img src='images/internet.png' alt='Internet' class='w-64 mt-2 rounded shadow'>"
+  },
+  {
+    "id": "ict_files",
+    "title": "Working with Files",
+    "content": "Files store your work on the computer. <br><br>👉 To **open a file**, double-click it. <br>👉 To **save a file**, use 'Save' or **Ctrl + S**. <br>👉 Organize files in folders for easy access.<br><br><img src='images/ict_files.png' alt='Files on Computer' class='w-64 mt-2 rounded shadow'>"
+  },
+  {
+    "id": "ict_internet",
+    "title": "Using the Internet",
+    "content": "The internet is a tool to find information and communicate. <br><br>👉 Use search engines to locate resources. <br>👉 Watch educational videos. <br>👉 Practice safe browsing habits and do not share passwords.<br><br><img src='images/ict_internet.png' alt='Internet Browser' class='w-64 mt-2 rounded shadow'>"
   }
 ]
 }
+
+    
