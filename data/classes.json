@@ -376,17 +376,17 @@
                 {
                   "title": "Lower Row Keys",
                   "instruction": "Practice lower-row letters and punctuation , . / with control.",
-                  "sample": ["Z", "X", "C", "V", "B", "N", "M", ",", ".", "/"]
+                  "sample": ["z", "x", "c", "v", "b", "n", "m", ",", ".", "/"]
                 },
                 {
                   "title": "Mixed Row Words",
                   "instruction": "Type words that use multiple rows together.",
-                  "sample": ["CAMP", "MANOR", "VOLUME", "BRICK", "ZEBRA"]
+                  "sample": ["camp", "manor", "volume", "brick", "zebra"]
                 },
                 {
                   "title": "Five 7-letter Words",
                   "instruction": "Build strength by typing 7-letter words.",
-                  "sample": ["ANIMALIA", "PORTRAY", "CAPABLE", "BALANCE", "FREIGHT"]
+                  "sample": ["animalia", "portray", "capable", "balance", "freight"]
                 }
               ]
             },
@@ -441,7 +441,7 @@
                 {
                   "title": "Timed Typing Drill",
                   "instruction": "Type as many provided words as possible in 5 minutes.",
-                  "sample": ["CAN", "PEN", "DOG", "RUN", "HAT", "BOOK", "LOVE"]
+                  "sample": ["can", "pen", "dog", "run", "hate", "book", "love"]
                 }
               ]
             }
@@ -465,17 +465,17 @@
                 {
                   "title": "All Rows Practice",
                   "instruction": "Practice letters across all rows to build accuracy.",
-                  "sample": ["Q", "W", "E", "A", "S", "D", "Z", "X", "C", "M"]
+                  "sample": ["q", "w", "e", "a", "s", "d", "z", "x", "c", "m"]
                 },
                 {
                   "title": "Word Mix",
                   "instruction": "Type mixed words that use letters from all rows.",
-                  "sample": ["GAME", "QUIZ", "CAMP", "ZONE", "WAVE"]
+                  "sample": ["Game", "Quiz", "Camp", "Zone", "Wave"]
                 },
                 {
                   "title": "Seven-Letter Words",
                   "instruction": "Type longer single words to improve reach and speed.",
-                  "sample": ["SPRINGY", "CAPTURE", "JOURNEY", "ANCIENT", "BALANCE"]
+                  "sample": ["Springy", "Capture", "Journey", "Ancient", "Balance"]
                 }
               ]
             },
@@ -535,7 +535,7 @@
                 {
                   "title": "Final Timed Drill",
                   "instruction": "Complete the timed drill focus on accuracy for 5 minutes.",
-                  "sample": ["SPRINGY", "CAPTURE", "JOURNEY", "ANCIENT", "BALANCE", "GAME", "QUIZ"]
+                  "sample": ["Springy", "Capture", "Journey", "Ancient", "Balance", "Game", "Quiz"]
                 }
               ]
             }
@@ -559,7 +559,7 @@
                 {
                   "title": "Advanced Home Row Practice",
                   "instruction": "Maintain correct finger positions while increasing speed.",
-                  "sample": ["ASDF JKL;", "AS DF JK", "FJ DK LA", "ASDFAS", "JKL;JK"]
+                  "sample": ["asdf jkl;", "as sa df jk kj", "fj al sk la sk", "asdf", "jkl;;"]
                 },
                 {
                   "title": "Number Keys",
