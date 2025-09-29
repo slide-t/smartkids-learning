@@ -3,68 +3,102 @@
     {
       "id": "keyboard_definition",
       "title": "What is a Computer Keyboard?",
-      "content": "A keyboard is an input device used to type letters, numbers, and commands into a computer. <br><br>👉 It allows users to interact with programs and enter text. <br><br><img src='images/keyboard.png' alt='Keyboard' class='w-64 mt-2 rounded shadow'>"
+      "content": "A keyboard is an input device used to type letters, numbers, and commands into a computer. <br><br>👉 It allows users to interact with programs and enter text.<br><br><img src='images/keyboard.png' alt='Keyboard' class='w-64 mt-2 rounded shadow'>"
     },
     {
       "id": "keyboard_layout",
       "title": "Layout of the Keyboard",
-      "content": "Most keyboards use the QWERTY layout. Keys are grouped into letters, numbers, function keys, navigation keys, and special keys. <br><br>👉 Standard layout helps speed and accuracy.<br><br><img src='images/keyboard_layout.png' alt='Keyboard Layout' class='w-64 mt-2 rounded shadow'>"
+      "content": "Most keyboards use the QWERTY layout. Keys are grouped into letters, numbers, function keys, navigation keys, and special keys.<br><br>👉 Standard layout helps speed and accuracy.<br><br><img src='images/keyboard_layout.png' alt='Keyboard Layout' class='w-64 mt-2 rounded shadow'>"
     },
     {
       "id": "categories_of_keys",
       "title": "Categories of Keys",
-      "content": "Keyboard keys are categorized as: <br>• Alphanumeric keys (letters and numbers)<br>• Function keys (F1–F12)<br>• Control keys (Ctrl, Alt, Esc)<br>• Navigation keys (Arrows, Home, End)<br>• Numeric keypad<br>• Special keys (Enter, Shift, Spacebar)<br><br><img src='images/keyboard_categories.png' alt='Keyboard Categories' class='w-64 mt-2 rounded shadow'>"
+      "content": "Keyboard keys are categorized as: <br>• Alphanumeric (letters and numbers)<br>• Function keys (F1–F12)<br>• Control keys (Ctrl, Alt, Esc)<br>• Navigation keys (Arrows, Home, End)<br>• Numeric keypad<br>• Special keys (Enter, Shift, Spacebar)<br><br><img src='images/keyboard_categories.png' alt='Keyboard Categories' class='w-64 mt-2 rounded shadow'>"
     },
     {
       "id": "typing_skills",
       "title": "How to Use the Keyboard for Typing",
-      "content": "Place your fingers on the home row (A, S, D, F for left hand, J, K, L, ; for right hand). <br>👉 Keep thumbs on the spacebar. <br>👉 Use proper finger placement to increase speed and accuracy.<br><br><img src='images/typing_skills.png' alt='Typing Skills' class='w-64 mt-2 rounded shadow'>"
+      "content": "Place your fingers on the home row (A, S, D, F for left hand, J, K, L, ; for right hand).<br>👉 Keep thumbs on the spacebar.<br>👉 Use proper finger placement to increase speed and accuracy.<br><br><img src='images/typing_skills.png' alt='Typing Skills' class='w-64 mt-2 rounded shadow'>"
     },
     {
       "id": "function_keys",
       "title": "Function Keys (F1–F12)",
-      "content": "Function keys perform special actions depending on the program. <br>👉 F1 = Help <br>👉 F2 = Rename <br>👉 F5 = Refresh <br>… etc.<br><br><img src='images/function_keys.png' alt='Function Keys' class='w-64 mt-2 rounded shadow'>"
+      "content": "Function keys perform special actions depending on the program.<br>👉 F1 = Help<br>👉 F2 = Rename<br>👉 F5 = Refresh<br>… etc.<br><br><img src='images/function_keys.png' alt='Function Keys' class='w-64 mt-2 rounded shadow'>"
     },
     {
       "id": "numeric_keys",
       "title": "Numeric and Symbol Keys",
-      "content": "Numeric keys allow typing numbers; symbol keys allow punctuation and other characters. <br>👉 Use Shift + number keys for symbols.<br><br><img src='images/keyboard_numeric.png' alt='Numeric Keys' class='w-64 mt-2 rounded shadow'>"
+      "content": "Numeric keys allow typing numbers; symbol keys allow punctuation and other characters.<br>👉 Use Shift + number keys for symbols.<br><br><img src='images/keyboard_numeric.png' alt='Numeric Keys' class='w-64 mt-2 rounded shadow'>"
+    },
+    {
+      "id": "keyboard_home_row",
+      "title": "Home Row Keys",
+      "content": "The home row keys are where your fingers rest.<br>👉 Left hand: A, S, D, F<br>👉 Right hand: J, K, L, ;<br>👉 Thumbs rest on the spacebar.<br><br><img src='images/keyboard_home.png' alt='Home Row Keys' class='w-64 mt-2 rounded shadow'>"
+    },
+    {
+      "id": "keyboard_top_row",
+      "title": "Top Row Keys",
+      "content": "Top row keys are Q to P letters.<br>👉 Reached by stretching fingers up from home row.<br>👉 Includes numbers and symbols.<br><br><img src='images/keyboard_top.png' alt='Top Row Keys' class='w-64 mt-2 rounded shadow'>"
+    },
+    {
+      "id": "keyboard_bottom_row",
+      "title": "Bottom Row Keys",
+      "content": "Bottom row keys include Z, X, C, V, B, N, M.<br>👉 Typed by stretching fingers down from home row.<br><br><img src='images/keyboard_bottom.png' alt='Bottom Row Keys' class='w-64 mt-2 rounded shadow'>"
+    },
+    {
+      "id": "keyboard_punctuation",
+      "title": "Punctuation Keys",
+      "content": "Punctuation keys are important for writing.<br>👉 Comma (,), Full stop (.), Question mark (?), Exclamation (!)<br><br><img src='images/keyboard_punctuation.png' alt='Punctuation Keys' class='w-64 mt-2 rounded shadow'>"
     },
     {
       "id": "keyboard_shortcuts",
       "title": "Keyboard Shortcuts",
-      "content": "Shortcuts help work faster. <br>👉 Ctrl + C = Copy<br>👉 Ctrl + V = Paste<br>👉 Ctrl + Z = Undo<br>👉 Ctrl + S = Save<br><br><img src='images/keyboard_shortcuts.png' alt='Keyboard Shortcuts' class='w-64 mt-2 rounded shadow'>"
+      "content": "Shortcuts help you work faster.<br>👉 Ctrl + C = Copy<br>👉 Ctrl + V = Paste<br>👉 Ctrl + Z = Undo<br>👉 Ctrl + S = Save<br><br><img src='images/keyboard_shortcuts.png' alt='Keyboard Shortcuts' class='w-64 mt-2 rounded shadow'>"
     },
     {
       "id": "mouse_definition",
       "title": "What is a Computer Mouse?",
-      "content": "A mouse is a pointing device used to interact with items on the screen. <br><br>👉 Move pointer, click, drag, scroll.<br><br><img src='images/mouse.png' alt='Computer Mouse' class='w-64 mt-2 rounded shadow'>"
+      "content": "A mouse is a pointing device used to interact with items on the screen.<br>👉 Move pointer, click, drag, scroll.<br><br><img src='images/mouse.png' alt='Computer Mouse' class='w-64 mt-2 rounded shadow'>"
     },
     {
       "id": "types_of_mouse",
       "title": "Types of Computer Mouse",
-      "content": "Types include: <br>• Optical Mouse <br>• Wireless Mouse <br>• Trackball Mouse <br>• Gaming Mouse<br><br><img src='images/mouse_types.png' alt='Types of Mouse' class='w-64 mt-2 rounded shadow'>"
+      "content": "Types include: Optical, Wireless, Trackball, Gaming Mouse.<br><br><img src='images/mouse_types.png' alt='Types of Mouse' class='w-64 mt-2 rounded shadow'>"
     },
     {
       "id": "mouse_buttons",
       "title": "Mouse Buttons and Their Uses",
-      "content": "A mouse typically has: <br>• Left button – select items <br>• Right button – context menu <br>• Scroll wheel – move up/down <br>• Additional buttons for gaming or shortcuts<br><br><img src='images/mouse_buttons.png' alt='Mouse Buttons' class='w-64 mt-2 rounded shadow'>"
+      "content": "A mouse typically has:<br>• Left button – select<br>• Right button – context menu<br>• Scroll wheel – move up/down<br>• Extra buttons for shortcuts or games<br><br><img src='images/mouse_buttons.png' alt='Mouse Buttons' class='w-64 mt-2 rounded shadow'>"
     },
     {
       "id": "mouse_actions",
       "title": "Mouse Actions",
-      "content": "Mouse actions include: <br>• Single click – select <br>• Double click – open <br>• Drag and drop – move items <br>• Scroll – navigate content <br>• Right click – context menu<br><br><img src='images/mouse_actions.png' alt='Mouse Actions' class='w-64 mt-2 rounded shadow'>"
+      "content": "Mouse actions include: Single click, Double click, Drag and drop, Scroll, Right click.<br><br><img src='images/mouse_actions.png' alt='Mouse Actions' class='w-64 mt-2 rounded shadow'>"
     },
     {
       "id": "drag_drop",
       "title": "Drag and Drop",
-      "content": "Click and hold the mouse button to move an object to a new location. <br><br>👉 Useful for moving files, icons, or shapes.<br><br><img src='images/drag_drop.png' alt='Drag and Drop' class='w-64 mt-2 rounded shadow'>"
+      "content": "Click and hold the mouse button to move an object.<br>👉 Useful for files, icons, or shapes.<br><br><img src='images/drag_drop.png' alt='Drag and Drop' class='w-64 mt-2 rounded shadow'>"
     },
     {
       "id": "scrolling",
       "title": "Scrolling with the Mouse",
-      "content": "Use the scroll wheel or trackpad to move up and down a page. <br><br>👉 Scrolling helps navigate long documents or web pages.<br><br><img src='images/scrolling.png' alt='Scrolling' class='w-64 mt-2 rounded shadow'>"
+      "content": "Use the scroll wheel to move up/down a page.<br>👉 Helps navigate documents or web pages.<br><br><img src='images/scrolling.png' alt='Scrolling' class='w-64 mt-2 rounded shadow'>"
+    },
+    {
+      "id": "mouse_clicking",
+      "title": "Clicking Basics",
+      "content": "Clicking is pressing and releasing the mouse button quickly.<br>👉 Single click selects, double click opens.<br><br><img src='images/mouse_click.png' alt='Mouse Clicking' class='w-64 mt-2 rounded shadow'>"
+    },
+    {
+      "id": "mouse_dragging",
+      "title": "Clicking and Dragging",
+      "content": "Dragging means holding down the mouse button while moving the mouse.<br>👉 Move objects or highlight text.<br><br><img src='images/mouse_drag.png' alt='Mouse Dragging' class='w-64 mt-2 rounded shadow'>"
+    },
+    {
+      "id": "mouse_precision",
+      "title": "High-Speed Precision Tasks",
+      "content": "Some games test your mouse speed and accuracy.<br>👉 Practice moving pointer to small shapes, click carefully.<br><br><img src='images/mouse_precision.png' alt='Mouse Precision' class='w-64 mt-2 rounded shadow'>"
     }
-    // Add all remaining topics for ICT, OS, Software, Office, Coding etc. following the same structure
   ]
 }
