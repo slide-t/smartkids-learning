@@ -73,12 +73,449 @@
       <div id="keyboard" class="p-2 bg-gray-200 rounded mt-4"></div>
     </div>
   </div>
+<script>
+// keyboard.js
+document.addEventListener("DOMContentLoaded", () => {
+  // --- DOM references (keep these ids in your HTML) ---
+  const startKeyboardBtn = document.getElementById("keyboardMode");
+  const startMouseBtn = document.getElementById("mouseMode");
+  const practiceArea = document.getElementById("practiceArea");
+  const targetChar = document.getElementById("targetChar");
+  const feedbackEl = document.getElementById("feedback");
+  const virtualKeyboard = document.getElementById("virtualKeyboard");
+  const mouseBoard = document.getElementById("mouseBoard");
+
+  // optional control buttons; create if missing (so we don't touch your accordion)
+  let nextBtn = document.getElementById("nextBtn");
+  let restartBtn = document.getElementById("restartBtn");
+  const ensureControlsExist = () => {
+    if (!nextBtn || !restartBtn) {
+      // try to append to an existing controls container if present
+      let controlsContainer = document.getElementById("practiceControls");
+      if (!controlsContainer) {
+        controlsContainer = document.createElement("div");
+        controlsContainer.id = "practiceControls";
+        controlsContainer.style.marginTop = "8px";
+        // append after practiceArea (safe; doesn't touch accordion)
+        practiceArea?.parentNode?.insertBefore(controlsContainer, practiceArea.nextSibling);
+      }
+
+      if (!nextBtn) {
+        nextBtn = document.createElement("button");
+        nextBtn.id = "nextBtn";
+        nextBtn.textContent = "Next";
+        nextBtn.className = "btn-next hidden";
+        nextBtn.style.marginRight = "8px";
+        controlsContainer.appendChild(nextBtn);
+      }
+      if (!restartBtn) {
+        restartBtn = document.createElement("button");
+        restartBtn.id = "restartBtn";
+        restartBtn.textContent = "Restart";
+        restartBtn.className = "btn-restart hidden";
+        controlsContainer.appendChild(restartBtn);
+      }
+    }
+  };
+
+  ensureControlsExist();
+
+  // --- state ---
+  let classesData = null;
+  let topics = []; // normalized array of { title, link?, content? }
+  let currentTopicIndex = 0;
+  let currentChars = []; // array of characters for typing
+  let currentCharIndex = 0;
+  let mode = ""; // "keyboard" | "mouse"
+
+  // track current selection (we pick first year/term by default)
+  let currentYearKey = null;
+  let currentTermKey = null;
+
+  // --- utility: try fetch data path fallback ---
+  async function tryFetchPaths(paths = []) {
+    for (const p of paths) {
+      try {
+        const res = await fetch(p);
+        if (res && res.ok) return await res.json();
+      } catch (e) {
+        // ignore and try next
+      }
+    }
+    throw new Error("None of the fetch paths returned JSON: " + paths.join(", "));
+  }
+
+  // --- load classes.json (supports object or array formats) ---
+  async function loadClasses() {
+    try {
+      // try common paths: data/classes.json then classes.json
+      classesData = await tryFetchPaths(["data/classes.json", "classes.json"]);
+    } catch (err) {
+      console.error("Failed to load classes.json:", err);
+      classesData = null;
+      return;
+    }
+
+    // Normalize topics for the first year & first term
+    if (Array.isArray(classesData)) {
+      // expected shape: [{ year/name, terms: [{ name, topics: [{ title, link?, content? }] }] }, ...]
+      const firstClass = classesData[0] || {};
+      currentYearKey = firstClass.name || firstClass.year || "Year 1";
+      const firstTerm = (firstClass.terms && firstClass.terms[0]) || { name: "Term 1", topics: [] };
+      currentTermKey = firstTerm.name || "Term 1";
+      topics = (firstTerm.topics || []).map(t => {
+        // if topic stored as string link, normalize
+        if (typeof t === "string") return { title: t, link: t };
+        return { title: t.title || t.name || "Topic", link: t.link, content: t.content };
+      });
+    } else if (typeof classesData === "object" && classesData !== null) {
+      // expected shape: { "Year 1": { "Term 1": { "Topic A": { content: [...], link? }, ... }, ... }, ... }
+      const yearKeys = Object.keys(classesData);
+      currentYearKey = yearKeys[0];
+      const termObj = classesData[currentYearKey];
+      const termKeys = Object.keys(termObj || {});
+      currentTermKey = termKeys[0];
+      const topicsObj = (termObj && termObj[currentTermKey]) || {};
+      topics = Object.keys(topicsObj).map(topicName => {
+        const t = topicsObj[topicName];
+        if (typeof t === "string") {
+          // topic is a link string
+          return { title: topicName, link: t };
+        } else if (t && typeof t === "object") {
+          return { title: topicName, link: t.link, content: t.content };
+        } else {
+          return { title: topicName, content: "" };
+        }
+      });
+    } else {
+      topics = [];
+    }
+  }
+
+  // --- load a single topic (either inline content or via link) ---
+  async function loadTopicByIndex(index) {
+    if (!topics || index < 0 || index >= topics.length) {
+      console.warn("Invalid topic index", index);
+      return;
+    }
+    const topic = topics[index];
+
+    // hide controls while loading
+    nextBtn.classList.add("hidden");
+    restartBtn.classList.add("hidden");
+    feedbackEl.textContent = "";
+
+    let topicData = null;
+    if (topic.content) {
+      // content may be string or array
+      topicData = { content: topic.content };
+    } else if (topic.link) {
+      // try to fetch link; support relative paths
+      try {
+        const res = await fetch(topic.link);
+        if (res && res.ok) topicData = await res.json();
+      } catch (err) {
+        console.error("Failed to fetch topic link:", topic.link, err);
+      }
+    }
+
+    // fallback: if topicData not found but topic.title exists and topics.json stored the text
+    if (!topicData) {
+      // try to use title as content (rare)
+      topicData = { content: topic.title || "" };
+    }
+
+    // resolve content to a single string we will make chars from
+    let text = "";
+    if (Array.isArray(topicData.content) && topicData.content.length > 0) {
+      // if content is array of strings, pick the first sample by default
+      text = String(topicData.content[0]);
+    } else {
+      text = String(topicData.content || "");
+    }
+
+    // set up typing chars
+    currentChars = text.split("");
+    currentCharIndex = 0;
+    currentTopicIndex = index;
+
+    // For clarity in UI: show which topic is loaded if your accordion has an element for it
+    // (we do not modify the accordion DOM itself)
+    if (practiceArea) {
+      // keep existing practiceArea content, just clear any old mouseboard/keyboard state
+      // we intentionally do not overwrite accordion
+    }
+
+    // Render keyboard for the first required char and load
+    renderKeyboardForChar(currentChars[currentCharIndex]);
+    mode === "keyboard" ? loadKeyboardItem() : loadMouseItem();
+  }
+
+  // --- KEYBOARD MODE: render and flow ---
+  function loadKeyboardItem() {
+    if (currentCharIndex >= currentChars.length) {
+      // finished topic
+      feedbackEl.textContent = "✅ Topic complete";
+      feedbackEl.className = "text-green-600 font-semibold";
+      if (currentTopicIndex < topics.length - 1) {
+        nextBtn.classList.remove("hidden");
+      } else {
+        restartBtn.classList.remove("hidden");
+        feedbackEl.textContent = "🎉 Term complete!";
+      }
+      return;
+    }
+
+    const ch = currentChars[currentCharIndex];
+    // Display target char in lowercase so kids type lowercase
+    targetChar.textContent = String(ch).toLowerCase();
+    feedbackEl.textContent = "";
+    // auto-switch keyboard layout if needed
+    renderKeyboardForChar(ch);
+    // highlight expected key if present
+    highlightKey(ch);
+  }
+
+  function checkKeyboardInput(inputRaw) {
+    if (currentCharIndex >= currentChars.length) return;
+    const expected = String(currentChars[currentCharIndex] || "").toLowerCase();
+    const input = String(inputRaw || "").toLowerCase();
+
+    if (input === expected) {
+      feedbackEl.textContent = "✅ Correct!";
+      feedbackEl.className = "text-green-600 font-semibold";
+      currentCharIndex++;
+      setTimeout(loadKeyboardItem, 180); // brief delay then next char
+    } else {
+      feedbackEl.textContent = "❌ Try again!";
+      feedbackEl.className = "text-red-600 font-semibold";
+      // keep cursor on same char
+    }
+  }
+
+  // highlight the key button (if present)
+  function highlightKey(ch) {
+    if (!virtualKeyboard) return;
+    document.querySelectorAll("#" + virtualKeyboard.id + " .key").forEach(el => el.classList.remove("highlight"));
+    const keySelector = `[data-key="${escapeSelector(String(ch).toLowerCase())}"]`;
+    const btn = virtualKeyboard.querySelector(keySelector);
+    if (btn) btn.classList.add("highlight");
+  }
+
+  // escape CSS selector for special characters
+  function escapeSelector(s) {
+    return s.replace(/([ !"#$%&'()*+,.\/:;<=>?@[\\\]^`{|}~])/g, "\\$1");
+  }
+
+  // --- Render keyboard layout: show full rows (lowercase). Auto-switch between letters/numbers/symbols ---
+  function renderKeyboardForChar(ch) {
+    if (!virtualKeyboard) return;
+
+    // determine type of character
+    const str = String(ch || "");
+    let type = "letters";
+    if (/[0-9]/.test(str)) type = "numbers";
+    else if (/[\.\,\!\?\;\:\-\/@#\$%\^&\*\(\)\+\=\[\]\{\}"'<>\\|`~]/.test(str)) type = "symbols";
+    else if (str === " ") type = "letters"; // show letters with a visible spacebar
+
+    // keep a consistent full layout for each type (lowercase)
+    virtualKeyboard.innerHTML = ""; // only clear keyboard area (safe)
+
+    const makeRow = (keys) => {
+      const row = document.createElement("div");
+      row.className = "vk-row";
+      keys.forEach(k => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "key vk-key";
+        btn.dataset.key = k;
+        btn.textContent = k === " " ? "␣" : k;
+        // simple styling to prevent accidental accordion changes (your CSS may override)
+        btn.style.padding = "6px 10px";
+        btn.style.margin = "3px";
+        btn.style.minWidth = (k === " " ? "120px" : "34px");
+        btn.style.borderRadius = "6px";
+        btn.style.border = "1px solid #ddd";
+        btn.style.background = "#f3f4f6";
+        btn.style.cursor = "pointer";
+        row.appendChild(btn);
+      });
+      virtualKeyboard.appendChild(row);
+    };
+
+    if (type === "letters") {
+      makeRow(["q","w","e","r","t","y","u","i","o","p"]);
+      makeRow(["a","s","d","f","g","h","j","k","l"]);
+      makeRow(["z","x","c","v","b","n","m"]);
+      makeRow([" "]); // spacebar row
+    } else if (type === "numbers") {
+      makeRow(["1","2","3","4","5","6","7","8","9","0"]);
+      makeRow(["-","="," "]); // include common extras + space
+    } else if (type === "symbols") {
+      // a reasonable symbol set that covers typical punctuation in exercises
+      makeRow([".",",","!","?",";",":"]);
+      makeRow(["'","\"", "@", "#", "$", "%"]);
+      makeRow(["&","*","(",")","/","-"]);
+      makeRow([" "]); // space
+    }
+
+    // ensure keyboard click handler is attached (delegation below handles it)
+  }
+
+  // --- MOUSE MODE: similar to your original implementation, but uses normalized structures ---
+  function loadMouseItem() {
+    if (!mouseBoard) return;
+    mouseBoard.innerHTML = "";
+    if (currentCharIndex >= currentChars.length) {
+      // finished topic
+      feedbackEl.textContent = "✅ Topic complete";
+      if (currentTopicIndex < topics.length - 1) nextBtn.classList.remove("hidden");
+      else restartBtn.classList.remove("hidden");
+      return;
+    }
+
+    const word = String(currentChars[currentCharIndex] || "");
+    targetChar.textContent = word.toLowerCase();
+    feedbackEl.textContent = "";
+
+    // create letter buttons for the word (shuffle)
+    const letters = word.split("");
+    const shuffled = letters.slice().sort(() => Math.random() - 0.5);
+
+    shuffled.forEach(letter => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.textContent = String(letter).toLowerCase();
+      btn.className = "mouse-letter";
+      btn.style.padding = "6px 10px";
+      btn.style.margin = "6px";
+      btn.style.borderRadius = "8px";
+      btn.style.background = "#e9d5ff";
+      btn.style.cursor = "pointer";
+      btn.addEventListener("click", () => handleMouseClick(letter, word));
+      mouseBoard.appendChild(btn);
+    });
+
+    mouseBoard.dataset.word = word;
+    mouseBoard.dataset.progress = "";
+  }
+
+  function handleMouseClick(letter, word) {
+    let progress = mouseBoard.dataset.progress || "";
+    const expected = word[progress.length];
+    if (!expected) return;
+
+    if (String(letter) === String(expected)) {
+      progress += letter;
+      mouseBoard.dataset.progress = progress;
+      if (progress === word) {
+        feedbackEl.textContent = "✅ Correct!";
+        feedbackEl.className = "text-green-600 font-semibold";
+        currentCharIndex++;
+        setTimeout(() => {
+          loadMouseItem();
+        }, 400);
+      } else {
+        // partial progress; do nothing special
+      }
+    } else {
+      feedbackEl.textContent = "❌ Wrong letter!";
+      feedbackEl.className = "text-red-600 font-semibold";
+    }
+  }
+
+  // --- topic progression ---
+  function nextTopic() {
+    // hide next, then move to next topic in same term
+    nextBtn.classList.add("hidden");
+    currentTopicIndex++;
+    if (currentTopicIndex < topics.length) {
+      if (mode === "keyboard") loadTopicByIndex(currentTopicIndex);
+      else loadTopicByIndex(currentTopicIndex);
+    } else {
+      // no more topics in term
+      restartBtn.classList.remove("hidden");
+      feedbackEl.textContent = "🎉 Term complete!";
+    }
+  }
+
+  function restartTerm() {
+    restartBtn.classList.add("hidden");
+    currentTopicIndex = 0;
+    loadTopicByIndex(currentTopicIndex);
+  }
+
+  // --- event listeners (delegated where possible) ---
+  // Start keyboard mode
+  startKeyboardBtn?.addEventListener("click", async () => {
+    mode = "keyboard";
+    // keep accordion unchanged; show practice area
+    practiceArea?.classList.remove("hidden");
+    virtualKeyboard?.classList.remove("hidden");
+    mouseBoard?.classList.add("hidden");
+
+    await loadClasses();
+    if (!topics || topics.length === 0) {
+      feedbackEl.textContent = "No topics found in classes.json (check structure).";
+      return;
+    }
+    currentTopicIndex = 0;
+    loadTopicByIndex(currentTopicIndex);
+  });
+
+  // Start mouse mode
+  startMouseBtn?.addEventListener("click", async () => {
+    mode = "mouse";
+    practiceArea?.classList.remove("hidden");
+    virtualKeyboard?.classList.add("hidden");
+    mouseBoard?.classList.remove("hidden");
+
+    await loadClasses();
+    if (!topics || topics.length === 0) {
+      feedbackEl.textContent = "No topics found in classes.json (check structure).";
+      return;
+    }
+    currentTopicIndex = 0;
+    loadTopicByIndex(currentTopicIndex);
+  });
+
+  // Virtual keyboard click (delegation)
+  virtualKeyboard?.addEventListener("click", (ev) => {
+    const el = ev.target.closest(".key, .vk-key");
+    if (!el) return;
+    const key = el.dataset.key;
+    if (mode === "keyboard") checkKeyboardInput(key);
+  });
+
+  // Physical keyboard
+  document.addEventListener("keydown", (ev) => {
+    // ignore modifier-only keys
+    if (mode !== "keyboard") return;
+    if (!ev.key) return;
+    // allow space, punctuation, numbers and letters
+    const key = ev.key;
+    // prevent default to avoid scrolling on space while typing inside practise.
+    if (key === " ") ev.preventDefault();
+    checkKeyboardInput(key);
+  });
+
+  // Next & Restart
+  nextBtn?.addEventListener("click", nextTopic);
+  restartBtn?.addEventListener("click", restartTerm);
+
+  // --- small init ---
+  // hide practice bits until user starts
+  if (practiceArea) practiceArea.classList.add("hidden");
+  if (virtualKeyboard) virtualKeyboard.classList.add("hidden");
+  if (mouseBoard) mouseBoard.classList.add("hidden");
+});
+  
+</script>
 
 
 
 
-
-  <!-- Approved script -->
+  <!-- Approved script --
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   const container = document.getElementById("accordion");
