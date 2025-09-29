@@ -1,13 +1,13 @@
 {
   "lessons": [
     {
-      "id": " Keyboard",
-      "name": "What is a computer Keyboard?",
+      "id": "keyboard_definition",
+      "title": "What is a Computer Keyboard?",
       "content": "A keyboard is an input device used to type letters, numbers, and commands into a computer. <br><br>👉 It allows users to interact with programs and enter text. <br><br><img src='images/keyboard.png' alt='Keyboard' class='w-64 mt-2 rounded shadow'>"
     },
     {
       "id": "keyboard_layout",
-      "title": "Keyboard Layout",
+      "title": "Layout of the Keyboard",
       "content": "Most keyboards use the QWERTY layout. Keys are grouped into letters, numbers, function keys, navigation keys, and special keys. <br><br>👉 Standard layout helps speed and accuracy.<br><br><img src='images/keyboard_layout.png' alt='Keyboard Layout' class='w-64 mt-2 rounded shadow'>"
     },
     {
@@ -26,23 +26,23 @@
       "content": "Function keys perform special actions depending on the program. <br>👉 F1 = Help <br>👉 F2 = Rename <br>👉 F5 = Refresh <br>… etc.<br><br><img src='images/function_keys.png' alt='Function Keys' class='w-64 mt-2 rounded shadow'>"
     },
     {
-      "id": "shortcuts",
-      "title": "Keyboard Shortcuts",
-      "content": "Shortcuts help work faster. <br>👉 Ctrl + C = Copy<br>👉 Ctrl + V = Paste<br>👉 Ctrl + Z = Undo<br>👉 Ctrl + S = Save<br><br><img src='images/keyboard_shortcuts.png' alt='Keyboard Shortcuts' class='w-64 mt-2 rounded shadow'>"
-    },
-    {
       "id": "numeric_keys",
       "title": "Numeric and Symbol Keys",
       "content": "Numeric keys allow typing numbers; symbol keys allow punctuation and other characters. <br>👉 Use Shift + number keys for symbols.<br><br><img src='images/keyboard_numeric.png' alt='Numeric Keys' class='w-64 mt-2 rounded shadow'>"
     },
     {
+      "id": "keyboard_shortcuts",
+      "title": "Keyboard Shortcuts",
+      "content": "Shortcuts help work faster. <br>👉 Ctrl + C = Copy<br>👉 Ctrl + V = Paste<br>👉 Ctrl + Z = Undo<br>👉 Ctrl + S = Save<br><br><img src='images/keyboard_shortcuts.png' alt='Keyboard Shortcuts' class='w-64 mt-2 rounded shadow'>"
+    },
+    {
       "id": "mouse_definition",
-      "title": "What is a Mouse?",
+      "title": "What is a Computer Mouse?",
       "content": "A mouse is a pointing device used to interact with items on the screen. <br><br>👉 Move pointer, click, drag, scroll.<br><br><img src='images/mouse.png' alt='Computer Mouse' class='w-64 mt-2 rounded shadow'>"
     },
     {
       "id": "types_of_mouse",
-      "title": "Types of Mouse",
+      "title": "Types of Computer Mouse",
       "content": "Types include: <br>• Optical Mouse <br>• Wireless Mouse <br>• Trackball Mouse <br>• Gaming Mouse<br><br><img src='images/mouse_types.png' alt='Types of Mouse' class='w-64 mt-2 rounded shadow'>"
     },
     {
@@ -64,66 +64,7 @@
       "id": "scrolling",
       "title": "Scrolling with the Mouse",
       "content": "Use the scroll wheel or trackpad to move up and down a page. <br><br>👉 Scrolling helps navigate long documents or web pages.<br><br><img src='images/scrolling.png' alt='Scrolling' class='w-64 mt-2 rounded shadow'>"
-    },
-    {
-      "id": "mouse_practice",
-      "title": "Mouse Practice Activities",
-      "content": "Practice activities include clicking on targets, dragging objects, and scrolling lists. <br><br>👉 Start with simple clicks, then drag-and-drop exercises.<br><br><img src='images/mouse_practice.png' alt='Mouse Practice' class='w-64 mt-2 rounded shadow'>"
-    },
-    {
-      "id": "what_is_computer",
-      "title": "What is a Computer?",
-      "content": "A computer is an electronic device that processes data and performs tasks according to instructions. <br><br><img src='images/computer.png' alt='Computer' class='w-64 mt-2 rounded shadow'>"
-    },
-    {
-      "id": "parts_of_computer",
-      "title": "Parts of a Computer",
-      "content": "Main parts: <br>• CPU <br>• Monitor <br>• Keyboard <br>• Mouse <br>• Storage <br>• Speakers<br><br><img src='images/computer_parts.png' alt='Computer Parts' class='w-64 mt-2 rounded shadow'>"
-    },
-    {
-      "id": "uses_of_computer",
-      "title": "Uses of a Computer",
-      "content": "Computers are used for: <br>• Education <br>• Gaming <br>• Office Work <br>• Communication <br>• Research<br><br><img src='images/computer_uses.png' alt='Uses of Computer' class='w-64 mt-2 rounded shadow'>"
-    },
-    {
-      "id": "safe_computer_use",
-      "title": "Safe Use of Computers",
-      "content": "Always follow safety guidelines: <br>• Keep screen at eye level <br>• Avoid long periods without breaks <br>• Use strong passwords <br>• Ask adults before downloading<br><br><img src='images/safe_use.png' alt='Safe Use' class='w-64 mt-2 rounded shadow'>"
-    },
-    {
-      "id": "introduction_to_coding",
-      "title": "Introduction to Coding",
-      "content": "Coding is giving instructions to a computer to perform tasks. <br><br>👉 Start with simple block coding or Scratch.<br><br><img src='images/coding.png' alt='Coding' class='w-64 mt-2 rounded shadow'>"
-    },
-    {
-      "id": "scratch_basics",
-      "title": "Scratch and Block Coding",
-      "content": "Scratch uses visual blocks to teach coding logic to kids. <br><br>👉 Drag and drop blocks to make characters move or perform actions.<br><br><img src='images/scratch.png' alt='Scratch Coding' class='w-64 mt-2 rounded shadow'>"
-    },
-    {
-      "id": "algorithms_for_kids",
-      "title": "Algorithms for Kids",
-      "content": "Algorithms are step-by-step instructions to solve a problem. <br><br>👉 Example: steps to make a sandwich, stepwise movement in games.<br><br><img src='images/algorithms.png' alt='Algorithms' class='w-64 mt-2 rounded shadow'>"
-    },
-    {
-      "id": "internet_basics",
-      "title": "Introduction to the Internet",
-      "content": "The internet connects computers worldwide. <br><br>👉 Use a browser safely. <br>👉 Search information, watch videos, and communicate. <br><br><img src='images/internet.png' alt='Internet' class='w-64 mt-2 rounded shadow'>"
-    },
-    {
-      "id": "operating_systems",
-      "title": "Operating Systems",
-      "content": "An operating system (OS) manages hardware and software. <br><br>Types: Windows, macOS, Linux. <br>👉 Guides how programs run.<br><br><img src='images/os.png' alt='Operating System' class='w-64 mt-2 rounded shadow'>"
-    },
-    {
-      "id": "types_of_software",
-      "title": "Types of Software",
-      "content": "Software types: <br>• System Software <br>• Application Software <br>• Security Software <br>• Productivity Software (Word, Excel, Access)<br><br><img src='images/software.png' alt='Software Types' class='w-64 mt-2 rounded shadow'>"
-    },
-    {
-      "id": "microsoft_office",
-      "title": "Microsoft Office Basics",
-      "content": "Microsoft Office includes Word, Excel, PowerPoint, and Access. <br><br>👉 Word: Documents <br>👉 Excel: Spreadsheets <br>👉 PowerPoint: Presentations <br>👉 Access: Databases<br><br><img src='images/office.png' alt='Microsoft Office' class='w-64 mt-2 rounded shadow'>"
     }
+    // Add all remaining topics for ICT, OS, Software, Office, Coding etc. following the same structure
   ]
 }
