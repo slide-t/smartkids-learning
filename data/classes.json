@@ -15,18 +15,17 @@
                 {
   "title": "Home Row Drill",
   "instruction": "Repeat the home row letters, build speed and accuracy.",
-  "sample": ["A", "S", "D", "F", "J", "K", "L", ";", ";", "L", "K", "J", "F", "D", "S", "A", "AAA", "SSS", "JJJ", "KKK", "DDD", "LKJ", "FDF", "DSA"]
-
+  "sample": ["a", "s", "d", "f", "j", "k", "l", ";", ";", "l", "k", "j", "f", "d", "s", "a", "aaa", "sss", "jjj", "kkk", "ddd", "lkj", "fdf", "dsa"]
        },
                 {
                   "title": "Two Letter Words",
                   "instruction": "Type simple two-letter words using home-row letters.",
-                  "sample": ["AS", "AD", "FA", "JK", "KL", "FJ", "AL", "KS", "DJ", "AF", "LA", "KS", "JD", "F;"]
+                  "sample": ["as", "ad", "fa", "jk", "kl", "fj", "al", "ks", "dj", "af", "la", "ks", "jd", "ff;"]
                 },
                 {
                   "title": "Three Letter Words",
                   "instruction": "Type these three-letter words slowly and correctly.",
-                  "sample": ["CAT", "DOG", "SUN", "HAT", "FUN"]
+                  "sample": ["cat", "dog", "sun", "hat", "fun"]
                 }
               ]
             },
