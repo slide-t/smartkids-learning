@@ -54,6 +54,56 @@
     "id": "keyboard_shortcuts",
     "title": "Keyboard Shortcuts",
     "content": "Shortcuts help you work faster. <br><br>👉 **Ctrl + C** = Copy <br>👉 **Ctrl + V** = Paste <br>👉 **Ctrl + X** = Cut <br>👉 **Ctrl + Z** = Undo <br>👉 **Ctrl + S** = Save <br><br>Practice shortcuts to save time while working.<br><br><img src='images/keyboard_shortcuts.png' alt='Keyboard Shortcuts' class='w-64 mt-2 rounded shadow'>"
+  },
+  {
+    "id": "mouse_definition",
+    "title": "What is a Computer Mouse?",
+    "content": "A computer mouse is a pointing device used to interact with items on the screen. <br><br>👉 Move the pointer to select icons, buttons, and menus. <br>👉 Click, drag, and scroll to control the computer efficiently. <br><br><img src='images/mouse.png' alt='Computer Mouse' class='w-64 mt-2 rounded shadow'>"
+  },
+  {
+    "id": "types_of_mouse",
+    "title": "Types of Computer Mouse",
+    "content": "There are different types of mice for different purposes: <br>• **Optical Mouse**: Uses light to detect movement. <br>• **Wireless Mouse**: Connects without a cable. <br>• **Trackball Mouse**: Moves pointer by rotating a ball. <br>• **Gaming Mouse**: Extra buttons and higher sensitivity for games. <br><br><img src='images/mouse_types.png' alt='Types of Mouse' class='w-64 mt-2 rounded shadow'>"
+  },
+  {
+    "id": "mouse_buttons",
+    "title": "Mouse Buttons and Their Uses",
+    "content": "A standard mouse has several buttons: <br>• **Left button**: Select items, click links. <br>• **Right button**: Opens context menus. <br>• **Scroll wheel**: Moves page up/down. <br>• **Additional buttons**: For extra functions or gaming shortcuts. <br><br><img src='images/mouse_buttons.png' alt='Mouse Buttons' class='w-64 mt-2 rounded shadow'>"
+  },
+  {
+    "id": "mouse_actions",
+    "title": "Mouse Actions",
+    "content": "Common mouse actions include: <br>• **Single click** – select an item <br>• **Double click** – open files or programs <br>• **Drag and drop** – move objects <br>• **Scroll** – navigate pages <br>• **Right click** – open menus <br><br><img src='images/mouse_actions.png' alt='Mouse Actions' class='w-64 mt-2 rounded shadow'>"
+  },
+  {
+    "id": "drag_drop",
+    "title": "Drag and Drop",
+    "content": "Dragging means holding down the mouse button while moving an object. <br><br>👉 Used to move files, icons, or text. <br>👉 Always release the button to drop the item in the new location. <br><br><img src='images/drag_drop.png' alt='Drag and Drop' class='w-64 mt-2 rounded shadow'>"
+  },
+  {
+    "id": "scrolling",
+    "title": "Scrolling with the Mouse",
+    "content": "Scrolling allows you to move up and down a document or web page. <br><br>👉 Use the scroll wheel or trackpad. <br>👉 Scrolling is helpful for reading long content. <br><br><img src='images/scrolling.png' alt='Scrolling' class='w-64 mt-2 rounded shadow'>"
+  },
+  {
+    "id": "mouse_clicking",
+    "title": "Clicking Basics",
+    "content": "Clicking is pressing and releasing a mouse button quickly. <br><br>👉 **Single click**: Select an item. <br>👉 **Double click**: Open a file or folder. <br>👉 Use your **index finger** for left click. <br><br><img src='images/mouse_click.png' alt='Mouse Clicking' class='w-64 mt-2 rounded shadow'>"
+  },
+  {
+    "id": "mouse_dragging",
+    "title": "Clicking and Dragging",
+    "content": "Dragging means holding a button while moving the mouse. <br><br>👉 Used to move objects, highlight text, or draw shapes. <br>👉 Release the button when done. <br><br><img src='images/mouse_drag.png' alt='Mouse Dragging' class='w-64 mt-2 rounded shadow'>"
+  },
+  {
+    "id": "mouse_precision",
+    "title": "High-Speed Precision Tasks",
+    "content": "Some activities require fast and accurate mouse movement. <br><br>👉 Practice moving the pointer to small targets. <br>👉 Click quickly but carefully. <br>👉 Helps in gaming and graphic design. <br><br><img src='images/mouse_precision.png' alt='Mouse Precision' class='w-64 mt-2 rounded shadow'>"
+  },
+  {
+    "id": "mouse_practice",
+    "title": "Mouse Practice Activities",
+    "content": "Practice exercises help improve speed and accuracy: <br>• Clicking on targets <br>• Dragging objects <br>• Scrolling lists <br><br>👉 Start with simple exercises and progress to complex tasks. <br><br><img src='images/mouse_practice.png' alt='Mouse Practice' class='w-64 mt-2 rounded shadow'>"
   }
 ]
 }
