@@ -1,7 +1,7 @@
 {
   "lessons": [
     {
-      "id": "keyboard_definition",
+      "id": "Computer Keyboard",
       "title": "What is a Keyboard?",
       "content": "A keyboard is an input device used to type letters, numbers, and commands into a computer. <br><br>👉 It allows users to interact with programs and enter text. <br><br><img src='images/keyboard.png' alt='Keyboard' class='w-64 mt-2 rounded shadow'>"
     },
