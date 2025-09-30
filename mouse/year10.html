@@ -1,153 +1,567 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>SmartKids - Year 10 Mouse Practice</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-  body { font-family:sans-serif; background:#f3f4f6; margin:0; padding:0; }
-  header { background:#1e40af; color:white; padding:1rem; display:flex; justify-content:space-between; align-items:center; }
-  header a { background:white; color:#1e40af; padding:0.5rem 1rem; border-radius:0.5rem; font-weight:bold; text-decoration:none; }
-  main { padding:2rem; max-width:900px; margin:auto; }
-  h2 { margin-bottom:0.5rem; }
-  .practiceArea { width:100%; height:220px; background:#e5e7eb; border-radius:0.5rem; position:relative; margin-bottom:20px; overflow:hidden; }
-  .object { width:50px; height:50px; background:#f59e0b; position:absolute; display:flex; justify-content:center; align-items:center; color:white; font-weight:bold; cursor:pointer; user-select:none; border-radius:0.25rem; }
-  .selected { border:2px dashed #1e40af; }
-  .precision { width:70px; height:50px; border:2px solid #10b981; position:absolute; top:50px; left:50px; display:flex; justify-content:center; align-items:center; }
+  :root{
+    --accent:#1e40af;
+    --success:#16a34a;
+    --error:#ef4444;
+    --bg:#f3f4f6;
+  }
+  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;margin:0;background:var(--bg);color:#111}
+  header{background:var(--accent);color:#fff;padding:1rem;display:flex;justify-content:space-between;align-items:center}
+  header a{background:#fff;color:var(--accent);padding:.45rem .85rem;border-radius:.5rem;text-decoration:none;font-weight:600}
+  main{max-width:980px;margin:1.5rem auto;padding:0 1rem}
+  .accordion{margin-bottom:1rem;border-radius:.6rem;overflow:hidden}
+  .accordion-header{background:var(--accent);color:#fff;padding:.9rem 1rem;cursor:pointer;font-weight:700;border:none;width:100%;text-align:left;border-radius:.5rem}
+  .accordion-content{display:none;padding:1rem;background:#fff;border:1px solid #e6e9ef;border-radius:.5rem;margin-top:.5rem;box-shadow:0 6px 18px rgba(15,23,42,0.04)}
+  .practiceArea{width:100%;height:260px;border-radius:.5rem;background:#f8fafc;position:relative;overflow:hidden;border:1px solid #e6e9ef}
+  .object{width:56px;height:56px;border-radius:.5rem;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;position:absolute;cursor:grab;box-shadow:0 6px 18px rgba(15,23,42,0.08);transition:transform .12s, box-shadow .12s}
+  .object:active{cursor:grabbing;transform:scale(.98)}
+  .rotate-3d{background:linear-gradient(135deg,#f59e0b,#d97706)}
+  .layer-box{background:linear-gradient(135deg,#06b6d4,#0ea5a9)}
+  .precision-target{width:80px;height:60px;border-radius:.25rem;background:#bbf7d0;border:2px dashed #10b981;position:absolute;left:calc(50% - 40px);top:calc(50% - 30px);display:flex;align-items:center;justify-content:center;font-weight:700;color:#065f46}
+  .slot{width:66px;height:66px;border-radius:.35rem;background:#fff;border:2px dashed #94a3b8;position:absolute;display:flex;align-items:center;justify-content:center}
+  .group-box{position:absolute;right:12px;bottom:12px;width:170px;height:150px;border-radius:.5rem;border:2px dashed #94a3b8;background:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;color:#374151}
+  .marker{width:4px;height:100%;background:#ef4444;position:absolute;top:0}
+  #playhead{width:12px;height:100%;background:var(--accent);position:absolute;left:0;top:0;cursor:grab;border-radius:2px}
+  .stats{margin-top:.6rem;display:flex;align-items:center;gap:1rem;font-weight:700}
+  .btn{background:var(--accent);color:#fff;padding:.5rem .8rem;border-radius:.45rem;border:none;cursor:pointer}
+  .small{font-size:.85rem;padding:.35rem .6rem;border-radius:.35rem}
+  .flash-success{box-shadow:0 0 0 6px rgba(22,163,74,.12);animation:flash .45s linear}
+  @keyframes flash{0%{transform:scale(1)}50%{transform:scale(1.01)}100%{transform:scale(1)}}
+  .shake{animation:shake .35s}
+  @keyframes shake{0%{transform:translateX(0)}25%{transform:translateX(-6px)}50%{transform:translateX(6px)}75%{transform:translateX(-4px)}100%{transform:translateX(0)}}
+  .ready-note{font-size:.9rem;color:#374151;margin-top:.3rem}
+  .muted{color:#6b7280;font-weight:600}
 </style>
 </head>
 <body>
-
 <header>
-  <h1 class="text-xl font-bold">Year 10 Mouse Practice</h1>
+  <div class="flex items-center gap-4">
+    <h1 class="text-xl font-bold">Year 10 Mouse Practice</h1>
+  </div>
   <a href="https://slide-t.github.io/smartkids-learning/mouse.html">Back To Classes</a>
 </header>
 
 <main>
+  <!-- Accordion 1: 3D Rotation -->
+  <div class="accordion">
+    <button class="accordion-header" data-section="rotate">🔁 3D Object Manipulation</button>
+    <div class="accordion-content" id="rotateContent">
+      <p class="ready-note">Rotate a shape by clicking and dragging horizontally. Rotate **≥ 45°** to score. Complete all 3 to finish.</p>
+      <div class="practiceArea" id="rotateArea" aria-label="3D rotate area"></div>
+      <div class="stats">
+        <span id="rotateScore">Score: 0</span>
+        <span id="rotateTime">Time: 0s</span>
+        <button class="btn small" id="rotateRestart">Restart</button>
+        <span class="muted">Targets done: <span id="rotateDone">0/3</span></span>
+      </div>
+    </div>
+  </div>
 
-<h2>3D Object Manipulation</h2>
-<p>Click and drag to rotate objects.</p>
-<div id="rotateArea" class="practiceArea"></div>
+  <!-- Accordion 2: Layer Controls -->
+  <div class="accordion">
+    <button class="accordion-header" data-section="layers">📚 Layer Controls (Stacking)</button>
+    <div class="accordion-content" id="layersContent">
+      <p class="ready-note">Drag boxes into the stacking zone and order them so that their z-index from top to bottom matches 1→2→3 (top = 3). Drop all correctly to score.</p>
+      <div class="practiceArea" id="layerArea" aria-label="layer area">
+        <!-- stacking target area -->
+        <div id="stackZone" style="position:absolute;left:18px;top:20px;width:220px;height:200px;border-radius:.5rem;border:2px dashed #cbd5e1;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fff">
+          <div style="font-weight:700;color:#475569">Stack Here</div>
+        </div>
+      </div>
+      <div class="stats">
+        <span id="layersScore">Score: 0</span>
+        <span id="layersTime">Time: 0s</span>
+        <button class="btn small" id="layersRestart">Restart</button>
+        <span class="muted">Correct stacks: <span id="layerDone">0/1</span></span>
+      </div>
+    </div>
+  </div>
 
-<h2>Layer Controls in Editing</h2>
-<p>Drag boxes to change stacking order.</p>
-<div id="layerArea" class="practiceArea"></div>
-
-<h2>Precision Selection Tools</h2>
-<p>Drag to outline the green rectangle.</p>
-<div id="precisionArea" class="practiceArea">
-  <div class="precision">Target</div>
-</div>
-
+  <!-- Accordion 3: Precision Selection -->
+  <div class="accordion">
+    <button class="accordion-header" data-section="precision">🎯 Precision Selection Tools</button>
+    <div class="accordion-content" id="precisionContent">
+      <p class="ready-note">Drag to create a selection box that overlaps the green target by at least 75% area to score. 3 hits to finish.</p>
+      <div class="practiceArea" id="precisionArea" aria-label="precision area">
+        <div class="precision-target" id="precisionTarget">Target</div>
+      </div>
+      <div class="stats">
+        <span id="precisionScore">Score: 0</span>
+        <span id="precisionTime">Time: 0s</span>
+        <button class="btn small" id="precisionRestart">Restart</button>
+        <span class="muted">Hits: <span id="precisionDone">0/3</span></span>
+      </div>
+    </div>
+  </div>
 </main>
 
 <script>
-document.addEventListener('DOMContentLoaded',()=>{
-
-  // 3D Object Manipulation
-  const rotateArea=document.getElementById('rotateArea');
-  for(let i=0;i<3;i++){
-    const obj=document.createElement('div');
-    obj.className='object';
-    obj.textContent=i+1;
-    obj.style.left=(50+i*70)+'px';
-    obj.style.top='50px';
-    rotateArea.appendChild(obj);
-    makeRotatable(obj);
+/* ---------------------------
+  Audio helpers (AudioContext)
+   - success / error / open / restart / complete
+   - built in, short tones
+ --------------------------- */
+function tone(freq, duration=0.18, type='sine', vol=0.15){
+  try{
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    const ctx = new Ctx();
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.type = type;
+    o.frequency.value = freq;
+    o.connect(g);
+    g.connect(ctx.destination);
+    g.gain.setValueAtTime(vol, ctx.currentTime);
+    o.start();
+    o.stop(ctx.currentTime + duration);
+    // fade out
+    g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+  }catch(e){
+    // AudioContext blocked or not available — silent fail
+    console.warn('audio error', e);
   }
+}
+function playSuccess(){ tone(880,0.14,'sine',0.18); }
+function playError(){ tone(220,0.12,'sawtooth',0.12); }
+function playOpen(){ tone(600,0.12,'sine',0.08); }
+function playRestart(){ tone(440,0.12,'triangle',0.12); }
+function playComplete(){ tone(1200,0.16,'sine',0.22); tone(1000,0.16,'sawtooth',0.12); }
 
-  function makeRotatable(el){
-    let startX=0;
-    el.addEventListener('mousedown',e=>{
-      startX=e.clientX;
-      document.onmousemove=drag;
-      document.onmouseup=endDrag;
-    });
-    function drag(e){
-      const diff=e.clientX-startX;
-      el.style.transform=`rotateY(${diff}deg)`;
+/* ---------------------------
+  Accordion behaviour
+  - only one open at a time
+  - starting timers when open
+ --------------------------- */
+const headers = document.querySelectorAll('.accordion-header');
+headers.forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    // close others
+    document.querySelectorAll('.accordion-content').forEach(c=>c.style.display='none');
+    const content = btn.nextElementSibling;
+    const open = content.style.display === 'block';
+    if(!open){
+      content.style.display = 'block';
+      playOpen();
+      // start timer for the section if not started
+      const section = btn.dataset.section;
+      startTimerFor(section);
+    } else {
+      content.style.display = 'none';
     }
-    function endDrag(){
-      document.onmousemove=null;
-      document.onmouseup=null;
-    }
-  }
-
-  // Layer Controls
-  const layerArea=document.getElementById('layerArea');
-  const layers=[];
-  for(let i=0;i<3;i++){
-    const obj=document.createElement('div');
-    obj.className='object';
-    obj.textContent=i+1;
-    obj.style.left=(50+i*70)+'px';
-    obj.style.top='50px';
-    obj.style.zIndex=i+1;
-    layerArea.appendChild(obj);
-    makeLayerDraggable(obj);
-    layers.push(obj);
-  }
-
-  function makeLayerDraggable(el){
-    let dragging=false, offsetX=0, offsetY=0;
-    el.addEventListener('mousedown',e=>{
-      dragging=true;
-      offsetX=e.clientX-el.offsetLeft;
-      offsetY=e.clientY-el.offsetTop;
-      el.style.zIndex=1000; // bring to front
-    });
-    document.addEventListener('mouseup',()=>{dragging=false; el.style.zIndex=layers.indexOf(el)+1;});
-    document.addEventListener('mousemove',e=>{
-      if(!dragging) return;
-      let left=e.clientX-offsetX;
-      let top=e.clientY-offsetY;
-      left=Math.max(0, Math.min(layerArea.clientWidth-el.offsetWidth,left));
-      top=Math.max(0, Math.min(layerArea.clientHeight-el.offsetHeight,top));
-      el.style.left=left+'px';
-      el.style.top=top+'px';
-    });
-  }
-
-  // Precision Selection
-  const precisionArea=document.getElementById('precisionArea');
-  const target=precisionArea.querySelector('.precision');
-  let selecting=false;
-  let startX=0,startY=0;
-  const selection=document.createElement('div');
-  selection.style.position='absolute';
-  selection.style.border='2px dashed #ef4444';
-  selection.style.background='rgba(239,68,68,0.2)';
-  precisionArea.appendChild(selection);
-
-  precisionArea.addEventListener('mousedown',e=>{
-    selecting=true;
-    startX=e.offsetX;
-    startY=e.offsetY;
-    selection.style.left=startX+'px';
-    selection.style.top=startY+'px';
-    selection.style.width='0px';
-    selection.style.height='0px';
   });
-
-  precisionArea.addEventListener('mousemove',e=>{
-    if(!selecting) return;
-    const w=e.offsetX-startX;
-    const h=e.offsetY-startY;
-    selection.style.width=Math.abs(w)+'px';
-    selection.style.height=Math.abs(h)+'px';
-    selection.style.left=(w<0?e.offsetX:startX)+'px';
-    selection.style.top=(h<0?e.offsetY:startY)+'px';
-  });
-
-  precisionArea.addEventListener('mouseup',e=>{
-    selecting=false;
-  });
-
 });
+
+/* ---------------------------
+  Timer factory (per section)
+ --------------------------- */
+function createTimer(displayEl){
+  let t = 0, interval = null;
+  return {
+    start(){
+      if(interval) return;
+      interval = setInterval(()=>{
+        t++;
+        displayEl.textContent = 'Time: ' + t + 's';
+      },1000);
+    },
+    reset(){
+      clearInterval(interval); interval = null; t = 0; displayEl.textContent = 'Time: 0s';
+    }
+  };
+}
+
+/* ---------------------------
+  Section: Rotate (3D rotation)
+  - click + drag horizontally rotates element (CSS rotateY)
+  - if delta >= threshold (45deg) on mouseup -> success, lock object
+  - goal: rotate all 3 objects
+ --------------------------- */
+const rotateArea = document.getElementById('rotateArea');
+const rotateScoreEl = document.getElementById('rotateScore');
+const rotateTimeEl = document.getElementById('rotateTime');
+const rotateDoneEl = document.getElementById('rotateDone');
+const rotateTimer = createTimer(rotateTimeEl);
+let rotateScore = 0, rotateDone = 0;
+let rotateStarted = false;
+
+function initRotate(){
+  rotateArea.innerHTML = '';
+  rotateScore = 0; rotateDone = 0;
+  rotateScoreEl.textContent = 'Score: 0';
+  rotateDoneEl.textContent = '0/3';
+  rotateTimer.reset();
+  rotateStarted = false;
+
+  for(let i=0;i<3;i++){
+    const el = document.createElement('div');
+    el.className = 'object rotate-3d';
+    el.textContent = i+1;
+    el.style.left = (28 + i*85) + 'px';
+    el.style.top = '90px';
+    el.dataset.index = i;
+    el.dataset.locked = 'false';
+    el.style.transform = 'rotateY(0deg)';
+    setupRotatable(el);
+    rotateArea.appendChild(el);
+  }
+}
+function setupRotatable(el){
+  let dragging = false, startX = 0, acc = 0;
+  const threshold = 45; // degrees
+
+  el.addEventListener('mousedown', e=>{
+    if(el.dataset.locked === 'true') return;
+    dragging = true;
+    startX = e.clientX;
+    acc = 0;
+    document.body.style.cursor = 'grabbing';
+  });
+  document.addEventListener('mousemove', e=>{
+    if(!dragging) return;
+    const dx = e.clientX - startX;
+    // map dx to degrees (gentle)
+    const deg = dx;
+    acc = deg;
+    el.style.transform = `rotateY(${deg}deg)`;
+  });
+  document.addEventListener('mouseup', ()=>{
+    if(!dragging) return;
+    dragging = false;
+    document.body.style.cursor = '';
+    // check threshold
+    if(Math.abs(acc) >= threshold){
+      // success: lock and snap to 90deg direction
+      const snapped = acc > 0 ? 90 : -90;
+      el.style.transform = `rotateY(${snapped}deg)`;
+      el.dataset.locked = 'true';
+      rotateScore += 5;
+      rotateDone += 1;
+      rotateScoreEl.textContent = 'Score: ' + rotateScore;
+      rotateDoneEl.textContent = rotateDone + '/3';
+      rotateArea.classList.add('flash-success');
+      setTimeout(()=>rotateArea.classList.remove('flash-success'),350);
+      playSuccess();
+      if(rotateDone === 3){
+        // complete
+        playComplete();
+        showToast('Design practice complete! + bonus 10', 'success');
+        rotateScore += 10;
+        rotateScoreEl.textContent = 'Score: ' + rotateScore;
+      }
+    } else {
+      // fail: bounce back
+      el.style.transform = 'rotateY(0deg)';
+      el.classList.add('shake');
+      setTimeout(()=>el.classList.remove('shake'),300);
+      playError();
+    }
+  });
+}
+
+/* ---------------------------
+  Section: Layers (stacking)
+  - drag three boxes — drop into stack zone
+  - to be correct, the z-order of boxes within the zone must be top=3, mid=2, bottom=1
+  - user changes z-index by clicking a box to bring to front (or by dragging), topmost is last clicked (we'll set zIndex)
+ --------------------------- */
+const layerArea = document.getElementById('layerArea');
+const layersScoreEl = document.getElementById('layersScore');
+const layersTimeEl = document.getElementById('layersTime');
+const layerDoneEl = document.getElementById('layerDone');
+const layersTimer = createTimer(layersTimeEl);
+let layersScore = 0;
+let stackZone = null;
+let layerObjects = [];
+
+function initLayers(){
+  layerArea.innerHTML = '';
+  layersScore = 0; layersScoreEl.textContent = 'Score: 0';
+  layerDoneEl.textContent = '0/1';
+  layersTimer.reset();
+  layerObjects = [];
+
+  // create stack zone (already exists static in markup, but ensure)
+  stackZone = document.getElementById('stackZone');
+
+  // create draggable boxes with distinct ids (1,2,3)
+  for(let i=1;i<=3;i++){
+    const b = document.createElement('div');
+    b.className = 'object layer-box';
+    b.textContent = i;
+    b.style.left = (260 + (i-1)*70) + 'px';
+    b.style.top = '50px';
+    b.dataset.id = String(i);
+    b.style.zIndex = 10 + i;
+    layerArea.appendChild(b);
+    setupLayerDrag(b);
+    layerObjects.push(b);
+  }
+  // enable click-to-front
+  layerArea.addEventListener('click', e=>{
+    const t = e.target.closest('.layer-box');
+    if(t){
+      bringToFront(t);
+    }
+  });
+}
+function bringToFront(el){
+  // set highest zIndex among layerObjects + 1
+  const max = Math.max(...layerObjects.map(o=>Number(o.style.zIndex)||0));
+  el.style.zIndex = max + 1;
+  el.classList.add('flash-success');
+  setTimeout(()=>el.classList.remove('flash-success'),280);
+}
+function setupLayerDrag(el){
+  let dragging=false, ox=0, oy=0;
+  el.addEventListener('mousedown', e=>{
+    dragging = true;
+    ox = e.clientX - el.getBoundingClientRect().left;
+    oy = e.clientY - el.getBoundingClientRect().top;
+    bringToFront(el);
+    document.body.style.cursor='grabbing';
+  });
+  document.addEventListener('mousemove', e=>{
+    if(!dragging) return;
+    const rect = layerArea.getBoundingClientRect();
+    let left = e.clientX - rect.left - ox;
+    let top = e.clientY - rect.top - oy;
+    left = Math.max(0, Math.min(rect.width - el.offsetWidth, left));
+    top = Math.max(0, Math.min(rect.height - el.offsetHeight, top));
+    el.style.left = left + 'px';
+    el.style.top = top + 'px';
+  });
+  document.addEventListener('mouseup', ()=>{
+    if(!dragging) return;
+    dragging = false;
+    document.body.style.cursor='';
+    // check if inside stackZone bounds
+    const rz = stackZone.getBoundingClientRect();
+    const rb = el.getBoundingClientRect();
+    if(!(rb.right < rz.left || rb.left > rz.right || rb.bottom < rz.top || rb.top > rz.bottom)){
+      // snapped into zone: center in zone in stack order (we'll stack them vertically)
+      const inside = layerObjects.filter(o=>{
+        const r=o.getBoundingClientRect();
+        return !(r.right < rz.left || r.left > rz.right || r.bottom < rz.top || r.top > rz.bottom);
+      });
+      // place current el inside zone area (basic snap)
+      el.style.left = (rz.left - layerArea.getBoundingClientRect().left + 12) + 'px';
+      el.style.top = (rz.top - layerArea.getBoundingClientRect().top + 8 + (inside.length*28)) + 'px';
+    }
+    // After every drop, check correctness (if all three inside and z-order correct)
+    checkLayerCorrect();
+  });
+}
+
+function checkLayerCorrect(){
+  const rz = stackZone.getBoundingClientRect();
+  const inside = layerObjects.filter(o=>{
+    const r=o.getBoundingClientRect();
+    return !(r.right < rz.left || r.left > rz.right || r.bottom < rz.top || r.top > rz.bottom);
+  });
+  if(inside.length !== 3){
+    return; // not all placed yet
+  }
+  // Determine top->bottom order by looking at zIndex (higher zIndex means visually on top)
+  const order = inside.slice().sort((a,b)=>Number(b.style.zIndex||0)-Number(a.style.zIndex||0)).map(el=>Number(el.dataset.id));
+  // desired top->bottom is [3,2,1]
+  const isCorrect = (order[0]===3 && order[1]===2 && order[2]===1);
+  if(isCorrect){
+    layersScore += 15;
+    layersScoreEl.textContent = 'Score: ' + layersScore;
+    layerDoneEl.textContent = '1/1';
+    layerArea.classList.add('flash-success');
+    setTimeout(()=>layerArea.classList.remove('flash-success'),420);
+    playSuccess();
+    // prevent further scoring repeatedly
+    // detach listeners by removing pointer events on objects
+    layerObjects.forEach(o=> o.style.pointerEvents = 'none');
+    // completion sound
+    playComplete();
+  } else {
+    // small error feedback
+    layerArea.classList.add('shake');
+    setTimeout(()=>layerArea.classList.remove('shake'),300);
+    playError();
+  }
+}
+
+/* ---------------------------
+  Section: Precision Selection
+  - draw selection rectangle
+  - compute overlap area percentage with target
+  - if overlap >= 75% count as hit and remove target / award
+  - need 3 hits
+ --------------------------- */
+const precisionArea = document.getElementById('precisionArea');
+const precisionTarget = document.getElementById('precisionTarget');
+const precisionScoreEl = document.getElementById('precisionScore');
+const precisionTimeEl = document.getElementById('precisionTime');
+const precisionDoneEl = document.getElementById('precisionDone');
+const precisionTimer = createTimer(precisionTimeEl);
+let precisionScore = 0, precisionHits = 0;
+
+let selecting = false;
+let selStart = {x:0,y:0};
+const selectionBox = document.createElement('div');
+selectionBox.style.position = 'absolute';
+selectionBox.style.border = '2px dashed rgba(239,68,68,0.9)';
+selectionBox.style.background = 'rgba(239,68,68,0.12)';
+selectionBox.style.display = 'none';
+precisionArea.appendChild(selectionBox);
+
+function initPrecision(){
+  // reset target(s) — we will create 3 targets that appear sequentially
+  precisionArea.querySelectorAll('.precision-target').forEach(el=>{
+    // keep only main target
+  });
+  precisionScore = 0; precisionHits = 0;
+  precisionScoreEl.textContent = 'Score: 0';
+  precisionDoneEl.textContent = '0/3';
+  precisionTimer.reset();
+  // position the target at a random position inside area
+  placePrecisionTargetRandom();
+}
+function placePrecisionTargetRandom(){
+  const rect = precisionArea.getBoundingClientRect();
+  // compute safe area to place target
+  const tw = precisionTarget.offsetWidth;
+  const th = precisionTarget.offsetHeight;
+  const left = Math.floor(Math.random()*(rect.width - tw - 40)) + 20;
+  const top  = Math.floor(Math.random()*(rect.height - th - 40)) + 20;
+  precisionTarget.style.left = left + 'px';
+  precisionTarget.style.top = top + 'px';
+  precisionTarget.style.display = 'flex';
+}
+
+/* selection drag handlers */
+precisionArea.addEventListener('mousedown', (e)=>{
+  // hide if clicking target itself? still okay
+  selecting = true;
+  const rect = precisionArea.getBoundingClientRect();
+  selStart.x = e.clientX - rect.left;
+  selStart.y = e.clientY - rect.top;
+  selectionBox.style.left = selStart.x + 'px';
+  selectionBox.style.top = selStart.y + 'px';
+  selectionBox.style.width = '0px';
+  selectionBox.style.height = '0px';
+  selectionBox.style.display = 'block';
+});
+document.addEventListener('mousemove', (e)=>{
+  if(!selecting) return;
+  const rect = precisionArea.getBoundingClientRect();
+  let curX = e.clientX - rect.left;
+  let curY = e.clientY - rect.top;
+  const w = curX - selStart.x;
+  const h = curY - selStart.y;
+  selectionBox.style.left = (w < 0 ? curX : selStart.x) + 'px';
+  selectionBox.style.top  = (h < 0 ? curY : selStart.y) + 'px';
+  selectionBox.style.width = Math.abs(w) + 'px';
+  selectionBox.style.height = Math.abs(h) + 'px';
+});
+document.addEventListener('mouseup', (e)=>{
+  if(!selecting) return;
+  selecting = false;
+  selectionBox.style.display = 'none';
+  // compute overlap with target
+  const selRect = selectionBox.getBoundingClientRect();
+  const tRect = precisionTarget.getBoundingClientRect();
+  const interLeft = Math.max(selRect.left, tRect.left);
+  const interRight = Math.min(selRect.right, tRect.right);
+  const interTop = Math.max(selRect.top, tRect.top);
+  const interBottom = Math.min(selRect.bottom, tRect.bottom);
+  const interW = Math.max(0, interRight - interLeft);
+  const interH = Math.max(0, interBottom - interTop);
+  const interArea = interW * interH;
+  const tArea = tRect.width * tRect.height;
+  const pct = tArea === 0 ? 0 : (interArea / tArea) * 100;
+  if(pct >= 75){
+    // success
+    precisionHits++; precisionScore += 5;
+    precisionScoreEl.textContent = 'Score: ' + precisionScore;
+    precisionDoneEl.textContent = precisionHits + '/3';
+    precisionTarget.classList.add('flash-success');
+    playSuccess();
+    setTimeout(()=>precisionTarget.classList.remove('flash-success'),300);
+    if(precisionHits >= 3){
+      playComplete();
+      showToast('Precision practice complete! + bonus 8', 'success');
+      precisionScore += 8;
+      precisionScoreEl.textContent = 'Score: ' + precisionScore;
+    } else {
+      // reposition target
+      placePrecisionTargetRandom();
+    }
+  } else {
+    playError();
+    // red flash
+    precisionArea.classList.add('shake');
+    setTimeout(()=>precisionArea.classList.remove('shake'),280);
+  }
+});
+
+/* ---------------------------
+  Timers and start triggers
+ --------------------------- */
+const timers = {
+  rotate: {timer: rotateTimer, started:false},
+  layers: {timer: layersTimer, started:false},
+  precision: {timer: precisionTimer, started:false}
+};
+
+function startTimerFor(section){
+  if(timers[section] && !timers[section].started){
+    timers[section].timer.start();
+    timers[section].started = true;
+  }
+}
+
+/* ---------------------------
+  Restart buttons
+ --------------------------- */
+document.getElementById('rotateRestart').addEventListener('click', ()=>{ initRotate(); playRestart(); });
+document.getElementById('layersRestart').addEventListener('click', ()=>{ initLayers(); playRestart(); });
+document.getElementById('precisionRestart').addEventListener('click', ()=>{ initPrecision(); playRestart(); });
+
+function playRestart(){ playRestartSound(); }
+function playRestartSound(){ playRestart(); } // wrapped for naming
+
+/* ---------------------------
+  Toast / small messages
+ --------------------------- */
+function showToast(msg, type='info'){
+  const t = document.createElement('div');
+  t.textContent = msg;
+  t.style.position = 'fixed';
+  t.style.right = '18px';
+  t.style.bottom = '18px';
+  t.style.background = (type==='success' ? '#10b981' : '#111827');
+  t.style.color = '#fff';
+  t.style.padding = '.6rem .9rem';
+  t.style.borderRadius = '.5rem';
+  t.style.boxShadow = '0 8px 30px rgba(2,6,23,.2)';
+  t.style.zIndex = 9999;
+  document.body.appendChild(t);
+  setTimeout(()=> t.style.opacity = '0', 1600);
+  setTimeout(()=> t.remove(), 2100);
+}
+
+/* ---------------------------
+  Small glue: init on load
+ --------------------------- */
+initRotate();
+initLayers();
+initPrecision();
+
+/* expose some functions for debug/test in console */
+window._init = { initRotate, initLayers, initPrecision };
+
 </script>
-<div id="shared-footer"></div>
-
-
 </body>
 </html>
