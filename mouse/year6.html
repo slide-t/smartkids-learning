@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Learning Kids - Year 6 Mouse Practice</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: 'Segoe UI', sans-serif; background: #f3f4f6; }
+  .file { width:60px; height:60px; background:#f59e0b; color:white; display:flex; justify-content:center; align-items:center; position:absolute; cursor:grab; user-select:none; border-radius:0.5rem; box-shadow:0 2px 6px rgba(0,0,0,0.2);}
+  .folder { width:120px; height:120px; background:#2563eb; position:absolute; top:40px; right:40px; border-radius:1rem; display:flex; justify-content:center; align-items:center; color:white; font-weight:bold; box-shadow:0 4px 10px rgba(0,0,0,0.3);}
+  .window { width:150px; height:100px; background:white; border:2px solid #9ca3af; border-radius:0.5rem; padding:5px; cursor:pointer; display:flex; justify-content:center; align-items:center; transition:0.2s; }
+  .window:hover { background:#f3f4f6; }
+  .selected { border-color:#f59e0b; box-shadow:0 0 10px rgba(245,158,11,0.5); }
+  .accordion-header { cursor:pointer; padding:1rem; background:#1e3a8a; color:white; border-radius:0.5rem; margin-bottom:0.5rem; font-weight:bold; }
+  .accordion-content { display:none; padding:1rem; background:white; border:1px solid #d1d5db; border-radius:0.5rem; margin-bottom:1rem; }
+</style>
+</head>
+<body>
+
+<header class="bg-blue-800 text-white p-4 flex justify-between items-center shadow">
+  <h1 class="text-xl font-bold">Year 6 Mouse Practice</h1>
+  <div class="flex items-center gap-4">
+    <div class="bg-white text-blue-800 font-bold px-4 py-2 rounded-lg shadow">
+      Score: <span id="score">0</span>
+    </div>
+    <a href="https://slide-t.github.io/smartkids-learning/mouse.html" class="bg-white text-blue-800 px-4 py-2 rounded-lg font-semibold shadow hover:bg-blue-100">Back To Classes</a>
+  </div>
+</header>
+
+<main class="p-6 max-w-4xl mx-auto">
+
+  <!-- Accordion Section 1 -->
+  <div class="accordion">
+    <div class="accordion-header">📋 Copy, Cut & Paste Practice</div>
+    <div class="accordion-content">
+      <p class="mb-2">Select text below and use right-click to Copy, Cut, Paste.</p>
+      <div id="clipboardArea" contenteditable="true" class="border border-gray-400 rounded-lg bg-white p-3 min-h-[100px]">
+        This is some editable text. Try selecting, copying, cutting, and pasting.
+      </div>
+    </div>
+  </div>
+
+  <!-- Accordion Section 2 -->
+  <div class="accordion">
+    <div class="accordion-header">📂 Advanced Drag-and-Drop</div>
+    <div class="accordion-content">
+      <p class="mb-2">Drag the files into the blue folder.</p>
+      <div id="dragArea" class="relative w-full h-64 bg-gray-200 rounded-lg overflow-hidden">
+        <div class="folder">Folder</div>
+        <div class="file" style="top:10px; left:10px;">File 1</div>
+        <div class="file" style="top:10px; left:90px;">File 2</div>
+        <div class="file" style="top:90px; left:10px;">File 3</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Accordion Section 3 -->
+  <div class="accordion">
+    <div class="accordion-header">🖥 Multi-Window Navigation</div>
+    <div class="accordion-content">
+      <p class="mb-2">Click between windows to select the active one.</p>
+      <div id="windowsArea" class="flex gap-4 flex-wrap">
+        <div class="window">Window 1</div>
+        <div class="window">Window 2</div>
+        <div class="window">Window 3</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+
+  let score = 0;
+  const scoreEl = document.getElementById('score');
+  const updateScore = (points)=>{ score += points; scoreEl.textContent = score; };
+
+  // Accordion toggle
+  document.querySelectorAll('.accordion-header').forEach(header=>{
+    header.addEventListener('click',()=>{
+      const content = header.nextElementSibling;
+      content.style.display = content.style.display==='block' ? 'none':'block';
+    });
+  });
+
+  // Clipboard functionality
+  const clipboardArea = document.getElementById('clipboardArea');
+  clipboardArea.addEventListener('contextmenu',e=>{
+    e.preventDefault();
+    const selection = window.getSelection().toString();
+    const action = prompt('Enter action: copy, cut, paste');
+    if(action==='copy' && selection){
+      navigator.clipboard.writeText(selection);
+      updateScore(1);
+    } else if(action==='cut' && selection){
+      navigator.clipboard.writeText(selection);
+      const sel = window.getSelection();
+      if(sel.rangeCount){ sel.getRangeAt(0).deleteContents(); updateScore(2); }
+    } else if(action==='paste'){
+      navigator.clipboard.readText().then(text=>{
+        const sel = window.getSelection();
+        if(sel.rangeCount){ sel.getRangeAt(0).deleteContents(); sel.getRangeAt(0).insertNode(document.createTextNode(text)); updateScore(1); }
+      });
+    }
+  });
+
+  // Drag and Drop
+  const dragArea = document.getElementById('dragArea');
+  const files = dragArea.querySelectorAll('.file');
+  const folder = dragArea.querySelector('.folder');
+
+  files.forEach(file=>{
+    file.onmousedown = e=>{
+      e.preventDefault();
+      let shiftX = e.clientX - file.getBoundingClientRect().left;
+      let shiftY = e.clientY - file.getBoundingClientRect().top;
+
+      function moveAt(pageX,pageY){
+        let x = pageX - shiftX - dragArea.getBoundingClientRect().left;
+        let y = pageY - shiftY - dragArea.getBoundingClientRect().top;
+        file.style.left = Math.max(0,Math.min(x, dragArea.clientWidth - file.offsetWidth)) + 'px';
+        file.style.top = Math.max(0,Math.min(y, dragArea.clientHeight - file.offsetHeight)) + 'px';
+      }
+
+      function onMouseMove(e){ moveAt(e.pageX,e.pageY); }
+
+      document.addEventListener('mousemove',onMouseMove);
+      document.onmouseup = ()=>{
+        document.removeEventListener('mousemove',onMouseMove);
+        document.onmouseup=null;
+
+        // Check drop inside folder
+        const fileRect = file.getBoundingClientRect();
+        const folderRect = folder.getBoundingClientRect();
+        if(fileRect.left > folderRect.left && fileRect.right < folderRect.right &&
+           fileRect.top > folderRect.top && fileRect.bottom < folderRect.bottom){
+             file.style.display='none';
+             updateScore(5);
+             alert(file.textContent + ' dropped into folder! (+5)');
+        }
+      };
+    };
+    file.ondragstart = ()=>false;
+  });
+
+  // Multi-window navigation
+  const windows = document.querySelectorAll('.window');
+  windows.forEach(win=>{
+    win.onclick = ()=>{
+      windows.forEach(w=>w.classList.remove('selected'));
+      win.classList.add('selected');
+      updateScore(1);
+    };
+  });
+
+});
+</script>
+
+</body>
+</html>
