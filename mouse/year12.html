@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartKids - Mouse Practice</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family:sans-serif; background:#f3f4f6; margin:0; padding:0; }
+  header { background:#1e40af; color:white; padding:1rem; display:flex; justify-content:space-between; align-items:center; }
+  header a { background:white; color:#1e40af; padding:0.5rem 1rem; border-radius:0.5rem; font-weight:bold; text-decoration:none; }
+  main { padding:2rem; max-width:900px; margin:auto; }
+  .practiceArea { width:100%; height:220px; background:#e5e7eb; border-radius:0.5rem; position:relative; margin-top:10px; overflow:hidden; }
+  .timeline { width:40px; height:40px; background:#f59e0b; position:absolute; border-radius:50%; display:flex; justify-content:center; align-items:center; color:white; font-weight:bold; cursor:grab; }
+  .uiElement { width:60px; height:40px; background:#10b981; position:absolute; display:flex; justify-content:center; align-items:center; color:white; font-weight:bold; cursor:grab; border-radius:0.25rem; }
+  .target { width:50px; height:50px; background:#f97316; position:absolute; border-radius:50%; display:flex; justify-content:center; align-items:center; color:white; font-weight:bold; cursor:pointer; transition:transform 0.1s ease; }
+  .accordion { background:white; border:1px solid #ddd; border-radius:0.5rem; margin-bottom:10px; overflow:hidden; }
+  .accordion button { width:100%; text-align:left; padding:0.75rem; background:#1e3a8a; color:white; font-weight:bold; cursor:pointer; }
+  .accordionContent { display:none; padding:1rem; }
+  .accordion.active .accordionContent { display:block; }
+  .accordion button:after { content:"+"; float:right; }
+  .accordion.active button:after { content:"-"; }
+  .stats { background:#fff; padding:0.75rem; margin-bottom:1rem; border-radius:0.5rem; box-shadow:0 2px 4px rgba(0,0,0,0.1); display:flex; justify-content:space-between; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1 class="text-xl font-bold">SmartKids - Mouse Practice</h1>
+  <a href="https://slide-t.github.io/smartkids-learning/mouse.html">Back To Classes</a>
+</header>
+
+<main>
+  <!-- Scoreboard -->
+  <div id="scoreboard" class="stats">
+    <div>⏱ Time: <span id="time">0</span>s</div>
+    <div>🏆 Score: <span id="score">0</span></div>
+  </div>
+
+  <!-- Accordion Sections -->
+  <div class="accordion">
+    <button>Advanced Multimedia Editing</button>
+    <div class="accordionContent">
+      <p>Drag the orange circles along the timeline to trim and sync.</p>
+      <div id="timelineArea" class="practiceArea"></div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <button>UI/UX Prototyping</button>
+    <div class="accordionContent">
+      <p>Drag the green interface elements around the workspace.</p>
+      <div id="uiArea" class="practiceArea"></div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <button>High-Speed Precision Tasks</button>
+    <div class="accordionContent">
+      <p>Click rapidly on moving targets.</p>
+      <div id="precisionArea" class="practiceArea"></div>
+    </div>
+  </div>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+
+  let score=0, time=0;
+  const scoreEl=document.getElementById('score');
+  const timeEl=document.getElementById('time');
+
+  // Timer
+  setInterval(()=>{ time++; timeEl.textContent=time; },1000);
+
+  // Accordion with sound
+  const acc=document.querySelectorAll('.accordion');
+  acc.forEach(a=>{
+    const btn=a.querySelector('button');
+    btn.addEventListener('click',()=>{
+      a.classList.toggle('active');
+      new Audio("https://actions.google.com/sounds/v1/cartoon/pop.ogg").play();
+    });
+  });
+
+  // --- Advanced Multimedia Editing ---
+  const timelineArea=document.getElementById('timelineArea');
+  for(let i=0;i<3;i++){
+    const circle=document.createElement('div');
+    circle.className='timeline';
+    circle.textContent=i+1;
+    circle.style.left=(50+i*100)+'px';
+    circle.style.top='80px';
+    timelineArea.appendChild(circle);
+    makeDraggable(circle,()=>{ score+=1; scoreEl.textContent=score; });
+  }
+
+  // --- UI/UX Prototyping ---
+  const uiArea=document.getElementById('uiArea');
+  for(let i=0;i<4;i++){
+    const el=document.createElement('div');
+    el.className='uiElement';
+    el.textContent='UI'+(i+1);
+    el.style.left=(50+i*80)+'px';
+    el.style.top='80px';
+    uiArea.appendChild(el);
+    makeDraggable(el,()=>{ score+=1; scoreEl.textContent=score; });
+  }
+
+  // --- High-Speed Precision Tasks ---
+  const precisionArea=document.getElementById('precisionArea');
+  let hitCount=0, clickCount=0;
+
+  function spawnTarget(){
+    const target=document.createElement('div');
+    target.className='target';
+    target.textContent='🎯';
+    precisionArea.appendChild(target);
+
+    let x=Math.random()*(precisionArea.clientWidth-50);
+    let y=Math.random()*(precisionArea.clientHeight-50);
+    target.style.left=x+'px';
+    target.style.top=y+'px';
+
+    const moveInterval=setInterval(()=>{
+      x=Math.random()*(precisionArea.clientWidth-50);
+      y=Math.random()*(precisionArea.clientHeight-50);
+      target.style.left=x+'px';
+      target.style.top=y+'px';
+    },800);
+
+    target.addEventListener('click',()=>{
+      hitCount++;
+      clickCount++;
+      score+=5;
+      scoreEl.textContent=score;
+      target.remove();
+      clearInterval(moveInterval);
+      spawnTarget();
+    });
+  }
+
+  precisionArea.addEventListener('click',e=>{
+    if(!e.target.classList.contains('target')){
+      clickCount++;
+    }
+  });
+
+  spawnTarget();
+
+  // --- Utility Draggable ---
+  function makeDraggable(el, onDrop){
+    let dragging=false, offsetX=0, offsetY=0;
+    el.addEventListener('mousedown',e=>{
+      dragging=true;
+      offsetX=e.offsetX;
+      offsetY=e.offsetY;
+      el.style.cursor='grabbing';
+      el.style.opacity=0.7;
+    });
+    document.addEventListener('mousemove',e=>{
+      if(!dragging) return;
+      const rect=el.parentElement.getBoundingClientRect();
+      let x=e.clientX-rect.left-offsetX;
+      let y=e.clientY-rect.top-offsetY;
+      x=Math.max(0,Math.min(rect.width-el.offsetWidth,x));
+      y=Math.max(0,Math.min(rect.height-el.offsetHeight,y));
+      el.style.left=x+'px';
+      el.style.top=y+'px';
+    });
+    document.addEventListener('mouseup',()=>{
+      if(dragging && onDrop) onDrop();
+      dragging=false;
+      el.style.cursor='grab';
+      el.style.opacity=1;
+    });
+  }
+
+});
+</script>
+
+</body>
+</html>
