@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smartkids Mouse Practice - Year 3</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: sans-serif; background: #f0f4f8; }
+  header { background-color: #1e40af; color: white; padding: 1.4rem; text-align: center; position: sticky; top: 0; z-index: 50; }
+  header a { background: white; color: #1e40af; padding: 0.5rem 1rem; border-radius: 0.5rem; margin-left: 1rem; text-decoration: none; font-weight: bold; }
+  .accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; background: white; border-radius: 0.5rem; margin-bottom: 1rem; }
+  .accordion-header { cursor: pointer; padding: 1rem; background: #60a5fa; color: white; font-weight: bold; display: flex; justify-content: space-between; border-radius: 0.5rem; margin-bottom: 0.5rem; }
+  .practice-area { position: relative; width: 100%; height: 300px; background: #e2e8f0; border-radius: 0.5rem; overflow: auto; margin-top: 1rem; padding: 1rem; }
+  canvas { border: 1px solid #94a3b8; background: white; }
+</style>
+</head>
+<body>
+
+<header>
+ SmartKids Mouse Practice - Year 3
+  <a href="https://slide-t.github.io/smartkids-learning/mouse.html">Back To Classes</a>
+</header>
+
+<main class="max-w-4xl mx-auto p-4">
+  <h2 class="text-2xl font-bold mb-4 text-center">Year 3 Topics</h2>
+
+  <div id="accordion">
+    <div>
+      <div class="accordion-header">Text Selection <span>+</span></div>
+      <div class="accordion-body" id="textSelectBody">
+        <p>Click and drag to highlight part of the text below:</p>
+        <div id="textSelectArea" class="practice-area"></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="accordion-header">Scrolling <span>+</span></div>
+      <div class="accordion-body" id="scrollingBody">
+        <p>Use mouse wheel or scroll to move up and down the content.</p>
+        <div id="scrollArea" class="practice-area"></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="accordion-header">Simple Shapes Drawing <span>+</span></div>
+      <div class="accordion-body" id="shapesBody">
+        <p>Click and drag to draw rectangles and circles.</p>
+        <div id="shapesArea" class="practice-area"></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+// Accordion toggle
+document.querySelectorAll('.accordion-header').forEach(header => {
+  header.addEventListener('click', () => {
+    const body = header.nextElementSibling;
+    const open = body.style.maxHeight && body.style.maxHeight !== '0px';
+    document.querySelectorAll('.accordion-body').forEach(b => b.style.maxHeight = null);
+    document.querySelectorAll('.accordion-header span').forEach(s => s.style.transform = 'rotate(0deg)');
+    if (!open) {
+      body.style.maxHeight = body.scrollHeight + 'px';
+      header.querySelector('span').style.transform = 'rotate(45deg)';
+    }
+  });
+});
+
+// Year 3: Text Selection
+function startTextSelection() {
+  const area = document.getElementById('textSelectArea');
+  area.innerHTML = '';
+
+  const textBlock = document.createElement('p');
+  textBlock.textContent = "Apple Banana Cherry Date Elderberry Fig Grape Honeydew. Highlight any part of this sentence using your mouse.";
+  textBlock.style.fontSize = "1.1rem";
+  textBlock.style.lineHeight = "1.6";
+  textBlock.style.cursor = "text";
+  area.appendChild(textBlock);
+
+  textBlock.addEventListener('mouseup', () => {
+    const selection = window.getSelection().toString().trim();
+    if (selection.length > 0) {
+      alert(`✅ You highlighted: "${selection}"`);
+    }
+  });
+}
+startTextSelection();
+
+// Year 3: Scrolling
+function startScrolling() {
+  const area = document.getElementById('scrollArea');
+  area.innerHTML = '';
+  for (let i = 1; i <= 50; i++) {
+    const p = document.createElement('p');
+    p.textContent = `Line ${i}: Scrollable content for mouse practice.`;
+    area.appendChild(p);
+  }
+}
+startScrolling();
+
+// Year 3: Simple Shapes Drawing
+function startShapesDrawing() {
+  const area = document.getElementById('shapesArea');
+  area.innerHTML = '';
+  const canvas = document.createElement('canvas');
+  canvas.width = area.clientWidth - 20;
+  canvas.height = area.clientHeight - 20;
+  area.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+
+  let drawing = false;
+  let startX, startY;
+
+  canvas.onmousedown = e => {
+    drawing = true;
+    startX = e.offsetX;
+    startY = e.offsetY;
+  };
+
+  canvas.onmousemove = e => {
+    if (!drawing) return;
+    const w = e.offsetX - startX;
+    const h = e.offsetY - startY;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.strokeStyle = '#1e40af';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(startX, startY, w, h);
+    ctx.beginPath();
+    ctx.arc(startX + w / 2, startY + h / 2, Math.abs(w / 2), 0, Math.PI * 2);
+    ctx.stroke();
+  };
+
+  canvas.onmouseup = () => drawing = false;
+  canvas.onmouseleave = () => drawing = false;
+}
+startShapesDrawing();
+</script>
+
+</body>
+</html>
