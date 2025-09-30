@@ -9,14 +9,14 @@
   body { font-family: sans-serif; background: #f3f4f6; margin:0; padding:0; }
   header { background: #1e40af; color: white; padding: 1rem; display:flex; justify-content:space-between; align-items:center; }
   header a { background: white; color:#1e40af; padding:0.5rem 1rem; border-radius:0.5rem; font-weight:bold; text-decoration:none; }
-  main { padding: 2rem; max-width:900px; margin:auto; }
-  .accordion { border:1px solid #d1d5db; border-radius:0.5rem; margin-bottom:1rem; overflow:hidden; background:white; }
-  .accordion button { width:100%; text-align:left; padding:1rem; font-weight:bold; background:#e5e7eb; cursor:pointer; }
-  .accordion button:hover { background:#d1d5db; }
-  .accordion .panel { display:none; padding:1rem; border-top:1px solid #d1d5db; }
+  main { padding: 2rem; max-width:800px; margin:auto; }
+  .practice { margin-bottom:2rem; background:white; padding:1rem; border-radius:0.5rem; box-shadow:0 2px 4px rgba(0,0,0,0.1); }
+  #editableText { width:100%; height:120px; border:1px solid #9ca3af; padding:10px; margin-top:10px; background:white; }
+  #scrollArea { height:200px; overflow-y:scroll; border:1px solid #9ca3af; padding:10px; margin-top:10px; background:white; }
+  #shapeArea { position:relative; width:100%; height:300px; background:#e5e7eb; margin-top:20px; overflow:hidden; border-radius:0.5rem; }
   .shape { position:absolute; background:#f59e0b; cursor:move; display:flex; justify-content:center; align-items:center; color:white; font-weight:bold; user-select:none; }
   .resize-handle { width:10px; height:10px; background:black; position:absolute; right:0; bottom:0; cursor:se-resize; }
-  #editableText { width:100%; height:120px; border:1px solid #9ca3af; padding:10px; margin-top:10px; background:white; }
+  button.toolbar-button { margin-right: 5px; padding:5px 10px; background:#3b82f6; color:white; border:none; border-radius:0.25rem; cursor:pointer; }
 </style>
 </head>
 <body>
@@ -27,173 +27,134 @@
 </header>
 
 <main>
-  <h2 class="text-2xl font-bold mb-4">Interactive Mouse Practices</h2>
-  <p>Expand each accordion to try a different mouse skill.</p>
-
-  <!-- Accordion Sections -->
-  <div class="accordion">
-    <button>1. Click Practice</button>
-    <div class="panel" id="clickPractice"></div>
+  <!-- Practice 1: Toolbar & Clicking -->
+  <div class="practice">
+    <h2 class="text-xl font-bold mb-2">1. Clicks & Toolbar Practice</h2>
+    <p>Try clicking the buttons and applying styles to text below.</p>
+    <div id="toolbarArea"></div>
   </div>
 
-  <div class="accordion">
-    <button>2. Double Click Practice</button>
-    <div class="panel" id="dblClickPractice"></div>
+  <!-- Practice 2: Scrolling -->
+  <div class="practice">
+    <h2 class="text-xl font-bold mb-2">2. Scrolling Practice</h2>
+    <p>Use the mouse wheel or drag the scrollbar to explore content.</p>
+    <div id="scrollArea"></div>
   </div>
 
-  <div class="accordion">
-    <button>3. Right Click Practice</button>
-    <div class="panel" id="rightClickPractice"></div>
-  </div>
-
-  <div class="accordion">
-    <button>4. Drag & Drop Practice</button>
-    <div class="panel" id="dragDropPractice" style="height:250px; background:#e5e7eb; position:relative;"></div>
-  </div>
-
-  <div class="accordion">
-    <button>5. Resize Shapes</button>
-    <div class="panel" id="resizePractice" style="height:250px; background:#e5e7eb; position:relative;"></div>
-  </div>
-
-  <div class="accordion">
-    <button>6. Toolbar Formatting</button>
-    <div class="panel" id="toolbarPractice"></div>
-  </div>
-
-  <div class="accordion">
-    <button>7. Text Highlighting</button>
-    <div class="panel" id="highlightPractice"></div>
+  <!-- Practice 3: Shapes -->
+  <div class="practice">
+    <h2 class="text-xl font-bold mb-2">3. Shape Manipulation</h2>
+    <p>Drag, resize, and right-click on shapes.</p>
+    <div id="shapeArea"></div>
   </div>
 </main>
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-  // Accordion toggle
-  document.querySelectorAll(".accordion button").forEach(btn=>{
-    btn.addEventListener("click",()=>{
-      const panel = btn.nextElementSibling;
-      panel.style.display = (panel.style.display==="block") ? "none" : "block";
+document.addEventListener('DOMContentLoaded',()=>{
+  // Practice 1: Toolbar
+  function startToolbars(){
+    const area=document.getElementById('toolbarArea');
+    area.innerHTML='';
+    const buttons=['B','I','U'];
+    buttons.forEach(btn=>{
+      const b=document.createElement('button');
+      b.className='toolbar-button';
+      b.textContent=btn;
+      b.onclick=()=>{
+        document.execCommand(
+          btn==='B'?'bold':btn==='I'?'italic':'underline',
+          false,null
+        );
+      };
+      area.appendChild(b);
     });
-  });
+    const text=document.createElement('div');
+    text.contentEditable=true;
+    text.id='editableText';
+    text.textContent='Type here and try formatting with the toolbar buttons.';
+    area.appendChild(text);
+  }
 
-  // 1. Click practice
-  const clickArea = document.getElementById("clickPractice");
-  const clickBox = document.createElement("div");
-  clickBox.textContent="Click me!";
-  clickBox.className="p-6 bg-blue-500 text-white rounded cursor-pointer w-32 text-center";
-  clickBox.onclick = ()=>clickBox.classList.toggle("bg-green-500");
-  clickArea.appendChild(clickBox);
-
-  // 2. Double click practice
-  const dblArea = document.getElementById("dblClickPractice");
-  const dblBox = document.createElement("div");
-  dblBox.textContent="Double Click Me!";
-  dblBox.className="p-6 bg-purple-500 text-white rounded cursor-pointer w-40 text-center";
-  dblBox.ondblclick=()=>dblBox.style.transform="scale(1.5)";
-  dblArea.appendChild(dblBox);
-
-  // 3. Right click practice
-  const rightArea = document.getElementById("rightClickPractice");
-  const rightBox = document.createElement("div");
-  rightBox.textContent="Right Click Me!";
-  rightBox.className="p-6 bg-red-500 text-white rounded cursor-pointer w-48 text-center";
-  rightBox.oncontextmenu=(e)=>{ e.preventDefault(); alert("🎉 Custom right-click!"); };
-  rightArea.appendChild(rightBox);
-
-  // 4. Drag & Drop practice
-  const dragArea = document.getElementById("dragDropPractice");
-  const dragItem = document.createElement("div");
-  dragItem.textContent="Drag Me";
-  dragItem.className="absolute top-10 left-10 bg-yellow-500 p-4 rounded cursor-move";
-  dragArea.appendChild(dragItem);
-  dragItem.onmousedown=(e)=>{
-    e.preventDefault();
-    const shiftX=e.clientX-dragItem.getBoundingClientRect().left;
-    const shiftY=e.clientY-dragItem.getBoundingClientRect().top;
-    function moveAt(x,y){
-      dragItem.style.left=x-shiftX-dragArea.getBoundingClientRect().left+"px";
-      dragItem.style.top=y-shiftY-dragArea.getBoundingClientRect().top+"px";
+  // Practice 2: Scrolling
+  function startScrolling(){
+    const area=document.getElementById('scrollArea');
+    area.innerHTML='';
+    for(let i=1;i<=40;i++){
+      const p=document.createElement('p');
+      p.textContent=`Line ${i}: Scroll through this practice area.`;
+      area.appendChild(p);
     }
-    function onMove(ev){ moveAt(ev.pageX,ev.pageY); }
-    document.addEventListener("mousemove",onMove);
-    document.onmouseup=()=>{ document.removeEventListener("mousemove",onMove); document.onmouseup=null; };
-  };
+    area.addEventListener('scroll',()=>{
+      if(area.scrollTop+area.clientHeight>=area.scrollHeight){
+        alert("🎉 Great job! You reached the bottom.");
+      }
+    });
+  }
 
-  // 5. Resize practice
-  const resizeArea=document.getElementById("resizePractice");
-  const shape=document.createElement("div");
-  shape.className="shape";
-  shape.style.width="80px"; shape.style.height="80px";
-  shape.style.top="60px"; shape.style.left="60px";
-  shape.textContent="□";
-  resizeArea.appendChild(shape);
-  const handle=document.createElement("div");
-  handle.className="resize-handle";
-  shape.appendChild(handle);
-  handle.onmousedown=(e)=>{
-    e.stopPropagation();
-    e.preventDefault();
-    const startW=shape.offsetWidth, startH=shape.offsetHeight, startX=e.clientX, startY=e.clientY;
-    function onMove(ev){
-      shape.style.width=Math.max(40,startW+(ev.clientX-startX))+"px";
-      shape.style.height=Math.max(40,startH+(ev.clientY-startY))+"px";
-    }
-    document.addEventListener("mousemove",onMove);
-    document.onmouseup=()=>{ document.removeEventListener("mousemove",onMove); document.onmouseup=null; };
-  };
+  // Practice 3: Shapes
+  function startShapeManipulation(){
+    const area=document.getElementById('shapeArea');
+    area.innerHTML='';
+    for(let i=0;i<3;i++){
+      const shape=document.createElement('div');
+      shape.className='shape';
+      shape.style.top=(30+i*90)+'px';
+      shape.style.left='30px';
+      shape.style.width='60px';
+      shape.style.height='60px';
+      shape.textContent='□';
+      area.appendChild(shape);
 
-  // 6. Toolbar formatting
-  const tbArea=document.getElementById("toolbarPractice");
-  ["B","I","U"].forEach(btn=>{
-    const b=document.createElement("button");
-    b.textContent=btn;
-    b.className="px-3 py-1 bg-blue-500 text-white rounded mr-2";
-    b.onclick=()=>{
-      const sel=window.getSelection();
-      if(sel.rangeCount){
-        const range=sel.getRangeAt(0);
-        if(range.toString()){
-          const span=document.createElement("span");
-          if(btn==="B") span.style.fontWeight="bold";
-          if(btn==="I") span.style.fontStyle="italic";
-          if(btn==="U") span.style.textDecoration="underline";
-          span.textContent=range.toString();
-          range.deleteContents();
-          range.insertNode(span);
+      // Dragging
+      shape.onmousedown=e=>{
+        if(e.target.classList.contains('resize-handle')) return;
+        e.preventDefault();
+        const shiftX=e.clientX-shape.getBoundingClientRect().left;
+        const shiftY=e.clientY-shape.getBoundingClientRect().top;
+        function moveAt(x,y){
+          shape.style.left=(x-shiftX-area.getBoundingClientRect().left)+'px';
+          shape.style.top=(y-shiftY-area.getBoundingClientRect().top)+'px';
         }
-      }
-    };
-    tbArea.appendChild(b);
-  });
-  const edit=document.createElement("div");
-  edit.id="editableText"; edit.contentEditable=true; edit.textContent="Type and format me!";
-  tbArea.appendChild(edit);
+        function onMouseMove(ev){ moveAt(ev.pageX,ev.pageY); }
+        document.addEventListener('mousemove',onMouseMove);
+        document.onmouseup=()=>{
+          document.removeEventListener('mousemove',onMouseMove);
+          document.onmouseup=null;
+        };
+      };
+      shape.ondragstart=()=>false;
 
-  // 7. Text highlighting
-  const hlArea=document.getElementById("highlightPractice");
-  const toggle=document.createElement("button");
-  toggle.textContent="Switch to Targeted Highlight Mode";
-  toggle.className="px-3 py-1 bg-green-500 text-white rounded mb-2";
-  hlArea.appendChild(toggle);
-  const words=["Apple","Banana","Cherry","Date"];
-  const para=document.createElement("p");
-  para.textContent=words.join(" ")+" - Highlight any word.";
-  para.style.cursor="text";
-  hlArea.appendChild(para);
-  let strict=false;
-  toggle.onclick=()=>{ strict=!strict; toggle.textContent=strict?"Switch to Free Highlight Mode":"Switch to Targeted Highlight Mode"; };
-  para.addEventListener("mouseup",()=>{
-    const sel=window.getSelection().toString().trim();
-    if(sel){
-      if(strict){
-        if(words.includes(sel)) alert("🎉 Correct highlight: "+sel);
-        else alert("❌ Not in target list!");
-      } else {
-        alert("✅ You highlighted: "+sel);
-      }
+      // Resize
+      const handle=document.createElement('div');
+      handle.className='resize-handle';
+      shape.appendChild(handle);
+      handle.onmousedown=e=>{
+        e.stopPropagation(); e.preventDefault();
+        const startWidth=shape.offsetWidth;
+        const startHeight=shape.offsetHeight;
+        const startX=e.clientX, startY=e.clientY;
+        function onMouseMove(ev){
+          shape.style.width=Math.max(30,startWidth+(ev.clientX-startX))+'px';
+          shape.style.height=Math.max(30,startHeight+(ev.clientY-startY))+'px';
+        }
+        document.addEventListener('mousemove',onMouseMove);
+        document.onmouseup=()=>{
+          document.removeEventListener('mousemove',onMouseMove);
+          document.onmouseup=null;
+        };
+      };
+
+      // Right click
+      shape.oncontextmenu=e=>{
+        e.preventDefault();
+        alert('You right-clicked this shape!');
+      };
     }
-  });
+  }
+
+  startToolbars();
+  startScrolling();
+  startShapeManipulation();
 });
 </script>
 
