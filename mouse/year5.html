@@ -10,14 +10,16 @@
   header { background: #1e40af; color: white; padding: 1rem; display:flex; justify-content:space-between; align-items:center; }
   header a { background: white; color:#1e40af; padding:0.5rem 1rem; border-radius:0.5rem; font-weight:bold; text-decoration:none; }
   main { padding: 2rem; max-width:900px; margin:auto; }
-  .practice { margin-bottom:2rem; background:white; padding:1rem; border-radius:0.5rem; box-shadow:0 2px 4px rgba(0,0,0,0.1); }
-  #editableText { width:100%; height:120px; border:1px solid #9ca3af; padding:10px; margin-top:10px; background:white; }
-  #scrollArea { height:200px; overflow-y:scroll; border:1px solid #9ca3af; padding:10px; margin-top:10px; background:white; }
-  #shapeArea { position:relative; width:100%; height:300px; background:#e5e7eb; margin-top:20px; overflow:hidden; border-radius:0.5rem; }
+  .accordion-item { border:1px solid #ddd; border-radius:0.5rem; margin-bottom:1rem; overflow:hidden; background:white; }
+  .accordion-header { background:#e5e7eb; padding:1rem; cursor:pointer; font-weight:bold; }
+  .accordion-content { display:none; padding:1rem; }
+  .accordion-content.active { display:block; }
+  .toolbar-button { margin-right:5px; padding:5px 10px; background:#3b82f6; color:white; border:none; border-radius:0.25rem; cursor:pointer; }
+  #editableText { width:100%; height:150px; border:1px solid #9ca3af; padding:10px; margin-top:10px; background:white; }
+  #shapeArea { position:relative; width:100%; height:300px; background:#f9fafb; margin-top:20px; overflow:hidden; border-radius:0.5rem; }
   .shape { position:absolute; background:#f59e0b; cursor:move; display:flex; justify-content:center; align-items:center; color:white; font-weight:bold; user-select:none; }
   .resize-handle { width:10px; height:10px; background:black; position:absolute; right:0; bottom:0; cursor:se-resize; }
-  button.toolbar-button { margin-right: 5px; padding:5px 10px; background:#3b82f6; color:white; border:none; border-radius:0.25rem; cursor:pointer; }
-  #statsBar { background:#e0f2fe; padding:10px; border-radius:0.5rem; margin-bottom:20px; font-weight:bold; }
+  .click-box { width:100px; height:100px; background:#10b981; display:flex; justify-content:center; align-items:center; color:white; font-weight:bold; cursor:pointer; margin:10px auto; border-radius:0.5rem; transition:background 0.3s; }
 </style>
 </head>
 <body>
@@ -28,137 +30,140 @@
 </header>
 
 <main>
-  <!-- Stats Bar -->
-  <div id="statsBar">
-    Clicks: <span id="clicks">0</span> | 
-    Scroll %: <span id="scrollPercent">0</span>% | 
-    Shapes moved: <span id="shapesMoved">0</span> | 
-    Resized: <span id="resized">0</span>
-  </div>
+  <h2 class="text-2xl font-bold mb-4">Mouse Skills Practice</h2>
+  <p>Expand each section below and practice different mouse skills.</p>
 
-  <!-- Practice 1: Toolbar & Clicking -->
-  <div class="practice">
-    <h2 class="text-xl font-bold mb-2">1. Clicks & Toolbar Practice</h2>
-    <p>Try clicking the buttons and applying styles to text below.</p>
-    <div id="toolbarArea"></div>
-  </div>
+  <!-- Accordion -->
+  <div class="accordion">
 
-  <!-- Practice 2: Scrolling -->
-  <div class="practice">
-    <h2 class="text-xl font-bold mb-2">2. Scrolling Practice</h2>
-    <p>Use the mouse wheel or drag the scrollbar to explore content.</p>
-    <div id="scrollArea"></div>
-  </div>
+    <!-- Toolbar Practice -->
+    <div class="accordion-item">
+      <div class="accordion-header">✏️ Toolbar Practice</div>
+      <div class="accordion-content">
+        <p>Click buttons to format selected text.</p>
+        <div id="toolbarArea"></div>
+      </div>
+    </div>
 
-  <!-- Practice 3: Shapes -->
-  <div class="practice">
-    <h2 class="text-xl font-bold mb-2">3. Shape Manipulation</h2>
-    <p>Drag, resize, and right-click on shapes.</p>
-    <div id="shapeArea"></div>
+    <!-- Shape Manipulation -->
+    <div class="accordion-item">
+      <div class="accordion-header">⬛ Shape Manipulation</div>
+      <div class="accordion-content">
+        <p>Drag, resize, and right-click shapes below.</p>
+        <div id="shapeArea"></div>
+      </div>
+    </div>
+
+    <!-- Click Practice -->
+    <div class="accordion-item">
+      <div class="accordion-header">🖱️ Click Practice</div>
+      <div class="accordion-content">
+        <p>Try left-click, double-click, and right-click on the box below.</p>
+        <div class="click-box" id="clickBox">Click Me</div>
+        <p id="clickMessage" class="mt-2 text-blue-700 font-bold"></p>
+      </div>
+    </div>
+
   </div>
 </main>
 
 <script>
 document.addEventListener('DOMContentLoaded',()=>{
-  // Stats tracker
-  let stats = { clicks:0, scrollPercent:0, shapesMoved:0, resized:0 };
-  function updateStats(){
-    document.getElementById('clicks').textContent=stats.clicks;
-    document.getElementById('scrollPercent').textContent=stats.scrollPercent;
-    document.getElementById('shapesMoved').textContent=stats.shapesMoved;
-    document.getElementById('resized').textContent=stats.resized;
-  }
 
-  // Practice 1: Toolbar
+  // Accordion toggle
+  document.querySelectorAll('.accordion-header').forEach(header=>{
+    header.addEventListener('click',()=>{
+      const content=header.nextElementSibling;
+      content.classList.toggle('active');
+    });
+  });
+
+  // Toolbar Practice
   function startToolbars(){
-    const area=document.getElementById('toolbarArea');
-    area.innerHTML='';
-    const buttons=['B','I','U'];
-    buttons.forEach(btn=>{
-      const b=document.createElement('button');
-      b.className='toolbar-button';
-      b.textContent=btn;
-      b.onclick=()=>{
-        stats.clicks++; updateStats();
-        document.execCommand(
-          btn==='B'?'bold':btn==='I'?'italic':'underline',
-          false,null
-        );
+    const area = document.getElementById('toolbarArea');
+    area.innerHTML = '';
+    const buttons = ['B','I','U'];
+    const text = document.createElement('div');
+    text.contentEditable = true;
+    text.id = 'editableText';
+    text.textContent = "Type something here and try formatting it.";
+    area.appendChild(text);
+
+    buttons.forEach(btn => {
+      const b = document.createElement('button');
+      b.className = 'toolbar-button';
+      b.textContent = btn;
+      b.onclick = () => {
+        const sel = window.getSelection();
+        if(sel.rangeCount){
+          const range = sel.getRangeAt(0);
+          if(range.toString()){
+            const span = document.createElement('span');
+            if(btn==='B') span.style.fontWeight='bold';
+            if(btn==='I') span.style.fontStyle='italic';
+            if(btn==='U') span.style.textDecoration='underline';
+            span.textContent = range.toString();
+            range.deleteContents();
+            range.insertNode(span);
+          }
+        }
       };
       area.appendChild(b);
     });
-    const text=document.createElement('div');
-    text.contentEditable=true;
-    text.id='editableText';
-    text.textContent='Type here and try formatting with the toolbar buttons.';
-    area.appendChild(text);
   }
 
-  // Practice 2: Scrolling
-  function startScrolling(){
-    const area=document.getElementById('scrollArea');
-    area.innerHTML='';
-    for(let i=1;i<=50;i++){
-      const p=document.createElement('p');
-      p.textContent=`Line ${i}: Scroll through this practice area.`;
-      area.appendChild(p);
-    }
-    area.addEventListener('scroll',()=>{
-      const percent=Math.round((area.scrollTop/(area.scrollHeight-area.clientHeight))*100);
-      stats.scrollPercent=percent; updateStats();
-    });
-  }
-
-  // Practice 3: Shapes
+  // Shape Manipulation
   function startShapeManipulation(){
-    const area=document.getElementById('shapeArea');
+    const area = document.getElementById('shapeArea');
     area.innerHTML='';
     for(let i=0;i<3;i++){
-      const shape=document.createElement('div');
+      const shape = document.createElement('div');
       shape.className='shape';
-      shape.style.top=(30+i*90)+'px';
-      shape.style.left='30px';
+      shape.style.top=(50+i*80)+'px';
+      shape.style.left='50px';
       shape.style.width='60px';
       shape.style.height='60px';
       shape.textContent='□';
       area.appendChild(shape);
 
-      // Dragging
+      // Drag
       shape.onmousedown=e=>{
         if(e.target.classList.contains('resize-handle')) return;
         e.preventDefault();
         const shiftX=e.clientX-shape.getBoundingClientRect().left;
         const shiftY=e.clientY-shape.getBoundingClientRect().top;
-        function moveAt(x,y){
-          shape.style.left=(x-shiftX-area.getBoundingClientRect().left)+'px';
-          shape.style.top=(y-shiftY-area.getBoundingClientRect().top)+'px';
+        function moveAt(pageX,pageY){
+          shape.style.left=pageX-shiftX-area.getBoundingClientRect().left+'px';
+          shape.style.top=pageY-shiftY-area.getBoundingClientRect().top+'px';
         }
-        function onMouseMove(ev){ moveAt(ev.pageX,ev.pageY); }
+        function onMouseMove(e){ moveAt(e.pageX,e.pageY); }
         document.addEventListener('mousemove',onMouseMove);
         document.onmouseup=()=>{
-          stats.shapesMoved++; updateStats();
           document.removeEventListener('mousemove',onMouseMove);
           document.onmouseup=null;
         };
       };
       shape.ondragstart=()=>false;
 
-      // Resize
+      // Resize handle
       const handle=document.createElement('div');
       handle.className='resize-handle';
       shape.appendChild(handle);
       handle.onmousedown=e=>{
-        e.stopPropagation(); e.preventDefault();
+        e.stopPropagation();
+        e.preventDefault();
         const startWidth=shape.offsetWidth;
         const startHeight=shape.offsetHeight;
-        const startX=e.clientX, startY=e.clientY;
+        const startX=e.clientX;
+        const startY=e.clientY;
         function onMouseMove(ev){
-          shape.style.width=Math.max(30,startWidth+(ev.clientX-startX))+'px';
-          shape.style.height=Math.max(30,startHeight+(ev.clientY-startY))+'px';
+          const newWidth=Math.max(30,startWidth+(ev.clientX-startX));
+          const newHeight=Math.max(30,startHeight+(ev.clientY-startY));
+          shape.style.width=newWidth+'px';
+          shape.style.height=newHeight+'px';
         }
         document.addEventListener('mousemove',onMouseMove);
         document.onmouseup=()=>{
-          stats.resized++; updateStats();
           document.removeEventListener('mousemove',onMouseMove);
           document.onmouseup=null;
         };
@@ -167,16 +172,36 @@ document.addEventListener('DOMContentLoaded',()=>{
       // Right click
       shape.oncontextmenu=e=>{
         e.preventDefault();
-        stats.clicks++; updateStats();
-        alert('You right-clicked this shape!');
+        alert('Right-click menu for this shape!');
       };
     }
   }
 
+  // Click Practice
+  function startClickPractice(){
+    const box=document.getElementById('clickBox');
+    const msg=document.getElementById('clickMessage');
+
+    box.addEventListener('click',()=>{ 
+      msg.textContent="Left Click detected ✅"; 
+      box.style.background="#2563eb";
+    });
+
+    box.addEventListener('dblclick',()=>{ 
+      msg.textContent="Double Click detected ⚡"; 
+      box.style.background="#f59e0b";
+    });
+
+    box.addEventListener('contextmenu',(e)=>{ 
+      e.preventDefault();
+      msg.textContent="Right Click detected 🖱️"; 
+      box.style.background="#ef4444";
+    });
+  }
+
   startToolbars();
-  startScrolling();
   startShapeManipulation();
-  updateStats();
+  startClickPractice();
 });
 </script>
 
