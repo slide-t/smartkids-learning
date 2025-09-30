@@ -53,6 +53,116 @@ document.addEventListener('DOMContentLoaded',()=>{
   // Spreadsheet Navigation
   const spreadsheet=document.getElementById('spreadsheet');
   const rows=5, cols=5;
+  let selecting=false;
+
+  for(let i=0;i<rows*cols;i++){
+    const cell=document.createElement('div');
+    cell.className='cell';
+    cell.addEventListener('mousedown',()=>{
+      selecting=true;
+      cell.style.background='#fbbf24';
+    });
+    cell.addEventListener('mouseenter',()=>{
+      if(selecting) cell.style.background='#fbbf24';
+    });
+    spreadsheet.appendChild(cell);
+  }
+  document.addEventListener('mouseup',()=>{ selecting=false; });
+
+  // Advanced Gaming Controls
+  const gameArea=document.getElementById('gameArea');
+  const clicksEl=document.getElementById('clicks');
+  const hitsEl=document.getElementById('hits');
+  const accuracyEl=document.getElementById('accuracy');
+  let clicks=0,hits=0,misses=0,timer=null,timeLeft=30;
+
+  function spawnTarget(){
+    gameArea.innerHTML='';
+    const t=document.createElement('div');
+    t.className='target';
+    t.textContent='🎯';
+    const areaRect=gameArea.getBoundingClientRect();
+    const x=Math.random()*(areaRect.width-40);
+    const y=Math.random()*(areaRect.height-40);
+    t.style.left=x+'px';
+    t.style.top=y+'px';
+    t.style.transform=`scale(${0.8+Math.random()*1.2})`;
+    gameArea.appendChild(t);
+
+    t.addEventListener('mousedown',(e)=>{
+      if(e.button===0 || e.button===2){ // left or right click
+        hits++; clicks++;
+        updateStats();
+        spawnTarget();
+      }
+    });
+  }
+
+  gameArea.addEventListener('mousedown',e=>{
+    if(!e.target.classList.contains('target')){ 
+      clicks++; misses++; 
+      updateStats(); 
+    }
+  });
+
+  function updateStats(){
+    clicksEl.textContent=clicks;
+    hitsEl.textContent=hits;
+    accuracyEl.textContent=clicks>0?Math.round(hits/clicks*100):100;
+  }
+
+  function startTimer(){
+    const timerEl=document.createElement('div');
+    timerEl.id='timer';
+    timerEl.className='mt-2 font-bold';
+    timerEl.textContent=`Time left: ${timeLeft}s`;
+    gameArea.insertAdjacentElement("afterend",timerEl);
+
+    timer=setInterval(()=>{
+      timeLeft--;
+      timerEl.textContent=`Time left: ${timeLeft}s`;
+      if(timeLeft<=0){
+        clearInterval(timer);
+        gameArea.innerHTML='<p class="p-4 font-bold">⏰ Time Up! Score: '+hits+'</p>';
+      }
+    },1000);
+  }
+
+  spawnTarget();
+  startTimer();
+
+  // Image Editing Basics (drag + resize)
+  const img=document.getElementById('draggableImage');
+  let dragging=false,offsetX=0,offsetY=0;
+
+  img.addEventListener('mousedown',(e)=>{
+    dragging=true;
+    offsetX=e.offsetX;
+    offsetY=e.offsetY;
+    img.style.cursor='grabbing';
+  });
+  document.addEventListener('mouseup',()=>{ dragging=false; img.style.cursor='grab'; });
+  document.addEventListener('mousemove',(e)=>{
+    if(!dragging) return;
+    const rect=img.parentElement.getBoundingClientRect();
+    let left=e.clientX-rect.left-offsetX;
+    let top=e.clientY-rect.top-offsetY;
+    left=Math.max(0,Math.min(rect.width-img.offsetWidth,left));
+    top=Math.max(0,Math.min(rect.height-img.offsetHeight,top));
+    img.style.left=left+'px';
+    img.style.top=top+'px';
+  });
+
+});
+</script>
+
+  <!--
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+
+  // Spreadsheet Navigation
+  const spreadsheet=document.getElementById('spreadsheet');
+  const rows=5, cols=5;
   for(let i=0;i<rows*cols;i++){
     const cell=document.createElement('div');
     cell.className='cell';
@@ -125,6 +235,6 @@ document.addEventListener('DOMContentLoaded',()=>{
 
 });
 </script>
-
+-->
 </body>
 </html>
