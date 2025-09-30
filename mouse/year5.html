@@ -9,7 +9,7 @@
   body { font-family: sans-serif; background: #f3f4f6; margin:0; padding:0; }
   header { background: #1e40af; color: white; padding: 1rem; display:flex; justify-content:space-between; align-items:center; }
   header a { background: white; color:#1e40af; padding:0.5rem 1rem; border-radius:0.5rem; font-weight:bold; text-decoration:none; }
-  main { padding: 2rem; max-width:800px; margin:auto; }
+  main { padding: 2rem; max-width:900px; margin:auto; }
   .practice { margin-bottom:2rem; background:white; padding:1rem; border-radius:0.5rem; box-shadow:0 2px 4px rgba(0,0,0,0.1); }
   #editableText { width:100%; height:120px; border:1px solid #9ca3af; padding:10px; margin-top:10px; background:white; }
   #scrollArea { height:200px; overflow-y:scroll; border:1px solid #9ca3af; padding:10px; margin-top:10px; background:white; }
@@ -17,6 +17,7 @@
   .shape { position:absolute; background:#f59e0b; cursor:move; display:flex; justify-content:center; align-items:center; color:white; font-weight:bold; user-select:none; }
   .resize-handle { width:10px; height:10px; background:black; position:absolute; right:0; bottom:0; cursor:se-resize; }
   button.toolbar-button { margin-right: 5px; padding:5px 10px; background:#3b82f6; color:white; border:none; border-radius:0.25rem; cursor:pointer; }
+  #statsBar { background:#e0f2fe; padding:10px; border-radius:0.5rem; margin-bottom:20px; font-weight:bold; }
 </style>
 </head>
 <body>
@@ -27,6 +28,14 @@
 </header>
 
 <main>
+  <!-- Stats Bar -->
+  <div id="statsBar">
+    Clicks: <span id="clicks">0</span> | 
+    Scroll %: <span id="scrollPercent">0</span>% | 
+    Shapes moved: <span id="shapesMoved">0</span> | 
+    Resized: <span id="resized">0</span>
+  </div>
+
   <!-- Practice 1: Toolbar & Clicking -->
   <div class="practice">
     <h2 class="text-xl font-bold mb-2">1. Clicks & Toolbar Practice</h2>
@@ -51,6 +60,15 @@
 
 <script>
 document.addEventListener('DOMContentLoaded',()=>{
+  // Stats tracker
+  let stats = { clicks:0, scrollPercent:0, shapesMoved:0, resized:0 };
+  function updateStats(){
+    document.getElementById('clicks').textContent=stats.clicks;
+    document.getElementById('scrollPercent').textContent=stats.scrollPercent;
+    document.getElementById('shapesMoved').textContent=stats.shapesMoved;
+    document.getElementById('resized').textContent=stats.resized;
+  }
+
   // Practice 1: Toolbar
   function startToolbars(){
     const area=document.getElementById('toolbarArea');
@@ -61,6 +79,7 @@ document.addEventListener('DOMContentLoaded',()=>{
       b.className='toolbar-button';
       b.textContent=btn;
       b.onclick=()=>{
+        stats.clicks++; updateStats();
         document.execCommand(
           btn==='B'?'bold':btn==='I'?'italic':'underline',
           false,null
@@ -79,15 +98,14 @@ document.addEventListener('DOMContentLoaded',()=>{
   function startScrolling(){
     const area=document.getElementById('scrollArea');
     area.innerHTML='';
-    for(let i=1;i<=40;i++){
+    for(let i=1;i<=50;i++){
       const p=document.createElement('p');
       p.textContent=`Line ${i}: Scroll through this practice area.`;
       area.appendChild(p);
     }
     area.addEventListener('scroll',()=>{
-      if(area.scrollTop+area.clientHeight>=area.scrollHeight){
-        alert("🎉 Great job! You reached the bottom.");
-      }
+      const percent=Math.round((area.scrollTop/(area.scrollHeight-area.clientHeight))*100);
+      stats.scrollPercent=percent; updateStats();
     });
   }
 
@@ -118,6 +136,7 @@ document.addEventListener('DOMContentLoaded',()=>{
         function onMouseMove(ev){ moveAt(ev.pageX,ev.pageY); }
         document.addEventListener('mousemove',onMouseMove);
         document.onmouseup=()=>{
+          stats.shapesMoved++; updateStats();
           document.removeEventListener('mousemove',onMouseMove);
           document.onmouseup=null;
         };
@@ -139,6 +158,7 @@ document.addEventListener('DOMContentLoaded',()=>{
         }
         document.addEventListener('mousemove',onMouseMove);
         document.onmouseup=()=>{
+          stats.resized++; updateStats();
           document.removeEventListener('mousemove',onMouseMove);
           document.onmouseup=null;
         };
@@ -147,6 +167,7 @@ document.addEventListener('DOMContentLoaded',()=>{
       // Right click
       shape.oncontextmenu=e=>{
         e.preventDefault();
+        stats.clicks++; updateStats();
         alert('You right-clicked this shape!');
       };
     }
@@ -155,6 +176,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   startToolbars();
   startScrolling();
   startShapeManipulation();
+  updateStats();
 });
 </script>
 
