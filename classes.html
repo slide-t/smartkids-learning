@@ -989,6 +989,131 @@ document.addEventListener("DOMContentLoaded", async () => {
       </div>
     </div>
   </footer>
+
+  <!-- Registration Form Modal -->
+<div id="registrationModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+  <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+    <h2 class="text-xl font-bold mb-4">SmartKids Registration</h2>
+    <form id="registrationForm" class="space-y-3">
+      <div>
+        <label class="block text-sm font-medium">Full Name</label>
+        <input type="text" id="fullName" class="w-full border rounded p-2" required>
+      </div>
+      <div>
+        <label class="block text-sm font-medium">Class</label>
+        <input type="text" id="className" class="w-full border rounded p-2" required>
+      </div>
+      <div>
+        <label class="block text-sm font-medium">School Name</label>
+        <input type="text" id="schoolName" class="w-full border rounded p-2" required>
+      </div>
+      <div>
+        <label class="block text-sm font-medium">Select Year</label>
+        <select id="yearSelect" class="w-full border rounded p-2" required>
+          <option value="">Select Year</option>
+          <option>Year 1</option>
+          <option>Year 2</option>
+          <option>Year 3</option>
+          <option>Year 4</option>
+          <option>Year 5</option>
+          <option>Year 6</option>
+          <option>Year 7</option>
+          <option>Year 8</option>
+          <option>Year 9</option>
+          <option>Year 10</option>
+          <option>Year 11</option>
+          <option>Year 12</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium">Do you like SmartKids Tutor?</label>
+        <select id="likeTutor" class="w-full border rounded p-2" required>
+          <option value="">Select</option>
+          <option>Yes</option>
+          <option>No</option>
+        </select>
+      </div>
+      <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded">Submit</button>
+    </form>
+    <button id="newUserBtn" class="mt-3 text-sm text-red-600 underline">Register as New User</button>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const modal = document.getElementById("registrationModal");
+  const form = document.getElementById("registrationForm");
+  const newUserBtn = document.getElementById("newUserBtn");
+
+  // IndexedDB setup
+  let db;
+  const request = indexedDB.open("SmartKidsDB", 1);
+  request.onupgradeneeded = (e) => {
+    db = e.target.result;
+    if (!db.objectStoreNames.contains("users")) {
+      db.createObjectStore("users", { keyPath: "id", autoIncrement: true });
+    }
+  };
+  request.onsuccess = (e) => { db = e.target.result; };
+  request.onerror = (e) => console.error("DB Error:", e);
+
+  // Show form if no local data
+  const userData = localStorage.getItem("smartKidsUser");
+  if (!userData) {
+    modal.classList.remove("hidden");
+  }
+
+  // Submit form
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const data = {
+      fullName: document.getElementById("fullName").value,
+      className: document.getElementById("className").value,
+      schoolName: document.getElementById("schoolName").value,
+      year: document.getElementById("yearSelect").value,
+      likeTutor: document.getElementById("likeTutor").value,
+      timestamp: new Date().toISOString()
+    };
+
+    // Save to LocalStorage (for quick login)
+    localStorage.setItem("smartKidsUser", JSON.stringify(data));
+
+    // Save to IndexedDB (for later Excel export)
+    const tx = db.transaction("users", "readwrite");
+    tx.objectStore("users").add(data);
+
+    modal.classList.add("hidden");
+    alert("Registration successful! Welcome, " + data.fullName);
+  });
+
+  // Register new user option
+  newUserBtn.addEventListener("click", () => {
+    localStorage.removeItem("smartKidsUser");
+    modal.classList.remove("hidden");
+  });
+
+  // Export to Excel (later use)
+  window.exportUsersToExcel = () => {
+    const tx = db.transaction("users", "readonly");
+    const store = tx.objectStore("users");
+    const req = store.getAll();
+    req.onsuccess = () => {
+      const users = req.result;
+      let csv = "Full Name,Class,School,Year,Likes Tutor,Timestamp\n";
+      users.forEach(u => {
+        csv += `${u.fullName},${u.className},${u.schoolName},${u.year},${u.likeTutor},${u.timestamp}\n`;
+      });
+      const blob = new Blob([csv], { type: "text/csv" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "SmartKids_Users.csv";
+      a.click();
+      URL.revokeObjectURL(url);
+    };
+  };
+});
+</script>
 </body>
 </html>
                           
