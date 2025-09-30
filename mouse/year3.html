@@ -72,6 +72,28 @@ document.querySelectorAll('.accordion-header').forEach(header => {
 function startTextSelection(){
   const area = document.getElementById('textSelectArea');
   area.innerHTML = '';
+
+  const textBlock = document.createElement('p');
+  textBlock.textContent = "Apple Banana Cherry Date Elderberry Fig Grape Honeydew. Click and drag your mouse to highlight part of this text.";
+  textBlock.style.fontSize = "1.1rem";
+  textBlock.style.lineHeight = "1.6";
+  textBlock.style.cursor = "text";
+  area.appendChild(textBlock);
+
+  // feedback on highlight
+  textBlock.addEventListener('mouseup', () => {
+    const selection = window.getSelection().toString().trim();
+    if(selection.length > 0){
+      alert(`✅ You highlighted: "${selection}"`);
+    }
+  });
+}
+startTextSelection();
+  
+/*// Year 3: Text Selection
+function startTextSelection(){
+  const area = document.getElementById('textSelectArea');
+  area.innerHTML = '';
   const words = ["Apple","Banana","Cherry","Date","Elderberry","Fig","Grape","Honeydew"];
   words.forEach(word => {
     const span = document.createElement('span');
@@ -83,7 +105,7 @@ function startTextSelection(){
   });
 }
 startTextSelection();
-
+*/
 // Year 3: Scrolling
 function startScrolling(){
   const area = document.getElementById('scrollArea');
