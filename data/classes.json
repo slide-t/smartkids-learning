@@ -114,7 +114,7 @@
                 {
                   "title": "Two & Three Letter Words",
                   "instruction": "Type mixed 2–3 letter words using the home row.",
-                  "sample": ["AND", "SAD", "FUN", "JAM", "LAD"]
+                  "sample": ["and", "an", "sad", "as", "fan", "an", "jan", "lad"]
                 },
                 {
                   "title": "Five Short Words",
