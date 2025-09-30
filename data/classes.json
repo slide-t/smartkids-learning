@@ -167,14 +167,14 @@
               "name": "Keyboard",
               "topics": [
                 {
-                  "title": "Longer Words (5 letters)",
-                  "instruction": "Practice typing five-letter words to grow vocabulary.",
-                  "sample": ["APPLE", "HOUSE", "SCHOOL", "WATER", "PLANT"]
+                  "title": "Longer Words (5-6 letters)",
+                  "instruction": "Practice typing five-six letter words to grow vocabulary.",
+                  "sample": ["Angle", "House", "Should", "butter", "Plant"]
                 },
                 {
                   "title": "Speed Drill (5 min)",
                   "instruction": "Type the supplied words and short phrases repeatedly for 5 minutes.",
-                  "sample": ["APPLE", "HOUSE", "PLAY", "SCHOOL", "FRIEND"]
+                  "sample": ["Apply", "Hours", "Plead", "Scheme", "Hostile", "Amount", "Harmony"]
                 }
               ]
             }
@@ -198,17 +198,17 @@
                 {
                   "title": "Home Row Speed Drill",
                   "instruction": "Type home row letters with more speed and less looking.",
-                  "sample": ["A", "S", "D", "F", "J", "K", "L", ";"]
+                  "sample": ["aaa", "sss", "ddd", "fff", "jjj", "kkk", "lll", ";;;", ";;", "la", "ks", "jd", "f;"]
                 },
                 {
                   "title": "Simple Words Practice",
                   "instruction": "Type common easy words accurately.",
-                  "sample": ["SUN", "FUN", "HAT", "CAT", "DOG"]
+                  "sample": ["sun", "fun", "hat", "cat", "dog", "fag", "bag", "lag", "sag", "gas"]
                 },
                 {
                   "title": "Five 5-letter Words",
                   "instruction": "Type these 5-letter words to expand vocabulary and finger control.",
-                  "sample": ["BRING", "SMILE", "PLANT", "RIVER", "LIGHT"]
+                  "sample": ["Bring", "Smile", "Place", "River", "Sight"]
                 }
               ]
             },
@@ -263,7 +263,7 @@
                 {
                   "title": "Timed Accuracy Drill",
                   "instruction": "Type as many items correctly in 5 minutes as possible.",
-                  "sample": ["BRING", "SMILE", "PLANT", "RIVER", "LIGHT", "APPLE", "HOUSE"]
+                  "sample": ["Bring", "Smile", "Place", "River", "Light", "Apply", "House"]
                 }
               ]
             }
@@ -287,17 +287,17 @@
                 {
                   "title": "Top Row Keys",
                   "instruction": "Practice the top row letters (Q–P) with accuracy.",
-                  "sample": ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"]
+                  "sample": ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"]
                 },
                 {
                   "title": "Word Building",
                   "instruction": "Form and type words using top & home rows.",
-                  "sample": ["TREE", "WORD", "QUIZ", "JUMP", "FROG"]
+                  "sample": ["Tree", "Word", "Quiz", "Jump", "Frog"]
                 },
                 {
                   "title": "Five 6-letter Words",
                   "instruction": "Type these 6-letter words to build typing stamina.",
-                  "sample": ["ORANGE", "BUTTER", "FLOWER", "STREET", "GARDEN"]
+                  "sample": ["Orange", "Button", "Flower", "Street", "Garden"]
                 }
               ]
             },
@@ -330,7 +330,7 @@
                 {
                   "title": "Speed Words (3 min)",
                   "instruction": "Type these words quickly over multiple rounds.",
-                  "sample": ["FAST", "LOVE", "SCHOOL", "DOG", "FUN"]
+                  "sample": ["Fast", "Love", "School", "Dog", "Fun", "Frog", "Dorst"]
                 }
               ]
             }
