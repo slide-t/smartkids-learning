@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>SmartKids - Year 11 Mouse Practice (Interactive)</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root{
+    --accent:#0f172a;
+    --primary:#1e40af;
+    --success:#16a34a;
+    --danger:#ef4444;
+    --bg:#f3f4f6;
+  }
+  body{font-family:system-ui,Segoe UI,Roboto,Arial;background:var(--bg);margin:0;color:#0f172a}
+  header{background:var(--primary);color:#fff;padding:1rem;display:flex;justify-content:space-between;align-items:center}
+  header a{background:#fff;color:var(--primary);padding:.45rem .85rem;border-radius:.5rem;text-decoration:none;font-weight:600}
+  main{max-width:980px;margin:1.5rem auto;padding:0 1rem}
+  .accordion{margin-bottom:1rem}
+  .accordion-header{background:var(--primary);color:#fff;padding:.9rem 1rem;border-radius:.6rem;cursor:pointer;border:none;font-weight:700;display:flex;justify-content:space-between;align-items:center}
+  .accordion-content{display:none;background:#fff;border:1px solid #e6e9ef;padding:1rem;border-radius:.6rem;margin-top:.5rem;box-shadow:0 8px 24px rgba(2,6,23,.06)}
+  .practiceArea{width:100%;height:260px;border-radius:.6rem;background:#f8fafc;border:1px solid #e6e9ef;position:relative;overflow:hidden;margin-top:.6rem}
+  .control-point{width:16px;height:16px;border-radius:50%;background:linear-gradient(180deg,#f59e0b,#d97706);position:absolute;cursor:pointer;box-shadow:0 6px 14px rgba(2,6,23,.08)}
+  .target-zone{width:26px;height:26px;border-radius:4px;background:rgba(16,185,129,0.12);border:2px dashed rgba(16,185,129,0.7);position:absolute;display:flex;align-items:center;justify-content:center;font-size:12px;color:#064e3b;font-weight:700}
+  .cell{width:64px;height:36px;background:linear-gradient(180deg,#10b981,#059669);color:#fff;display:flex;align-items:center;justify-content:center;border-radius:.35rem;position:absolute;cursor:grab;box-shadow:0 8px 18px rgba(2,6,23,.06)}
+  .slot{width:72px;height:44px;border-radius:.35rem;border:2px dashed #94a3b8;background:#fff;position:absolute;display:flex;align-items:center;justify-content:center;color:#334155;font-weight:700}
+  .cad-box{width:110px;height:110px;background:linear-gradient(180deg,#fb923c,#f97316);border-radius:.5rem;color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;position:absolute;cursor:grab;box-shadow:0 12px 30px rgba(15,23,42,.12)}
+  .cad-target{position:absolute;width:130px;height:130px;border-radius:.6rem;border:3px dashed rgba(2,6,23,.09);left:calc(50% - 65px);top:calc(50% - 65px);display:flex;align-items:center;justify-content:center;color:#0f172a;font-weight:700}
+  .marker{width:4px;height:100%;background:var(--danger);position:absolute;top:0}
+  #playhead{width:12px;height:100%;background:var(--primary);position:absolute;left:0;top:0;border-radius:2px;cursor:grab}
+  .stats{display:flex;gap:1rem;align-items:center;margin-top:.6rem;font-weight:700}
+  .btn{background:var(--primary);color:#fff;padding:.45rem .75rem;border-radius:.45rem;border:none;cursor:pointer}
+  .small{font-size:.88rem;padding:.3rem .6rem}
+  .flash{animation:flash .45s}
+  @keyframes flash{0%{transform:scale(1)}50%{transform:scale(1.02)}100%{transform:scale(1)}}
+  .shake{animation:shake .34s}
+  @keyframes shake{0%{transform:translateX(0)}25%{transform:translateX(-6px)}50%{transform:translateX(6px)}75%{transform:translateX(-4px)}100%{transform:translateX(0)}}
+  .muted{color:#6b7280;font-weight:600}
+  .hint{font-size:.92rem;color:#374151;margin-top:.3rem}
+</style>
+</head>
+<body>
+<header>
+  <h1 class="text-lg font-bold">SmartKids — Year 11 Mouse Practice</h1>
+  <a href="https://slide-t.github.io/smartkids-learning/mouse.html">Back To Classes</a>
+</header>
+
+<main>
+  <!-- Accordion: Bezier Curve -->
+  <div class="accordion">
+    <button class="accordion-header" data-section="bezier">
+      🎨 Professional Design: Bezier control points
+      <span class="muted">Drag points into the glowing targets</span>
+    </button>
+    <div class="accordion-content" id="bezierContent">
+      <p class="hint">Drag each control point to its green target zone. When all 3 are placed, you score +10 and the curve locks.</p>
+      <div class="practiceArea" id="bezierArea" aria-label="bezier area">
+        <!-- SVG overlay for curve -->
+        <svg id="bezierSVG" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none"></svg>
+      </div>
+
+      <div class="stats">
+        <span id="bezierScore">Score: 0</span>
+        <span id="bezierTimer">Time: 0s</span>
+        <button class="btn small" id="bezierRestart">Restart</button>
+        <span class="muted">Placed: <span id="bezierPlaced">0/3</span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Accordion: Spreadsheet -->
+  <div class="accordion">
+    <button class="accordion-header" data-section="sheet">
+      📊 Complex Spreadsheet Skills
+      <span class="muted">Drag cells into matching slots</span>
+    </button>
+    <div class="accordion-content" id="sheetContent">
+      <p class="hint">Drag each green cell into the correctly numbered slot on the right. Correct placement = +5 points.</p>
+      <div class="practiceArea" id="sheetArea"></div>
+
+      <div class="stats">
+        <span id="sheetScore">Score: 0</span>
+        <span id="sheetTimer">Time: 0s</span>
+        <button class="btn small" id="sheetRestart">Restart</button>
+        <span class="muted">Placed: <span id="sheetPlaced">0/3</span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Accordion: CAD-like -->
+  <div class="accordion">
+    <button class="accordion-header" data-section="cad">
+      🛠 CAD-like Interactions
+      <span class="muted">Rotate & scale to match the target outline</span>
+    </button>
+    <div class="accordion-content" id="cadContent">
+      <p class="hint">Drag the orange box: horizontal drag = rotate, vertical drag = scale. Match target outline (visual) to score.</p>
+      <div class="practiceArea" id="cadArea">
+        <div class="cad-target" id="cadTarget">MATCH</div>
+      </div>
+
+      <div class="stats">
+        <span id="cadScore">Score: 0</span>
+        <span id="cadTimer">Time: 0s</span>
+        <button class="btn small" id="cadRestart">Restart</button>
+        <span class="muted">Matched: <span id="cadDone">0/1</span></span>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+/* ---------- Audio helpers (AudioContext tones) ---------- */
+function tone(freq, time=0.14, type='sine', vol=0.14){
+  try{
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    const ctx = new Ctx();
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.type = type; o.frequency.value = freq;
+    o.connect(g); g.connect(ctx.destination);
+    g.gain.setValueAtTime(vol, ctx.currentTime);
+    o.start(); o.stop(ctx.currentTime + time);
+    g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + time);
+  }catch(e){ /* silent fail */ }
+}
+const SOUND = {
+  success(){ tone(880,0.12,'sine',0.16); },
+  error(){ tone(220,0.12,'sawtooth',0.12); },
+  open(){ tone(600,0.08,'sine',0.08); },
+  restart(){ tone(440,0.12,'triangle',0.12); },
+  complete(){ tone(1200,0.16,'sine',0.2); tone(1000,0.16,'sawtooth',0.12); }
+};
+
+/* ---------- Accordion behavior (one open at a time) ---------- */
+const headers = document.querySelectorAll('.accordion-header');
+headers.forEach(h=>{
+  h.addEventListener('click', () => {
+    document.querySelectorAll('.accordion-content').forEach(c=>c.style.display='none');
+    const content = h.nextElementSibling;
+    const open = content.style.display === 'block';
+    if(!open){
+      content.style.display = 'block';
+      SOUND.open();
+      startTimer(h.dataset.section);
+    } else {
+      content.style.display = 'none';
+    }
+  });
+});
+
+/* ---------- Timer factory ---------- */
+function createTimer(displayEl){
+  let t=0, id=null;
+  return {
+    start(){ if(id) return; id=setInterval(()=>{ t++; displayEl.textContent = 'Time: ' + t + 's'; },1000); },
+    reset(){ clearInterval(id); id=null; t=0; displayEl.textContent = 'Time: 0s'; }
+  };
+}
+
+/* --------------------- BEZIER PRACTICE --------------------- */
+const bezierArea = document.getElementById('bezierArea');
+const bezierSVG = document.getElementById('bezierSVG');
+const bezierScoreEl = document.getElementById('bezierScore');
+const bezierTimerEl = document.getElementById('bezierTimer');
+const bezierPlacedEl = document.getElementById('bezierPlaced');
+const bezierTimer = createTimer(bezierTimerEl);
+let bezierScore = 0, bezierPlaced = 0;
+let bezierPoints = [], bezierTargets = [], bezierLocked = false;
+
+function initBezier(){
+  bezierArea.innerHTML = '';
+  bezierSVG.innerHTML = '';
+  bezierScore = 0; bezierPlaced = 0; bezierLocked = false;
+  bezierScoreEl.textContent = 'Score: 0';
+  bezierPlacedEl.textContent = '0/3';
+  bezierTimer.reset();
+
+  // Create three control points and target zones
+  const areaRect = {w: bezierArea.clientWidth, h: bezierArea.clientHeight};
+  const startX = 60;
+  for(let i=0;i<3;i++){
+    const p = document.createElement('div');
+    p.className = 'control-point';
+    p.style.left = (startX + i*120) + 'px';
+    p.style.top = (80 + (i%2?20:-10)) + 'px';
+    p.dataset.index = i;
+    bezierArea.appendChild(p);
+    makeDragPoint(p, checkBezierTargets);
+    bezierPoints.push(p);
+
+    // target zones (random-ish positions)
+    const tz = document.createElement('div');
+    tz.className = 'target-zone';
+    const tx = 40 + i*140 + (Math.random()*40-20);
+    const ty = 40 + (i%2?110:70);
+    tz.style.left = tx + 'px';
+    tz.style.top = ty + 'px';
+    tz.dataset.index = i;
+    tz.textContent = (i+1);
+    bezierArea.appendChild(tz);
+    bezierTargets.push(tz);
+  }
+
+  // initial curve draw
+  drawBezier();
+}
+
+/* dragable control points */
+function makeDragPoint(el, ondrop){
+  let dragging=false, ox=0, oy=0;
+  el.addEventListener('mousedown', e=>{
+    if(bezierLocked) return;
+    dragging=true;
+    ox = e.offsetX; oy = e.offsetY;
+    document.body.style.cursor='grabbing';
+  });
+  document.addEventListener('mousemove', e=>{
+    if(!dragging) return;
+    const rect = bezierArea.getBoundingClientRect();
+    let x = e.clientX - rect.left - ox;
+    let y = e.clientY - rect.top - oy;
+    x = Math.max(0, Math.min(rect.width - el.offsetWidth, x));
+    y = Math.max(0, Math.min(rect.height - el.offsetHeight, y));
+    el.style.left = x + 'px';
+    el.style.top = y + 'px';
+    drawBezier();
+  });
+  document.addEventListener('mouseup', ()=>{
+    if(dragging && typeof ondrop === 'function') ondrop(el);
+    dragging=false;
+    document.body.style.cursor='';
+  });
+}
+
+/* draw cubic-like curve (using quadratic segments for simplicity) */
+function drawBezier(){
+  bezierSVG.innerHTML = '';
+  if(bezierPoints.length < 3) return;
+  const p = bezierPoints.map(pt => {
+    const r = pt.getBoundingClientRect();
+    const parent = bezierArea.getBoundingClientRect();
+    return {x: r.left - parent.left + r.width/2, y: r.top - parent.top + r.height/2};
+  });
+  // draw simple smooth path using SVG cubic (M C)
+  const svgNS = "http://www.w3.org/2000/svg";
+  const path = document.createElementNS(svgNS, 'path');
+  path.setAttribute('fill', 'none');
+  path.setAttribute('stroke', '#3b82f6');
+  path.setAttribute('stroke-width', '3');
+  const d = `M ${p[0].x} ${p[0].y} C ${p[0].x+60} ${p[0].y-30}, ${p[2].x-60} ${p[2].y+30}, ${p[2].x} ${p[2].y}`;
+  path.setAttribute('d', d);
+  bezierSVG.appendChild(path);
+
+  // draw small handles lines
+  p.forEach(pt=>{
+    const circle = document.createElementNS(svgNS,'circle');
+    circle.setAttribute('cx', pt.x);
+    circle.setAttribute('cy', pt.y);
+    circle.setAttribute('r', 4);
+    circle.setAttribute('fill', '#f59e0b');
+    bezierSVG.appendChild(circle);
+  });
+}
+
+/* check whether a moved control point is inside its target zone */
+function checkBezierTargets(el){
+  // find target with same index
+  const idx = el.dataset.index;
+  const target = bezierTargets.find(t => t.dataset.index === idx);
+  const r1 = el.getBoundingClientRect(), r2 = target.getBoundingClientRect();
+  const overlap = !(r1.right < r2.left || r1.left > r2.right || r1.bottom < r2.top || r1.top > r2.bottom);
+  if(overlap && !el.dataset.placed){
+    el.dataset.placed = 'true';
+    el.style.transform = 'scale(0.9)';
+    bezierPlaced++;
+    bezierPlacedEl.textContent = bezierPlaced + '/3';
+    SOUND.success();
+    bezierScore += 3;
+    bezierScoreEl.textContent = 'Score: ' + bezierScore;
+    el.style.pointerEvents = 'none';
+    // when all placed: lock curve and give bonus
+    if(bezierPlaced === 3){
+      bezierLocked = true;
+      SOUND.complete();
+      bezierScore += 10;
+      bezierScoreEl.textContent = 'Score: ' + bezierScore;
+      bezierArea.classList.add('flash');
+      setTimeout(()=>bezierArea.classList.remove('flash'),400);
+    }
+  } else if(!overlap && el.dataset.placed === 'true'){
+    // if moved out again, allow un-place
+    el.dataset.placed = '';
+    bezierPlaced = Math.max(0, bezierPlaced - 1);
+    bezierPlacedEl.textContent = bezierPlaced + '/3';
+    SOUND.error();
+  }
+}
+
+/* ---------- Timers for section ---------- */
+const timers = {
+  bezier: createTimer(document.getElementById('bezierTimer')),
+  sheet: createTimer(document.getElementById('sheetTimer')),
+  cad: createTimer(document.getElementById('cadTimer')) // note: sheetTimer / cadTimer IDs created later
+};
+
+/* ensure createTimer for sheet and cad (they exist in DOM) */
+document.getElementById('sheetTimer').textContent = 'Time: 0s';
+document.getElementById('cadTimer').textContent = 'Time: 0s';
+timers.sheet = createTimer(document.getElementById('sheetTimer'));
+timers.cad = createTimer(document.getElementById('cadTimer'));
+
+/* helper to start timer when a section opens */
+function startTimer(section){
+  if(timers[section]) timers[section].start();
+}
+
+/* ---------- SHEET PRACTICE ---------- */
+const sheetArea = document.getElementById('sheetArea');
+const sheetScoreEl = document.getElementById('sheetScore');
+const sheetPlacedEl = document.getElementById('sheetPlaced');
+let sheetScore = 0, sheetPlaced = 0;
+let sheetCells = [], sheetSlots = [];
+
+function initSheet(){
+  sheetArea.innerHTML = '';
+  sheetScore = 0; sheetPlaced = 0;
+  sheetScoreEl.textContent = 'Score: 0';
+  sheetPlacedEl.textContent = '0/3';
+  timers.sheet.reset();
+
+  // create three numbered slots on the right
+  const areaW = sheetArea.clientWidth, areaH = sheetArea.clientHeight;
+  const slotX = areaW - 110;
+  for(let i=0;i<3;i++){
+    const s = document.createElement('div');
+    s.className = 'slot';
+    s.style.left = (slotX) + 'px';
+    s.style.top = (30 + i*70) + 'px';
+    s.textContent = 'Slot ' + (i+1);
+    s.dataset.index = i;
+    sheetArea.appendChild(s);
+    sheetSlots.push(s);
+  }
+
+  // create 3 draggable cells on the left with matching numbers
+  for(let i=0;i<3;i++){
+    const c = document.createElement('div');
+    c.className = 'cell';
+    c.textContent = (i+1);
+    c.style.left = (18) + 'px';
+    c.style.top = (30 + i*70) + 'px';
+    c.dataset.index = i;
+    sheetArea.appendChild(c);
+    makeDragCell(c);
+    sheetCells.push(c);
+  }
+}
+
+/* cell drag logic with drop detection */
+function makeDragCell(el){
+  let dragging=false, ox=0, oy=0;
+  el.addEventListener('mousedown', e=>{
+    dragging = true;
+    ox = e.offsetX; oy = e.offsetY;
+    el.style.cursor = 'grabbing';
+    el.style.transform = 'scale(1.02)';
+  });
+  document.addEventListener('mousemove', e=>{
+    if(!dragging) return;
+    const rect = sheetArea.getBoundingClientRect();
+    let x = e.clientX - rect.left - ox;
+    let y = e.clientY - rect.top - oy;
+    x = Math.max(6, Math.min(rect.width - el.offsetWidth - 6, x));
+    y = Math.max(6, Math.min(rect.height - el.offsetHeight - 6, y));
+    el.style.left = x + 'px';
+    el.style.top = y + 'px';
+  });
+  document.addEventListener('mouseup', ()=>{
+    if(!dragging) return;
+    dragging = false;
+    el.style.cursor = 'grab';
+    el.style.transform = '';
+    // detect slot overlap
+    const er = el.getBoundingClientRect();
+    let placed = false;
+    sheetSlots.forEach(slot=>{
+      const sr = slot.getBoundingClientRect();
+      const overlap = !(er.right < sr.left || er.left > sr.right || er.bottom < sr.top || er.top > sr.bottom);
+      if(overlap){
+        // check index match
+        if(slot.dataset.index === el.dataset.index && !el.dataset.placed){
+          // snap into slot
+          const parentRect = sheetArea.getBoundingClientRect();
+          el.style.left = (sr.left - parentRect.left + (sr.width - el.offsetWidth)/2) + 'px';
+          el.style.top = (sr.top - parentRect.top + (sr.height - el.offsetHeight)/2) + 'px';
+          el.dataset.placed = 'true';
+          sheetPlaced++; sheetPlacedEl.textContent = sheetPlaced + '/3';
+          sheetScore += 5; sheetScoreEl.textContent = 'Score: ' + sheetScore;
+          SOUND.success();
+          placed = true;
+          // lock pointer so it can't be moved again
+          el.style.pointerEvents = 'none';
+        } else {
+          // wrong slot
+          el.classList.add('shake');
+          setTimeout(()=>el.classList.remove('shake'),300);
+          SOUND.error();
+        }
+      }
+    });
+    if(!placed){
+      // snap back to left area if not placed
+      el.style.left = Math.max(6, parseFloat(el.style.left)) + 'px';
+    }
+    if(sheetPlaced === 3){
+      // complete bonus
+      sheetScore += 8;
+      sheetScoreEl.textContent = 'Score: ' + sheetScore;
+      SOUND.complete();
+      sheetArea.classList.add('flash');
+      setTimeout(()=>sheetArea.classList.remove('flash'),400);
+    }
+  });
+}
+
+/* ---------- CAD Practice ---------- */
+const cadArea = document.getElementById('cadArea');
+const cadScoreEl = document.getElementById('cadScore');
+const cadDoneEl = document.getElementById('cadDone');
+let cadBox, cadScore = 0, cadMatched = 0;
+
+function initCad(){
+  cadArea.innerHTML = '';
+  cadScore = 0; cadMatched = 0;
+  cadScoreEl.textContent = 'Score: 0';
+  cadDoneEl.textContent = '0/1';
+  timers.cad.reset();
+
+  // add target outline (already in markup), ensure present
+  const target = document.createElement('div');
+  target.className = 'cad-target';
+  target.id = 'cadTarget';
+  target.textContent = 'MATCH';
+  cadArea.appendChild(target);
+
+  // add draggable CAD box
+  cadBox = document.createElement('div');
+  cadBox.className = 'cad-box';
+  cadBox.id = 'cadBox';
+  cadBox.textContent = 'CAD';
+  cadBox.style.left = '40px';
+  cadBox.style.top = '40px';
+  cadArea.appendChild(cadBox);
+
+  setupCadDrag(cadBox, target);
+}
+
+/* drag horizontally = rotate (degrees), vertically = scale */
+function setupCadDrag(box, target){
+  let dragging=false, startX=0, startY=0, currentRotation=0, currentScale=1;
+  box.addEventListener('mousedown', e=>{
+    dragging = true;
+    startX = e.clientX;
+    startY = e.clientY;
+    box.style.cursor = 'grabbing';
+  });
+  document.addEventListener('mousemove', e=>{
+    if(!dragging) return;
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+    currentRotation = Math.max(-180, Math.min(180, dx)); // degrees
+    currentScale = Math.max(0.6, Math.min(1.8, 1 + dy/300));
+    box.style.transform = `rotate(${currentRotation}deg) scale(${currentScale})`;
+  });
+  document.addEventListener('mouseup', ()=>{
+    if(!dragging) return;
+    dragging = false;
+    box.style.cursor = 'grab';
+    // check visual match: compare rotation close to 0 and scale close to 1 (target)
+    const rotationOK = Math.abs(currentRotation) < 12; // within +/-12 deg
+    const scaleOK = Math.abs(currentScale - 1) < 0.12; // within ~12%
+    if(rotationOK && scaleOK && cadMatched === 0){
+      cadMatched = 1;
+      cadScore += 12;
+      cadScoreEl.textContent = 'Score: ' + cadScore;
+      cadDoneEl.textContent = '1/1';
+      SOUND.success();
+      cadBox.style.pointerEvents = 'none';
+      cadArea.classList.add('flash');
+      setTimeout(()=>cadArea.classList.remove('flash'),350);
+      SOUND.complete();
+    } else {
+      // give gentle feedback and let user try again
+      cadBox.classList.add('shake');
+      setTimeout(()=>cadBox.classList.remove('shake'),320);
+      SOUND.error();
+    }
+  });
+}
+
+/* ---------- Restart button bindings ---------- */
+document.getElementById('bezierRestart').addEventListener('click', ()=>{ initBezier(); SOUND.restart(); });
+document.getElementById('sheetRestart').addEventListener('click', ()=>{ initSheet(); SOUND.restart(); });
+document.getElementById('cadRestart').addEventListener('click', ()=>{ initCad(); SOUND.restart(); });
+
+/* ---------- initialize all ---------- */
+initBezier();
+initSheet();
+initCad();
+
+/* expose for quick console testing */
+window._practice = { initBezier, initSheet, initCad };
+
+</script>
+</body>
+</html>
