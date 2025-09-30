@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,12 +10,13 @@
   header { background:#1e40af; color:white; padding:1rem; display:flex; justify-content:space-between; align-items:center; }
   header a { background:white; color:#1e40af; padding:0.5rem 1rem; border-radius:0.5rem; font-weight:bold; text-decoration:none; }
   main { padding:2rem; max-width:900px; margin:auto; }
-  h2 { margin-bottom:0.5rem; }
-  #designArea, #groupArea, #timelineArea { width:100%; height:200px; background:#e5e7eb; border-radius:0.5rem; position:relative; margin-bottom:20px; overflow:hidden; }
+  .accordion { margin-bottom:1rem; border:1px solid #ccc; border-radius:0.5rem; overflow:hidden; }
+  .accordion-header { background:#1e40af; color:white; padding:0.75rem; cursor:pointer; font-weight:bold; }
+  .accordion-content { display:none; padding:1rem; background:white; }
+  .stats { margin:0.5rem 0; font-weight:bold; }
   .object { width:50px; height:50px; background:#f59e0b; position:absolute; display:flex; justify-content:center; align-items:center; color:white; font-weight:bold; cursor:pointer; user-select:none; border-radius:0.25rem; }
   .selected { border:2px dashed #1e40af; }
   #playhead { width:10px; height:100%; background:#1e40af; position:absolute; left:0; cursor:pointer; }
-  .stats span { margin-right:10px; font-weight:bold; }
 </style>
 </head>
 <body>
@@ -28,119 +28,136 @@
 
 <main>
 
-<h2>Graphic Design Tools</h2>
-<p>Click and drag objects to move them around the area.</p>
-<div id="designArea"></div>
+<!-- Accordion: Graphic Design -->
+<div class="accordion">
+  <div class="accordion-header">🎨 Graphic Design Tools</div>
+  <div class="accordion-content">
+    <p>Click and drag objects to move them around the area.</p>
+    <div class="stats">Score: <span id="score1">0</span> | Time: <span id="timer1">0</span>s</div>
+    <button id="restart1" class="bg-blue-600 text-white px-3 py-1 rounded">Restart</button>
+    <div id="designArea" style="width:100%;height:200px;background:#e5e7eb;border-radius:0.5rem;position:relative;margin-top:1rem;"></div>
+  </div>
+</div>
 
-<h2>Multi-Select and Grouping</h2>
-<p>Click multiple objects with Ctrl and move them together.</p>
-<div id="groupArea"></div>
+<!-- Accordion: Grouping -->
+<div class="accordion">
+  <div class="accordion-header">🖱️ Multi-Select & Grouping</div>
+  <div class="accordion-content">
+    <p>Click multiple objects with Ctrl and move them together.</p>
+    <div class="stats">Score: <span id="score2">0</span> | Time: <span id="timer2">0</span>s</div>
+    <button id="restart2" class="bg-blue-600 text-white px-3 py-1 rounded">Restart</button>
+    <div id="groupArea" style="width:100%;height:200px;background:#e5e7eb;border-radius:0.5rem;position:relative;margin-top:1rem;"></div>
+  </div>
+</div>
 
-<h2>Timeline Navigation</h2>
-<p>Drag the playhead to simulate timeline navigation.</p>
-<div id="timelineArea">
-  <div id="playhead"></div>
+<!-- Accordion: Timeline -->
+<div class="accordion">
+  <div class="accordion-header">⏳ Timeline Navigation</div>
+  <div class="accordion-content">
+    <p>Drag the playhead to simulate timeline navigation.</p>
+    <div class="stats">Score: <span id="score3">0</span> | Time: <span id="timer3">0</span>s</div>
+    <button id="restart3" class="bg-blue-600 text-white px-3 py-1 rounded">Restart</button>
+    <div id="timelineArea" style="width:100%;height:200px;background:#e5e7eb;border-radius:0.5rem;position:relative;margin-top:1rem;overflow:hidden;">
+      <div id="playhead"></div>
+    </div>
+  </div>
 </div>
 
 </main>
 
 <script>
 document.addEventListener('DOMContentLoaded',()=>{
+  // Accordion behavior
+  document.querySelectorAll('.accordion-header').forEach((header, idx)=>{
+    header.addEventListener('click', ()=>{
+      const content = header.nextElementSibling;
+      const isOpen = content.style.display==='block';
+      document.querySelectorAll('.accordion-content').forEach(c=>c.style.display='none');
+      if(!isOpen) content.style.display='block';
+      if(!timers[idx]) startTimer(idx);
+    });
+  });
 
-  // Graphic Design Tools
-  const designArea=document.getElementById('designArea');
-  const objects=[];
-  for(let i=0;i<3;i++){
-    const obj=document.createElement('div');
-    obj.className='object';
-    obj.textContent=i+1;
-    obj.style.left=(50+i*70)+'px';
-    obj.style.top='50px';
-    designArea.appendChild(obj);
-    makeDraggable(obj, designArea);
-    objects.push(obj);
+  // Score & Timer System
+  let scores=[0,0,0];
+  let timers=[null,null,null];
+  let timeVals=[0,0,0];
+
+  function updateScore(i, inc=1){
+    scores[i]+=inc;
+    document.getElementById(`score${i+1}`).textContent=scores[i];
+  }
+  function startTimer(i){
+    if(timers[i]) return;
+    timers[i]=setInterval(()=>{
+      timeVals[i]++;
+      document.getElementById(`timer${i+1}`).textContent=timeVals[i];
+    },1000);
+  }
+  function reset(i){
+    scores[i]=0; timeVals[i]=0;
+    document.getElementById(`score${i+1}`).textContent=0;
+    document.getElementById(`timer${i+1}`).textContent=0;
+    clearInterval(timers[i]); timers[i]=null;
+    if(i===0) initDesign(); 
+    if(i===1) initGroup(); 
+    if(i===2) initTimeline();
   }
 
-  // Multi-Select and Grouping
-  const groupArea=document.getElementById('groupArea');
-  const groupObjects=[];
-  for(let i=0;i<4;i++){
-    const obj=document.createElement('div');
-    obj.className='object';
-    obj.textContent=i+1;
-    obj.style.left=(50+i*60)+'px';
-    obj.style.top='50px';
-    groupArea.appendChild(obj);
-    makeSelectableDraggable(obj, groupArea);
-    groupObjects.push(obj);
+  document.getElementById('restart1').onclick=()=>reset(0);
+  document.getElementById('restart2').onclick=()=>reset(1);
+  document.getElementById('restart3').onclick=()=>reset(2);
+
+  // Graphic Design
+  function initDesign(){
+    const area=document.getElementById('designArea');
+    area.innerHTML='';
+    for(let i=0;i<3;i++){
+      const obj=document.createElement('div');
+      obj.className='object';
+      obj.textContent=i+1;
+      obj.style.left=(50+i*70)+'px';
+      obj.style.top='50px';
+      area.appendChild(obj);
+      makeDraggable(obj, area, ()=>updateScore(0));
+    }
   }
 
+  // Grouping
   let selectedObjects=[];
-
-  function makeSelectableDraggable(el, container){
-    let dragging=false, offsetX=0, offsetY=0;
-
-    el.addEventListener('mousedown', (e)=>{
-      if(!e.ctrlKey) {
-        selectedObjects.forEach(o=>o.classList.remove('selected'));
-        selectedObjects=[el];
-      } else {
-        if(!selectedObjects.includes(el)) selectedObjects.push(el);
-        else selectedObjects=selectedObjects.filter(o=>o!==el);
-      }
-      selectedObjects.forEach(o=>o.classList.add('selected'));
-
-      dragging=true;
-      const rect=el.getBoundingClientRect();
-      offsetX=e.clientX-rect.left;
-      offsetY=e.clientY-rect.top;
-    });
-
-    document.addEventListener('mouseup', ()=>dragging=false);
-
-    document.addEventListener('mousemove', e=>{
-      if(!dragging) return;
-      const rect=container.getBoundingClientRect();
-      const dx=e.movementX;
-      const dy=e.movementY;
-      selectedObjects.forEach(o=>{
-        let left=o.offsetLeft+dx;
-        let top=o.offsetTop+dy;
-        left=Math.max(0, Math.min(container.clientWidth-o.offsetWidth, left));
-        top=Math.max(0, Math.min(container.clientHeight-o.offsetHeight, top));
-        o.style.left=left+'px';
-        o.style.top=top+'px';
-      });
-    });
+  function initGroup(){
+    const area=document.getElementById('groupArea');
+    area.innerHTML='';
+    selectedObjects=[];
+    for(let i=0;i<4;i++){
+      const obj=document.createElement('div');
+      obj.className='object';
+      obj.textContent=i+1;
+      obj.style.left=(50+i*60)+'px';
+      obj.style.top='50px';
+      area.appendChild(obj);
+      makeSelectableDraggable(obj, area, ()=>updateScore(1));
+    }
   }
 
-  // Timeline Navigation
-  const playhead=document.getElementById('playhead');
-  let dragging=false, offsetX=0;
+  // Timeline
+  function initTimeline(){
+    const playhead=document.getElementById('playhead');
+    playhead.style.left='0px';
+  }
 
-  playhead.addEventListener('mousedown',(e)=>{
-    dragging=true;
-    offsetX=e.offsetX;
-  });
-  document.addEventListener('mouseup',()=>dragging=false);
-  document.addEventListener('mousemove',(e)=>{
-    if(!dragging) return;
-    const rect=playhead.parentElement.getBoundingClientRect();
-    let left=e.clientX-rect.left-offsetX;
-    left=Math.max(0, Math.min(rect.width-playhead.offsetWidth,left));
-    playhead.style.left=left+'px';
-  });
-
-  // Helper for designArea draggable
-  function makeDraggable(el, container){
+  // Helpers
+  function makeDraggable(el, container, onDrop){
     let dragging=false, offsetX=0, offsetY=0;
     el.addEventListener('mousedown', e=>{
       dragging=true;
       const rect=el.getBoundingClientRect();
-      offsetX=e.clientX-rect.left;
-      offsetY=e.clientY-rect.top;
+      offsetX=e.clientX-rect.left; offsetY=e.clientY-rect.top;
     });
-    document.addEventListener('mouseup',()=>dragging=false);
+    document.addEventListener('mouseup',()=>{
+      if(dragging) onDrop();
+      dragging=false;
+    });
     document.addEventListener('mousemove', e=>{
       if(!dragging) return;
       const rect=container.getBoundingClientRect();
@@ -148,11 +165,53 @@ document.addEventListener('DOMContentLoaded',()=>{
       let top=e.clientY-rect.top-offsetY;
       left=Math.max(0, Math.min(container.clientWidth-el.offsetWidth,left));
       top=Math.max(0, Math.min(container.clientHeight-el.offsetHeight,top));
-      el.style.left=left+'px';
-      el.style.top=top+'px';
+      el.style.left=left+'px'; el.style.top=top+'px';
     });
   }
 
+  function makeSelectableDraggable(el, container, onDrop){
+    let dragging=false, offsetX=0, offsetY=0;
+    el.addEventListener('mousedown', (e)=>{
+      if(!e.ctrlKey){ selectedObjects.forEach(o=>o.classList.remove('selected')); selectedObjects=[el]; }
+      else { if(!selectedObjects.includes(el)) selectedObjects.push(el); else selectedObjects=selectedObjects.filter(o=>o!==el); }
+      selectedObjects.forEach(o=>o.classList.add('selected'));
+      dragging=true;
+      const rect=el.getBoundingClientRect();
+      offsetX=e.clientX-rect.left; offsetY=e.clientY-rect.top;
+    });
+    document.addEventListener('mouseup', ()=>{
+      if(dragging) onDrop();
+      dragging=false;
+    });
+    document.addEventListener('mousemove', e=>{
+      if(!dragging) return;
+      const dx=e.movementX, dy=e.movementY;
+      selectedObjects.forEach(o=>{
+        let left=o.offsetLeft+dx, top=o.offsetTop+dy;
+        left=Math.max(0, Math.min(container.clientWidth-o.offsetWidth,left));
+        top=Math.max(0, Math.min(container.clientHeight-o.offsetHeight,top));
+        o.style.left=left+'px'; o.style.top=top+'px';
+      });
+    });
+  }
+
+  // Timeline playhead drag
+  (function(){
+    const playhead=document.getElementById('playhead');
+    let dragging=false, offsetX=0;
+    playhead.addEventListener('mousedown',(e)=>{dragging=true; offsetX=e.offsetX;});
+    document.addEventListener('mouseup',()=>{ if(dragging) updateScore(2); dragging=false;});
+    document.addEventListener('mousemove',(e)=>{
+      if(!dragging) return;
+      const rect=playhead.parentElement.getBoundingClientRect();
+      let left=e.clientX-rect.left-offsetX;
+      left=Math.max(0, Math.min(rect.width-playhead.offsetWidth,left));
+      playhead.style.left=left+'px';
+    });
+  })();
+
+  // Init defaults
+  initDesign(); initGroup(); initTimeline();
 });
 </script>
 
