@@ -73,6 +73,59 @@ function startTextSelection(){
   const area = document.getElementById('textSelectArea');
   area.innerHTML = '';
 
+  // Words to appear in the paragraph
+  const words = ["Apple","Banana","Cherry","Date","Elderberry","Fig","Grape","Honeydew"];
+
+  // Mode toggle button
+  const toggleBtn = document.createElement('button');
+  toggleBtn.textContent = "Switch to Targeted Highlight Mode";
+  toggleBtn.className = "px-3 py-1 bg-blue-500 text-white rounded mb-3 hover:bg-blue-600";
+  area.appendChild(toggleBtn);
+
+  const textBlock = document.createElement('p');
+  textBlock.textContent = words.join(" ") + ". Click and drag your mouse to highlight.";
+  textBlock.style.fontSize = "1.1rem";
+  textBlock.style.lineHeight = "1.6";
+  textBlock.style.cursor = "text";
+  area.appendChild(textBlock);
+
+  // Mode flag
+  let strictMode = false;
+
+  // Toggle behavior
+  toggleBtn.addEventListener("click", () => {
+    strictMode = !strictMode;
+    toggleBtn.textContent = strictMode 
+      ? "Switch to Free Highlight Mode" 
+      : "Switch to Targeted Highlight Mode";
+  });
+
+  // Highlight detection
+  textBlock.addEventListener('mouseup', () => {
+    const selection = window.getSelection().toString().trim();
+
+    if(selection.length > 0){
+      if(strictMode){
+        if(words.includes(selection)){
+          alert(`🎉 Correct! You highlighted "${selection}".`);
+        } else {
+          alert(`❌ "${selection}" is not one of the target words. Try again.`);
+        }
+      } else {
+        alert(`✅ You highlighted: "${selection}"`);
+      }
+    }
+  });
+}
+
+startTextSelection();
+
+  
+/*// Year 3: Text Selection
+function startTextSelection(){
+  const area = document.getElementById('textSelectArea');
+  area.innerHTML = '';
+
   const textBlock = document.createElement('p');
   textBlock.textContent = "Apple Banana Cherry Date Elderberry Fig Grape Honeydew. Click and drag your mouse to highlight part of this text.";
   textBlock.style.fontSize = "1.1rem";
