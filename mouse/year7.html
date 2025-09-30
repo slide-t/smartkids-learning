@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartKids Mouse Practice - Year 7</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: 'Segoe UI', sans-serif; background:#f3f4f6; margin:0; padding:0; }
+  header { background:#1e40af; color:white; padding:1rem; display:flex; justify-content:space-between; align-items:center; }
+  header a { background:white; color:#1e40af; padding:0.5rem 1rem; border-radius:0.5rem; font-weight:bold; text-decoration:none; }
+  main { padding:2rem; max-width:900px; margin:auto; }
+  .accordion-header { cursor:pointer; padding:1rem; background:#1e3a8a; color:white; border-radius:0.5rem; margin-bottom:0.5rem; font-weight:bold; box-shadow:0 2px 5px rgba(0,0,0,0.2);}
+  .accordion-content { display:none; padding:1rem; background:white; border:1px solid #d1d5db; border-radius:0.5rem; margin-bottom:1rem; }
+  #drawArea { border:1px solid #9ca3af; background:white; height:300px; width:100%; position:relative; cursor:crosshair; border-radius:0.5rem; }
+  #targetArea { position:relative; width:100%; height:220px; background:#e5e7eb; border-radius:0.5rem; overflow:hidden; }
+  .target { width:50px; height:50px; background:#f59e0b; border-radius:50%; position:absolute; display:flex; justify-content:center; align-items:center; color:white; font-size:20px; font-weight:bold; cursor:pointer; user-select:none; transition: transform 0.2s; }
+  .target:active { transform: scale(0.9); }
+  #scrollArea { height:200px; overflow:auto; border:1px solid #9ca3af; background:white; padding:10px; border-radius:0.5rem; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1 class="text-xl font-bold">SmartKids Year 7 Mouse Practice</h1>
+  <a href="https://slide-t.github.io/smartkids-learning/mouse.html">Back To Classes</a>
+</header>
+
+<main>
+
+  <!-- Global Score Counter -->
+  <div class="bg-yellow-100 border border-yellow-300 rounded-lg p-3 mb-4 text-lg font-bold text-yellow-800">
+    ⭐ Score: <span id="score">0</span>
+  </div>
+
+  <!-- Accordion 1 -->
+  <div class="accordion">
+    <div class="accordion-header">✏️ Using Drawing Tools</div>
+    <div class="accordion-content">
+      <p class="mb-2">Draw freehand lines with your mouse in the area below.</p>
+      <canvas id="drawArea"></canvas>
+    </div>
+  </div>
+
+  <!-- Accordion 2 -->
+  <div class="accordion">
+    <div class="accordion-header">🎯 Precision Clicking</div>
+    <div class="accordion-content">
+      <p class="mb-2">Click the moving target as quickly and accurately as you can!</p>
+      <div id="targetArea"></div>
+      <div class="stats mt-2 bg-gray-100 p-2 rounded-lg inline-block">
+        Clicks: <span id="clicks">0</span>,
+        Hits: <span id="hits">0</span>,
+        Accuracy: <span id="accuracy">100</span>%
+      </div>
+    </div>
+  </div>
+
+  <!-- Accordion 3 -->
+  <div class="accordion">
+    <div class="accordion-header">🖱 Scroll and Zoom</div>
+    <div class="accordion-content">
+      <p class="mb-2">Scroll the content below and use <b>Ctrl + Scroll</b> to zoom in/out.</p>
+      <div id="scrollArea">
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur euismod, nisl at convallis ultrices.</p>
+        <p>Proin sed purus a justo hendrerit aliquet. Sed efficitur turpis non nisi tincidunt, nec finibus turpis laoreet.</p>
+        <p>Maecenas nec ex sed augue scelerisque viverra non a sapien. Integer eget massa nec diam consequat tincidunt.</p>
+        <p>Vivamus sed sapien vitae dolor pharetra aliquet. Morbi et sagittis purus. Nullam eu purus in justo tincidunt tempor.</p>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+
+  let score=0;
+  const scoreEl=document.getElementById('score');
+  function addScore(points){
+    score+=points;
+    scoreEl.textContent=score;
+  }
+
+  // Accordion toggle
+  document.querySelectorAll('.accordion-header').forEach(header=>{
+    header.addEventListener('click',()=>{
+      const content = header.nextElementSibling;
+      content.style.display = content.style.display==='block' ? 'none':'block';
+    });
+  });
+
+  // Drawing Tools
+  const canvas = document.getElementById('drawArea');
+  const ctx = canvas.getContext('2d');
+  canvas.width = canvas.offsetWidth;
+  canvas.height = canvas.offsetHeight;
+  let drawing=false;
+
+  canvas.addEventListener('mousedown',()=>{drawing=true; ctx.beginPath();});
+  canvas.addEventListener('mouseup',()=>{drawing=false;});
+  canvas.addEventListener('mousemove',(e)=>{
+    if(!drawing) return;
+    const rect=canvas.getBoundingClientRect();
+    ctx.lineTo(e.clientX-rect.left, e.clientY-rect.top);
+    ctx.stroke();
+    addScore(1); // score for drawing
+  });
+
+  // Precision Clicking (moving target)
+  const targetArea=document.getElementById('targetArea');
+  const clicksEl=document.getElementById('clicks');
+  const hitsEl=document.getElementById('hits');
+  const accuracyEl=document.getElementById('accuracy');
+  let clicks=0,hits=0;
+
+  const target=document.createElement('div');
+  target.className='target';
+  target.textContent='🎯';
+  targetArea.appendChild(target);
+
+  let vx=2+Math.random()*2; 
+  let vy=2+Math.random()*2;
+
+  function moveTarget(){
+    const areaRect=targetArea.getBoundingClientRect();
+    let x=parseFloat(target.style.left)||50;
+    let y=parseFloat(target.style.top)||50;
+
+    x+=vx; y+=vy;
+
+    if(x<=0 || x+50>=areaRect.width){ vx*=-1; }
+    if(y<=0 || y+50>=areaRect.height){ vy*=-1; }
+
+    target.style.left=x+'px';
+    target.style.top=y+'px';
+    requestAnimationFrame(moveTarget);
+  }
+
+  target.addEventListener('click',(e)=>{
+    e.stopPropagation();
+    hits++; clicks++;
+    updateStats();
+    addScore(10); // reward for hitting target
+  });
+
+  targetArea.addEventListener('click',(e)=>{
+    if(!e.target.classList.contains('target')){ clicks++; updateStats(); }
+  });
+
+  function updateStats(){
+    clicksEl.textContent=clicks;
+    hitsEl.textContent=hits;
+    accuracyEl.textContent=clicks>0?Math.round(hits/clicks*100):100;
+  }
+
+  moveTarget();
+
+  // Scroll and Zoom
+  const scrollArea=document.getElementById('scrollArea');
+  let scrolled=false;
+  scrollArea.addEventListener('scroll',()=>{
+    if(!scrolled){ addScore(5); scrolled=true; }
+  });
+
+  scrollArea.addEventListener('wheel',e=>{
+    if(e.ctrlKey){
+      e.preventDefault();
+      let scale=parseFloat(scrollArea.style.zoom)||1;
+      scale+=e.deltaY>0?-0.1:0.1;
+      scale=Math.min(Math.max(scale,0.5),3);
+      scrollArea.style.zoom=scale;
+      addScore(2); // reward for zooming
+    }
+  });
+
+});
+</script>
+
+</body>
+</html>
