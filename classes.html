@@ -1113,6 +1113,28 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 </script>
+
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+  // Select all <a> elements with href containing "mouse"
+  const mouseLinks = document.querySelectorAll('a[href*="mouse"]');
+
+  mouseLinks.forEach(link => {
+    // Disable link click
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      alert("Mouse practice is available on the Mouse page only.");
+    });
+
+    // Style it like disabled (optional)
+    link.style.pointerEvents = "none"; // fully blocks clicks
+    link.style.opacity = "0.5";
+    link.style.cursor = "not-allowed";
+    link.setAttribute("title", "Disabled — open Mouse page separately");
+  });
+});
+</script>
 </body>
 </html>
                           
