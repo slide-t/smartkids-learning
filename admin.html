@@ -130,8 +130,66 @@
           tbody.appendChild(tr);
         });
     }
+// ===== EXPORT EXCEL =====
+document.getElementById("exportExcel").addEventListener("click", () => {
+  const table = document.getElementById("recordsTable");
+  const wb = XLSX.utils.book_new();
 
-    // Export to Excel
+  // Get only visible rows (after filtering)
+  const rows = [];
+  table.querySelectorAll("tbody tr").forEach(tr => {
+    if (tr.style.display !== "none") {
+      const cells = Array.from(tr.querySelectorAll("td")).map(td => td.innerText);
+      rows.push(cells);
+    }
+  });
+
+  if (rows.length === 0) {
+    alert("⚠️ No records to export!");
+    return;
+  }
+
+  // Add headers
+  const headers = Array.from(table.querySelectorAll("thead th")).map(th => th.innerText);
+  const ws = XLSX.utils.aoa_to_sheet([headers, ...rows]);
+
+  XLSX.utils.book_append_sheet(wb, ws, "Students");
+  XLSX.writeFile(wb, "SmartKids_Records.xlsx");
+});
+
+// ===== EXPORT PDF =====
+document.getElementById("exportPdf").addEventListener("click", () => {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  // Collect visible rows
+  const table = document.getElementById("recordsTable");
+  const headers = Array.from(table.querySelectorAll("thead th")).map(th => th.innerText);
+  const rows = [];
+
+  table.querySelectorAll("tbody tr").forEach(tr => {
+    if (tr.style.display !== "none") {
+      const cells = Array.from(tr.querySelectorAll("td")).map(td => td.innerText);
+      rows.push(cells);
+    }
+  });
+
+  if (rows.length === 0) {
+    alert("⚠️ No records to export!");
+    return;
+  }
+
+  // Generate table in PDF
+  doc.autoTable({
+    head: [headers],
+    body: rows,
+  });
+
+  doc.save("SmartKids_Records.pdf");
+});
+
+    
+    /*// Export to Excel
     function exportToExcel() {
       const wb = XLSX.utils.book_new();
       const wsData = [["Full Name","Class","Subject","Session","Term","School","Location","Country"]];
@@ -163,7 +221,7 @@
 
       doc.save("SmartKids_Records.pdf");
     }
-
+*/
     // Event Listeners
     document.getElementById("searchBtn").addEventListener("click", () => {
       const school = document.getElementById("searchSchool").value;
