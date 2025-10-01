@@ -989,78 +989,46 @@ document.addEventListener("DOMContentLoaded", async () => {
       </div>
     </div>
   </footer>
-<!-- Registration / Login Modal -->
-<div id="authModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+
+<!-- Registration Form Modal -->
+<div id="registrationModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
   <div class="bg-white p-6 rounded-lg shadow-lg w-96">
     <h2 class="text-xl font-bold mb-4">SmartKids Registration</h2>
-    <form id="authForm" class="space-y-3">
+    <form id="registrationForm" class="space-y-3">
       <div>
-        <label class="block mb-1">Full Name</label>
-        <input type="text" id="fullName" class="w-full border p-2 rounded" required />
+        <label class="block text-sm font-medium">Full Name</label>
+        <input type="text" id="fullName" class="w-full border p-2 rounded" required>
       </div>
       <div>
-        <label class="block mb-1">Class</label>
-        <input type="text" id="className" class="w-full border p-2 rounded" required />
+        <label class="block text-sm font-medium">School Name</label>
+        <input type="text" id="schoolName" class="w-full border p-2 rounded" required>
       </div>
       <div>
-        <label class="block mb-1">School Name</label>
-        <input type="text" id="schoolName" class="w-full border p-2 rounded" required />
+        <label class="block text-sm font-medium">State</label>
+        <input type="text" id="state" class="w-full border p-2 rounded" required>
       </div>
       <div>
-        <label class="block mb-1">State</label>
-        <input type="text" id="state" class="w-full border p-2 rounded" required />
+        <label class="block text-sm font-medium">Country</label>
+        <input type="text" id="country" class="w-full border p-2 rounded" required>
       </div>
       <div>
-        <label class="block mb-1">Country</label>
-        <input type="text" id="country" class="w-full border p-2 rounded" required />
+        <label class="block text-sm font-medium">Password</label>
+        <input type="password" id="password" class="w-full border p-2 rounded" required>
       </div>
-      <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Register</button>
+      <button type="submit" class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700">
+        Register
+      </button>
     </form>
   </div>
 </div>
 
 <!-- Logout Button -->
-<button id="logoutBtn" class="hidden bg-red-500 text-white px-4 py-2 rounded m-4">Logout</button>
-<script src="auth.js"></script>
-<script>
-document.addEventListener("DOMContentLoaded", async () => {
-  const authModal = document.getElementById("authModal");
-  const authForm = document.getElementById("authForm");
-  const logoutBtn = document.getElementById("logoutBtn");
+<button id="logoutBtn" class="hidden fixed top-4 right-4 bg-red-600 text-white px-4 py-2 rounded">
+  Logout
+</button>
+<script src="registration.js"></script>
 
-  const currentUser = getCurrentUser();
-
-  if (!currentUser) {
-    authModal.classList.remove("hidden"); // show modal
-  } else {
-    logoutBtn.classList.remove("hidden"); // already logged in
-  }
-
-  authForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const pupil = {
-      fullName: document.getElementById("fullName").value.trim(),
-      className: document.getElementById("className").value.trim(),
-      schoolName: document.getElementById("schoolName").value.trim(),
-      state: document.getElementById("state").value.trim(),
-      country: document.getElementById("country").value.trim(),
-      timestamp: Date.now()
-    };
-
-    await addPupil(pupil);
-    setCurrentUser(pupil);
-
-    authModal.classList.add("hidden");
-    logoutBtn.classList.remove("hidden");
-  });
-
-  logoutBtn.addEventListener("click", () => {
-    logoutUser();
-    logoutBtn.classList.add("hidden");
-    authModal.classList.remove("hidden");
-  });
-});
-</script>
+  
   
 </body>
 </html>
