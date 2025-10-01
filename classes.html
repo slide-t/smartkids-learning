@@ -991,41 +991,42 @@ document.addEventListener("DOMContentLoaded", async () => {
   </footer>
 
 <!-- Registration Form Modal -->
-<div id="registrationModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+<div id="registrationModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
   <div class="bg-white p-6 rounded-lg shadow-lg w-96">
     <h2 class="text-xl font-bold mb-4">SmartKids Registration</h2>
     <form id="registrationForm" class="space-y-3">
       <div>
         <label class="block text-sm font-medium">Full Name</label>
-        <input type="text" id="fullName" class="w-full border p-2 rounded" required>
+        <input type="text" id="fullName" name="fullName" class="w-full border rounded p-2" required />
       </div>
       <div>
         <label class="block text-sm font-medium">School Name</label>
-        <input type="text" id="schoolName" class="w-full border p-2 rounded" required>
+        <input type="text" id="schoolName" name="schoolName" class="w-full border rounded p-2" required />
       </div>
       <div>
-        <label class="block text-sm font-medium">State</label>
-        <input type="text" id="state" class="w-full border p-2 rounded" required>
+        <label class="block text-sm font-medium">Location</label>
+        <input type="text" id="location" name="location" class="w-full border rounded p-2" required />
       </div>
       <div>
         <label class="block text-sm font-medium">Country</label>
-        <input type="text" id="country" class="w-full border p-2 rounded" required>
+        <input type="text" id="country" name="country" class="w-full border rounded p-2" required />
       </div>
-      <div>
-        <label class="block text-sm font-medium">Password</label>
-        <input type="password" id="password" class="w-full border p-2 rounded" required>
-      </div>
-      <button type="submit" class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700">
+
+      <!-- ✅ Button must be type="submit" -->
+      <button type="submit" id="registerBtn" 
+              class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
         Register
       </button>
     </form>
+
+    <!-- Logout button (for next pupil) -->
+    <button id="logoutBtn" class="hidden mt-3 w-full bg-red-500 text-white py-2 rounded hover:bg-red-600">
+      Logout
+    </button>
   </div>
 </div>
 
-<!-- Logout Button -->
-<button id="logoutBtn" class="hidden fixed top-4 right-4 bg-red-600 text-white px-4 py-2 rounded">
-  Logout
-</button>
+
 <script src="registration.js"></script>
 
   
