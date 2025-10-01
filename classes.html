@@ -996,6 +996,44 @@ document.addEventListener("DOMContentLoaded", async () => {
     <h2 class="text-xl font-bold mb-4">SmartKids Registration</h2>
     <form id="registrationForm" class="space-y-3">
       <div>
+        <label for="fullName" class="block">Full Name</label>
+        <input type="text" id="fullName" class="w-full border rounded p-2" required>
+      </div>
+
+      <div>
+        <label for="schoolName" class="block">School Name</label>
+        <input type="text" id="schoolName" class="w-full border rounded p-2" required>
+      </div>
+
+      <div>
+        <label for="location" class="block">Location (State)</label>
+        <input type="text" id="location" class="w-full border rounded p-2" required>
+      </div>
+
+      <div>
+        <label for="country" class="block">Country</label>
+        <input type="text" id="country" class="w-full border rounded p-2" required>
+      </div>
+
+      <!-- 🚨 Submit button must be type="submit" -->
+      <button type="submit" id="registerBtn" class="w-full bg-blue-600 text-white py-2 rounded">
+        Register
+      </button>
+    </form>
+
+    <!-- Logout Button (hidden by default) -->
+    <button id="logoutBtn" class="w-full bg-red-500 text-white py-2 rounded mt-3 hidden">
+      Logout
+    </button>
+  </div>
+</div>
+  
+<!-- Registration Form Modal --
+<div id="registrationModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+  <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+    <h2 class="text-xl font-bold mb-4">SmartKids Registration</h2>
+    <form id="registrationForm" class="space-y-3">
+      <div>
         <label class="block text-sm font-medium">Full Name</label>
         <input type="text" id="fullName" name="fullName" class="w-full border rounded p-2" required />
       </div>
@@ -1012,7 +1050,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         <input type="text" id="country" name="country" class="w-full border rounded p-2" required />
       </div>
 
-      <!-- ✅ Button must be type="submit" -->
+      <!-- ✅ Button must be type="submit" --
       <button type="submit" id="registerBtn" 
               class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
         Register
