@@ -989,152 +989,40 @@ document.addEventListener("DOMContentLoaded", async () => {
       </div>
     </div>
   </footer>
-
-  <!-- Registration Form Modal -->
-<div id="registrationModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+<!-- Registration / Login Modal -->
+<div id="authModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
   <div class="bg-white p-6 rounded-lg shadow-lg w-96">
     <h2 class="text-xl font-bold mb-4">SmartKids Registration</h2>
-    <form id="registrationForm" class="space-y-3">
+    <form id="authForm" class="space-y-3">
       <div>
-        <label class="block text-sm font-medium">Full Name</label>
-        <input type="text" id="fullName" class="w-full border rounded p-2" required>
+        <label class="block mb-1">Full Name</label>
+        <input type="text" id="fullName" class="w-full border p-2 rounded" required />
       </div>
       <div>
-        <label class="block text-sm font-medium">Class Name</label>
-        <input type="text" id="className" class="w-full border rounded p-2" required>
+        <label class="block mb-1">Class</label>
+        <input type="text" id="className" class="w-full border p-2 rounded" required />
       </div>
       <div>
-        <label class="block text-sm font-medium">School Name</label>
-        <input type="text" id="schoolName" class="w-full border rounded p-2" required>
+        <label class="block mb-1">School Name</label>
+        <input type="text" id="schoolName" class="w-full border p-2 rounded" required />
       </div>
       <div>
-        <label class="block text-sm font-medium">Select Year</label>
-        <select id="yearSelect" class="w-full border rounded p-2" required>
-          <option value="">Select Year</option>
-          ${[...Array(12)].map((_,i)=>`<option>Year ${i+1}</option>`).join('')}
-        </select>
+        <label class="block mb-1">State</label>
+        <input type="text" id="state" class="w-full border p-2 rounded" required />
       </div>
       <div>
-        <label class="block text-sm font-medium">Do you like SmartKids Tutor?</label>
-        <select id="likeTutor" class="w-full border rounded p-2" required>
-          <option value="">Select</option>
-          <option>Yes</option>
-          <option>No</option>
-        </select>
+        <label class="block mb-1">Country</label>
+        <input type="text" id="country" class="w-full border p-2 rounded" required />
       </div>
-      <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded">Submit</button>
+      <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Register</button>
     </form>
-    <button id="newUserBtn" class="mt-3 text-sm text-red-600 underline">Register as New User</button>
   </div>
 </div>
 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const modal = document.getElementById("registrationModal");
-  const form = document.getElementById("registrationForm");
-  const newUserBtn = document.getElementById("newUserBtn");
+<!-- Logout Button -->
+<button id="logoutBtn" class="hidden bg-red-500 text-white px-4 py-2 rounded m-4">Logout</button>
 
-  let db;
-  const request = indexedDB.open("SmartKidsDB", 1);
-  request.onupgradeneeded = (e) => {
-    db = e.target.result;
-    if (!db.objectStoreNames.contains("users")) {
-      db.createObjectStore("users", { keyPath: "id", autoIncrement: true });
-    }
-    if (!db.objectStoreNames.contains("activityLogs")) {
-      const store = db.createObjectStore("activityLogs", { keyPath: "id", autoIncrement: true });
-      store.createIndex("student", "fullName");
-    }
-  };
-  request.onsuccess = (e) => { db = e.target.result; };
-  request.onerror = (e) => console.error("DB Error:", e);
-
-  // Load existing user from localStorage
-  let currentUser = JSON.parse(localStorage.getItem("smartKidsUser"));
-  if (!currentUser) modal.classList.remove("hidden");
-
-  // Submit form
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const data = {
-      fullName: document.getElementById("fullName").value.trim(),
-      className: document.getElementById("className").value.trim(),
-      schoolName: document.getElementById("schoolName").value.trim(),
-      year: document.getElementById("yearSelect").value,
-      likeTutor: document.getElementById("likeTutor").value,
-      timestamp: new Date().toISOString()
-    };
-
-    if (!data.fullName || !data.className || !data.schoolName || !data.year || !data.likeTutor) {
-      alert("All fields are required!");
-      return;
-    }
-
-    // Save to localStorage
-    localStorage.setItem("smartKidsUser", JSON.stringify(data));
-    currentUser = data;
-
-    // Save to IndexedDB
-    const tx = db.transaction("users", "readwrite");
-    tx.objectStore("users").add(data);
-
-    modal.classList.add("hidden");
-    alert("Registration successful! Welcome, " + data.fullName);
-
-    // Log page visit
-    logActivity(currentUser.fullName, window.location.pathname, "visit");
-  });
-
-  newUserBtn.addEventListener("click", () => {
-    localStorage.removeItem("smartKidsUser");
-    currentUser = null;
-    modal.classList.remove("hidden");
-  });
-
-  // Activity logging function
-  async function logActivity(fullName, page, type, extra = {}) {
-    if (!db || !fullName) return;
-    const tx = db.transaction("activityLogs", "readwrite");
-    tx.objectStore("activityLogs").add({ fullName, page, type, timestamp: new Date().toISOString(), ...extra });
-  }
-
-  // Track clicks
-  document.addEventListener("click", (e) => {
-    if (!currentUser) return;
-    logActivity(currentUser.fullName, window.location.pathname, "click", { tag: e.target.tagName, id: e.target.id });
-  });
-
-  // Track time spent on page
-  const startTime = Date.now();
-  window.addEventListener("beforeunload", () => {
-    if (!currentUser) return;
-    const durationSec = Math.floor((Date.now() - startTime) / 1000);
-    logActivity(currentUser.fullName, window.location.pathname, "time", { durationSec });
-  });
-});
-</script>
-
-  <script>
-document.addEventListener("DOMContentLoaded", () => {
-  // Select all <a> elements with href containing "mouse"
-  const mouseLinks = document.querySelectorAll('a[href*="mouse"]');
-
-  mouseLinks.forEach(link => {
-    // Disable link click
-    link.addEventListener("click", (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      alert("Mouse practice is available on the Mouse page only.");
-    });
-
-    // Style it like disabled (optional)
-    link.style.pointerEvents = "none"; // fully blocks clicks
-    link.style.opacity = "0.5";
-    link.style.cursor = "not-allowed";
-    link.setAttribute("title", "Disabled — open Mouse page separately");
-  });
-});
-</script>
+  
 </body>
 </html>
                           
