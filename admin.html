@@ -1,144 +1,190 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SmartKids Learning- Admin Dashboard</title>
-
-  <!-- Tailwind -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartKids Learning - Admin Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- DataTables CSS + JS -->
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
-  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css">
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
-  <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
-  <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+  <!-- SheetJS for Excel export -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+  <!-- jsPDF for PDF export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body class="bg-gray-100 font-sans">
 
+  <!-- Login Modal -->
+  <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+      <h2 class="text-xl font-bold mb-4 text-center">Admin Login</h2>
+      <form id="loginForm" class="space-y-3">
+        <div>
+          <label class="block mb-1">Username</label>
+          <input type="text" id="adminUsername" class="w-full border p-2 rounded" required>
+        </div>
+        <div>
+          <label class="block mb-1">Password</label>
+          <input type="password" id="adminPassword" class="w-full border p-2 rounded" required>
+        </div>
+        <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Login</button>
+      </form>
+      <p id="loginError" class="text-red-500 text-sm mt-2 hidden">Invalid username or password!</p>
+    </div>
+  </div>
+
   <!-- Navbar -->
-  <nav class="bg-blue-700 text-white p-4 shadow-md flex justify-between items-center">
-    <div class="text-2xl font-bold">SmartKids  Learning</div>
-    <ul class="flex space-x-6">
-      <li><a href="#" class="hover:underline">Home</a></li>
-      <li><a href="#" class="hover:underline">Records</a></li>
-      <li><a href="#" class="hover:underline">Export</a></li>
-    </ul>
+  <nav class="bg-blue-600 text-white p-4 shadow">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-xl font-bold">SmartKids Learning</h1>
+      <ul class="flex space-x-4">
+        <li><a href="#" class="hover:underline">Home</a></li>
+        <li><a href="#" class="hover:underline">Records</a></li>
+        <li><a href="#" class="hover:underline">Export</a></li>
+      </ul>
+    </div>
   </nav>
 
-  <!-- Dashboard Container -->
-  <main class="p-6">
-    <h2 class="text-xl font-bold mb-4">📊 Student Records</h2>
+  <!-- Records Section -->
+  <section class="container mx-auto p-6">
+    <h2 class="text-2xl font-bold mb-4">Student Records</h2>
 
-    <!-- Filter Dropdown -->
-    <div class="mb-4 flex items-center gap-4">
-      <label for="schoolFilter" class="font-semibold">Filter by School:</label>
-      <select id="schoolFilter" class="border border-gray-300 rounded p-2">
-        <option value="">All Schools</option>
-        <!-- Options populated dynamically -->
-      </select>
+    <!-- Search by School -->
+    <div class="mb-4 flex space-x-2">
+      <input type="text" id="searchSchool" placeholder="Search by School Name" class="border p-2 rounded w-1/2">
+      <button id="searchBtn" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Search</button>
     </div>
 
-    <!-- DataTable -->
-    <div class="bg-white p-4 rounded-lg shadow-lg">
-      <table id="studentsTable" class="display nowrap w-full text-sm text-left text-gray-700">
-        <thead>
-          <tr>
-            <th>Full Name</th>
-            <th>Class</th>
-            <th>Subject</th>
-            <th>Session</th>
-            <th>Term</th>
-            <th>School</th>
-            <th>State</th>
-            <th>Country</th>
-            <th>Registered At</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Data loads dynamically -->
-        </tbody>
-      </table>
-    </div>
-  </main>
+    <table class="w-full bg-white rounded shadow" id="recordsTable">
+      <thead class="bg-gray-200">
+        <tr>
+          <th class="p-2">Full Name</th>
+          <th class="p-2">Class</th>
+          <th class="p-2">Subject</th>
+          <th class="p-2">Session</th>
+          <th class="p-2">Term</th>
+          <th class="p-2">School</th>
+          <th class="p-2">Location</th>
+          <th class="p-2">Country</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
 
-  <!-- Script to Fetch & Display -->
+    <div class="mt-4 flex space-x-4">
+      <button id="exportExcel" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Export to Excel</button>
+      <button id="exportPdf" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Export to PDF</button>
+    </div>
+  </section>
+
   <script>
-    let studentTable;
+    let db;
+    const DB_NAME = "SmartKidsDB";
+    const STORE_NAME = "students";
 
-    async function fetchStudents() {
-      try {
-        const res = await fetch("http://localhost:3000/api/students"); // 🔹 adjust for server
-        const data = await res.json();
-
-        // Destroy old DataTable if exists
-        if ($.fn.DataTable.isDataTable('#studentsTable')) {
-          $('#studentsTable').DataTable().clear().destroy();
+    // Open IndexedDB
+    function openDB() {
+      const request = indexedDB.open(DB_NAME, 1);
+      request.onupgradeneeded = (event) => {
+        db = event.target.result;
+        if (!db.objectStoreNames.contains(STORE_NAME)) {
+          db.createObjectStore(STORE_NAME, { keyPath: "id", autoIncrement: true });
         }
+      };
+      request.onsuccess = (event) => {
+        db = event.target.result;
+        fetchRecords();
+      };
+      request.onerror = () => {
+        console.error("IndexedDB error");
+      };
+    }
 
-        // Initialize DataTable
-        studentTable = $('#studentsTable').DataTable({
-          data: data,
-          columns: [
-            { data: 'fullName' },
-            { data: 'class' },
-            { data: 'subject' },
-            { data: 'session' },
-            { data: 'term' },
-            { data: 'schoolName' },
-            { data: 'state' },
-            { data: 'country' },
-            { data: 'registeredAt' }
-          ],
-          dom: 'Bfrtip',
-          buttons: [
-            { extend: 'excelHtml5', title: 'EduKids_Student_Records' },
-            { extend: 'pdfHtml5', title: 'EduKids_Student_Records' },
-            { extend: 'print', title: 'EduKids Student Records' }
-          ],
-          responsive: true,
-          pageLength: 10
+    // Fetch all student records
+    function fetchRecords(filterSchool = "") {
+      const transaction = db.transaction(STORE_NAME, "readonly");
+      const store = transaction.objectStore(STORE_NAME);
+      const request = store.getAll();
+      request.onsuccess = () => {
+        const records = request.result;
+        displayRecords(records, filterSchool);
+      };
+    }
+
+    // Display records in table
+    function displayRecords(records, filterSchool) {
+      const tbody = document.querySelector("#recordsTable tbody");
+      tbody.innerHTML = "";
+      records
+        .filter(r => !filterSchool || r.schoolName.toLowerCase().includes(filterSchool.toLowerCase()))
+        .forEach(record => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td class="p-2">${record.fullName}</td>
+            <td class="p-2">${record.className}</td>
+            <td class="p-2">${record.subject}</td>
+            <td class="p-2">${record.session}</td>
+            <td class="p-2">${record.term}</td>
+            <td class="p-2">${record.schoolName}</td>
+            <td class="p-2">${record.location || "-"}</td>
+            <td class="p-2">${record.country || "-"}</td>
+          `;
+          tbody.appendChild(tr);
         });
-
-        // Populate school dropdown
-        populateSchoolFilter(data);
-      } catch (err) {
-        console.error("❌ Error fetching students:", err);
-      }
     }
 
-    function populateSchoolFilter(data) {
-      const uniqueSchools = [...new Set(data.map(item => item.schoolName))];
-      const schoolFilter = document.getElementById("schoolFilter");
-
-      // Clear old options
-      schoolFilter.innerHTML = '<option value="">All Schools</option>';
-
-      uniqueSchools.forEach(school => {
-        const opt = document.createElement("option");
-        opt.value = school;
-        opt.textContent = school;
-        schoolFilter.appendChild(opt);
+    // Export to Excel
+    function exportToExcel() {
+      const wb = XLSX.utils.book_new();
+      const wsData = [["Full Name","Class","Subject","Session","Term","School","Location","Country"]];
+      const rows = document.querySelectorAll("#recordsTable tbody tr");
+      rows.forEach(row => {
+        const cols = row.querySelectorAll("td");
+        const rowData = Array.from(cols).map(td => td.innerText);
+        wsData.push(rowData);
       });
+      const ws = XLSX.utils.aoa_to_sheet(wsData);
+      XLSX.utils.book_append_sheet(wb, ws, "Students");
+      XLSX.writeFile(wb, "SmartKids_Records.xlsx");
     }
 
-    // School filter event
-    document.getElementById("schoolFilter").addEventListener("change", function () {
-      const selected = this.value;
-      if (studentTable) {
-        studentTable.column(5).search(selected).draw(); // 🔹 Column index 5 = School
+    // Export to PDF
+    function exportToPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.text("SmartKids Learning - Student Records", 10, 10);
+
+      let y = 20;
+      const rows = document.querySelectorAll("#recordsTable tbody tr");
+      rows.forEach((row, index) => {
+        const cols = row.querySelectorAll("td");
+        const rowData = Array.from(cols).map(td => td.innerText).join(" | ");
+        doc.text(rowData, 10, y);
+        y += 10;
+      });
+
+      doc.save("SmartKids_Records.pdf");
+    }
+
+    // Event Listeners
+    document.getElementById("searchBtn").addEventListener("click", () => {
+      const school = document.getElementById("searchSchool").value;
+      fetchRecords(school);
+    });
+    document.getElementById("exportExcel").addEventListener("click", exportToExcel);
+    document.getElementById("exportPdf").addEventListener("click", exportToPDF);
+
+    // Admin login
+    document.getElementById("loginForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const username = document.getElementById("adminUsername").value;
+      const password = document.getElementById("adminPassword").value;
+
+      if (username === "smartkids" && password === "myNias9ja#") {
+        document.getElementById("loginModal").classList.add("hidden");
+        openDB();
+      } else {
+        document.getElementById("loginError").classList.remove("hidden");
       }
     });
-
-    // Auto refresh every 15s
-    setInterval(fetchStudents, 15000);
-    fetchStudents();
   </script>
 </body>
 </html>
