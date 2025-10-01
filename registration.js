@@ -1,67 +1,91 @@
-// IndexedDB helper
-function openDB() {
-  return new Promise((resolve, reject) => {
-    const request = indexedDB.open("SmartKidsDB", 1);
-
-    request.onupgradeneeded = (e) => {
-      const db = e.target.result;
-      if (!db.objectStoreNames.contains("accounts")) {
-        db.createObjectStore("accounts", { keyPath: "id", autoIncrement: true });
-      }
-    };
-
-    request.onsuccess = (e) => resolve(e.target.result);
-    request.onerror = (e) => reject(e.target.error);
-  });
-}
-
-async function addPupil(pupil) {
-  const db = await openDB();
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction("accounts", "readwrite");
-    tx.objectStore("accounts").add(pupil);
-    tx.oncomplete = () => resolve(true);
-    tx.onerror = (e) => reject(e.target.error);
-  });
-}
+// registration.js
 
 document.addEventListener("DOMContentLoaded", () => {
   const modal = document.getElementById("registrationModal");
+  const form = document.getElementById("registrationForm");
+  const registerBtn = document.getElementById("registerBtn");
   const logoutBtn = document.getElementById("logoutBtn");
 
-  // Check session for current user
-  if (!sessionStorage.getItem("currentUser")) {
-    modal.classList.remove("hidden"); // force registration
-  } else {
-    logoutBtn.classList.remove("hidden"); // user already logged in
+  let db;
+  const DB_NAME = "SmartKidsDB";
+  const STORE_NAME = "kids";
+  const ACTIVE_USER_KEY = "activeUser";
+
+  // Open IndexedDB
+  const request = indexedDB.open(DB_NAME, 1);
+
+  request.onupgradeneeded = (event) => {
+    db = event.target.result;
+    if (!db.objectStoreNames.contains(STORE_NAME)) {
+      db.createObjectStore(STORE_NAME, { keyPath: "id", autoIncrement: true });
+    }
+  };
+
+  request.onsuccess = (event) => {
+    db = event.target.result;
+    checkActiveUser();
+  };
+
+  request.onerror = (event) => {
+    console.error("IndexedDB error:", event.target.errorCode);
+  };
+
+  // Check if there is an active user
+  function checkActiveUser() {
+    const activeUser = localStorage.getItem(ACTIVE_USER_KEY);
+    if (activeUser) {
+      modal.classList.add("hidden");
+      logoutBtn.classList.remove("hidden");
+    } else {
+      modal.classList.remove("hidden");
+      logoutBtn.classList.add("hidden");
+    }
   }
 
-  // Handle registration
-  document.getElementById("registrationForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
+  // Save new kid into IndexedDB
+  function saveKid(data) {
+    const tx = db.transaction(STORE_NAME, "readwrite");
+    const store = tx.objectStore(STORE_NAME);
+    store.add(data);
 
-    const pupil = {
-      fullName: document.getElementById("fullName").value,
-      schoolName: document.getElementById("schoolName").value,
-      state: document.getElementById("state").value,
-      country: document.getElementById("country").value,
-      password: document.getElementById("password").value,
-      createdAt: new Date()
+    tx.oncomplete = () => {
+      console.log("Kid registered:", data);
     };
 
-    await addPupil(pupil);
+    tx.onerror = (event) => {
+      console.error("Save failed:", event.target.error);
+    };
+  }
 
-    // Set active session
-    sessionStorage.setItem("currentUser", JSON.stringify(pupil));
+  // Handle form submission
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
 
+    const kid = {
+      fullName: document.getElementById("fullName").value.trim(),
+      schoolName: document.getElementById("schoolName").value.trim(),
+      location: document.getElementById("location").value.trim(),
+      country: document.getElementById("country").value.trim(),
+      registeredAt: new Date().toISOString()
+    };
+
+    // Save to IndexedDB
+    saveKid(kid);
+
+    // Set active user in localStorage
+    localStorage.setItem(ACTIVE_USER_KEY, JSON.stringify(kid));
+
+    // Hide modal and show logout
     modal.classList.add("hidden");
     logoutBtn.classList.remove("hidden");
+
+    form.reset();
   });
 
   // Handle logout
   logoutBtn.addEventListener("click", () => {
-    sessionStorage.removeItem("currentUser");
-    logoutBtn.classList.add("hidden");
+    localStorage.removeItem(ACTIVE_USER_KEY);
     modal.classList.remove("hidden");
+    logoutBtn.classList.add("hidden");
   });
 });
