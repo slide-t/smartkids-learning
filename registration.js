@@ -3,7 +3,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const modal = document.getElementById("registrationModal");
   const form = document.getElementById("registrationForm");
-  const registerBtn = document.getElementById("registerBtn");
   const logoutBtn = document.getElementById("logoutBtn");
 
   let db;
@@ -47,14 +46,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const tx = db.transaction(STORE_NAME, "readwrite");
     const store = tx.objectStore(STORE_NAME);
     store.add(data);
-
-    tx.oncomplete = () => {
-      console.log("Kid registered:", data);
-    };
-
-    tx.onerror = (event) => {
-      console.error("Save failed:", event.target.error);
-    };
   }
 
   // Handle form submission
@@ -69,16 +60,16 @@ document.addEventListener("DOMContentLoaded", () => {
       registeredAt: new Date().toISOString()
     };
 
-    // Save to IndexedDB
-    saveKid(kid);
+    if (!kid.fullName || !kid.schoolName || !kid.location || !kid.country) {
+      alert("All fields are required!");
+      return;
+    }
 
-    // Set active user in localStorage
+    saveKid(kid);
     localStorage.setItem(ACTIVE_USER_KEY, JSON.stringify(kid));
 
-    // Hide modal and show logout
     modal.classList.add("hidden");
     logoutBtn.classList.remove("hidden");
-
     form.reset();
   });
 
