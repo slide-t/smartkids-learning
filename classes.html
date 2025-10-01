@@ -1021,7 +1021,46 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 <!-- Logout Button -->
 <button id="logoutBtn" class="hidden bg-red-500 text-white px-4 py-2 rounded m-4">Logout</button>
+<script src="auth.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  const authModal = document.getElementById("authModal");
+  const authForm = document.getElementById("authForm");
+  const logoutBtn = document.getElementById("logoutBtn");
 
+  const currentUser = getCurrentUser();
+
+  if (!currentUser) {
+    authModal.classList.remove("hidden"); // show modal
+  } else {
+    logoutBtn.classList.remove("hidden"); // already logged in
+  }
+
+  authForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const pupil = {
+      fullName: document.getElementById("fullName").value.trim(),
+      className: document.getElementById("className").value.trim(),
+      schoolName: document.getElementById("schoolName").value.trim(),
+      state: document.getElementById("state").value.trim(),
+      country: document.getElementById("country").value.trim(),
+      timestamp: Date.now()
+    };
+
+    await addPupil(pupil);
+    setCurrentUser(pupil);
+
+    authModal.classList.add("hidden");
+    logoutBtn.classList.remove("hidden");
+  });
+
+  logoutBtn.addEventListener("click", () => {
+    logoutUser();
+    logoutBtn.classList.add("hidden");
+    authModal.classList.remove("hidden");
+  });
+});
+</script>
   
 </body>
 </html>
