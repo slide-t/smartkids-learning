@@ -72,12 +72,12 @@
           <p class="text-xs text-slate-500">Coding, Computer Literacy & Games for Schools</p>
         </div>
 
-        <!-- Sign Up button -->
-        <button id="openSignUp" 
-          class="ml-4 px-4 py-1.5 border border-blue-600 rounded-full text-blue-600 text-sm font-medium bg-white transition duration-200 ease-in-out hover:bg-blue-50 active:scale-95 active:shadow-[0_0_10px_rgba(59,130,246,0.7)]">
-          Sign Up
-        </button>
-      </div>
+    <!-- Sign Up Button beside Logo -->
+<button id="authBtn" 
+  class="ml-4 px-4 py-1.5 border border-blue-600 rounded-full text-blue-600 text-sm font-medium bg-white transition duration-200 ease-in-out hover:bg-blue-50 active:scale-95 active:shadow-[0_0_10px_rgba(59,130,246,0.7)]">
+  Sign Up
+</button>
+  </div>
 
       <!-- Desktop Menu -->
       <nav class="hidden md:flex items-center gap-6 text-sm">
@@ -116,19 +116,142 @@
   </div>
 </header>
 
-<script>
-  // Link Sign Up button to open modal
-  document.addEventListener("DOMContentLoaded", () => {
-    const signUpBtn = document.getElementById("openSignUp");
-    const modal = document.getElementById("registrationModal");
 
-    if (signUpBtn && modal) {
-      signUpBtn.addEventListener("click", () => {
+
+<!-- Registration Modal -->
+<div id="registrationModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+  <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+    <h2 class="text-xl font-bold mb-4">Pupil Registration</h2>
+    <form id="registrationForm" class="space-y-3">
+      <div>
+        <label class="block text-sm">Full Name</label>
+        <input type="text" id="fullName" class="w-full border rounded px-3 py-2" required>
+      </div>
+      <div>
+        <label class="block text-sm">School Name</label>
+        <input type="text" id="schoolName" class="w-full border rounded px-3 py-2" required>
+      </div>
+      <div>
+        <label class="block text-sm">Location (State)</label>
+        <input type="text" id="location" class="w-full border rounded px-3 py-2" required>
+      </div>
+      <div>
+        <label class="block text-sm">Country</label>
+        <input type="text" id="country" class="w-full border rounded px-3 py-2" required>
+      </div>
+      <button type="submit" 
+        class="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+        Register
+      </button>
+    </form>
+  </div>
+</div>
+
+<script>
+const DB_NAME = "SmartKidsDB";
+const DB_VERSION = 1;
+let db;
+
+// Open IndexedDB
+function openDB() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(DB_NAME, DB_VERSION);
+    request.onupgradeneeded = e => {
+      db = e.target.result;
+      if (!db.objectStoreNames.contains("accounts")) {
+        db.createObjectStore("accounts", { keyPath: "id", autoIncrement: true });
+      }
+    };
+    request.onsuccess = e => { db = e.target.result; resolve(db); };
+    request.onerror = e => reject("DB error: " + e.target.errorCode);
+  });
+}
+
+// Add pupil
+async function addPupil(pupil) {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction("accounts", "readwrite");
+    tx.objectStore("accounts").add(pupil);
+    tx.oncomplete = () => resolve();
+    tx.onerror = e => reject(e);
+  });
+}
+
+// Session management
+function setCurrentUser(user) { localStorage.setItem("currentUser", JSON.stringify(user)); }
+function getCurrentUser() { return JSON.parse(localStorage.getItem("currentUser")); }
+function logoutUser() { localStorage.removeItem("currentUser"); }
+
+// UI Handling
+document.addEventListener("DOMContentLoaded", () => {
+  const authBtn = document.getElementById("authBtn");
+  const modal = document.getElementById("registrationModal");
+  const form = document.getElementById("registrationForm");
+  const protectedLinks = document.querySelectorAll("a[href*='classes'], a[href*='games'], a[href*='lessons']");
+
+  // Update button state
+  function updateAuthBtn() {
+    if (getCurrentUser()) {
+      authBtn.textContent = "Logout";
+    } else {
+      authBtn.textContent = "Sign Up";
+    }
+  }
+  updateAuthBtn();
+
+  // Protect links (require login)
+  protectedLinks.forEach(link => {
+    link.addEventListener("click", e => {
+      if (!getCurrentUser()) {
+        e.preventDefault();
         modal.classList.remove("hidden");
-      });
+        alert("Please register before accessing this section.");
+      }
+    });
+  });
+
+  // Auto popup if not registered
+  if (!getCurrentUser()) {
+    modal.classList.remove("hidden");
+  }
+
+  // Button click
+  authBtn.addEventListener("click", () => {
+    if (getCurrentUser()) {
+      // Logout flow
+      logoutUser();
+      updateAuthBtn();
+      alert("You have logged out!");
+      modal.classList.remove("hidden"); // force new registration
+    } else {
+      // Open sign-up modal
+      modal.classList.remove("hidden");
     }
   });
+
+  // Handle form submit
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const pupil = {
+      fullName: document.getElementById("fullName").value,
+      schoolName: document.getElementById("schoolName").value,
+      location: document.getElementById("location").value,
+      country: document.getElementById("country").value,
+      createdAt: new Date().toISOString()
+    };
+
+    await addPupil(pupil);
+    setCurrentUser(pupil);
+    modal.classList.add("hidden");
+    form.reset();
+    updateAuthBtn();
+    alert("Registration successful! You are now logged in.");
+  });
+});
 </script>
+
+  
   <!-- Hero Section -->
   <main class="pt-28">
     <!-- Keep your hero and other sections as before -->
