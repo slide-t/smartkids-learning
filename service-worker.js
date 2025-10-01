@@ -27,7 +27,9 @@ const PRECACHE_URLS = [
   'record.js',
   '/styles.css',
   '/auth js',
-  '/script.js'
+  '/script.js',
+  '/registration.js'
+  
 ];
 
 // Install: clear old caches, pre-cache new files
