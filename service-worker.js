@@ -23,6 +23,7 @@ const PRECACHE_URLS = [
   '/mouse/year11.html',
   '/mouse/year12.html',
   '/styles.css',
+  '/auth js',
   '/script.js'
 ];
 
