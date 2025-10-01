@@ -2,52 +2,219 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Student Records - Smart Learning Kids</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SmartKids Learning- Student Records</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
-<body class="bg-gradient-to-b from-sky-50 via-white to-sky-100 text-slate-900 font-sans">
+<body class="font-['Roboto'] bg-gray-100 min-h-screen flex flex-col">
 
-  <!-- Header -->
-  <header class="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-sm shadow-md z-40">
-    <div class="max-w-6xl mx-auto px-4 flex justify-between items-center h-16">
-      <h1 class="text-lg font-bold">📊 Student Records</h1>
-      <nav>
-        <a href="index.html" class="px-3 text-sm hover:underline">Home</a>
-        <a href="lessons.html" class="px-3 text-sm hover:underline">Lessons</a>
-      </nav>
+  <!-- Navbar -->
+  <nav class="bg-blue-600 text-white shadow-md">
+    <div class="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
+      <div class="text-2xl font-bold">SmartKids Learning</div>
+      <ul class="flex space-x-6">
+        <li><a href="#" class="hover:underline">Home</a></li>
+        <li><a href="#" class="hover:underline">Records</a></li>
+        <li><a href="#" class="hover:und1erline">Export</a></li>
+      </ul>
     </div>
-  </header>
+  </nav>
+<!-- Search Bar -->
+<section class="p-6 bg-white shadow rounded mb-6">
+  <h2 class="text-xl font-bold mb-3">Search Records</h2>
+  <div class="flex gap-3">
+    <input 
+      type="text" 
+      id="searchSchool" 
+      placeholder="Enter school name..." 
+      class="border p-2 rounded w-full"
+    >
+    <button 
+      id="searchBtn" 
+      class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+      Search
+    </button>
+    <button 
+      id="resetBtn" 
+      class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+      Reset
+    </button>
+  </div>
+</section>
+  <!-- Main Content -->
+  <main class="flex-1 max-w-7xl mx-auto p-6 space-y-10">
 
-  <!-- Main -->
-  <main class="pt-24 max-w-6xl mx-auto px-4">
-    <h2 class="text-2xl font-bold mb-6">All Saved Records</h2>
+    <!-- Student Data Form -->
+    <section class="bg-white rounded-lg shadow-md p-6">
+      <h2 class="text-xl font-bold mb-4 text-blue-700">Add Student Record</h2>
+      <form id="studentForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        
+        <div>
+          <label for="fullName" class="block text-sm font-medium">Full Name</label>
+          <input type="text" id="fullName" class="w-full border rounded-lg p-2" required>
+        </div>
 
-    <!-- Action buttons -->
-    <div class="flex gap-3 mb-6">
-      <button id="exportPdf" class="px-4 py-2 bg-red-500 text-white rounded shadow hover:bg-red-600">Export PDF</button>
-      <button id="exportExcel" class="px-4 py-2 bg-green-500 text-white rounded shadow hover:bg-green-600">Export Excel</button>
-    </div>
+        <div>
+          <label for="class" class="block text-sm font-medium">Class</label>
+          <select id="class" class="w-full border rounded-lg p-2" required>
+            <option value="">Select Class</option>
+            <option value="Year 1">Year 1</option>
+            <option value="Year 2">Year 2</option>
+            <option value="Year 3">Year 3</option>
+            <option value="Year 4">Year 4</option>
+            <option value="Year 5">Year 5</option>
+            <option value="Year 6">Year 6</option>
+          </select>
+        </div>
 
-    <!-- Records Table -->
-    <div class="overflow-x-auto bg-white shadow rounded-lg">
-      <table class="min-w-full border text-sm" id="recordsTable">
-        <thead class="bg-slate-100">
-          <tr>
-            <th class="border px-3 py-2">Full Name</th>
-            <th class="border px-3 py-2">Class</th>
-            <th class="border px-3 py-2">School</th>
-            <th class="border px-3 py-2">Subject</th>
-            <th class="border px-3 py-2">Session</th>
-            <th class="border px-3 py-2">Term</th>
-            <th class="border px-3 py-2">Score</th>
-          </tr>
-        </thead>
-        <tbody id="recordsBody"></tbody>
-      </table>
-    </div>
+        <div>
+          <label for="subject" class="block text-sm font-medium">Subject</label>
+          <select id="subject" class="w-full border rounded-lg p-2" required>
+            <option value="">Select Subject</option>
+            <option value="Mathematics">Mathematics</option>
+            <option value="English">English</option>
+            <option value="Basic Science">Basic Science</option>
+            <option value="Computer Studies">Computer Studies</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="session" class="block text-sm font-medium">Session</label>
+          <select id="session" class="w-full border rounded-lg p-2" required>
+            <option value="2025/26">2025/26</option>
+            <option value="2026/27">2026/27</option>
+            <option value="2027/28">2027/28</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="term" class="block text-sm font-medium">Term</label>
+          <select id="term" class="w-full border rounded-lg p-2" required>
+            <option value="First Term">First Term</option>
+            <option value="Second Term">Second Term</option>
+            <option value="Third Term">Third Term</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="schoolName" class="block text-sm font-medium">School Name</label>
+          <input type="text" id="schoolName" class="w-full border rounded-lg p-2" required>
+        </div>
+
+        <div class="md:col-span-2 flex justify-end">
+          <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+            Save Record
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Records Display -->
+    <section class="bg-white rounded-lg shadow-md p-6">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold text-blue-700">Student Records</h2>
+        <div class="space-x-2">
+          <button id="exportPdf" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">
+            Export PDF
+          </button>
+          <button id="exportExcel" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+            Export Excel
+          </button>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table id="recordsTable" class="w-full border border-gray-300">
+          <thead class="bg-gray-100">
+            <tr>
+              <th class="border px-4 py-2">Full Name</th>
+              <th class="border px-4 py-2">Class</th>
+              <th class="border px-4 py-2">Subject</th>
+              <th class="border px-4 py-2">Session</th>
+              <th class="border px-4 py-2">Term</th>
+              <th class="border px-4 py-2">School</th>
+            </tr>
+          </thead>
+          <tbody id="recordsBody">
+            <!-- Records load here -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
   </main>
 
-  <script type="module" src="records.js"></script>
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="auth.js"></script> <!-- IndexedDB helpers -->
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const form = document.getElementById("studentForm");
+      const tbody = document.getElementById("recordsBody");
+      const exportExcelBtn = document.getElementById("exportExcel");
+      const exportPdfBtn = document.getElementById("exportPdf");
+
+      async function loadRecords() {
+        tbody.innerHTML = "";
+        const pupils = await getAllPupils();
+        pupils.forEach(p => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td class="border px-4 py-2">${p.fullName}</td>
+            <td class="border px-4 py-2">${p.className}</td>
+            <td class="border px-4 py-2">${p.subject}</td>
+            <td class="border px-4 py-2">${p.session}</td>
+            <td class="border px-4 py-2">${p.term}</td>
+            <td class="border px-4 py-2">${p.schoolName}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+
+      // Save record
+      form.addEventListener("submit", async e => {
+        e.preventDefault();
+        const pupil = {
+          fullName: document.getElementById("fullName").value.trim(),
+          className: document.getElementById("class").value,
+          subject: document.getElementById("subject").value,
+          session: document.getElementById("session").value,
+          term: document.getElementById("term").value,
+          schoolName: document.getElementById("schoolName").value.trim(),
+          timestamp: Date.now()
+        };
+        await addPupil(pupil);
+        form.reset();
+        loadRecords();
+      });
+
+      // Export Excel
+      exportExcelBtn.addEventListener("click", async () => {
+        const pupils = await getAllPupils();
+        const worksheet = XLSX.utils.json_to_sheet(pupils);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Records");
+        XLSX.writeFile(workbook, "StudentRecords.xlsx");
+      });
+
+      // Export PDF
+      exportPdfBtn.addEventListener("click", async () => {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        doc.text("EduKids Africa - Student Records", 10, 10);
+        let y = 20;
+        const pupils = await getAllPupils();
+        pupils.forEach(p => {
+          doc.text(`${p.fullName} | ${p.className} | ${p.subject} | ${p.session} | ${p.term} | ${p.schoolName}`, 10, y);
+          y += 10;
+        });
+        doc.save("StudentRecords.pdf");
+      });
+
+      loadRecords();
+    });
+  </script>
 </body>
 </html>
