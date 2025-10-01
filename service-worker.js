@@ -23,6 +23,8 @@ const PRECACHE_URLS = [
   '/mouse/year10.html',
   '/mouse/year11.html',
   '/mouse/year12.html',
+  '/record.html',
+  'record.js',
   '/styles.css',
   '/auth js',
   '/script.js'
