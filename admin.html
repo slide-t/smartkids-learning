@@ -1,100 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SmartKids Learning- Student Records</title>
-  <link rel="stylesheet" href="styles.css">
-
-  <!-- Google Fonts (Optional) -->
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Records - Smart Learning Kids</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-  <!-- Navbar -->
-  <nav class="navbar">
-    <div class="logo">SmartKids Learning</div>
-    <ul class="menu">
-      <li><a href="#">Home</a></li>
-      <li><a href="#">Records</a></li>
-      <li><a href="#">Export</a></li>
-    </ul>
-  </nav>
+<body class="bg-gradient-to-b from-sky-50 via-white to-sky-100 text-slate-900 font-sans">
 
-  <!-- Student Data Form -->
-  <section class="form-section">
-    <h2>Add Student Record</h2>
-    <form id="studentForm">
-      <label for="fullName">Full Name</label>
-      <input type="text" id="fullName" required>
-
-      <label for="class">Class</label>
-      <select id="class" required>
-        <option value="">Select Class</option>
-        <option value="Year 1">Year 1</option>
-        <option value="Year 2">Year 2</option>
-        <option value="Year 3">Year 3</option>
-        <option value="Year 4">Year 4</option>
-        <option value="Year 5">Year 5</option>
-        <option value="Year 6">Year 6</option>
-      </select>
-
-      <label for="subject">Subject</label>
-      <select id="subject" required>
-        <option value="">Select Subject</option>
-        <option value="Mathematics">Mathematics</option>
-        <option value="English">English</option>
-        <option value="Basic Science">Basic Science</option>
-        <option value="Computer Studies">Computer Studies</option>
-      </select>
-
-      <label for="session">Session</label>
-      <select id="session" required>
-        <option value="2025/26">2025/26</option>
-        <option value="2026/27">2026/27</option>
-        <option value="2027/28">2027/28</option>
-      </select>
-
-      <label for="term">Term</label>
-      <select id="term" required>
-        <option value="First Term">First Term</option>
-        <option value="Second Term">Second Term</option>
-        <option value="Third Term">Third Term</option>
-      </select>
-
-      <label for="schoolName">School Name</label>
-      <input type="text" id="schoolName" required>
-
-      <button type="submit">Save Record</button>
-    </form>
-  </section>
-
-  <!-- Records Display -->
-  <section class="records-section">
-    <h2>Student Records</h2>
-    <table id="recordsTable">
-      <thead>
-        <tr>
-          <th>Full Name</th>
-          <th>Class</th>
-          <th>Subject</th>
-          <th>Session</th>
-          <th>Term</th>
-          <th>School</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Records will load here dynamically -->
-      </tbody>
-    </table>
-
-    <div class="export-buttons">
-      <button id="exportPdf">Export to PDF</button>
-      <button id="exportExcel">Export to Excel</button>
+  <!-- Header -->
+  <header class="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-sm shadow-md z-40">
+    <div class="max-w-6xl mx-auto px-4 flex justify-between items-center h-16">
+      <h1 class="text-lg font-bold">📊 Student Records</h1>
+      <nav>
+        <a href="index.html" class="px-3 text-sm hover:underline">Home</a>
+        <a href="lessons.html" class="px-3 text-sm hover:underline">Lessons</a>
+      </nav>
     </div>
-  </section>
+  </header>
 
-  <!-- Scripts -->
-  <script src="indexeddb-helper.js"></script>
-  <script src="app.js"></script>
+  <!-- Main -->
+  <main class="pt-24 max-w-6xl mx-auto px-4">
+    <h2 class="text-2xl font-bold mb-6">All Saved Records</h2>
+
+    <!-- Action buttons -->
+    <div class="flex gap-3 mb-6">
+      <button id="exportPdf" class="px-4 py-2 bg-red-500 text-white rounded shadow hover:bg-red-600">Export PDF</button>
+      <button id="exportExcel" class="px-4 py-2 bg-green-500 text-white rounded shadow hover:bg-green-600">Export Excel</button>
+    </div>
+
+    <!-- Records Table -->
+    <div class="overflow-x-auto bg-white shadow rounded-lg">
+      <table class="min-w-full border text-sm" id="recordsTable">
+        <thead class="bg-slate-100">
+          <tr>
+            <th class="border px-3 py-2">Full Name</th>
+            <th class="border px-3 py-2">Class</th>
+            <th class="border px-3 py-2">School</th>
+            <th class="border px-3 py-2">Subject</th>
+            <th class="border px-3 py-2">Session</th>
+            <th class="border px-3 py-2">Term</th>
+            <th class="border px-3 py-2">Score</th>
+          </tr>
+        </thead>
+        <tbody id="recordsBody"></tbody>
+      </table>
+    </div>
+  </main>
+
+  <script type="module" src="records.js"></script>
 </body>
 </html>
