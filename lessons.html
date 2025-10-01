@@ -204,6 +204,79 @@ async function loadLessons() {
 
 document.addEventListener('DOMContentLoaded', loadLessons);
 </script>
+-->
 
+<!-- Registration / Login Modal -->
+<div id="authModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+  <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+    <h2 class="text-xl font-bold mb-4">SmartKids Registration</h2>
+    <form id="authForm" class="space-y-3">
+      <div>
+        <label class="block mb-1">Full Name</label>
+        <input type="text" id="fullName" class="w-full border p-2 rounded" required />
+      </div>
+      <div>
+        <label class="block mb-1">Class</label>
+        <input type="text" id="className" class="w-full border p-2 rounded" required />
+      </div>
+      <div>
+        <label class="block mb-1">School Name</label>
+        <input type="text" id="schoolName" class="w-full border p-2 rounded" required />
+      </div>
+      <div>
+        <label class="block mb-1">State</label>
+        <input type="text" id="state" class="w-full border p-2 rounded" required />
+      </div>
+      <div>
+        <label class="block mb-1">Country</label>
+        <input type="text" id="country" class="w-full border p-2 rounded" required />
+      </div>
+      <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Register</button>
+    </form>
+  </div>
+</div>
+
+<!-- Logout Button -->
+<button id="logoutBtn" class="hidden bg-red-500 text-white px-4 py-2 rounded m-4">Logout</button>
+<script src="auth.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  const authModal = document.getElementById("authModal");
+  const authForm = document.getElementById("authForm");
+  const logoutBtn = document.getElementById("logoutBtn");
+
+  const currentUser = getCurrentUser();
+
+  if (!currentUser) {
+    authModal.classList.remove("hidden"); // show modal
+  } else {
+    logoutBtn.classList.remove("hidden"); // already logged in
+  }
+
+  authForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const pupil = {
+      fullName: document.getElementById("fullName").value.trim(),
+      className: document.getElementById("className").value.trim(),
+      schoolName: document.getElementById("schoolName").value.trim(),
+      state: document.getElementById("state").value.trim(),
+      country: document.getElementById("country").value.trim(),
+      timestamp: Date.now()
+    };
+
+    await addPupil(pupil);
+    setCurrentUser(pupil);
+
+    authModal.classList.add("hidden");
+    logoutBtn.classList.remove("hidden");
+  });
+
+  logoutBtn.addEventListener("click", () => {
+    logoutUser();
+    logoutBtn.classList.add("hidden");
+    authModal.classList.remove("hidden");
+  });
+});
+</script>
 </body>
 </html>
