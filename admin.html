@@ -2,219 +2,143 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SmartKids Learning- Student Records</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmartKids Learning- Admin Dashboard</title>
+
+  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- DataTables CSS + JS -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
 </head>
-<body class="font-['Roboto'] bg-gray-100 min-h-screen flex flex-col">
+<body class="bg-gray-100 font-sans">
 
   <!-- Navbar -->
-  <nav class="bg-blue-600 text-white shadow-md">
-    <div class="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
-      <div class="text-2xl font-bold">SmartKids Learning</div>
-      <ul class="flex space-x-6">
-        <li><a href="#" class="hover:underline">Home</a></li>
-        <li><a href="#" class="hover:underline">Records</a></li>
-        <li><a href="#" class="hover:und1erline">Export</a></li>
-      </ul>
-    </div>
+  <nav class="bg-blue-700 text-white p-4 shadow-md flex justify-between items-center">
+    <div class="text-2xl font-bold">SmartKids  Learning- Admin</div>
+    <ul class="flex space-x-6">
+      <li><a href="#" class="hover:underline">Home</a></li>
+      <li><a href="#" class="hover:underline">Records</a></li>
+      <li><a href="#" class="hover:underline">Export</a></li>
+    </ul>
   </nav>
-<!-- Search Bar -->
-<section class="p-6 bg-white shadow rounded mb-6">
-  <h2 class="text-xl font-bold mb-3">Search Records</h2>
-  <div class="flex gap-3">
-    <input 
-      type="text" 
-      id="searchSchool" 
-      placeholder="Enter school name..." 
-      class="border p-2 rounded w-full"
-    >
-    <button 
-      id="searchBtn" 
-      class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-      Search
-    </button>
-    <button 
-      id="resetBtn" 
-      class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
-      Reset
-    </button>
-  </div>
-</section>
-  <!-- Main Content -->
-  <main class="flex-1 max-w-7xl mx-auto p-6 space-y-10">
 
-    <!-- Student Data Form -->
-    <section class="bg-white rounded-lg shadow-md p-6">
-      <h2 class="text-xl font-bold mb-4 text-blue-700">Add Student Record</h2>
-      <form id="studentForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        
-        <div>
-          <label for="fullName" class="block text-sm font-medium">Full Name</label>
-          <input type="text" id="fullName" class="w-full border rounded-lg p-2" required>
-        </div>
+  <!-- Dashboard Container -->
+  <main class="p-6">
+    <h2 class="text-xl font-bold mb-4">📊 Student Records</h2>
 
-        <div>
-          <label for="class" class="block text-sm font-medium">Class</label>
-          <select id="class" class="w-full border rounded-lg p-2" required>
-            <option value="">Select Class</option>
-            <option value="Year 1">Year 1</option>
-            <option value="Year 2">Year 2</option>
-            <option value="Year 3">Year 3</option>
-            <option value="Year 4">Year 4</option>
-            <option value="Year 5">Year 5</option>
-            <option value="Year 6">Year 6</option>
-          </select>
-        </div>
+    <!-- Filter Dropdown -->
+    <div class="mb-4 flex items-center gap-4">
+      <label for="schoolFilter" class="font-semibold">Filter by School:</label>
+      <select id="schoolFilter" class="border border-gray-300 rounded p-2">
+        <option value="">All Schools</option>
+        <!-- Options populated dynamically -->
+      </select>
+    </div>
 
-        <div>
-          <label for="subject" class="block text-sm font-medium">Subject</label>
-          <select id="subject" class="w-full border rounded-lg p-2" required>
-            <option value="">Select Subject</option>
-            <option value="Mathematics">Mathematics</option>
-            <option value="English">English</option>
-            <option value="Basic Science">Basic Science</option>
-            <option value="Computer Studies">Computer Studies</option>
-          </select>
-        </div>
-
-        <div>
-          <label for="session" class="block text-sm font-medium">Session</label>
-          <select id="session" class="w-full border rounded-lg p-2" required>
-            <option value="2025/26">2025/26</option>
-            <option value="2026/27">2026/27</option>
-            <option value="2027/28">2027/28</option>
-          </select>
-        </div>
-
-        <div>
-          <label for="term" class="block text-sm font-medium">Term</label>
-          <select id="term" class="w-full border rounded-lg p-2" required>
-            <option value="First Term">First Term</option>
-            <option value="Second Term">Second Term</option>
-            <option value="Third Term">Third Term</option>
-          </select>
-        </div>
-
-        <div>
-          <label for="schoolName" class="block text-sm font-medium">School Name</label>
-          <input type="text" id="schoolName" class="w-full border rounded-lg p-2" required>
-        </div>
-
-        <div class="md:col-span-2 flex justify-end">
-          <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
-            Save Record
-          </button>
-        </div>
-      </form>
-    </section>
-
-    <!-- Records Display -->
-    <section class="bg-white rounded-lg shadow-md p-6">
-      <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-bold text-blue-700">Student Records</h2>
-        <div class="space-x-2">
-          <button id="exportPdf" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">
-            Export PDF
-          </button>
-          <button id="exportExcel" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
-            Export Excel
-          </button>
-        </div>
-      </div>
-
-      <div class="overflow-x-auto">
-        <table id="recordsTable" class="w-full border border-gray-300">
-          <thead class="bg-gray-100">
-            <tr>
-              <th class="border px-4 py-2">Full Name</th>
-              <th class="border px-4 py-2">Class</th>
-              <th class="border px-4 py-2">Subject</th>
-              <th class="border px-4 py-2">Session</th>
-              <th class="border px-4 py-2">Term</th>
-              <th class="border px-4 py-2">School</th>
-            </tr>
-          </thead>
-          <tbody id="recordsBody">
-            <!-- Records load here -->
-          </tbody>
-        </table>
-      </div>
-    </section>
-
+    <!-- DataTable -->
+    <div class="bg-white p-4 rounded-lg shadow-lg">
+      <table id="studentsTable" class="display nowrap w-full text-sm text-left text-gray-700">
+        <thead>
+          <tr>
+            <th>Full Name</th>
+            <th>Class</th>
+            <th>Subject</th>
+            <th>Session</th>
+            <th>Term</th>
+            <th>School</th>
+            <th>State</th>
+            <th>Country</th>
+            <th>Registered At</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Data loads dynamically -->
+        </tbody>
+      </table>
+    </div>
   </main>
 
-  <!-- Scripts -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="auth.js"></script> <!-- IndexedDB helpers -->
+  <!-- Script to Fetch & Display -->
   <script>
-    document.addEventListener("DOMContentLoaded", async () => {
-      const form = document.getElementById("studentForm");
-      const tbody = document.getElementById("recordsBody");
-      const exportExcelBtn = document.getElementById("exportExcel");
-      const exportPdfBtn = document.getElementById("exportPdf");
+    let studentTable;
 
-      async function loadRecords() {
-        tbody.innerHTML = "";
-        const pupils = await getAllPupils();
-        pupils.forEach(p => {
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td class="border px-4 py-2">${p.fullName}</td>
-            <td class="border px-4 py-2">${p.className}</td>
-            <td class="border px-4 py-2">${p.subject}</td>
-            <td class="border px-4 py-2">${p.session}</td>
-            <td class="border px-4 py-2">${p.term}</td>
-            <td class="border px-4 py-2">${p.schoolName}</td>
-          `;
-          tbody.appendChild(tr);
+    async function fetchStudents() {
+      try {
+        const res = await fetch("http://localhost:3000/api/students"); // 🔹 adjust for server
+        const data = await res.json();
+
+        // Destroy old DataTable if exists
+        if ($.fn.DataTable.isDataTable('#studentsTable')) {
+          $('#studentsTable').DataTable().clear().destroy();
+        }
+
+        // Initialize DataTable
+        studentTable = $('#studentsTable').DataTable({
+          data: data,
+          columns: [
+            { data: 'fullName' },
+            { data: 'class' },
+            { data: 'subject' },
+            { data: 'session' },
+            { data: 'term' },
+            { data: 'schoolName' },
+            { data: 'state' },
+            { data: 'country' },
+            { data: 'registeredAt' }
+          ],
+          dom: 'Bfrtip',
+          buttons: [
+            { extend: 'excelHtml5', title: 'EduKids_Student_Records' },
+            { extend: 'pdfHtml5', title: 'EduKids_Student_Records' },
+            { extend: 'print', title: 'EduKids Student Records' }
+          ],
+          responsive: true,
+          pageLength: 10
         });
+
+        // Populate school dropdown
+        populateSchoolFilter(data);
+      } catch (err) {
+        console.error("❌ Error fetching students:", err);
       }
+    }
 
-      // Save record
-      form.addEventListener("submit", async e => {
-        e.preventDefault();
-        const pupil = {
-          fullName: document.getElementById("fullName").value.trim(),
-          className: document.getElementById("class").value,
-          subject: document.getElementById("subject").value,
-          session: document.getElementById("session").value,
-          term: document.getElementById("term").value,
-          schoolName: document.getElementById("schoolName").value.trim(),
-          timestamp: Date.now()
-        };
-        await addPupil(pupil);
-        form.reset();
-        loadRecords();
+    function populateSchoolFilter(data) {
+      const uniqueSchools = [...new Set(data.map(item => item.schoolName))];
+      const schoolFilter = document.getElementById("schoolFilter");
+
+      // Clear old options
+      schoolFilter.innerHTML = '<option value="">All Schools</option>';
+
+      uniqueSchools.forEach(school => {
+        const opt = document.createElement("option");
+        opt.value = school;
+        opt.textContent = school;
+        schoolFilter.appendChild(opt);
       });
+    }
 
-      // Export Excel
-      exportExcelBtn.addEventListener("click", async () => {
-        const pupils = await getAllPupils();
-        const worksheet = XLSX.utils.json_to_sheet(pupils);
-        const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, "Records");
-        XLSX.writeFile(workbook, "StudentRecords.xlsx");
-      });
-
-      // Export PDF
-      exportPdfBtn.addEventListener("click", async () => {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-        doc.text("EduKids Africa - Student Records", 10, 10);
-        let y = 20;
-        const pupils = await getAllPupils();
-        pupils.forEach(p => {
-          doc.text(`${p.fullName} | ${p.className} | ${p.subject} | ${p.session} | ${p.term} | ${p.schoolName}`, 10, y);
-          y += 10;
-        });
-        doc.save("StudentRecords.pdf");
-      });
-
-      loadRecords();
+    // School filter event
+    document.getElementById("schoolFilter").addEventListener("change", function () {
+      const selected = this.value;
+      if (studentTable) {
+        studentTable.column(5).search(selected).draw(); // 🔹 Column index 5 = School
+      }
     });
+
+    // Auto refresh every 15s
+    setInterval(fetchStudents, 15000);
+    fetchStudents();
   </script>
 </body>
 </html>
