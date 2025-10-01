@@ -4,6 +4,7 @@ const PRECACHE_URLS = [
   '/',
   '/index.html',
   '/classes.html',
+  '/admin.html',
   '/mouse.html',
   '/data/mouse.json',
   '/classes.json',
