@@ -55,49 +55,50 @@ async function loadRegistrationModal() {
     const res = await fetch("registration.html");
     const html = await res.text();
     document.body.insertAdjacentHTML("beforeend", html);
-    attachFormHandler();
   }
+  // ✅ always attach handler after ensuring modal exists
+  attachFormHandler();
 }
 
 // --- Attach Form Events ---
 function attachFormHandler() {
   const form = document.getElementById("registrationForm");
   const closeBtn = document.getElementById("closeRegistration");
-  const successMsg = document.getElementById("successMsg");
+  const modal = document.getElementById("registrationModal");
 
-  if (form) {
-    form.addEventListener("submit", async e => {
-      e.preventDefault();
+  if (!form) return; // safety
 
-      const pupil = {
-        name: form.name.value.trim(),
-        age: form.age.value.trim(),
-        class: form.class.value.trim(),
-        schoolName: form.schoolName.value.trim(),
-        location: form.location.value.trim(),
-        country: form.country.value.trim(),
-        registeredAt: new Date().toISOString()
-      };
+  // remove old listener to avoid duplicates
+  form.onsubmit = null;
 
-      await addPupil(pupil);
-      setCurrentUser(pupil);
+  form.addEventListener("submit", async e => {
+    e.preventDefault();
 
-      // Show success message briefly
-      if (successMsg) {
-        successMsg.classList.remove("hidden");
-        setTimeout(() => {
-          successMsg.classList.add("hidden");
-          document.getElementById("registrationModal").classList.add("hidden");
-          form.reset();
-          updateSignUpButton();
-        }, 1500);
-      }
-    });
-  }
+    const pupil = {
+      name: form.name.value.trim(),
+      age: form.age.value.trim(),
+      class: form.class.value.trim(),
+      schoolName: form.schoolName.value.trim(),
+      location: form.location.value.trim(),
+      country: form.country.value.trim(),
+      registeredAt: new Date().toISOString()
+    };
+
+    await addPupil(pupil);
+    setCurrentUser(pupil);
+
+    // ✅ instant button update
+    updateSignUpButton();
+
+    // ✅ close modal after save
+    alert("✅ Registration successful!");
+    modal.classList.add("hidden");
+    form.reset();
+  });
 
   if (closeBtn) {
     closeBtn.addEventListener("click", () => {
-      document.getElementById("registrationModal").classList.add("hidden");
+      modal.classList.add("hidden");
     });
   }
 }
@@ -118,7 +119,6 @@ function updateSignUpButton() {
   } else {
     btn.textContent = "Sign Up";
     btn.onclick = async () => {
-      // ✅ only load form if no user is signed in
       if (!getCurrentUser()) {
         await loadRegistrationModal();
         document.getElementById("registrationModal").classList.remove("hidden");
