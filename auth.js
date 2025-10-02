@@ -101,52 +101,16 @@ function attachFormHandler() {
   }
 }
 
-
-
-/*function attachFormHandler() {
-  const form = document.getElementById("registrationForm");
-  const closeBtn = document.getElementById("closeRegistration");
-
-  if (form) {
-    form.addEventListener("submit", async e => {
-      e.preventDefault();
-
-      const pupil = {
-        name: form.name.value.trim(),
-        age: form.age.value.trim(),
-        class: form.class.value.trim(),
-        schoolName: form.schoolName.value.trim(),
-        location: form.location.value.trim(),
-        country: form.country.value.trim(),
-        registeredAt: new Date().toISOString()
-      };
-
-      await addPupil(pupil);
-      setCurrentUser(pupil);
-
-      alert("✅ Registration successful!");
-      document.getElementById("registrationModal").classList.add("hidden");
-      updateSignUpButton();
-    });
-  }
-
-  if (closeBtn) {
-    closeBtn.addEventListener("click", () => {
-      document.getElementById("registrationModal").classList.add("hidden");
-    });
-  }
-}*/
-
 // --- Sign Up / Logout Button ---
-// --- Sign Up / Logout Button ---
+
 function updateSignUpButton() {
-  const btn = document.getElementById("signupBtn");
+  const btn = document.getElementById("authBtn"); // ✅ match your HTML
   if (!btn) return;
 
   const user = getCurrentUser();
 
   if (user) {
-    btn.textContent = `Logout (${user.name})`;   // 👈 show pupil's name
+    btn.textContent = `Logout (${user.name})`;
     btn.onclick = () => {
       logoutUser();
       alert("👋 Logged out successfully.");
@@ -159,29 +123,6 @@ function updateSignUpButton() {
     };
   }
 }
-
-
-/*
-function updateSignUpButton() {
-  const btn = document.getElementById("signupBtn");
-  if (!btn) return;
-
-  const user = getCurrentUser();
-
-  if (user) {
-    btn.textContent = "Logout";
-    btn.onclick = () => {
-      logoutUser();
-      alert("👋 Logged out successfully.");
-    };
-  } else {
-    btn.textContent = "Sign Up";
-    btn.onclick = async () => {
-      await loadRegistrationModal();
-      document.getElementById("registrationModal").classList.remove("hidden");
-    };
-  }
-}*/
 
 // --- Init on Page Load ---
 document.addEventListener("DOMContentLoaded", () => {
