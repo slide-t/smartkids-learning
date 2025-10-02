@@ -138,6 +138,30 @@ function attachFormHandler() {
 }*/
 
 // --- Sign Up / Logout Button ---
+// --- Sign Up / Logout Button ---
+function updateSignUpButton() {
+  const btn = document.getElementById("signupBtn");
+  if (!btn) return;
+
+  const user = getCurrentUser();
+
+  if (user) {
+    btn.textContent = `Logout (${user.name})`;   // 👈 show pupil's name
+    btn.onclick = () => {
+      logoutUser();
+      alert("👋 Logged out successfully.");
+    };
+  } else {
+    btn.textContent = "Sign Up";
+    btn.onclick = async () => {
+      await loadRegistrationModal();
+      document.getElementById("registrationModal").classList.remove("hidden");
+    };
+  }
+}
+
+
+/*
 function updateSignUpButton() {
   const btn = document.getElementById("signupBtn");
   if (!btn) return;
@@ -157,7 +181,7 @@ function updateSignUpButton() {
       document.getElementById("registrationModal").classList.remove("hidden");
     };
   }
-}
+}*/
 
 // --- Init on Page Load ---
 document.addEventListener("DOMContentLoaded", () => {
