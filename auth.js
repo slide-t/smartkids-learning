@@ -63,6 +63,49 @@ async function loadRegistrationModal() {
 function attachFormHandler() {
   const form = document.getElementById("registrationForm");
   const closeBtn = document.getElementById("closeRegistration");
+  const successMsg = document.getElementById("successMsg");
+
+  if (form) {
+    form.addEventListener("submit", async e => {
+      e.preventDefault();
+
+      const pupil = {
+        name: form.name.value.trim(),
+        age: form.age.value.trim(),
+        class: form.class.value.trim(),
+        schoolName: form.schoolName.value.trim(),
+        location: form.location.value.trim(),
+        country: form.country.value.trim(),
+        registeredAt: new Date().toISOString()
+      };
+
+      await addPupil(pupil);
+      setCurrentUser(pupil);
+
+      // Show success message briefly
+      successMsg.classList.remove("hidden");
+
+      setTimeout(() => {
+        successMsg.classList.add("hidden");
+        document.getElementById("registrationModal").classList.add("hidden");
+        form.reset();
+        updateSignUpButton();
+      }, 1500);
+    });
+  }
+
+  if (closeBtn) {
+    closeBtn.addEventListener("click", () => {
+      document.getElementById("registrationModal").classList.add("hidden");
+    });
+  }
+}
+
+
+
+/*function attachFormHandler() {
+  const form = document.getElementById("registrationForm");
+  const closeBtn = document.getElementById("closeRegistration");
 
   if (form) {
     form.addEventListener("submit", async e => {
@@ -92,7 +135,7 @@ function attachFormHandler() {
       document.getElementById("registrationModal").classList.add("hidden");
     });
   }
-}
+}*/
 
 // --- Sign Up / Logout Button ---
 function updateSignUpButton() {
