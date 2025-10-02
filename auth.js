@@ -83,14 +83,15 @@ function attachFormHandler() {
       setCurrentUser(pupil);
 
       // Show success message briefly
-      successMsg.classList.remove("hidden");
-
-      setTimeout(() => {
-        successMsg.classList.add("hidden");
-        document.getElementById("registrationModal").classList.add("hidden");
-        form.reset();
-        updateSignUpButton();
-      }, 1500);
+      if (successMsg) {
+        successMsg.classList.remove("hidden");
+        setTimeout(() => {
+          successMsg.classList.add("hidden");
+          document.getElementById("registrationModal").classList.add("hidden");
+          form.reset();
+          updateSignUpButton();
+        }, 1500);
+      }
     });
   }
 
@@ -102,9 +103,8 @@ function attachFormHandler() {
 }
 
 // --- Sign Up / Logout Button ---
-
 function updateSignUpButton() {
-  const btn = document.getElementById("authBtn"); // ✅ match your HTML
+  const btn = document.getElementById("authBtn");
   if (!btn) return;
 
   const user = getCurrentUser();
@@ -118,8 +118,11 @@ function updateSignUpButton() {
   } else {
     btn.textContent = "Sign Up";
     btn.onclick = async () => {
-      await loadRegistrationModal();
-      document.getElementById("registrationModal").classList.remove("hidden");
+      // ✅ only load form if no user is signed in
+      if (!getCurrentUser()) {
+        await loadRegistrationModal();
+        document.getElementById("registrationModal").classList.remove("hidden");
+      }
     };
   }
 }
