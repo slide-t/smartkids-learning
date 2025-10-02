@@ -28,7 +28,7 @@ const PRECACHE_URLS = [
   '/styles.css',
   '/auth.js',
   '/script.js',
-  '/registration.js'
+  '/registration.html'
   
 ];
 
