@@ -21,14 +21,7 @@
           <p class="text-xs text-slate-500">Coding, Computer Literacy & Games for Schools</p>
         </div>
 
-    <!-- Sign Up Button beside Logo -->
-<button id="authBtn" 
-  onclick="openRegistrationForm()" 
-  class="ml-4 px-4 py-1.5 border border-blue-600 rounded-full text-blue-600 text-sm font-medium bg-white transition duration-200 ease-in-out hover:bg-blue-50 active:scale-95 active:shadow-[0_0_10px_rgba(59,130,246,0.7)]">
-  Sign Up
-</button>
-
-<!-- Sign Up Button beside Logo --
+<!-- Sign Up Button beside Logo -->
 <button id="authBtn" 
   onclick="toggleAuth()"
   class="ml-4 px-4 py-1.5 border border-blue-600 rounded-full text-blue-600 text-sm font-medium bg-white transition duration-200 ease-in-out hover:bg-blue-50 active:scale-95 active:shadow-[0_0_10px_rgba(59,130,246,0.7)]">
@@ -141,7 +134,7 @@
   Mouse Practice
 </a>
 </div>
-<!-- Registration Modal Placeholder --
+<!-- Registration Modal Placeholder -->
 <div id="modalContainer"></div>
 
 <!-- Shared Auth Script -->
@@ -267,73 +260,6 @@
   }
 </script>
 
-
-<!-- Registration Modal -->
-<div id="registrationModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-  <div class="bg-white p-6 rounded-lg shadow-lg w-96">
-    <h2 class="text-xl font-bold mb-4">SmartKids Registration</h2>
-    <form id="registrationForm" class="space-y-3">
-      <input type="text" name="name" placeholder="Full Name" class="w-full p-2 border rounded" required>
-      <input type="number" name="age" placeholder="Age" class="w-full p-2 border rounded" required>
-      <input type="text" name="class" placeholder="Class" class="w-full p-2 border rounded" required>
-      <input type="text" name="parent" placeholder="Parent's Name" class="w-full p-2 border rounded" required>
-      <input type="tel" name="phone" placeholder="Phone Number" class="w-full p-2 border rounded" required>
-      <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Register</button>
-    </form>
-    <p id="successMsg" class="text-green-600 text-center mt-3 hidden">✅ Registration Successful!</p>
-  </div>
-</div>
-
-<script>
-  // Open modal
-  function openRegistrationForm() {
-    document.getElementById("registrationModal").classList.remove("hidden");
-  }
-
-  // IndexedDB setup
-  let db;
-  const request = indexedDB.open("SmartKidsDB", 1);
-
-  request.onupgradeneeded = function(e) {
-    db = e.target.result;
-    if (!db.objectStoreNames.contains("registrations")) {
-      db.createObjectStore("registrations", { keyPath: "id", autoIncrement: true });
-    }
-  };
-
-  request.onsuccess = function(e) {
-    db = e.target.result;
-  };
-
-  // Handle form submit
-  document.getElementById("registrationForm").addEventListener("submit", function(e) {
-    e.preventDefault();
-
-    const formData = {
-      name: this.name.value,
-      age: this.age.value,
-      class: this.class.value,
-      parent: this.parent.value,
-      phone: this.phone.value,
-      date: new Date().toLocaleString()
-    };
-
-    const tx = db.transaction("registrations", "readwrite");
-    tx.objectStore("registrations").add(formData);
-
-    tx.oncomplete = () => {
-      document.getElementById("successMsg").classList.remove("hidden");
-      setTimeout(() => {
-        document.getElementById("registrationModal").classList.add("hidden");
-        document.getElementById("successMsg").classList.add("hidden");
-        document.getElementById("registrationForm").reset();
-        document.getElementById("authBtn").innerText = "Logout"; // change button
-      }, 1500);
-    };
-  });
-</script>
-
-  <!--
 <script>
 async function toggleAuth() {
   const user = JSON.parse(localStorage.getItem("currentUser"));
@@ -412,6 +338,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 </script>
-  -->
+  
 </body>
 </html>
