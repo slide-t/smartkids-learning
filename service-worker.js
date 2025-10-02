@@ -26,7 +26,7 @@ const PRECACHE_URLS = [
   '/record.html',
   'record.js',
   '/styles.css',
-  '/auth js',
+  '/auth.js',
   '/script.js',
   '/registration.js'
   
