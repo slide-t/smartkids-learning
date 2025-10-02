@@ -21,11 +21,18 @@
           <p class="text-xs text-slate-500">Coding, Computer Literacy & Games for Schools</p>
         </div>
 
-    <!-- Sign Up Button beside Logo -->
+    <!-- Sign Up Button beside Logo --
 <button id="authBtn" 
   class="ml-4 px-4 py-1.5 border border-blue-600 rounded-full text-blue-600 text-sm font-medium bg-white transition duration-200 ease-in-out hover:bg-blue-50 active:scale-95 active:shadow-[0_0_10px_rgba(59,130,246,0.7)]">
   Sign Up
+</button>-->
+<!-- Sign Up Button beside Logo -->
+<button id="authBtn" 
+  onclick="toggleAuth()"
+  class="ml-4 px-4 py-1.5 border border-blue-600 rounded-full text-blue-600 text-sm font-medium bg-white transition duration-200 ease-in-out hover:bg-blue-50 active:scale-95 active:shadow-[0_0_10px_rgba(59,130,246,0.7)]">
+  Sign Up
 </button>
+        
   </div>
 
       <!-- Desktop Menu -->
@@ -257,7 +264,84 @@
     });
   }
 </script>
+<script>
+async function toggleAuth() {
+  const user = JSON.parse(localStorage.getItem("currentUser"));
 
+  if (user) {
+    // Already signed in → logout
+    localStorage.removeItem("currentUser");
+    document.getElementById("authBtn").textContent = "Sign Up";
+    alert("👋 Logged out successfully.");
+  } else {
+    // Not signed in → open registration form
+    if (!document.getElementById("registrationModal")) {
+      const res = await fetch("registration.html"); // load modal markup dynamically
+      const html = await res.text();
+      document.body.insertAdjacentHTML("beforeend", html);
+      attachFormHandler();
+    }
+    document.getElementById("registrationModal").classList.remove("hidden");
+  }
+}
+
+// Attach submit handler when modal loads
+function attachFormHandler() {
+  const form = document.getElementById("registrationForm");
+  form.addEventListener("submit", async e => {
+    e.preventDefault();
+
+    const pupil = {
+      name: form.name.value.trim(),
+      age: form.age.value.trim(),
+      class: form.class.value.trim(),
+      schoolName: form.schoolName.value.trim(),
+      location: form.location.value.trim(),
+      country: form.country.value.trim(),
+      registeredAt: new Date().toISOString()
+    };
+
+    // Save to IndexedDB
+    const db = await openDB();
+    const tx = db.transaction("accounts", "readwrite");
+    tx.objectStore("accounts").add(pupil);
+    tx.oncomplete = () => {
+      localStorage.setItem("currentUser", JSON.stringify(pupil));
+      document.getElementById("authBtn").textContent = "Logout";
+      alert("✅ Registration successful!");
+      document.getElementById("registrationModal").classList.add("hidden");
+    };
+  });
+
+  // Close modal
+  document.getElementById("closeRegistration").onclick = () => {
+    document.getElementById("registrationModal").classList.add("hidden");
+  };
+}
+
+// IndexedDB open helper
+function openDB() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open("SmartKidsDB", 1);
+
+    request.onupgradeneeded = e => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains("accounts")) {
+        db.createObjectStore("accounts", { keyPath: "id", autoIncrement: true });
+      }
+    };
+    request.onsuccess = e => resolve(e.target.result);
+    request.onerror = e => reject(e.target.error);
+  });
+}
+
+// Auto update button state on load
+document.addEventListener("DOMContentLoaded", () => {
+  if (localStorage.getItem("currentUser")) {
+    document.getElementById("authBtn").textContent = "Logout";
+  }
+});
+</script>
   
 </body>
 </html>
