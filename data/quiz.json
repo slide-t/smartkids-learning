@@ -1,0 +1,29 @@
+{
+  "quiz": [
+    {
+      "question": "Which device is used to move the pointer on a computer?",
+      "options": ["Monitor", "Mouse", "Printer", "Speaker"],
+      "answer": "Mouse"
+    },
+    {
+      "question": "Which key is used to remove letters?",
+      "options": ["Enter", "Backspace", "Spacebar", "Shift"],
+      "answer": "Backspace"
+    },
+    {
+      "question": "Which part of the computer is called the 'brain'?",
+      "options": ["CPU", "Mouse", "Keyboard", "Monitor"],
+      "answer": "CPU"
+    },
+    {
+      "question": "Which device is used to type letters and numbers?",
+      "options": ["Keyboard", "Mouse", "Scanner", "Speaker"],
+      "answer": "Keyboard"
+    },
+    {
+      "question": "Which device shows what you are doing on the computer?",
+      "options": ["Printer", "Monitor", "Keyboard", "CPU"],
+      "answer": "Monitor"
+    }
+  ]
+}
