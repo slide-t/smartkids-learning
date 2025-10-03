@@ -1,56 +1,62 @@
-{
-  "quiz": [
-    // ----------- MOUSE QUESTIONS (30 total) -----------
-    {
-      "id": 1,
-      "category": "Mouse",
-      "question": "Mouse Question 1",
-      "options": ["Option A", "Option B", "Option C", "Option D"],
-      "answer": "Option A"
-    },
-    {
-      "id": 2,
-      "category": "Mouse",
-      "question": "Mouse Question 2",
-      "options": ["Option A", "Option B", "Option C", "Option D"],
-      "answer": "Option B"
-    }
-    // ... continue until id: 30
-    ,
-
-    // ----------- KEYBOARD QUESTIONS (40 total) -----------
-    {
-      "id": 31,
-      "category": "Keyboard",
-      "question": "Keyboard Question 1",
-      "options": ["Option A", "Option B", "Option C", "Option D"],
-      "answer": "Option C"
-    },
-    {
-      "id": 32,
-      "category": "Keyboard",
-      "question": "Keyboard Question 2",
-      "options": ["Option A", "Option B", "Option C", "Option D"],
-      "answer": "Option D"
-    }
-    // ... continue until id: 70
-    ,
-
-    // ----------- ICT QUESTIONS (50 total) -----------
-    {
-      "id": 71,
-      "category": "ICT",
-      "question": "ICT Question 1",
-      "options": ["Option A", "Option B", "Option C", "Option D"],
-      "answer": "Option A"
-    },
-    {
-      "id": 72,
-      "category": "ICT",
-      "question": "ICT Question 2",
-      "options": ["Option A", "Option B", "Option C", "Option D"],
-      "answer": "Option B"
-    }
-    // ... continue until id: 120
-  ]
-}
+[
+  {
+    "id": "m1",
+    "question": "Which part of the mouse moves the pointer on the screen?",
+    "options": ["Left button", "Right button", "Body of the mouse"],
+    "answer": "Body of the mouse"
+  },
+  {
+    "id": "m2",
+    "question": "Which button is commonly used to select items?",
+    "options": ["Left button", "Right button", "Scroll wheel"],
+    "answer": "Left button"
+  },
+  {
+    "id": "m3",
+    "question": "Which mouse button opens context menus?",
+    "options": ["Left button", "Right button", "Middle button"],
+    "answer": "Right button"
+  },
+  {
+    "id": "m4",
+    "question": "What is the function of the scroll wheel?",
+    "options": ["Move pointer", "Scroll page", "Close window"],
+    "answer": "Scroll page"
+  },
+  {
+    "id": "m5",
+    "question": "Which of these is a wireless mouse feature?",
+    "options": ["Cable", "Bluetooth", "USB port only"],
+    "answer": "Bluetooth"
+  },
+  {
+    "id": "m6",
+    "question": "What is 'drag and drop'?",
+    "options": ["Click and release", "Click and move item", "Right-click only"],
+    "answer": "Click and move item"
+  },
+  {
+    "id": "m7",
+    "question": "Which part detects movement on a surface?",
+    "options": ["Laser sensor", "Buttons", "Scroll wheel"],
+    "answer": "Laser sensor"
+  },
+  {
+    "id": "m8",
+    "question": "What happens when you double-click?",
+    "options": ["Opens item", "Selects item", "Closes window"],
+    "answer": "Opens item"
+  },
+  {
+    "id": "m9",
+    "question": "Which type of surface is best for mouse movement?",
+    "options": ["Glass", "Smooth mouse pad", "Carpet"],
+    "answer": "Smooth mouse pad"
+  },
+  {
+    "id": "m10",
+    "question": "What does a 'right-click' usually show?",
+    "options": ["Menu options", "Delete file", "Open file"],
+    "answer": "Menu options"
+  }
+]
