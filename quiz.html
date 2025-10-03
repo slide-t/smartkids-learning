@@ -5,181 +5,32 @@
   <title>SmartKids Quiz</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 p-6">
+<body class="bg-gray-100 font-sans">
 
   <!-- Header -->
-  <header class="flex justify-between items-center mb-6">
-    <h1 class="text-2xl font-bold">SmartKids Quiz</h1>
+  <nav class="bg-blue-600 text-white p-4 flex justify-between">
+    <h1 class="font-bold">SmartKids Quiz</h1>
     <div class="space-x-2">
-      <a href="classes.html" class="px-4 py-2 bg-blue-600 text-white rounded">Keyboard Tutor</a>
-      <a href="mouse.html" class="px-4 py-2 bg-green-600 text-white rounded">Mouse Practice</a>
+      <a href="classes.html" class="bg-green-500 px-3 py-1 rounded">Keyboard Tutor</a>
+      <a href="mouse.html" class="bg-yellow-500 px-3 py-1 rounded">Mouse Practice</a>
     </div>
-  </header>
+  </nav>
 
-  <!-- Category Selection -->
-  <div id="categorySelect" class="mb-6">
-    <h2 class="text-lg font-semibold mb-2">Choose Quiz Category:</h2>
-    <button onclick="startQuiz('mouse')" class="px-4 py-2 bg-purple-500 text-white rounded">Mouse</button>
-    <button onclick="startQuiz('keyboard')" class="px-4 py-2 bg-yellow-500 text-white rounded">Keyboard</button>
-    <button onclick="startQuiz('ict')" class="px-4 py-2 bg-red-500 text-white rounded">ICT</button>
-  </div>
+  <!-- Quiz Container -->
+  <div class="container mx-auto p-6">
+    <h2 class="text-2xl font-bold mb-4">Answer the questions below</h2>
+    <form id="quizForm" class="grid gap-4 md:grid-cols-2"></form>
 
-  <!-- Quiz Area -->
-  <div id="quizArea" class="hidden">
-    <div id="questionsContainer" class="grid md:grid-cols-2 gap-4"></div>
-
-    <div class="flex justify-between mt-4">
-      <button id="prevBtn" onclick="prevPage()" class="px-4 py-2 bg-gray-400 text-white rounded" disabled>Previous</button>
-      <button id="submitBtn" onclick="submitPage()" class="px-4 py-2 bg-blue-600 text-white rounded">Submit</button>
-      <button id="nextBtn" onclick="nextPage()" class="px-4 py-2 bg-green-600 text-white rounded hidden">Next</button>
+    <div class="flex justify-between mt-6">
+      <button id="prevBtn" class="bg-gray-400 text-white px-4 py-2 rounded hidden">Previous</button>
+      <button id="submitBtn" class="bg-blue-600 text-white px-4 py-2 rounded">Submit</button>
+      <button id="nextBtn" class="bg-green-600 text-white px-4 py-2 rounded hidden">Next</button>
     </div>
+
+    <div id="result" class="mt-4 text-lg font-bold text-center"></div>
+    <div id="reportCard" class="mt-6 hidden bg-white shadow rounded p-4"></div>
   </div>
 
-  <!-- Report Card -->
-  <div id="reportCard" class="hidden mt-8 bg-white shadow p-6 rounded">
-    <h2 class="text-xl font-bold mb-4">Mini Report Card</h2>
-    <p id="kidName" class="mb-2"></p>
-    <p id="finalScore"></p>
-  </div>
-
-  <script>
-    let quizData = {};
-    let currentCategory = "";
-    let currentPage = 0;
-    let pageSize = 5;
-    let kidName = localStorage.getItem("fullName") || "Student";
-    let scores = [];
-
-    // Load quiz.json
-    async function loadQuizData() {
-      const res = await fetch("data/quiz.json");
-      quizData = await res.json();
-    }
-
-    // Start Quiz
-    async function startQuiz(category) {
-      if (!quizData.categories) await loadQuizData();
-      currentCategory = category;
-      currentPage = 0;
-      scores = [];
-      document.getElementById("categorySelect").classList.add("hidden");
-      document.getElementById("quizArea").classList.remove("hidden");
-      loadPage();
-    }
-
-    // Load questions per page
-    function loadPage() {
-      const container = document.getElementById("questionsContainer");
-      container.innerHTML = "";
-
-      const questions = quizData.categories[currentCategory];
-      const start = currentPage * pageSize;
-      const end = start + pageSize;
-      const pageQuestions = questions.slice(start, end);
-
-      pageQuestions.forEach((q, i) => {
-        const div = document.createElement("div");
-        div.className = "p-4 bg-white shadow rounded";
-        div.innerHTML = `
-          <h3 class="font-semibold mb-2">${start + i + 1}. ${q.question}</h3>
-          ${q.options.map(opt => `
-            <label class="block">
-              <input type="radio" name="q${q.id}" value="${opt}" class="mr-2"> ${opt}
-            </label>
-          `).join("")}
-        `;
-        container.appendChild(div);
-      });
-
-      // Button states
-      document.getElementById("prevBtn").disabled = currentPage === 0;
-      document.getElementById("nextBtn").classList.add("hidden");
-      document.getElementById("submitBtn").classList.remove("hidden");
-    }
-
-    // Submit current page
-    function submitPage() {
-      const questions = quizData.categories[currentCategory];
-      const start = currentPage * pageSize;
-      const end = start + pageSize;
-      const pageQuestions = questions.slice(start, end);
-
-      let pageScore = 0;
-      pageQuestions.forEach(q => {
-        const selected = document.querySelector(`input[name="q${q.id}"]:checked`);
-        if (selected && selected.value === q.answer) pageScore++;
-      });
-
-      scores.push(pageScore);
-
-      alert(`✅ You scored ${pageScore}/${pageQuestions.length} on this page!`);
-
-      document.getElementById("submitBtn").classList.add("hidden");
-      document.getElementById("nextBtn").classList.remove("hidden");
-    }
-
-    // Next page
-    function nextPage() {
-      currentPage++;
-      const totalPages = Math.ceil(quizData.categories[currentCategory].length / pageSize);
-
-      if (currentPage < totalPages) {
-        loadPage();
-      } else {
-        showReportCard();
-      }
-    }
-
-    // Previous page
-    function prevPage() {
-      if (currentPage > 0) {
-        currentPage--;
-        loadPage();
-      }
-    }
-
-    // Show final report card
-    function showReportCard() {
-      const totalScore = scores.reduce((a,b) => a+b, 0);
-      const totalQuestions = quizData.categories[currentCategory].length;
-
-      document.getElementById("quizArea").classList.add("hidden");
-      const report = document.getElementById("reportCard");
-      report.classList.remove("hidden");
-      document.getElementById("kidName").innerText = `👦 Student: ${kidName}`;
-      document.getElementById("finalScore").innerText = `🏆 Total Score: ${totalScore}/${totalQuestions}`;
-
-      saveResult(kidName, currentCategory, totalScore, totalQuestions);
-    }
-
-    // Save result in IndexedDB
-    function saveResult(name, category, score, total) {
-      const DB_NAME = "SmartKidsDB";
-      const STORE_NAME = "quizResults";
-      let db;
-
-      const request = indexedDB.open(DB_NAME, 2);
-      request.onupgradeneeded = (e) => {
-        db = e.target.result;
-        if (!db.objectStoreNames.contains(STORE_NAME)) {
-          db.createObjectStore(STORE_NAME, { keyPath: "id", autoIncrement: true });
-        }
-      };
-      request.onsuccess = (e) => {
-        db = e.target.result;
-        const tx = db.transaction(STORE_NAME, "readwrite");
-        const store = tx.objectStore(STORE_NAME);
-        store.add({
-          name,
-          category,
-          score,
-          total,
-          date: new Date().toLocaleString()
-        });
-      };
-    }
-
-    loadQuizData();
-  </script>
+  <script src="quiz.js"></script>
 </body>
 </html>
