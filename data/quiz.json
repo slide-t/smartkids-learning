@@ -1,29 +1,37 @@
-{
-  "quiz": [
-    {
-      "question": "Which device is used to move the pointer on a computer?",
-      "options": ["Monitor", "Mouse", "Printer", "Speaker"],
-      "answer": "Mouse"
-    },
-    {
-      "question": "Which key is used to remove letters?",
-      "options": ["Enter", "Backspace", "Spacebar", "Shift"],
-      "answer": "Backspace"
-    },
-    {
-      "question": "Which part of the computer is called the 'brain'?",
-      "options": ["CPU", "Mouse", "Keyboard", "Monitor"],
-      "answer": "CPU"
-    },
-    {
-      "question": "Which device is used to type letters and numbers?",
-      "options": ["Keyboard", "Mouse", "Scanner", "Speaker"],
-      "answer": "Keyboard"
-    },
-    {
-      "question": "Which device shows what you are doing on the computer?",
-      "options": ["Printer", "Monitor", "Keyboard", "CPU"],
-      "answer": "Monitor"
-    }
-  ]
-}
+[
+  {
+    "id": 1,
+    "question": "Which device is used to point and click on a computer?",
+    "options": ["Keyboard", "Mouse", "Monitor", "Printer"],
+    "answer": "Mouse"
+  },
+  {
+    "id": 2,
+    "question": "Which key is used to delete text?",
+    "options": ["Shift", "Enter", "Delete", "Spacebar"],
+    "answer": "Delete"
+  },
+  {
+    "id": 3,
+    "question": "What does ICT stand for?",
+    "options": [
+      "Information and Computer Technology",
+      "Information and Communication Technology",
+      "Internet and Communication Tools",
+      "Integrated Computer Training"
+    ],
+    "answer": "Information and Communication Technology"
+  },
+  {
+    "id": 4,
+    "question": "Which finger is used to press the Spacebar?",
+    "options": ["Thumb", "Index", "Little Finger", "Middle Finger"],
+    "answer": "Thumb"
+  },
+  {
+    "id": 5,
+    "question": "Which part of the computer shows pictures and text?",
+    "options": ["CPU", "Monitor", "Keyboard", "Mouse"],
+    "answer": "Monitor"
+  }
+]
