@@ -1,56 +1,73 @@
 // auth.js
 document.addEventListener("DOMContentLoaded", () => {
-  const signupBtn = document.getElementById("signupBtn");
-  const registrationModal = document.getElementById("registrationModal");
-  const closeRegistration = document.getElementById("closeRegistration");
-  const registrationForm = document.getElementById("registrationForm");
-  const successMsg = document.getElementById("successMsg");
+  const authBtn = document.getElementById("authBtn");
+  const modalContainer = document.getElementById("modalContainer");
 
-  // ✅ Open Modal
-  signupBtn.addEventListener("click", () => {
-    if (signupBtn.textContent === "Logout") {
+  // Toggle Sign Up / Logout
+  window.toggleAuth = async function () {
+    if (authBtn.textContent === "Logout") {
       // Handle logout
       localStorage.removeItem("userData");
-      signupBtn.textContent = "Sign Up";
+      authBtn.textContent = "Sign Up";
       alert("You have logged out.");
       return;
     }
-    registrationModal.classList.remove("hidden");
-  });
 
-  // ✅ Close Modal
-  closeRegistration.addEventListener("click", () => {
-    registrationModal.classList.add("hidden");
-  });
+    // Load modal HTML dynamically from registration.html
+    if (!document.getElementById("registrationModal")) {
+      try {
+        const res = await fetch("registration.html");
+        const html = await res.text();
+        modalContainer.innerHTML = html;
 
-  // ✅ Handle Form Submit
-  registrationForm.addEventListener("submit", (e) => {
-    e.preventDefault();
+        // Now query elements inside modal
+        const registrationModal = document.getElementById("registrationModal");
+        const closeRegistration = document.getElementById("closeRegistration");
+        const registrationForm = document.getElementById("registrationForm");
+        const successMsg = document.getElementById("successMsg");
 
-    // Collect data
-    const formData = new FormData(registrationForm);
-    const userData = Object.fromEntries(formData.entries());
+        // Show modal
+        registrationModal.classList.remove("hidden");
 
-    // Save to localStorage
-    localStorage.setItem("userData", JSON.stringify(userData));
+        // Close modal
+        closeRegistration.addEventListener("click", () => {
+          registrationModal.classList.add("hidden");
+        });
 
-    // Show success message
-    successMsg.classList.remove("hidden");
+        // Handle form submit
+        registrationForm.addEventListener("submit", (e) => {
+          e.preventDefault();
 
-    // Change button to logout
-    signupBtn.textContent = "Logout";
+          const formData = new FormData(registrationForm);
+          const userData = Object.fromEntries(formData.entries());
 
-    // Hide modal after short delay
-    setTimeout(() => {
-      registrationModal.classList.add("hidden");
-      successMsg.classList.add("hidden");
-      registrationForm.reset();
-    }, 1500);
-  });
+          // Save to localStorage (later can be replaced with IndexedDB)
+          localStorage.setItem("userData", JSON.stringify(userData));
 
-  // ✅ Keep user logged in if already registered
+          // Show success
+          successMsg.classList.remove("hidden");
+
+          // Change button to logout
+          authBtn.textContent = "Logout";
+
+          setTimeout(() => {
+            registrationModal.classList.add("hidden");
+            successMsg.classList.add("hidden");
+            registrationForm.reset();
+          }, 1500);
+        });
+      } catch (err) {
+        console.error("Failed to load registration form:", err);
+      }
+    } else {
+      // If modal already exists, just show it
+      document.getElementById("registrationModal").classList.remove("hidden");
+    }
+  };
+
+  // Keep user logged in if already registered
   const storedUser = localStorage.getItem("userData");
   if (storedUser) {
-    signupBtn.textContent = "Logout";
+    authBtn.textContent = "Logout";
   }
 });
