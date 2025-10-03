@@ -187,41 +187,6 @@ document.getElementById("exportPdf").addEventListener("click", () => {
 
   doc.save("SmartKids_Records.pdf");
 });
-
-    
-    /*// Export to Excel
-    function exportToExcel() {
-      const wb = XLSX.utils.book_new();
-      const wsData = [["Full Name","Class","Subject","Session","Term","School","Location","Country"]];
-      const rows = document.querySelectorAll("#recordsTable tbody tr");
-      rows.forEach(row => {
-        const cols = row.querySelectorAll("td");
-        const rowData = Array.from(cols).map(td => td.innerText);
-        wsData.push(rowData);
-      });
-      const ws = XLSX.utils.aoa_to_sheet(wsData);
-      XLSX.utils.book_append_sheet(wb, ws, "Students");
-      XLSX.writeFile(wb, "SmartKids_Records.xlsx");
-    }
-
-    // Export to PDF
-    function exportToPDF() {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-      doc.text("SmartKids Learning - Student Records", 10, 10);
-
-      let y = 20;
-      const rows = document.querySelectorAll("#recordsTable tbody tr");
-      rows.forEach((row, index) => {
-        const cols = row.querySelectorAll("td");
-        const rowData = Array.from(cols).map(td => td.innerText).join(" | ");
-        doc.text(rowData, 10, y);
-        y += 10;
-      });
-
-      doc.save("SmartKids_Records.pdf");
-    }
-*/
     // Event Listeners
     document.getElementById("searchBtn").addEventListener("click", () => {
       const school = document.getElementById("searchSchool").value;
