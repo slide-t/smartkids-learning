@@ -19,18 +19,23 @@
   <!-- Quiz Container -->
   <div class="container mx-auto p-6">
     <h2 class="text-2xl font-bold mb-4">Answer the questions below</h2>
+    
+    <!-- Quiz Form -->
     <form id="quizForm" class="grid gap-4 md:grid-cols-2"></form>
 
+    <!-- Buttons -->
     <div class="flex justify-between mt-6">
-      <button id="prevBtn" class="bg-gray-400 text-white px-4 py-2 rounded hidden">Previous</button>
-      <button id="submitBtn" class="bg-blue-600 text-white px-4 py-2 rounded">Submit</button>
-      <button id="nextBtn" class="bg-green-600 text-white px-4 py-2 rounded hidden">Next</button>
+      <button type="button" id="prevBtn" class="bg-gray-400 text-white px-4 py-2 rounded hidden">Previous</button>
+      <button type="submit" id="submitBtn" class="bg-blue-600 text-white px-4 py-2 rounded">Submit</button>
+      <button type="button" id="nextBtn" class="bg-green-600 text-white px-4 py-2 rounded hidden">Next</button>
     </div>
 
+    <!-- Results -->
     <div id="result" class="mt-4 text-lg font-bold text-center"></div>
     <div id="reportCard" class="mt-6 hidden bg-white shadow rounded p-4"></div>
   </div>
 
+  <!-- Quiz Script -->
   <script src="quiz.js"></script>
 </body>
 </html>
