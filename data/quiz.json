@@ -1,18 +1,21 @@
 [
   {
     "id": 1,
+    "category": "Mouse",
     "question": "Which device is used to point and click on a computer?",
     "options": ["Keyboard", "Mouse", "Monitor", "Printer"],
     "answer": "Mouse"
   },
   {
     "id": 2,
+    "category": "Keyboard",
     "question": "Which key is used to delete text?",
     "options": ["Shift", "Enter", "Delete", "Spacebar"],
     "answer": "Delete"
   },
   {
     "id": 3,
+    "category": "ICT",
     "question": "What does ICT stand for?",
     "options": [
       "Information and Computer Technology",
@@ -24,14 +27,23 @@
   },
   {
     "id": 4,
+    "category": "Keyboard",
     "question": "Which finger is used to press the Spacebar?",
     "options": ["Thumb", "Index", "Little Finger", "Middle Finger"],
     "answer": "Thumb"
   },
   {
     "id": 5,
+    "category": "Mouse",
     "question": "Which part of the computer shows pictures and text?",
     "options": ["CPU", "Monitor", "Keyboard", "Mouse"],
+    "answer": "Monitor"
+  },
+  {
+    "id": 6,
+    "category": "ICT",
+    "question": "Which of these is an output device?",
+    "options": ["Monitor", "Mouse", "Keyboard", "Scanner"],
     "answer": "Monitor"
   }
 ]
