@@ -2,178 +2,184 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SmartKids Quiz</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 font-sans">
+<body class="bg-gray-100 p-6">
 
-  <!-- Navbar -->
-  <nav class="bg-blue-600 text-white p-4 shadow flex justify-between items-center">
-    <h1 class="text-xl font-bold">SmartKids Quiz</h1>
-    <div class="flex space-x-4">
-      <a href="classes.html" class="bg-green-500 px-3 py-1 rounded hover:bg-green-600">Keyboard Tutor</a>
-      <a href="mouse.html" class="bg-purple-500 px-3 py-1 rounded hover:bg-purple-600">Mouse Practice</a>
+  <!-- Header -->
+  <header class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold">SmartKids Quiz</h1>
+    <div class="space-x-2">
+      <a href="classes.html" class="px-4 py-2 bg-blue-600 text-white rounded">Keyboard Tutor</a>
+      <a href="mouse.html" class="px-4 py-2 bg-green-600 text-white rounded">Mouse Practice</a>
     </div>
-  </nav>
+  </header>
 
-  <!-- Category Selector -->
-  <div class="container mx-auto mt-6 p-4 bg-white rounded shadow">
-    <label for="categorySelect" class="block mb-2 font-semibold">Select Category:</label>
-    <select id="categorySelect" class="border p-2 rounded w-full sm:w-1/2">
-      <option value="">-- Choose a category --</option>
-      <option value="Mouse">Mouse</option>
-      <option value="Keyboard">Keyboard</option>
-      <option value="ICT">ICT</option>
-    </select>
+  <!-- Category Selection -->
+  <div id="categorySelect" class="mb-6">
+    <h2 class="text-lg font-semibold mb-2">Choose Quiz Category:</h2>
+    <button onclick="startQuiz('mouse')" class="px-4 py-2 bg-purple-500 text-white rounded">Mouse</button>
+    <button onclick="startQuiz('keyboard')" class="px-4 py-2 bg-yellow-500 text-white rounded">Keyboard</button>
+    <button onclick="startQuiz('ict')" class="px-4 py-2 bg-red-500 text-white rounded">ICT</button>
   </div>
 
-  <!-- Quiz Container -->
-  <div class="container mx-auto mt-6 p-4 bg-white rounded shadow hidden" id="quizContainer">
-    <form id="quizForm" class="space-y-6"></form>
+  <!-- Quiz Area -->
+  <div id="quizArea" class="hidden">
+    <div id="questionsContainer" class="grid md:grid-cols-2 gap-4"></div>
 
-    <!-- Navigation Buttons -->
-    <div class="flex justify-between mt-6">
-      <button id="prevBtn" class="bg-gray-400 text-white px-4 py-2 rounded hidden">Previous</button>
-      <button id="submitBtn" class="bg-blue-600 text-white px-4 py-2 rounded">Submit</button>
-      <button id="nextBtn" class="bg-green-600 text-white px-4 py-2 rounded hidden">Next</button>
+    <div class="flex justify-between mt-4">
+      <button id="prevBtn" onclick="prevPage()" class="px-4 py-2 bg-gray-400 text-white rounded" disabled>Previous</button>
+      <button id="submitBtn" onclick="submitPage()" class="px-4 py-2 bg-blue-600 text-white rounded">Submit</button>
+      <button id="nextBtn" onclick="nextPage()" class="px-4 py-2 bg-green-600 text-white rounded hidden">Next</button>
     </div>
   </div>
 
   <!-- Report Card -->
-  <div class="container mx-auto mt-6 p-4 bg-white rounded shadow hidden" id="reportCard">
-    <h2 class="text-xl font-bold mb-4">📊 Mini Report Card</h2>
-    <p id="scoreSummary" class="text-lg font-semibold"></p>
+  <div id="reportCard" class="hidden mt-8 bg-white shadow p-6 rounded">
+    <h2 class="text-xl font-bold mb-4">Mini Report Card</h2>
+    <p id="kidName" class="mb-2"></p>
+    <p id="finalScore"></p>
   </div>
 
   <script>
-    let allQuestions = [];
-    let selectedCategory = "";
+    let quizData = {};
+    let currentCategory = "";
     let currentPage = 0;
     let pageSize = 5;
-    let totalScore = 0;
-
-    const categorySelect = document.getElementById("categorySelect");
-    const quizContainer = document.getElementById("quizContainer");
-    const quizForm = document.getElementById("quizForm");
-    const prevBtn = document.getElementById("prevBtn");
-    const nextBtn = document.getElementById("nextBtn");
-    const submitBtn = document.getElementById("submitBtn");
-    const reportCard = document.getElementById("reportCard");
-    const scoreSummary = document.getElementById("scoreSummary");
+    let kidName = localStorage.getItem("fullName") || "Student";
+    let scores = [];
 
     // Load quiz.json
-    async function loadQuestions() {
+    async function loadQuizData() {
       const res = await fetch("data/quiz.json");
-      const data = await res.json();
-      return data.quiz;
+      quizData = await res.json();
     }
 
-    // Render Questions
-    function renderPage() {
-      quizForm.innerHTML = "";
+    // Start Quiz
+    async function startQuiz(category) {
+      if (!quizData.categories) await loadQuizData();
+      currentCategory = category;
+      currentPage = 0;
+      scores = [];
+      document.getElementById("categorySelect").classList.add("hidden");
+      document.getElementById("quizArea").classList.remove("hidden");
+      loadPage();
+    }
+
+    // Load questions per page
+    function loadPage() {
+      const container = document.getElementById("questionsContainer");
+      container.innerHTML = "";
+
+      const questions = quizData.categories[currentCategory];
       const start = currentPage * pageSize;
       const end = start + pageSize;
-      const pageQuestions = allQuestions.slice(start, end);
+      const pageQuestions = questions.slice(start, end);
 
-      pageQuestions.forEach((q, index) => {
-        const qIndex = start + index;
+      pageQuestions.forEach((q, i) => {
         const div = document.createElement("div");
-        div.classList.add("p-4", "border", "rounded", "bg-gray-50");
-
+        div.className = "p-4 bg-white shadow rounded";
         div.innerHTML = `
-          <p class="font-semibold mb-2">${qIndex + 1}. ${q.question}</p>
-          ${q.options.map((opt, i) => `
+          <h3 class="font-semibold mb-2">${start + i + 1}. ${q.question}</h3>
+          ${q.options.map(opt => `
             <label class="block">
-              <input type="radio" name="q${q.id}" value="${opt}" class="mr-2">
-              ${opt}
+              <input type="radio" name="q${q.id}" value="${opt}" class="mr-2"> ${opt}
             </label>
           `).join("")}
         `;
-        quizForm.appendChild(div);
+        container.appendChild(div);
       });
 
-      prevBtn.classList.toggle("hidden", currentPage === 0);
-      nextBtn.classList.add("hidden");
-      submitBtn.classList.remove("hidden");
+      // Button states
+      document.getElementById("prevBtn").disabled = currentPage === 0;
+      document.getElementById("nextBtn").classList.add("hidden");
+      document.getElementById("submitBtn").classList.remove("hidden");
     }
 
-    // Submit page
-    submitBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      let score = 0;
+    // Submit current page
+    function submitPage() {
+      const questions = quizData.categories[currentCategory];
       const start = currentPage * pageSize;
       const end = start + pageSize;
-      const pageQuestions = allQuestions.slice(start, end);
+      const pageQuestions = questions.slice(start, end);
 
+      let pageScore = 0;
       pageQuestions.forEach(q => {
-        const selected = quizForm.querySelector(`input[name="q${q.id}"]:checked`);
-        if (selected && selected.value === q.answer) score++;
+        const selected = document.querySelector(`input[name="q${q.id}"]:checked`);
+        if (selected && selected.value === q.answer) pageScore++;
       });
 
-      totalScore += score;
-      alert(`✅ You scored ${score} / ${pageQuestions.length} on this page`);
+      scores.push(pageScore);
 
-      if (end < allQuestions.length) {
-        currentPage++;
-        renderPage();
+      alert(`✅ You scored ${pageScore}/${pageQuestions.length} on this page!`);
+
+      document.getElementById("submitBtn").classList.add("hidden");
+      document.getElementById("nextBtn").classList.remove("hidden");
+    }
+
+    // Next page
+    function nextPage() {
+      currentPage++;
+      const totalPages = Math.ceil(quizData.categories[currentCategory].length / pageSize);
+
+      if (currentPage < totalPages) {
+        loadPage();
       } else {
-        // Quiz finished
-        quizContainer.classList.add("hidden");
-        reportCard.classList.remove("hidden");
-        scoreSummary.textContent = `🎉 Final Score: ${totalScore} / ${allQuestions.length}`;
-        saveScore(totalScore, allQuestions.length, selectedCategory);
+        showReportCard();
       }
-    });
+    }
 
-    // Previous button
-    prevBtn.addEventListener("click", () => {
+    // Previous page
+    function prevPage() {
       if (currentPage > 0) {
         currentPage--;
-        renderPage();
+        loadPage();
       }
-    });
+    }
 
-    // Save score to IndexedDB
-    function saveScore(score, total, category) {
-      const request = indexedDB.open("SmartKidsDB", 1);
-      request.onsuccess = (event) => {
-        const db = event.target.result;
-        const tx = db.transaction("quizScores", "readwrite");
-        let store;
-        if (!db.objectStoreNames.contains("quizScores")) {
-          tx.abort();
-          console.error("quizScores store missing");
-          return;
+    // Show final report card
+    function showReportCard() {
+      const totalScore = scores.reduce((a,b) => a+b, 0);
+      const totalQuestions = quizData.categories[currentCategory].length;
+
+      document.getElementById("quizArea").classList.add("hidden");
+      const report = document.getElementById("reportCard");
+      report.classList.remove("hidden");
+      document.getElementById("kidName").innerText = `👦 Student: ${kidName}`;
+      document.getElementById("finalScore").innerText = `🏆 Total Score: ${totalScore}/${totalQuestions}`;
+
+      saveResult(kidName, currentCategory, totalScore, totalQuestions);
+    }
+
+    // Save result in IndexedDB
+    function saveResult(name, category, score, total) {
+      const DB_NAME = "SmartKidsDB";
+      const STORE_NAME = "quizResults";
+      let db;
+
+      const request = indexedDB.open(DB_NAME, 2);
+      request.onupgradeneeded = (e) => {
+        db = e.target.result;
+        if (!db.objectStoreNames.contains(STORE_NAME)) {
+          db.createObjectStore(STORE_NAME, { keyPath: "id", autoIncrement: true });
         }
-        store = tx.objectStore("quizScores");
+      };
+      request.onsuccess = (e) => {
+        db = e.target.result;
+        const tx = db.transaction(STORE_NAME, "readwrite");
+        const store = tx.objectStore(STORE_NAME);
         store.add({
-          userId: localStorage.getItem("currentUserId") || "guest",
-          name: localStorage.getItem("currentUserName") || "Guest",
+          name,
           category,
           score,
           total,
-          date: new Date().toISOString()
+          date: new Date().toLocaleString()
         });
       };
     }
 
-    // Category selector
-    categorySelect.addEventListener("change", async () => {
-      selectedCategory = categorySelect.value;
-      if (!selectedCategory) return;
-
-      const questions = await loadQuestions();
-      allQuestions = questions.filter(q => q.category === selectedCategory);
-      currentPage = 0;
-      totalScore = 0;
-
-      if (allQuestions.length > 0) {
-        quizContainer.classList.remove("hidden");
-        reportCard.classList.add("hidden");
-        renderPage();
-      }
-    });
+    loadQuizData();
   </script>
 </body>
 </html>
