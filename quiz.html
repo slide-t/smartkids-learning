@@ -1,80 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SmartKids Quiz</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 p-6 font-sans">
+<body class="bg-gray-50 text-gray-800">
 
-  <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6">
-    <h1 class="text-2xl font-bold text-center mb-6">SmartKids ICT Quiz</h1>
-
-    <!-- Quiz Container -->
-    <div id="quizBox" class="grid gap-6 md:grid-cols-2"></div>
-
-    <!-- Submit -->
-    <div class="mt-6 text-center">
-      <button id="submitBtn" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">Submit</button>
+  <!-- Header -->
+  <header class="bg-blue-600 text-white p-4 flex justify-between items-center">
+    <h1 class="text-lg font-bold">SmartKids Quiz</h1>
+    <div class="space-x-3">
+      <a href="classes.html" class="px-3 py-1 bg-white text-blue-600 rounded">Keyboard Tutor</a>
+      <a href="mouse.html" class="px-3 py-1 bg-white text-blue-600 rounded">Mouse Practice</a>
     </div>
+  </header>
 
-    <!-- Result -->
-    <div id="result" class="mt-6 text-center hidden"></div>
-  </div>
+  <!-- Quiz Container -->
+  <main class="p-4 max-w-5xl mx-auto">
+    <div id="quiz-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
 
-  <script>
-    let quizData = [];
-    let answers = {};
+    <!-- Navigation -->
+    <div class="flex justify-between mt-6">
+      <button id="prevBtn" class="px-4 py-2 bg-gray-300 rounded disabled:opacity-50">Previous</button>
+      <button id="nextBtn" class="px-4 py-2 bg-blue-600 text-white rounded">Next</button>
+      <button id="submitBtn" class="px-4 py-2 bg-green-600 text-white rounded hidden">Submit</button>
+    </div>
+  </main>
 
-    // Load quiz.json
-    fetch("data/quiz.json")
-      .then(res => res.json())
-      .then(data => {
-        quizData = data.quiz;
-        displayQuiz();
-      });
-
-    function displayQuiz() {
-      const quizBox = document.getElementById("quizBox");
-      quizBox.innerHTML = "";
-
-      quizData.forEach((q, index) => {
-        const div = document.createElement("div");
-        div.className = "border p-4 rounded shadow-sm bg-gray-50";
-
-        div.innerHTML = `
-          <h2 class="font-semibold mb-2">Q${index + 1}. ${q.question}</h2>
-          <form class="space-y-2">
-            ${q.options.map(opt => `
-              <label class="block cursor-pointer">
-                <input type="radio" name="q${index}" value="${opt}" class="mr-2"> ${opt}
-              </label>
-            `).join("")}
-          </form>
-        `;
-        quizBox.appendChild(div);
-      });
-    }
-
-    // Handle submit
-    document.getElementById("submitBtn").addEventListener("click", () => {
-      let score = 0;
-
-      quizData.forEach((q, index) => {
-        const selected = document.querySelector(`input[name="q${index}"]:checked`);
-        if (selected && selected.value === q.answer) {
-          score++;
-        }
-      });
-
-      const resultBox = document.getElementById("result");
-      resultBox.innerHTML = `
-        <h2 class="text-xl font-bold">🎉 Quiz Completed!</h2>
-        <p class="mt-2">You scored <b>${score}</b> out of <b>${quizData.length}</b>.</p>
-      `;
-      resultBox.classList.remove("hidden");
-    });
-  </script>
+  <script src="quiz.js"></script>
 </body>
 </html>
