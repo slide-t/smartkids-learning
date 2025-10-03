@@ -22,11 +22,17 @@
     <div id="quiz-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
 
     <!-- Navigation -->
-    <div class="flex justify-between mt-6">
-      <button id="prevBtn" class="px-4 py-2 bg-gray-300 rounded disabled:opacity-50">Previous</button>
-      <button id="nextBtn" class="px-4 py-2 bg-blue-600 text-white rounded">Next</button>
-      <button id="submitBtn" class="px-4 py-2 bg-green-600 text-white rounded hidden">Submit</button>
+    <div class="flex justify-end mt-6">
+      <button id="submitBtn" class="px-4 py-2 bg-green-600 text-white rounded">Submit</button>
     </div>
+
+    <!-- Report Card -->
+    <section id="report-card" class="mt-8 hidden bg-white shadow rounded p-6">
+      <h2 class="text-xl font-bold mb-4">Mini Report Card</h2>
+      <p id="report-user" class="mb-2"></p>
+      <p id="report-total" class="mb-2"></p>
+      <div id="report-breakdown"></div>
+    </section>
   </main>
 
   <script src="quiz.js"></script>
