@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SmartKids Quiz</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6 font-sans">
+
+  <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6">
+    <h1 class="text-2xl font-bold text-center mb-6">ICT Quiz</h1>
+
+    <!-- Quiz Container -->
+    <div id="quizBox" class="grid gap-6 md:grid-cols-2"></div>
+
+    <!-- Submit -->
+    <div class="mt-6 text-center">
+      <button id="submitBtn" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">Submit</button>
+    </div>
+
+    <!-- Result -->
+    <div id="result" class="mt-6 text-center hidden"></div>
+  </div>
+
+  <script>
+    let quizData = [];
+    let answers = {};
+
+    // Load quiz.json
+    fetch("data/quiz.json")
+      .then(res => res.json())
+      .then(data => {
+        quizData = data.quiz;
+        displayQuiz();
+      });
+
+    function displayQuiz() {
+      const quizBox = document.getElementById("quizBox");
+      quizBox.innerHTML = "";
+
+      quizData.forEach((q, index) => {
+        const div = document.createElement("div");
+        div.className = "border p-4 rounded shadow-sm bg-gray-50";
+
+        div.innerHTML = `
+          <h2 class="font-semibold mb-2">Q${index + 1}. ${q.question}</h2>
+          <form class="space-y-2">
+            ${q.options.map(opt => `
+              <label class="block cursor-pointer">
+                <input type="radio" name="q${index}" value="${opt}" class="mr-2"> ${opt}
+              </label>
+            `).join("")}
+          </form>
+        `;
+        quizBox.appendChild(div);
+      });
+    }
+
+    // Handle submit
+    document.getElementById("submitBtn").addEventListener("click", () => {
+      let score = 0;
+
+      quizData.forEach((q, index) => {
+        const selected = document.querySelector(`input[name="q${index}"]:checked`);
+        if (selected && selected.value === q.answer) {
+          score++;
+        }
+      });
+
+      const resultBox = document.getElementById("result");
+      resultBox.innerHTML = `
+        <h2 class="text-xl font-bold">🎉 Quiz Completed!</h2>
+        <p class="mt-2">You scored <b>${score}</b> out of <b>${quizData.length}</b>.</p>
+      `;
+      resultBox.classList.remove("hidden");
+    });
+  </script>
+</body>
+</html>
