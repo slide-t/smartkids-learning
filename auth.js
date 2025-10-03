@@ -3,29 +3,41 @@ document.addEventListener("DOMContentLoaded", () => {
   const authBtn = document.getElementById("authBtn");
   const modalContainer = document.getElementById("modalContainer");
 
-  // Open IndexedDB
-  let db;
+  let db; // IndexedDB reference
+
+  // --- Open IndexedDB ---
   const request = indexedDB.open("SmartKidsDB", 1);
 
-  request.onupgradeneeded = (e) => {
-    db = e.target.result;
+  request.onerror = (event) => {
+    console.error("IndexedDB error:", event.target.errorCode);
+  };
+
+  request.onupgradeneeded = (event) => {
+    db = event.target.result;
     if (!db.objectStoreNames.contains("users")) {
-      db.createObjectStore("users", { keyPath: "email" }); // enforce unique email
+      const store = db.createObjectStore("users", { keyPath: "email" }); // email as unique key
+      store.createIndex("email", "email", { unique: true });
     }
   };
 
-  request.onsuccess = (e) => {
-    db = e.target.result;
+  request.onsuccess = (event) => {
+    db = event.target.result;
+
+    // If user already logged in before, keep button as Logout
+    const tx = db.transaction("users", "readonly");
+    const store = tx.objectStore("users");
+    const req = store.getAll();
+    req.onsuccess = () => {
+      if (req.result.length > 0) {
+        authBtn.textContent = "Logout";
+      }
+    };
   };
 
-  request.onerror = (e) => {
-    console.error("IndexedDB error:", e);
-  };
-
-  // Toggle Sign Up / Logout
+  // --- Toggle Auth ---
   window.toggleAuth = async function () {
     if (authBtn.textContent === "Logout") {
-      localStorage.removeItem("currentUser");
+      // Logout
       authBtn.textContent = "Sign Up";
       alert("You have logged out.");
       return;
@@ -43,55 +55,46 @@ document.addEventListener("DOMContentLoaded", () => {
         const registrationForm = document.getElementById("registrationForm");
         const successMsg = document.getElementById("successMsg");
 
-        // Show modal
         registrationModal.classList.remove("hidden");
 
-        // Close modal
         closeRegistration.addEventListener("click", () => {
           registrationModal.classList.add("hidden");
         });
 
-        // Handle form submit
+        // --- Handle Form Submit ---
         registrationForm.addEventListener("submit", (e) => {
           e.preventDefault();
           const formData = new FormData(registrationForm);
           const userData = Object.fromEntries(formData.entries());
 
-          // Duplicate check first
-          const tx = db.transaction("users", "readonly");
+          const tx = db.transaction("users", "readwrite");
           const store = tx.objectStore("users");
-          const getReq = store.get(userData.email);
 
-          getReq.onsuccess = () => {
-            if (getReq.result) {
-              alert("⚠️ This email is already registered. Please use another one.");
-              return;
+          // Check if email already exists
+          const checkReq = store.get(userData.email);
+
+          checkReq.onsuccess = () => {
+            if (checkReq.result) {
+              alert("This email is already registered. Please use another one.");
+            } else {
+              // Add new user
+              const addReq = store.add(userData);
+
+              addReq.onsuccess = () => {
+                successMsg.classList.remove("hidden");
+                authBtn.textContent = "Logout";
+
+                setTimeout(() => {
+                  registrationModal.classList.add("hidden");
+                  successMsg.classList.add("hidden");
+                  registrationForm.reset();
+                }, 1500);
+              };
+
+              addReq.onerror = () => {
+                console.error("Error saving user:", addReq.error);
+              };
             }
-
-            // If not found → save new user
-            const txAdd = db.transaction("users", "readwrite");
-            const storeAdd = txAdd.objectStore("users");
-            const addReq = storeAdd.add(userData);
-
-            addReq.onsuccess = () => {
-              localStorage.setItem("currentUser", userData.email);
-              successMsg.classList.remove("hidden");
-              authBtn.textContent = "Logout";
-
-              setTimeout(() => {
-                registrationModal.classList.add("hidden");
-                successMsg.classList.add("hidden");
-                registrationForm.reset();
-              }, 1500);
-            };
-
-            addReq.onerror = () => {
-              alert("⚠️ Error saving user. This email might already exist.");
-            };
-          };
-
-          getReq.onerror = () => {
-            console.error("Error checking duplicate email.");
           };
         });
       } catch (err) {
@@ -101,10 +104,4 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("registrationModal").classList.remove("hidden");
     }
   };
-
-  // Keep user logged in if already registered
-  const storedUser = localStorage.getItem("currentUser");
-  if (storedUser) {
-    authBtn.textContent = "Logout";
-  }
 });
