@@ -45,5 +45,68 @@
     "question": "Which of these is an output device?",
     "options": ["Monitor", "Mouse", "Keyboard", "Scanner"],
     "answer": "Monitor"
+  },
+  {
+    "id": 7,
+    "category": "Mouse",
+    "question": "Which button on the mouse is usually clicked to select items?",
+    "options": ["Left Button", "Right Button", "Scroll Wheel", "Power Button"],
+    "answer": "Left Button"
+  },
+  {
+    "id": 8,
+    "category": "Keyboard",
+    "question": "Which key is used to create a new line?",
+    "options": ["Enter", "Shift", "Tab", "Caps Lock"],
+    "answer": "Enter"
+  },
+  {
+    "id": 9,
+    "category": "ICT",
+    "question": "Which one is an input device?",
+    "options": ["Keyboard", "Printer", "Monitor", "Speaker"],
+    "answer": "Keyboard"
+  },
+  {
+    "id": 10,
+    "category": "Mouse",
+    "question": "What is the wheel in the middle of a mouse used for?",
+    "options": ["Clicking", "Scrolling", "Typing", "Moving cursor"],
+    "answer": "Scrolling"
+  },
+  {
+    "id": 11,
+    "category": "Keyboard",
+    "question": "Which key makes letters appear in capital form?",
+    "options": ["Ctrl", "Alt", "Caps Lock", "Shift"],
+    "answer": "Caps Lock"
+  },
+  {
+    "id": 12,
+    "category": "ICT",
+    "question": "Which of these is used to send information to the computer?",
+    "options": ["Keyboard", "Monitor", "Projector", "Speaker"],
+    "answer": "Keyboard"
+  },
+  {
+    "id": 13,
+    "category": "Mouse",
+    "question": "Which mouse button opens menus with extra options?",
+    "options": ["Left Button", "Right Button", "Scroll Wheel", "Top Button"],
+    "answer": "Right Button"
+  },
+  {
+    "id": 14,
+    "category": "Keyboard",
+    "question": "Which key moves the cursor to the next tab space?",
+    "options": ["Tab", "Enter", "Esc", "Shift"],
+    "answer": "Tab"
+  },
+  {
+    "id": 15,
+    "category": "ICT",
+    "question": "Which of these stores information permanently?",
+    "options": ["RAM", "CD-ROM", "Monitor", "Keyboard"],
+    "answer": "CD-ROM"
   }
 ]
