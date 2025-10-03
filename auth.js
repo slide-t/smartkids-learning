@@ -11,13 +11,14 @@ document.addEventListener("DOMContentLoaded", () => {
     db = event.target.result;
     if (!db.objectStoreNames.contains("users")) {
       const store = db.createObjectStore("users", { keyPath: "id", autoIncrement: true });
-      store.createIndex("email", "email", { unique: false }); // email not unique, since schools may reuse one
+      store.createIndex("email", "email", { unique: false }); 
     }
   };
 
   request.onsuccess = (event) => {
     db = event.target.result;
-    updateAuthButton(); // refresh UI on load
+    updateAuthButton(); 
+    checkForceRegistration(); // 🔥 ensure modal shows on practice pages
   };
 
   request.onerror = (event) => {
@@ -37,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function clearCurrentUser() {
     localStorage.removeItem("currentUserId");
     localStorage.removeItem("currentUserName");
-    updateAuthButton(); // force button back to Sign Up
+    updateAuthButton();
   }
 
   // ---------- Update Auth Button ----------
@@ -58,6 +59,23 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // ---------- Force Registration on Practice Pages ----------
+  function checkForceRegistration() {
+    const page = window.location.pathname;
+    const currentUser = getCurrentUserId();
+
+    // Only apply on lessons.html and mouse.html
+    if (!currentUser && (page.includes("lessons.html") || page.includes("mouse.html"))) {
+      setTimeout(() => {
+        if (!getCurrentUserId()) {
+          window.toggleAuth();
+          const closeBtn = document.getElementById("closeRegistration");
+          if (closeBtn) closeBtn.style.display = "none"; // ❌ remove close option
+        }
+      }, 2 * 60 * 1000); // show after 2 minutes practice
+    }
+  }
+
   // ---------- Toggle Modal ----------
   window.toggleAuth = async function () {
     if (!db) {
@@ -65,7 +83,6 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // Load modal HTML dynamically from registration.html
     if (!document.getElementById("registrationModal")) {
       try {
         const res = await fetch("registration.html");
@@ -78,15 +95,16 @@ document.addEventListener("DOMContentLoaded", () => {
         const registrationForm = document.getElementById("registrationForm");
         const successMsg = document.getElementById("successMsg");
 
-        // Show modal
         registrationModal.classList.remove("hidden");
 
         // Close modal
-        closeRegistration.addEventListener("click", () => {
-          registrationModal.classList.add("hidden");
-        });
+        if (closeRegistration) {
+          closeRegistration.addEventListener("click", () => {
+            registrationModal.classList.add("hidden");
+          });
+        }
 
-        // Handle registration submit
+        // Handle registration
         registrationForm.addEventListener("submit", (e) => {
           e.preventDefault();
 
