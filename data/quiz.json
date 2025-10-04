@@ -608,8 +608,388 @@
       "question": "Which key combination opens the search box?",
       "options": ["Windows + S", "Ctrl + S", "Alt + S", "Shift + S"],
       "answer": "Windows + S"
-    }
-  ]
-}
+    },
+  {
+    "id": 1,
+    "category": "ICT",
+    "question": "What does ICT stand for?",
+    "options": [
+      "Information and Communication Technology",
+      "Internet and Computer Training",
+      "Information Control Tools",
+      "Instant Communication Transfer"
+    ],
+    "answer": "Information and Communication Technology"
+  },
+  {
+    "id": 2,
+    "category": "ICT",
+    "question": "Which of these is a common ICT device?",
+    "options": ["Television", "Microwave", "Blender", "Broom"],
+    "answer": "Television"
+  },
+  {
+    "id": 3,
+    "category": "ICT",
+    "question": "The brain of the computer is called the ____.",
+    "options": ["Mouse", "Monitor", "CPU", "Keyboard"],
+    "answer": "CPU"
+  },
+  {
+    "id": 4,
+    "category": "ICT",
+    "question": "Which device is used to type letters and numbers into the computer?",
+    "options": ["Keyboard", "Monitor", "Printer", "Speaker"],
+    "answer": "Keyboard"
+  },
+  {
+    "id": 5,
+    "category": "ICT",
+    "question": "A computer mouse is used to ____.",
+    "options": [
+      "Draw and select items",
+      "Type text",
+      "Print documents",
+      "Store data"
+    ],
+    "answer": "Draw and select items"
+  },
+  {
+    "id": 6,
+    "category": "ICT",
+    "question": "Which of these is an output device?",
+    "options": ["Monitor", "Keyboard", "Mouse", "Scanner"],
+    "answer": "Monitor"
+  },
+  {
+    "id": 7,
+    "category": "ICT",
+    "question": "What does CPU mean?",
+    "options": [
+      "Central Processing Unit",
+      "Central Programming Unit",
+      "Computer Power Unit",
+      "Control Processing User"
+    ],
+    "answer": "Central Processing Unit"
+  },
+  {
+    "id": 8,
+    "category": "ICT",
+    "question": "Which of these devices shows what you are doing on the computer?",
+    "options": ["Monitor", "CPU", "Mouse", "Keyboard"],
+    "answer": "Monitor"
+  },
+  {
+    "id": 9,
+    "category": "ICT",
+    "question": "A printer produces ____ copy of your work.",
+    "options": ["Soft", "Hard", "Digital", "Hidden"],
+    "answer": "Hard"
+  },
+  {
+    "id": 10,
+    "category": "ICT",
+    "question": "Which of the following stores information permanently?",
+    "options": ["Hard disk", "RAM", "CPU", "Monitor"],
+    "answer": "Hard disk"
+  },
+  {
+    "id": 11,
+    "category": "ICT",
+    "question": "Which ICT tool is used for making voice and video calls?",
+    "options": ["Telephone", "Printer", "Scanner", "Mouse"],
+    "answer": "Telephone"
+  },
+  {
+    "id": 12,
+    "category": "ICT",
+    "question": "Internet helps us to ____.",
+    "options": [
+      "Play, learn and communicate",
+      "Cook food",
+      "Build houses",
+      "Clean the floor"
+    ],
+    "answer": "Play, learn and communicate"
+  },
+  {
+    "id": 13,
+    "category": "ICT",
+    "question": "What is the full meaning of 'e-mail'?",
+    "options": [
+      "Electronic Mail",
+      "Everyday Mail",
+      "Easy Mail",
+      "Electronic Machine"
+    ],
+    "answer": "Electronic Mail"
+  },
+  {
+    "id": 14,
+    "category": "ICT",
+    "question": "Which one is not an input device?",
+    "options": ["Printer", "Keyboard", "Mouse", "Scanner"],
+    "answer": "Printer"
+  },
+  {
+    "id": 15,
+    "category": "ICT",
+    "question": "The rectangular box that processes all data is the ____.",
+    "options": ["System unit", "Monitor", "Keyboard", "Mouse"],
+    "answer": "System unit"
+  },
+  {
+    "id": 16,
+    "category": "ICT",
+    "question": "Which of these devices helps to take pictures?",
+    "options": ["Camera", "Speaker", "Projector", "Monitor"],
+    "answer": "Camera"
+  },
+  {
+    "id": 17,
+    "category": "ICT",
+    "question": "Which of these is an ICT communication tool?",
+    "options": ["Telephone", "Stapler", "Microwave", "Book"],
+    "answer": "Telephone"
+  },
+  {
+    "id": 18,
+    "category": "ICT",
+    "question": "Software is a set of ____.",
+    "options": ["Programs", "Machines", "Wires", "Devices"],
+    "answer": "Programs"
+  },
+  {
+    "id": 19,
+    "category": "ICT",
+    "question": "Hardware refers to the ____ parts of a computer.",
+    "options": ["Physical", "Invisible", "Digital", "Online"],
+    "answer": "Physical"
+  },
+  {
+    "id": 20,
+    "category": "ICT",
+    "question": "Which of the following is used to store information temporarily?",
+    "options": ["RAM", "ROM", "Monitor", "CPU"],
+    "answer": "RAM"
+  },
+  {
+    "id": 21,
+    "category": "ICT",
+    "question": "Microsoft Word is an example of a ____.",
+    "options": [
+      "Application software",
+      "Hardware device",
+      "Game",
+      "Operating system"
+    ],
+    "answer": "Application software"
+  },
+  {
+    "id": 22,
+    "category": "ICT",
+    "question": "The device used to record your voice is a ____.",
+    "options": ["Microphone", "Speaker", "Scanner", "Camera"],
+    "answer": "Microphone"
+  },
+  {
+    "id": 23,
+    "category": "ICT",
+    "question": "Which device allows you to hear sounds from the computer?",
+    "options": ["Speaker", "Printer", "Keyboard", "Monitor"],
+    "answer": "Speaker"
+  },
+  {
+    "id": 24,
+    "category": "ICT",
+    "question": "Which of the following connects computers together?",
+    "options": ["Network", "Wire", "Power", "Cable"],
+    "answer": "Network"
+  },
+  {
+    "id": 25,
+    "category": "ICT",
+    "question": "Which one is an example of storage device?",
+    "options": ["Flash drive", "Mouse", "Monitor", "Speaker"],
+    "answer": "Flash drive"
+  },
+  {
+    "id": 26,
+    "category": "ICT",
+    "question": "Google Chrome is a type of ____.",
+    "options": ["Web browser", "Keyboard", "Hardware", "Application"],
+    "answer": "Web browser"
+  },
+  {
+    "id": 27,
+    "category": "ICT",
+    "question": "Which ICT tool is used for presenting slides?",
+    "options": ["Projector", "Scanner", "Printer", "Mouse"],
+    "answer": "Projector"
+  },
+  {
+    "id": 28,
+    "category": "ICT",
+    "question": "Which of these is an example of operating system?",
+    "options": ["Windows", "Chrome", "Google", "Excel"],
+    "answer": "Windows"
+  },
+  {
+    "id": 29,
+    "category": "ICT",
+    "question": "Which device helps you to scan pictures into the computer?",
+    "options": ["Scanner", "Printer", "Monitor", "Keyboard"],
+    "answer": "Scanner"
+  },
+  {
+    "id": 30,
+    "category": "ICT",
+    "question": "ICT makes learning more ____.",
+    "options": ["Interesting", "Hard", "Boring", "Long"],
+    "answer": "Interesting"
+  },
+  {
+    "id": 31,
+    "category": "ICT",
+    "question": "Which of the following is not part of ICT?",
+    "options": ["Farming tools", "Television", "Radio", "Computer"],
+    "answer": "Farming tools"
+  },
+  {
+    "id": 32,
+    "category": "ICT",
+    "question": "Which of these devices can connect to the Internet?",
+    "options": ["Smartphone", "Television", "Calculator", "Speaker"],
+    "answer": "Smartphone"
+  },
+  {
+    "id": 33,
+    "category": "ICT",
+    "question": "A computer virus can ____ your files.",
+    "options": ["Damage", "Print", "Save", "Repair"],
+    "answer": "Damage"
+  },
+  {
+    "id": 34,
+    "category": "ICT",
+    "question": "Which of these is used to protect your computer?",
+    "options": ["Antivirus", "Mouse", "Keyboard", "Speaker"],
+    "answer": "Antivirus"
+  },
+  {
+    "id": 35,
+    "category": "ICT",
+    "question": "Which part of the computer shows text and pictures?",
+    "options": ["Monitor", "Mouse", "Keyboard", "CPU"],
+    "answer": "Monitor"
+  },
+  {
+    "id": 36,
+    "category": "ICT",
+    "question": "A flash drive is also called a ____ drive.",
+    "options": ["USB", "Power", "Memory", "Smart"],
+    "answer": "USB"
+  },
+  {
+    "id": 37,
+    "category": "ICT",
+    "question": "ICT helps in which of these areas?",
+    "options": ["Education", "Farming", "Transport", "All of the above"],
+    "answer": "All of the above"
+  },
+  {
+    "id": 38,
+    "category": "ICT",
+    "question": "The use of computer to send messages is called ____.",
+    "options": ["E-mailing", "Typing", "Printing", "Drawing"],
+    "answer": "E-mailing"
+  },
+  {
+    "id": 39,
+    "category": "ICT",
+    "question": "When using the internet, you should never share your ____.",
+    "options": ["Password", "Game", "Homework", "School name"],
+    "answer": "Password"
+  },
+  {
+    "id": 40,
+    "category": "ICT",
+    "question": "Which of these ICT tools helps in watching movies?",
+    "options": ["Television", "Keyboard", "Printer", "Router"],
+    "answer": "Television"
+  },
+  {
+    "id": 41,
+    "category": "ICT",
+    "question": "The process of copying files from the Internet is called ____.",
+    "options": ["Downloading", "Uploading", "Installing", "Opening"],
+    "answer": "Downloading"
+  },
+  {
+    "id": 42,
+    "category": "ICT",
+    "question": "Which one is used to project images on a large screen?",
+    "options": ["Projector", "Printer", "Speaker", "CPU"],
+    "answer": "Projector"
+  },
+  {
+    "id": 43,
+    "category": "ICT",
+    "question": "ICT can be used to make online ____.",
+    "options": ["Payments", "Cooking", "Driving", "Sweeping"],
+    "answer": "Payments"
+  },
+  {
+    "id": 44,
+    "category": "ICT",
+    "question": "Which part of the computer keeps it cool?",
+    "options": ["Fan", "Keyboard", "Monitor", "Speaker"],
+    "answer": "Fan"
+  },
+  {
+    "id": 45,
+    "category": "ICT",
+    "question": "Which of these is a portable computer?",
+    "options": ["Laptop", "Desktop", "Mainframe", "Supercomputer"],
+    "answer": "Laptop"
+  },
+  {
+    "id": 46,
+    "category": "ICT",
+    "question": "The Internet is a global network that connects ____.",
+    "options": ["Computers worldwide", "Only schools", "Phones only", "Cameras"],
+    "answer": "Computers worldwide"
+  },
+  {
+    "id": 47,
+    "category": "ICT",
+    "question": "Which of the following is not a safe online behaviour?",
+    "options": ["Sharing passwords", "Using antivirus", "Logging out", "Reporting abuse"],
+    "answer": "Sharing passwords"
+  },
+  {
+    "id": 48,
+    "category": "ICT",
+    "question": "Which one of these is used for typing documents?",
+    "options": ["Word Processor", "Calculator", "Paint", "Camera"],
+    "answer": "Word Processor"
+  },
+  {
+    "id": 49,
+    "category": "ICT",
+    "question": "ICT is useful for ____.",
+    "options": ["Teaching and learning", "Sleeping", "Farming only", "Singing only"],
+    "answer": "Teaching and learning"
+  },
+  {
+    "id": 50,
+    "category": "ICT",
+    "question": "ICT promotes ____ in communication.",
+    "options": ["Speed and accuracy", "Delay", "Noise", "Confusion"],
+    "answer": "Speed and accuracy"
+  }
 ]
+}
+ ]
 }
