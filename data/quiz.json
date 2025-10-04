@@ -362,779 +362,253 @@
     }
   ]
 },
+{
+  "category": "Keyboard",
+  "questions": [
     {
-      "id": 31,
-      "category": "Keyboard",
-      "question": "What is the main function of the computer keyboard?",
-      "options": [
-        "To type letters, numbers, and symbols",
-        "To move the pointer",
-        "To display pictures",
-        "To draw shapes"
-      ],
-      "answer": "To type letters, numbers, and symbols"
+      "id": 1,
+      "question": "Which key is used to delete characters to the right of the cursor?",
+      "options": ["Backspace", "Delete", "Enter", "Shift"],
+      "answer": "Delete"
     },
     {
-      "id": 32,
-      "category": "Keyboard",
-      "question": "Which key is used to add a space between words?",
-      "options": [
-        "Enter key",
-        "Shift key",
-        "Spacebar",
-        "Ctrl key"
-      ],
+      "id": 2,
+      "question": "Which key is used to move to the next line while typing?",
+      "options": ["Spacebar", "Enter", "Tab", "Shift"],
+      "answer": "Enter"
+    },
+    {
+      "id": 3,
+      "question": "Which key is the longest key on the keyboard?",
+      "options": ["Enter", "Shift", "Spacebar", "Backspace"],
       "answer": "Spacebar"
     },
     {
-      "id": 33,
-      "category": "Keyboard",
-      "question": "What does the Enter key do?",
+      "id": 4,
+      "question": "What is the function of the Caps Lock key?",
       "options": [
-        "Moves the cursor to the next line or executes a command",
-        "Deletes the last letter",
-        "Closes the document",
-        "Types a period"
+        "To type small letters",
+        "To type capital letters",
+        "To delete letters",
+        "To move cursor down"
       ],
-      "answer": "Moves the cursor to the next line or executes a command"
+      "answer": "To type capital letters"
     },
     {
-      "id": 34,
-      "category": "Keyboard",
-      "question": "Which key is used to delete letters to the left of the cursor?",
-      "options": [
-        "Backspace key",
-        "Delete key",
-        "Escape key",
-        "Tab key"
-      ],
-      "answer": "Backspace key"
-    },
-    {
-      "id": 35,
-      "category": "Keyboard",
-      "question": "Which key is used to delete letters to the right of the cursor?",
-      "options": [
-        "Escape key",
-        "Enter key",
-        "Delete key",
-        "Caps Lock key"
-      ],
-      "answer": "Delete key"
-    },
-    {
-      "id": 36,
-      "category": "Keyboard",
-      "question": "What is the purpose of the Caps Lock key?",
-      "options": [
-        "To make all letters uppercase when typing",
-        "To delete words",
-        "To move the cursor left",
-        "To open programs"
-      ],
-      "answer": "To make all letters uppercase when typing"
-    },
-    {
-      "id": 37,
-      "category": "Keyboard",
-      "question": "Which key combination is used to copy selected text?",
-      "options": [
-        "Ctrl + V",
-        "Ctrl + C",
-        "Ctrl + X",
-        "Ctrl + P"
-      ],
+      "id": 5,
+      "question": "Which key combination is used to copy text?",
+      "options": ["Ctrl + X", "Ctrl + C", "Ctrl + V", "Ctrl + Z"],
       "answer": "Ctrl + C"
     },
     {
-      "id": 38,
-      "category": "Keyboard",
-      "question": "Which key combination pastes copied text?",
-      "options": [
-        "Ctrl + C",
-        "Ctrl + X",
-        "Ctrl + V",
-        "Ctrl + Z"
-      ],
+      "id": 6,
+      "question": "Which key combination is used to paste copied text?",
+      "options": ["Ctrl + X", "Ctrl + V", "Ctrl + C", "Ctrl + P"],
       "answer": "Ctrl + V"
     },
     {
-      "id": 39,
-      "category": "Keyboard",
-      "question": "Which key combination is used to undo the last action?",
-      "options": [
-        "Ctrl + Z",
-        "Ctrl + A",
-        "Ctrl + U",
-        "Ctrl + Y"
-      ],
-      "answer": "Ctrl + Z"
-    },
-    {
-      "id": 40,
-      "category": "Keyboard",
-      "question": "Which key combination is used to select all text in a document?",
-      "options": [
-        "Ctrl + A",
-        "Ctrl + S",
-        "Ctrl + D",
-        "Ctrl + L"
-      ],
-      "answer": "Ctrl + A"
-    },
-    {
-      "id": 41,
-      "category": "Keyboard",
-      "question": "What is the long key at the bottom of the keyboard called?",
-      "options": [
-        "Enter key",
-        "Spacebar",
-        "Shift key",
-        "Tab key"
-      ],
-      "answer": "Spacebar"
-    },
-    {
-      "id": 42,
-      "category": "Keyboard",
-      "question": "Which key is used to start a new paragraph in a text document?",
-      "options": [
-        "Shift key",
-        "Enter key",
-        "Tab key",
-        "Backspace key"
-      ],
-      "answer": "Enter key"
-    },
-    {
-      "id": 43,
-      "category": "Keyboard",
-      "question": "Which keys are used to type capital letters without turning on Caps Lock?",
-      "options": [
-        "Alt key",
-        "Shift key",
-        "Ctrl key",
-        "Fn key"
-      ],
-      "answer": "Shift key"
-    },
-    {
-      "id": 44,
-      "category": "Keyboard",
-      "question": "What is the function of the Tab key?",
-      "options": [
-        "To move the cursor several spaces to the right",
-        "To delete spaces",
-        "To close the window",
-        "To type symbols"
-      ],
-      "answer": "To move the cursor several spaces to the right"
-    },
-    {
-      "id": 45,
-      "category": "Keyboard",
-      "question": "Which key helps to cancel or stop an operation?",
-      "options": [
-        "Caps Lock key",
-        "Escape (Esc) key",
-        "Shift key",
-        "Control key"
-      ],
-      "answer": "Escape (Esc) key"
-    },
-    {
-      "id": 46,
-      "category": "Keyboard",
+      "id": 7,
       "question": "Which key combination is used to cut selected text?",
-      "options": [
-        "Ctrl + V",
-        "Ctrl + C",
-        "Ctrl + X",
-        "Ctrl + B"
-      ],
+      "options": ["Ctrl + C", "Ctrl + X", "Ctrl + Z", "Ctrl + S"],
       "answer": "Ctrl + X"
     },
     {
-      "id": 47,
-      "category": "Keyboard",
-      "question": "Which group of keys contains letters and numbers?",
-      "options": [
-        "Function keys",
-        "Numeric keypad",
-        "Alphanumeric keys",
-        "Arrow keys"
-      ],
-      "answer": "Alphanumeric keys"
+      "id": 8,
+      "question": "Which key is used to move several spaces at once?",
+      "options": ["Shift", "Enter", "Tab", "Ctrl"],
+      "answer": "Tab"
     },
     {
-      "id": 48,
-      "category": "Keyboard",
-      "question": "Which key combination is used to print a document?",
-      "options": [
-        "Ctrl + P",
-        "Ctrl + T",
-        "Ctrl + S",
-        "Ctrl + B"
-      ],
-      "answer": "Ctrl + P"
+      "id": 9,
+      "question": "Which key is used to make a space between words?",
+      "options": ["Shift", "Spacebar", "Ctrl", "Enter"],
+      "answer": "Spacebar"
     },
     {
-      "id": 49,
-      "category": "Keyboard",
-      "question": "Which key combination saves a document quickly?",
-      "options": [
-        "Ctrl + A",
-        "Ctrl + S",
-        "Ctrl + D",
-        "Ctrl + L"
-      ],
-      "answer": "Ctrl + S"
+      "id": 10,
+      "question": "What are the keys labeled A to Z called?",
+      "options": ["Function keys", "Alphabet keys", "Numeric keys", "Arrow keys"],
+      "answer": "Alphabet keys"
     },
-    {
-      "id": 50,
-      "category": "Keyboard",
-      "question": "What are the keys labeled F1 to F12 called?",
-      "options": [
-        "Function keys",
-        "Navigation keys",
-        "Alphabet keys",
-        "Number keys"
-      ],
-      "answer": "Function keys"
-    },
-    {
-      "id": 51,
-      "category": "Keyboard",
-      "question": "Which key moves the cursor one character to the left?",
-      "options": [
-        "Right arrow",
-        "Left arrow",
-        "Up arrow",
-        "Down arrow"
-      ],
-      "answer": "Left arrow"
-    },
-    {
-      "id": 52,
-      "category": "Keyboard",
-      "question": "Which keys are used to move the cursor up, down, left, or right?",
-      "options": [
-        "Alphabet keys",
-        "Number keys",
-        "Arrow keys",
-        "Spacebar"
-      ],
-      "answer": "Arrow keys"
-    },
-    {
-      "id": 53,
-      "category": "Keyboard",
-      "question": "What is the numeric keypad used for?",
-      "options": [
-        "Typing letters",
-        "Entering numbers quickly",
-        "Typing symbols only",
-        "Opening menus"
-      ],
-      "answer": "Entering numbers quickly"
-    },
-    {
-      "id": 54,
-      "category": "Keyboard",
-      "question": "Which key is used to turn on the computer from the keyboard on some systems?",
-      "options": [
-        "Power key",
-        "F12",
-        "Esc key",
-        "Tab key"
-      ],
-      "answer": "Power key"
-    },
-    {
-      "id": 55,
-      "category": "Keyboard",
-      "question": "What is touch typing?",
-      "options": [
-        "Typing with one finger only",
-        "Typing without looking at the keyboard",
-        "Typing with the mouse",
-        "Typing on a touchscreen only"
-      ],
-      "answer": "Typing without looking at the keyboard"
-    },
-    {
-      "id": 56,
-      "category": "Keyboard",
-      "question": "Which finger is used to press the spacebar?",
-      "options": [
-        "Index finger",
-        "Thumb",
-        "Little finger",
-        "Ring finger"
-      ],
-      "answer": "Thumb"
-    },
-    {
-      "id": 57,
-      "category": "Keyboard",
-      "question": "Which key combination locks your computer screen?",
-      "options": [
-        "Ctrl + L",
-        "Windows + L",
-        "Ctrl + Shift + P",
-        "Alt + X"
-      ],
-      "answer": "Windows + L"
-    },
-    {
-      "id": 58,
-      "category": "Keyboard",
-      "question": "Which key is used to make a single capital letter?",
-      "options": [
-        "Shift key",
-        "Tab key",
-        "Alt key",
-        "Fn key"
-      ],
-      "answer": "Shift key"
-    },
-    {
-      "id": 59,
-      "category": "Keyboard",
-      "question": "Which key is used to open the Start Menu in Windows?",
-      "options": [
-        "Windows key",
-        "Alt key",
-        "Ctrl key",
-        "Esc key"
-      ],
-      "answer": "Windows key"
-    },
-    {
-      "id": 60,
-      "category": "Keyboard",
-      "question": "Which function key often helps open the Help window in programs?",
-      "options": [
-        "F1",
-        "F2",
-        "F5",
-        "F12"
-      ],
-      "answer": "F1"
-    },
-    {
-      "id": 61,
-      "category": "Keyboard",
-      "question": "Which key combination refreshes a webpage?",
-      "options": [
-        "Ctrl + R or F5",
-        "Ctrl + E",
-        "Ctrl + H",
-        "Ctrl + N"
-      ],
-      "answer": "Ctrl + R or F5"
-    },
-    {
-      "id": 62,
-      "category": "Keyboard",
-      "question": "Which key combination opens a new tab in a web browser?",
-      "options": [
-        "Ctrl + N",
-        "Ctrl + T",
-        "Ctrl + D",
-        "Ctrl + M"
-      ],
-      "answer": "Ctrl + T"
-    },
-    {
-      "id": 63,
-      "category": "Keyboard",
-      "question": "Which key combination closes the current window or tab?",
-      "options": [
-        "Ctrl + W",
-        "Ctrl + P",
-        "Ctrl + L",
-        "Ctrl + X"
-      ],
-      "answer": "Ctrl + W"
-    },
-    {
-      "id": 64,
-      "category": "Keyboard",
-      "question": "Which key is used to toggle between open applications?",
-      "options": [
-        "Alt + Tab",
-        "Ctrl + Tab",
-        "Shift + Esc",
-        "Windows + D"
-      ],
-      "answer": "Alt + Tab"
-    },
-    {
-      "id": 65,
-      "category": "Keyboard",
-      "question": "What are shortcut keys?",
-      "options": [
-        "Keys used to play games",
-        "Key combinations that perform tasks quickly",
-        "Keys for typing names",
-        "Keys for drawing"
-      ],
-      "answer": "Key combinations that perform tasks quickly"
-    },
-    {
-      "id": 66,
-      "category": "Keyboard",
-      "question": "Which key combination opens Task Manager in Windows?",
-      "options": [
-        "Ctrl + Shift + Esc",
-        "Ctrl + Alt + T",
-        "Alt + F4",
-        "Ctrl + R"
-      ],
-      "answer": "Ctrl + Shift + Esc"
-    },
-    {
-      "id": 67,
-      "category": "Keyboard",
-      "question": "What is the purpose of the Num Lock key?",
-      "options": [
-        "To turn the numeric keypad on or off",
-        "To lock letters in uppercase",
-        "To print pages",
-        "To restart the computer"
-      ],
-      "answer": "To turn the numeric keypad on or off"
-    },
-    {
-      "id": 68,
-      "category": "Keyboard",
-      "question": "Which function key is often used to rename files or folders?",
-      "options": [
-        "F1",
-        "F2",
-        "F3",
-        "F4"
-      ],
-      "answer": "F2"
-    },
-    {
-      "id": 69,
-      "category": "Keyboard",
-      "question": "Which combination opens the Run dialog box in Windows?",
-      "options": [
-        "Windows + R",
-        "Ctrl + R",
-        "Alt + R",
-        "Shift + R"
-      ],
-      "answer": "Windows + R"
-    },
-    {
-      "id": 70,
-      "category": "Keyboard",
-      "question": "Which key combination minimizes all open windows?",
-      "options": [
-        "Windows + D",
-        "Ctrl + D",
-        "Alt + F4",
-        "Ctrl + M"
-      ],
-      "answer": "Windows + D"
-    },
-
-{
-  "category": "ICT",
-  "questions": [
     {
       "id": 11,
-      "question": "Which of the following is used to access the internet?",
-      "options": ["Mouse", "Monitor", "Browser", "Keyboard"],
-      "answer": "Browser"
+      "question": "Which key is used to move the cursor to the beginning of a line?",
+      "options": ["Home", "End", "Ctrl", "Shift"],
+      "answer": "Home"
     },
     {
       "id": 12,
-      "question": "What does ICT stand for?",
-      "options": [
-        "Internet Computer Technology",
-        "Information and Communication Technology",
-        "Interactive Communication Tools",
-        "Intelligent Coding Techniques"
-      ],
-      "answer": "Information and Communication Technology"
+      "question": "Which key moves the cursor to the end of a line?",
+      "options": ["Home", "End", "Page Up", "Enter"],
+      "answer": "End"
     },
     {
       "id": 13,
-      "question": "Which device is used to print documents from the computer?",
-      "options": ["Scanner", "Monitor", "Printer", "Speaker"],
-      "answer": "Printer"
+      "question": "Which key is used to undo an action?",
+      "options": ["Ctrl + Z", "Ctrl + C", "Ctrl + X", "Ctrl + S"],
+      "answer": "Ctrl + Z"
     },
     {
       "id": 14,
-      "question": "A computer that can be carried easily from one place to another is called a ____.",
-      "options": ["Desktop", "Laptop", "Server", "Mainframe"],
-      "answer": "Laptop"
+      "question": "Which key combination is used to save a file?",
+      "options": ["Ctrl + S", "Ctrl + P", "Ctrl + C", "Ctrl + X"],
+      "answer": "Ctrl + S"
     },
     {
       "id": 15,
-      "question": "The main storage area of the computer is called ____.",
-      "options": ["Monitor", "RAM", "CPU", "Hard disk"],
-      "answer": "Hard disk"
+      "question": "Which key is used to print a document?",
+      "options": ["Ctrl + V", "Ctrl + P", "Ctrl + X", "Ctrl + N"],
+      "answer": "Ctrl + P"
     },
     {
       "id": 16,
-      "question": "Which of these is an example of an output device?",
-      "options": ["Keyboard", "Mouse", "Monitor", "Pen drive"],
-      "answer": "Monitor"
+      "question": "Which key is used to open a new document?",
+      "options": ["Ctrl + O", "Ctrl + N", "Ctrl + P", "Ctrl + A"],
+      "answer": "Ctrl + N"
     },
     {
       "id": 17,
-      "question": "Which of these is a part of computer hardware?",
-      "options": ["Windows", "MS Word", "Keyboard", "Excel"],
-      "answer": "Keyboard"
+      "question": "Which key is used to select all text?",
+      "options": ["Ctrl + A", "Ctrl + C", "Ctrl + V", "Ctrl + D"],
+      "answer": "Ctrl + A"
     },
     {
       "id": 18,
-      "question": "Which part of the computer is used to type letters and numbers?",
-      "options": ["Mouse", "Keyboard", "Monitor", "CPU"],
-      "answer": "Keyboard"
+      "question": "Which keys are used for typing numbers?",
+      "options": ["Function keys", "Arrow keys", "Numeric keys", "Control keys"],
+      "answer": "Numeric keys"
     },
     {
       "id": 19,
-      "question": "The brain of the computer is called the ____.",
-      "options": ["Monitor", "CPU", "RAM", "Printer"],
-      "answer": "CPU"
+      "question": "Which keys help move the cursor up, down, left, or right?",
+      "options": ["Arrow keys", "Shift keys", "Function keys", "Caps Lock"],
+      "answer": "Arrow keys"
     },
     {
       "id": 20,
-      "question": "Which of these is a storage device?",
-      "options": ["Mouse", "Flash drive", "Monitor", "Keyboard"],
-      "answer": "Flash drive"
+      "question": "Which keys are labeled F1 to F12?",
+      "options": ["Function keys", "Command keys", "Arrow keys", "Number keys"],
+      "answer": "Function keys"
     },
     {
       "id": 21,
-      "question": "Which of the following is not an input device?",
-      "options": ["Mouse", "Keyboard", "Monitor", "Scanner"],
-      "answer": "Monitor"
+      "question": "Which key is used to erase letters to the left of the cursor?",
+      "options": ["Delete", "Backspace", "Shift", "Ctrl"],
+      "answer": "Backspace"
     },
     {
       "id": 22,
-      "question": "What is the use of the Internet?",
-      "options": [
-        "Cooking food",
-        "Playing outdoor games",
-        "Sharing information and communication",
-        "Washing clothes"
-      ],
-      "answer": "Sharing information and communication"
+      "question": "Which key combination is used to find text in a document?",
+      "options": ["Ctrl + F", "Ctrl + H", "Ctrl + E", "Ctrl + N"],
+      "answer": "Ctrl + F"
     },
     {
       "id": 23,
-      "question": "Which of these helps protect the computer from viruses?",
-      "options": ["Antivirus", "Games", "Music", "Video player"],
-      "answer": "Antivirus"
+      "question": "Which key is used to open the Start menu on Windows?",
+      "options": ["Alt", "Ctrl", "Windows key", "Esc"],
+      "answer": "Windows key"
     },
     {
       "id": 24,
-      "question": "What is the full meaning of CPU?",
-      "options": [
-        "Central Processing Unit",
-        "Control Processing Unit",
-        "Central Programming Utility",
-        "Computer Power Unit"
-      ],
-      "answer": "Central Processing Unit"
+      "question": "Which key is used to refresh a page?",
+      "options": ["Ctrl + R", "Ctrl + P", "Ctrl + V", "Ctrl + X"],
+      "answer": "Ctrl + R"
     },
     {
       "id": 25,
-      "question": "Which key combination is used to copy a file or text?",
-      "options": ["Ctrl + X", "Ctrl + C", "Ctrl + V", "Ctrl + S"],
-      "answer": "Ctrl + C"
+      "question": "Which key combination locks your computer screen?",
+      "options": ["Ctrl + L", "Alt + L", "Windows + L", "Shift + L"],
+      "answer": "Windows + L"
     },
     {
       "id": 26,
-      "question": "Which of these is an example of system software?",
-      "options": ["MS Word", "Windows", "Excel", "PowerPoint"],
-      "answer": "Windows"
+      "question": "Which key combination is used to open Task Manager?",
+      "options": ["Ctrl + T", "Ctrl + Shift + Esc", "Ctrl + S", "Ctrl + N"],
+      "answer": "Ctrl + Shift + Esc"
     },
     {
       "id": 27,
-      "question": "Which of these stores data permanently?",
-      "options": ["RAM", "Cache", "Hard disk", "Clipboard"],
-      "answer": "Hard disk"
+      "question": "Which key combination minimizes all open windows?",
+      "options": ["Windows + M", "Ctrl + M", "Alt + M", "Shift + M"],
+      "answer": "Windows + M"
     },
     {
       "id": 28,
-      "question": "Which device is used to show visual output from a computer?",
-      "options": ["Printer", "Monitor", "Scanner", "Speaker"],
-      "answer": "Monitor"
+      "question": "Which key combination is used to close an active window?",
+      "options": ["Alt + F4", "Ctrl + F4", "Ctrl + X", "Shift + F4"],
+      "answer": "Alt + F4"
     },
     {
       "id": 29,
-      "question": "Which of the following is used for video calls?",
-      "options": ["Mouse", "Speaker", "Webcam", "Keyboard"],
-      "answer": "Webcam"
+      "question": "Which key combination opens a new browser tab?",
+      "options": ["Ctrl + N", "Ctrl + T", "Ctrl + W", "Ctrl + P"],
+      "answer": "Ctrl + T"
     },
     {
       "id": 30,
-      "question": "Which of these is a computer network type?",
-      "options": ["LAN", "MAN", "WAN", "All of the above"],
-      "answer": "All of the above"
+      "question": "Which key combination closes a browser tab?",
+      "options": ["Ctrl + W", "Ctrl + T", "Ctrl + P", "Ctrl + X"],
+      "answer": "Ctrl + W"
     },
     {
       "id": 31,
-      "question": "What should you do when your computer freezes?",
-      "options": [
-        "Hit the monitor",
-        "Turn off and restart safely",
-        "Ignore it",
-        "Unplug without shutdown"
-      ],
-      "answer": "Turn off and restart safely"
+      "question": "Which key combination reopens a closed browser tab?",
+      "options": ["Ctrl + Shift + T", "Ctrl + R", "Ctrl + Z", "Ctrl + O"],
+      "answer": "Ctrl + Shift + T"
     },
     {
       "id": 32,
-      "question": "Which part of a computer shows pictures and text?",
-      "options": ["CPU", "Monitor", "Mouse", "Keyboard"],
-      "answer": "Monitor"
+      "question": "Which key combination is used to switch between open windows?",
+      "options": ["Alt + Tab", "Ctrl + Tab", "Shift + Tab", "Ctrl + Shift"],
+      "answer": "Alt + Tab"
     },
     {
       "id": 33,
-      "question": "Which device is used to hear sound from a computer?",
-      "options": ["Microphone", "Speaker", "Scanner", "Keyboard"],
-      "answer": "Speaker"
+      "question": "Which key combination is used to screenshot the active window?",
+      "options": ["Alt + Print Screen", "Ctrl + Print Screen", "Shift + S", "Alt + C"],
+      "answer": "Alt + Print Screen"
     },
     {
       "id": 34,
-      "question": "Which program is used to create documents?",
-      "options": ["MS Excel", "MS Word", "PowerPoint", "Paint"],
-      "answer": "MS Word"
+      "question": "Which key opens the Run dialog box?",
+      "options": ["Ctrl + R", "Windows + R", "Alt + R", "Shift + R"],
+      "answer": "Windows + R"
     },
     {
       "id": 35,
-      "question": "Which device connects a computer to the internet?",
-      "options": ["Switch", "Router", "Keyboard", "Mouse"],
-      "answer": "Router"
+      "question": "Which key combination selects the address bar in a browser?",
+      "options": ["Ctrl + A", "Alt + D", "Ctrl + E", "Ctrl + P"],
+      "answer": "Alt + D"
     },
     {
       "id": 36,
-      "question": "Which is an example of a web browser?",
-      "options": ["Google Chrome", "MS Word", "PowerPoint", "Windows"],
-      "answer": "Google Chrome"
+      "question": "Which key combination switches to full-screen mode in a browser?",
+      "options": ["F11", "F5", "F12", "Ctrl + F"],
+      "answer": "F11"
     },
     {
       "id": 37,
-      "question": "What should you not share online?",
-      "options": [
-        "Games",
-        "Your password and personal details",
-        "Pictures of animals",
-        "Educational videos"
-      ],
-      "answer": "Your password and personal details"
+      "question": "Which key combination is used to open File Explorer?",
+      "options": ["Windows + E", "Ctrl + E", "Alt + E", "Shift + E"],
+      "answer": "Windows + E"
     },
     {
       "id": 38,
-      "question": "Which of these is a safe internet practice?",
-      "options": [
-        "Using strong passwords",
-        "Clicking all pop-up ads",
-        "Sharing passwords",
-        "Downloading from unknown sites"
-      ],
-      "answer": "Using strong passwords"
+      "question": "Which key combination is used to select multiple files at once?",
+      "options": ["Ctrl + Click", "Alt + Click", "Shift + S", "Ctrl + Z"],
+      "answer": "Ctrl + Click"
     },
     {
       "id": 39,
-      "question": "What is used to move items on a computer screen?",
-      "options": ["Speaker", "Mouse", "Keyboard", "Monitor"],
-      "answer": "Mouse"
+      "question": "Which key is used to open the context menu?",
+      "options": ["Ctrl", "Shift", "Menu key", "Windows key"],
+      "answer": "Menu key"
     },
     {
       "id": 40,
-      "question": "Which storage device is small and portable?",
-      "options": ["Printer", "Flash drive", "CPU", "Monitor"],
-      "answer": "Flash drive"
-    },
-    {
-      "id": 41,
-      "question": "Which is the correct order of booting a computer?",
-      "options": [
-        "Press power → Load OS → Ready to use",
-        "Ready to use → Load OS → Press power",
-        "Load OS → Press power → Ready to use",
-        "None of the above"
-      ],
-      "answer": "Press power → Load OS → Ready to use"
-    },
-    {
-      "id": 42,
-      "question": "Which of the following is used to create presentations?",
-      "options": ["Excel", "PowerPoint", "MS Word", "Notepad"],
-      "answer": "PowerPoint"
-    },
-    {
-      "id": 43,
-      "question": "Which of these is a search engine?",
-      "options": ["Google", "Facebook", "WhatsApp", "Zoom"],
-      "answer": "Google"
-    },
-    {
-      "id": 44,
-      "question": "The electronic mail service is also called ____.",
-      "options": ["SMS", "Chat", "E-mail", "Video call"],
-      "answer": "E-mail"
-    },
-    {
-      "id": 45,
-      "question": "What should you do before shutting down your computer?",
-      "options": [
-        "Remove all cables",
-        "Close all running programs",
-        "Press random keys",
-        "Turn off monitor only"
-      ],
-      "answer": "Close all running programs"
-    },
-    {
-      "id": 46,
-      "question": "Which one is not an example of software?",
-      "options": ["Windows", "Keyboard", "Excel", "Word"],
-      "answer": "Keyboard"
-    },
-    {
-      "id": 47,
-      "question": "Which of these helps us store information online?",
-      "options": ["Google Drive", "Calculator", "Paint", "Notepad"],
-      "answer": "Google Drive"
-    },
-    {
-      "id": 48,
-      "question": "Which of these is a benefit of ICT in education?",
-      "options": [
-        "Helps students learn faster",
-        "Makes studying boring",
-        "Reduces computer skills",
-        "Encourages laziness"
-      ],
-      "answer": "Helps students learn faster"
-    },
-    {
-      "id": 49,
-      "question": "Which key combination is used to paste copied text?",
-      "options": ["Ctrl + C", "Ctrl + X", "Ctrl + V", "Ctrl + Z"],
-      "answer": "Ctrl + V"
-    },
-    {
-      "id": 50,
-      "question": "ICT helps people to ____.",
-      "options": [
-        "Communicate and share information",
-        "Sleep more",
-        "Cook faster",
-        "Drive cars"
-      ],
-      "answer": "Communicate and share information"
+      "question": "Which key combination opens the search box?",
+      "options": ["Windows + S", "Ctrl + S", "Alt + S", "Shift + S"],
+      "answer": "Windows + S"
     }
   ]
 }
