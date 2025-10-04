@@ -39,6 +39,9 @@
   class="ml-4 px-4 py-1.5 border border-blue-600 rounded-full text-blue-600 text-sm font-medium bg-white transition duration-200 ease-in-out hover:bg-blue-50 active:scale-95 active:shadow-[0_0_10px_rgba(59,130,246,0.7)]">
   Sign Up
 </button>
+   
+<!-- Blinking Features Button -->
+<a href="features.html" class="blinking-button">Features</a>
         
   </div>
 
@@ -266,5 +269,33 @@
 
 <!-- Shared Auth Script -->
 <script src="auth.js"></script> 
+
+<style>
+.blinking-button {
+  display: inline-block;
+  background-color: #007bff; /* Blue */
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 16px;
+  text-align: center;
+  animation: blink 1s infinite;
+  transition: transform 0.2s ease-in-out;
+}
+
+.blinking-button:hover {
+  transform: scale(1.05);
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Blinking animation */
+@keyframes blink {
+  0%, 50%, 100% { opacity: 1; }
+  25%, 75% { opacity: 0.3; }
+}
+</style>
+  
 </body>
 </html>
