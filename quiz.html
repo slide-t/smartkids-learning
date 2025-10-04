@@ -2,46 +2,192 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SmartKids Quiz</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 font-sans">
 
-  <!-- Header -->
-  <nav class="bg-blue-600 text-white p-4 flex justify-between">
-    <h1 class="font-bold">SmartKids Quiz</h1>
-    <div class="space-x-2">
-      <a href="classes.html" class="bg-green-500 px-3 py-1 rounded">Keyboard Tutor</a>
-      <a href="mouse.html" class="bg-yellow-500 px-3 py-1 rounded">Mouse Practice</a>
+  <!-- Navbar -->
+  <nav class="bg-blue-600 text-white p-4 shadow flex justify-between items-center">
+    <h1 class="text-xl font-bold">SmartKids Quiz</h1>
+    <div class="flex space-x-4">
+      <a href="classes.html" class="bg-green-500 px-3 py-1 rounded hover:bg-green-600">Keyboard Tutor</a>
+      <a href="mouse.html" class="bg-purple-500 px-3 py-1 rounded hover:bg-purple-600">Mouse Practice</a>
     </div>
   </nav>
 
   <!-- Quiz Container -->
-  <div class="container mx-auto p-6">
-    <h2 class="text-2xl font-bold mb-4">Answer the questions below</h2>
+  <div class="container mx-auto mt-6 p-4 bg-white rounded shadow" id="quizContainer">
+    <h2 class="text-2xl font-bold mb-4 text-center text-blue-700">🧩 SmartKids Quiz Challenge</h2>
 
-    <!-- Category selector -->
-    <div class="mb-4">
-      <label for="categorySelect" class="block mb-2 font-semibold">Choose Quiz Category:</label>
-      <select id="categorySelect" class="border rounded p-2 w-full max-w-sm">
-        <option value="mouse">Mouse</option>
-        <option value="keyboard">Keyboard</option>
-        <option value="ict">ICT</option>
-      </select>
-    </div>
+    <form id="quizForm" class="space-y-6"></form>
 
-    <form id="quizForm" class="grid gap-4 md:grid-cols-2"></form>
-
+    <!-- Navigation Buttons -->
     <div class="flex justify-between mt-6">
       <button id="prevBtn" class="bg-gray-400 text-white px-4 py-2 rounded hidden">Previous</button>
       <button id="submitBtn" class="bg-blue-600 text-white px-4 py-2 rounded">Submit</button>
       <button id="nextBtn" class="bg-green-600 text-white px-4 py-2 rounded hidden">Next</button>
     </div>
-
-    <div id="result" class="mt-4 text-lg font-bold text-center"></div>
-    <div id="reportCard" class="mt-6 hidden bg-white shadow rounded p-4"></div>
   </div>
 
-  <script src="quiz.js"></script>
+  <!-- Report Card -->
+  <div class="container mx-auto mt-6 p-4 bg-white rounded shadow hidden" id="reportCard">
+    <h2 class="text-xl font-bold mb-4">📊 Mini Report Card</h2>
+    <p id="scoreSummary" class="text-lg font-semibold mb-2"></p>
+    <p id="feedbackMessage" class="text-md"></p>
+  </div>
+
+  <script>
+    let allQuestions = [];
+    let currentPage = 0;
+    const pageSize = 5;
+    let totalScore = 0;
+
+    const quizContainer = document.getElementById("quizContainer");
+    const quizForm = document.getElementById("quizForm");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const submitBtn = document.getElementById("submitBtn");
+    const reportCard = document.getElementById("reportCard");
+    const scoreSummary = document.getElementById("scoreSummary");
+    const feedbackMessage = document.getElementById("feedbackMessage");
+
+    // ------------------ Load Questions ------------------
+    async function loadQuestions() {
+      const res = await fetch("data/quiz.json");
+      const data = await res.json();
+      // shuffle all questions for fairness
+      allQuestions = shuffleArray(data.quiz);
+      renderPage();
+    }
+
+    // ------------------ Render Page ------------------
+    function renderPage() {
+      quizForm.innerHTML = "";
+      const start = currentPage * pageSize;
+      const end = start + pageSize;
+      const pageQuestions = allQuestions.slice(start, end);
+
+      pageQuestions.forEach((q, index) => {
+        const div = document.createElement("div");
+        div.classList.add("p-4", "border", "rounded", "bg-gray-50");
+        div.innerHTML = `
+          <p class="font-semibold mb-2">${start + index + 1}. ${q.question}</p>
+          ${shuffleArray(q.options).map(opt => `
+            <label class="block cursor-pointer">
+              <input type="radio" name="q${q.id}" value="${opt}" class="mr-2">
+              ${opt}
+            </label>
+          `).join("")}
+        `;
+        quizForm.appendChild(div);
+      });
+
+      prevBtn.classList.toggle("hidden", currentPage === 0);
+      nextBtn.classList.add("hidden");
+    }
+
+    // ------------------ Submit Logic ------------------
+    submitBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      let score = 0;
+      const start = currentPage * pageSize;
+      const end = start + pageSize;
+      const pageQuestions = allQuestions.slice(start, end);
+
+      pageQuestions.forEach(q => {
+        const selected = quizForm.querySelector(`input[name="q${q.id}"]:checked`);
+        if (selected && selected.value === q.answer) score++;
+      });
+
+      totalScore += score;
+      const totalAttempted = Math.min(end, allQuestions.length);
+      const totalPossible = totalAttempted;
+
+      const percentage = Math.round((totalScore / totalPossible) * 100);
+
+      alert(`✅ You scored ${score} out of ${pageQuestions.length} on this page.`);
+
+      // Feedback message
+      if (percentage < 50) {
+        feedbackMessage.textContent = "💪 Keep trying! You can do better!";
+      } else if (percentage < 80) {
+        feedbackMessage.textContent = "👏 Good effort! You're improving!";
+      } else if (percentage < 90) {
+        feedbackMessage.textContent = "🌟 Great work! Almost perfect!";
+      } else {
+        feedbackMessage.textContent = "🏆 Excellent! You are a SmartKid star!";
+      }
+
+      // Move to next page or finish
+      if (end < allQuestions.length) {
+        currentPage++;
+        renderPage();
+      } else {
+        finishQuiz(percentage);
+      }
+    });
+
+    // ------------------ Finish Quiz ------------------
+    function finishQuiz(percentage) {
+      quizContainer.classList.add("hidden");
+      reportCard.classList.remove("hidden");
+
+      scoreSummary.textContent = `🎯 Final Score: ${totalScore} / ${allQuestions.length} (${percentage}%)`;
+
+      if (percentage < 88) {
+        alert("😅 You scored below 22 out of 25. Let's try again!");
+        restartQuiz();
+      } else {
+        saveScore(totalScore, allQuestions.length, percentage);
+      }
+    }
+
+    // ------------------ Restart Quiz ------------------
+    function restartQuiz() {
+      totalScore = 0;
+      currentPage = 0;
+      shuffleArray(allQuestions);
+      reportCard.classList.add("hidden");
+      quizContainer.classList.remove("hidden");
+      renderPage();
+    }
+
+    // ------------------ Shuffle Helper ------------------
+    function shuffleArray(array) {
+      return array.sort(() => Math.random() - 0.5);
+    }
+
+    // ------------------ IndexedDB Save ------------------
+    function saveScore(score, total, percentage) {
+      const request = indexedDB.open("SmartKidsDB", 1);
+      request.onupgradeneeded = (event) => {
+        const db = event.target.result;
+        if (!db.objectStoreNames.contains("quizScores")) {
+          const store = db.createObjectStore("quizScores", { keyPath: "id", autoIncrement: true });
+          store.createIndex("userId", "userId", { unique: false });
+          store.createIndex("category", "category", { unique: false });
+        }
+      };
+
+      request.onsuccess = (event) => {
+        const db = event.target.result;
+        const tx = db.transaction("quizScores", "readwrite");
+        const store = tx.objectStore("quizScores");
+        store.add({
+          userId: localStorage.getItem("currentUserId") || "guest",
+          name: localStorage.getItem("currentUserName") || "Guest",
+          score,
+          total,
+          percentage,
+          date: new Date().toISOString()
+        });
+      };
+    }
+
+    // ------------------ Start Quiz ------------------
+    loadQuestions();
+  </script>
 </body>
 </html>
