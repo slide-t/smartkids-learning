@@ -1,31 +1,48 @@
 {
-  "categories": {
-    "mouse": [
-      {
-        "id": 1,
-        "question": "Sample mouse question?",
-        "options": ["Option A", "Option B", "Option C", "Option D"],
-        "answer": "Option A"
-      }
-      // ⬅️ Add up to 30 mouse questions here
-    ],
-    "keyboard": [
-      {
-        "id": 1,
-        "question": "Sample keyboard question?",
-        "options": ["Option A", "Option B", "Option C", "Option D"],
-        "answer": "Option B"
-      }
-      // ⬅️ Add up to 40 keyboard questions here
-    ],
-    "ict": [
-      {
-        "id": 1,
-        "question": "Sample ICT question?",
-        "options": ["Option A", "Option B", "Option C", "Option D"],
-        "answer": "Option C"
-      }
-      // ⬅️ Add up to 50 ICT questions here
-    ]
-  }
+  "mouse": [
+    {
+      "id": "m1",
+      "question": "Which button is used to select items on the screen?",
+      "options": ["Left button", "Right button", "Scroll wheel"],
+      "answer": "Left button"
+    },
+    {
+      "id": "m2",
+      "question": "What does double-clicking do?",
+      "options": ["Opens a file or program", "Closes the computer", "Deletes files"],
+      "answer": "Opens a file or program"
+    }
+  ],
+  "keyboard": [
+    {
+      "id": "k1",
+      "question": "Which key is used to remove text to the left of the cursor?",
+      "options": ["Delete", "Backspace", "Shift"],
+      "answer": "Backspace"
+    },
+    {
+      "id": "k2",
+      "question": "Which key is used to start a new line?",
+      "options": ["Spacebar", "Enter", "Ctrl"],
+      "answer": "Enter"
+    }
+  ],
+  "ict": [
+    {
+      "id": "i1",
+      "question": "ICT stands for?",
+      "options": [
+        "Information and Computer Technology",
+        "Information and Communication Technology",
+        "Internet and Computing Tools"
+      ],
+      "answer": "Information and Communication Technology"
+    },
+    {
+      "id": "i2",
+      "question": "Which of these is a storage device?",
+      "options": ["Monitor", "Keyboard", "Flash drive"],
+      "answer": "Flash drive"
+    }
+  ]
 }
