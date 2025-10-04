@@ -841,5 +841,300 @@
         "Ctrl + M"
       ],
       "answer": "Windows + D"
-    }
+    },
 
+{
+  "category": "ICT",
+  "questions": [
+    {
+      "id": 11,
+      "question": "Which of the following is used to access the internet?",
+      "options": ["Mouse", "Monitor", "Browser", "Keyboard"],
+      "answer": "Browser"
+    },
+    {
+      "id": 12,
+      "question": "What does ICT stand for?",
+      "options": [
+        "Internet Computer Technology",
+        "Information and Communication Technology",
+        "Interactive Communication Tools",
+        "Intelligent Coding Techniques"
+      ],
+      "answer": "Information and Communication Technology"
+    },
+    {
+      "id": 13,
+      "question": "Which device is used to print documents from the computer?",
+      "options": ["Scanner", "Monitor", "Printer", "Speaker"],
+      "answer": "Printer"
+    },
+    {
+      "id": 14,
+      "question": "A computer that can be carried easily from one place to another is called a ____.",
+      "options": ["Desktop", "Laptop", "Server", "Mainframe"],
+      "answer": "Laptop"
+    },
+    {
+      "id": 15,
+      "question": "The main storage area of the computer is called ____.",
+      "options": ["Monitor", "RAM", "CPU", "Hard disk"],
+      "answer": "Hard disk"
+    },
+    {
+      "id": 16,
+      "question": "Which of these is an example of an output device?",
+      "options": ["Keyboard", "Mouse", "Monitor", "Pen drive"],
+      "answer": "Monitor"
+    },
+    {
+      "id": 17,
+      "question": "Which of these is a part of computer hardware?",
+      "options": ["Windows", "MS Word", "Keyboard", "Excel"],
+      "answer": "Keyboard"
+    },
+    {
+      "id": 18,
+      "question": "Which part of the computer is used to type letters and numbers?",
+      "options": ["Mouse", "Keyboard", "Monitor", "CPU"],
+      "answer": "Keyboard"
+    },
+    {
+      "id": 19,
+      "question": "The brain of the computer is called the ____.",
+      "options": ["Monitor", "CPU", "RAM", "Printer"],
+      "answer": "CPU"
+    },
+    {
+      "id": 20,
+      "question": "Which of these is a storage device?",
+      "options": ["Mouse", "Flash drive", "Monitor", "Keyboard"],
+      "answer": "Flash drive"
+    },
+    {
+      "id": 21,
+      "question": "Which of the following is not an input device?",
+      "options": ["Mouse", "Keyboard", "Monitor", "Scanner"],
+      "answer": "Monitor"
+    },
+    {
+      "id": 22,
+      "question": "What is the use of the Internet?",
+      "options": [
+        "Cooking food",
+        "Playing outdoor games",
+        "Sharing information and communication",
+        "Washing clothes"
+      ],
+      "answer": "Sharing information and communication"
+    },
+    {
+      "id": 23,
+      "question": "Which of these helps protect the computer from viruses?",
+      "options": ["Antivirus", "Games", "Music", "Video player"],
+      "answer": "Antivirus"
+    },
+    {
+      "id": 24,
+      "question": "What is the full meaning of CPU?",
+      "options": [
+        "Central Processing Unit",
+        "Control Processing Unit",
+        "Central Programming Utility",
+        "Computer Power Unit"
+      ],
+      "answer": "Central Processing Unit"
+    },
+    {
+      "id": 25,
+      "question": "Which key combination is used to copy a file or text?",
+      "options": ["Ctrl + X", "Ctrl + C", "Ctrl + V", "Ctrl + S"],
+      "answer": "Ctrl + C"
+    },
+    {
+      "id": 26,
+      "question": "Which of these is an example of system software?",
+      "options": ["MS Word", "Windows", "Excel", "PowerPoint"],
+      "answer": "Windows"
+    },
+    {
+      "id": 27,
+      "question": "Which of these stores data permanently?",
+      "options": ["RAM", "Cache", "Hard disk", "Clipboard"],
+      "answer": "Hard disk"
+    },
+    {
+      "id": 28,
+      "question": "Which device is used to show visual output from a computer?",
+      "options": ["Printer", "Monitor", "Scanner", "Speaker"],
+      "answer": "Monitor"
+    },
+    {
+      "id": 29,
+      "question": "Which of the following is used for video calls?",
+      "options": ["Mouse", "Speaker", "Webcam", "Keyboard"],
+      "answer": "Webcam"
+    },
+    {
+      "id": 30,
+      "question": "Which of these is a computer network type?",
+      "options": ["LAN", "MAN", "WAN", "All of the above"],
+      "answer": "All of the above"
+    },
+    {
+      "id": 31,
+      "question": "What should you do when your computer freezes?",
+      "options": [
+        "Hit the monitor",
+        "Turn off and restart safely",
+        "Ignore it",
+        "Unplug without shutdown"
+      ],
+      "answer": "Turn off and restart safely"
+    },
+    {
+      "id": 32,
+      "question": "Which part of a computer shows pictures and text?",
+      "options": ["CPU", "Monitor", "Mouse", "Keyboard"],
+      "answer": "Monitor"
+    },
+    {
+      "id": 33,
+      "question": "Which device is used to hear sound from a computer?",
+      "options": ["Microphone", "Speaker", "Scanner", "Keyboard"],
+      "answer": "Speaker"
+    },
+    {
+      "id": 34,
+      "question": "Which program is used to create documents?",
+      "options": ["MS Excel", "MS Word", "PowerPoint", "Paint"],
+      "answer": "MS Word"
+    },
+    {
+      "id": 35,
+      "question": "Which device connects a computer to the internet?",
+      "options": ["Switch", "Router", "Keyboard", "Mouse"],
+      "answer": "Router"
+    },
+    {
+      "id": 36,
+      "question": "Which is an example of a web browser?",
+      "options": ["Google Chrome", "MS Word", "PowerPoint", "Windows"],
+      "answer": "Google Chrome"
+    },
+    {
+      "id": 37,
+      "question": "What should you not share online?",
+      "options": [
+        "Games",
+        "Your password and personal details",
+        "Pictures of animals",
+        "Educational videos"
+      ],
+      "answer": "Your password and personal details"
+    },
+    {
+      "id": 38,
+      "question": "Which of these is a safe internet practice?",
+      "options": [
+        "Using strong passwords",
+        "Clicking all pop-up ads",
+        "Sharing passwords",
+        "Downloading from unknown sites"
+      ],
+      "answer": "Using strong passwords"
+    },
+    {
+      "id": 39,
+      "question": "What is used to move items on a computer screen?",
+      "options": ["Speaker", "Mouse", "Keyboard", "Monitor"],
+      "answer": "Mouse"
+    },
+    {
+      "id": 40,
+      "question": "Which storage device is small and portable?",
+      "options": ["Printer", "Flash drive", "CPU", "Monitor"],
+      "answer": "Flash drive"
+    },
+    {
+      "id": 41,
+      "question": "Which is the correct order of booting a computer?",
+      "options": [
+        "Press power → Load OS → Ready to use",
+        "Ready to use → Load OS → Press power",
+        "Load OS → Press power → Ready to use",
+        "None of the above"
+      ],
+      "answer": "Press power → Load OS → Ready to use"
+    },
+    {
+      "id": 42,
+      "question": "Which of the following is used to create presentations?",
+      "options": ["Excel", "PowerPoint", "MS Word", "Notepad"],
+      "answer": "PowerPoint"
+    },
+    {
+      "id": 43,
+      "question": "Which of these is a search engine?",
+      "options": ["Google", "Facebook", "WhatsApp", "Zoom"],
+      "answer": "Google"
+    },
+    {
+      "id": 44,
+      "question": "The electronic mail service is also called ____.",
+      "options": ["SMS", "Chat", "E-mail", "Video call"],
+      "answer": "E-mail"
+    },
+    {
+      "id": 45,
+      "question": "What should you do before shutting down your computer?",
+      "options": [
+        "Remove all cables",
+        "Close all running programs",
+        "Press random keys",
+        "Turn off monitor only"
+      ],
+      "answer": "Close all running programs"
+    },
+    {
+      "id": 46,
+      "question": "Which one is not an example of software?",
+      "options": ["Windows", "Keyboard", "Excel", "Word"],
+      "answer": "Keyboard"
+    },
+    {
+      "id": 47,
+      "question": "Which of these helps us store information online?",
+      "options": ["Google Drive", "Calculator", "Paint", "Notepad"],
+      "answer": "Google Drive"
+    },
+    {
+      "id": 48,
+      "question": "Which of these is a benefit of ICT in education?",
+      "options": [
+        "Helps students learn faster",
+        "Makes studying boring",
+        "Reduces computer skills",
+        "Encourages laziness"
+      ],
+      "answer": "Helps students learn faster"
+    },
+    {
+      "id": 49,
+      "question": "Which key combination is used to paste copied text?",
+      "options": ["Ctrl + C", "Ctrl + X", "Ctrl + V", "Ctrl + Z"],
+      "answer": "Ctrl + V"
+    },
+    {
+      "id": 50,
+      "question": "ICT helps people to ____.",
+      "options": [
+        "Communicate and share information",
+        "Sleep more",
+        "Cook faster",
+        "Drive cars"
+      ],
+      "answer": "Communicate and share information"
+    }
+  ]
+}
