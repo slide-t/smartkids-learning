@@ -1,5 +1,5 @@
-// auth.js — Enhanced SmartKids Registration Manager with Dynamic Name Display
-// -------------------------------------------------------------------
+// auth.js — Enhanced SmartKids Registration Manager
+// --------------------------------------------
 const modalContainer = document.getElementById("modalContainer") || (() => {
   const div = document.createElement("div");
   div.id = "modalContainer";
@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ---------- IndexedDB Setup ----------
   let db;
-  const request = indexedDB.open("SmartKidsDB", 2);
+  const request = indexedDB.open("SmartKidsDB", 2); // bump version for new schema
 
   request.onupgradeneeded = (event) => {
     db = event.target.result;
@@ -27,9 +27,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   request.onsuccess = (event) => {
     db = event.target.result;
-    cleanupExpiredUsers();
+    cleanupExpiredUsers(); // 🧹 remove old entries older than 5 days
     updateAuthButton();
-    displayUserCount();
+    displayUserCount(); // update total user count on page
   };
 
   request.onerror = (event) => console.error("IndexedDB error:", event.target.errorCode);
@@ -50,43 +50,21 @@ document.addEventListener("DOMContentLoaded", () => {
     updateAuthButton();
   }
 
-  // ---------- Update Auth Button + Name Display ----------
+  // ---------- Update Auth Button ----------
   function updateAuthButton() {
     if (!authBtn) return;
     const id = getCurrentUserId();
     const name = localStorage.getItem("currentUserName");
 
-    // create or reuse dynamic display element
-    let nameDisplay = document.getElementById("userNameDisplay");
-    if (!nameDisplay) {
-      nameDisplay = document.createElement("span");
-      nameDisplay.id = "userNameDisplay";
-      nameDisplay.className =
-        "ml-3 text-lime-500 font-semibold transition-all duration-700 ease-in-out";
-      authBtn.parentNode.insertBefore(nameDisplay, authBtn.nextSibling);
-    }
-
-    if (id && name) {
-      authBtn.textContent = "Logout";
+    if (id) {
+      authBtn.textContent = `Logout${name ? ` (${name})` : ""}`;
       authBtn.onclick = () => {
         clearCurrentUser();
         alert("👋 Logged out.");
       };
-
-      // glowing user name effect
-      nameDisplay.textContent = `👋 ${name}`;
-      nameDisplay.style.opacity = "0";
-      nameDisplay.style.transform = "scale(0.9)";
-      setTimeout(() => {
-        nameDisplay.style.opacity = "1";
-        nameDisplay.style.transform = "scale(1)";
-        nameDisplay.style.textShadow = "0 0 10px lime";
-      }, 150);
     } else {
       authBtn.textContent = "Sign Up";
       authBtn.onclick = () => window.toggleAuth && window.toggleAuth();
-      nameDisplay.textContent = "";
-      nameDisplay.style.textShadow = "";
     }
   }
 
@@ -110,11 +88,11 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  // ---------- Display User Count ----------
+  // ---------- Display User Count (on all practice pages) ----------
   function displayUserCount() {
     if (!db) return;
     const countDisplay = document.getElementById("userCount");
-    if (!countDisplay) return;
+    if (!countDisplay) return; // only show if placeholder exists
     const tx = db.transaction("users", "readonly");
     const store = tx.objectStore("users");
     const req = store.getAll();
@@ -126,7 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  // ---------- Expose Admin Helper ----------
+  // ---------- Expose For Admin Page ----------
   window.getAllRegisteredUsers = function (callback) {
     if (!db) return;
     const tx = db.transaction("users", "readonly");
@@ -147,6 +125,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
+    // Load modal dynamically from registration.html
     if (!document.getElementById("registrationModal")) {
       try {
         const res = await fetch("registration.html");
@@ -180,6 +159,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const userData = Object.fromEntries(formData.entries());
       userData.timestamp = Date.now();
 
+      // Save user in DB
       const tx = db.transaction("users", "readwrite");
       const store = tx.objectStore("users");
 
