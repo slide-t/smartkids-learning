@@ -1,4 +1,11 @@
 // auth.js
+
+const modalContainer = document.getElementById("modalContainer") || (() => {
+  const div = document.createElement("div");
+  div.id = "modalContainer";
+  document.body.appendChild(div);
+  return div;
+})();
 document.addEventListener("DOMContentLoaded", () => {
   const authBtn = document.getElementById("authBtn");
   const modalContainer = document.getElementById("modalContainer");
