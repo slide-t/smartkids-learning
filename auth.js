@@ -1,5 +1,5 @@
-// auth.js — SmartKids Registration + Persistent User Display
-// ---------------------------------------------------------
+// auth.js — SmartKids Registration + Persistent User Display (Fixed Version)
+// -------------------------------------------------------------------------
 const modalContainer = document.getElementById("modalContainer") || (() => {
   const div = document.createElement("div");
   div.id = "modalContainer";
@@ -45,8 +45,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function setCurrentUser(id, name) {
+    if (!name) name = "User";
     localStorage.setItem("currentUserId", id);
-    localStorage.setItem("currentUserName", name || "");
+    localStorage.setItem("currentUserName", name);
   }
 
   function clearCurrentUser() {
@@ -64,17 +65,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
     clearInterval(blinkInterval);
 
-    if (id) {
-      authBtn.textContent = `👤 ${name || "User"} (Logout)`;
+    if (id && name) {
+      // Display with icon + name
+      authBtn.innerHTML = `<span id="userLabel" class="font-semibold text-blue-600">👤 ${name}</span> <span class="ml-2 text-red-500 font-medium">(Logout)</span>`;
+
       authBtn.onclick = () => {
         clearCurrentUser();
         alert("👋 You’ve logged out successfully!");
       };
 
-      // 🌟 Blinking name animation every 5s
+      // 🌟 Blinking effect every 5 seconds
+      const userLabel = document.getElementById("userLabel");
       blinkInterval = setInterval(() => {
-        authBtn.classList.add("animate-pulse", "text-lime-500");
-        setTimeout(() => authBtn.classList.remove("animate-pulse", "text-lime-500"), 1500);
+        if (userLabel) {
+          userLabel.classList.add("animate-pulse", "text-lime-500");
+          setTimeout(() => userLabel.classList.remove("animate-pulse", "text-lime-500"), 1500);
+        }
       }, 5000);
 
     } else {
@@ -173,13 +179,15 @@ document.addEventListener("DOMContentLoaded", () => {
       const userData = Object.fromEntries(formData.entries());
       userData.timestamp = Date.now();
 
+      // Save user in DB
       const tx = db.transaction("users", "readwrite");
       const store = tx.objectStore("users");
 
       const addReq = store.add(userData);
       addReq.onsuccess = (event) => {
         const newId = event.target.result;
-        setCurrentUser(newId, userData.fullName);
+        const fullName = userData.fullName || "User";
+        setCurrentUser(newId, fullName);
         successMsg.classList.remove("hidden");
         updateAuthButton();
         displayUserCount();
