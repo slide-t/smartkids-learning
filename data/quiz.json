@@ -361,4 +361,485 @@
       "answer": "It offers more freedom of movement without a cable"
     }
   ]
-}
+},
+    {
+      "id": 31,
+      "category": "Keyboard",
+      "question": "What is the main function of the computer keyboard?",
+      "options": [
+        "To type letters, numbers, and symbols",
+        "To move the pointer",
+        "To display pictures",
+        "To draw shapes"
+      ],
+      "answer": "To type letters, numbers, and symbols"
+    },
+    {
+      "id": 32,
+      "category": "Keyboard",
+      "question": "Which key is used to add a space between words?",
+      "options": [
+        "Enter key",
+        "Shift key",
+        "Spacebar",
+        "Ctrl key"
+      ],
+      "answer": "Spacebar"
+    },
+    {
+      "id": 33,
+      "category": "Keyboard",
+      "question": "What does the Enter key do?",
+      "options": [
+        "Moves the cursor to the next line or executes a command",
+        "Deletes the last letter",
+        "Closes the document",
+        "Types a period"
+      ],
+      "answer": "Moves the cursor to the next line or executes a command"
+    },
+    {
+      "id": 34,
+      "category": "Keyboard",
+      "question": "Which key is used to delete letters to the left of the cursor?",
+      "options": [
+        "Backspace key",
+        "Delete key",
+        "Escape key",
+        "Tab key"
+      ],
+      "answer": "Backspace key"
+    },
+    {
+      "id": 35,
+      "category": "Keyboard",
+      "question": "Which key is used to delete letters to the right of the cursor?",
+      "options": [
+        "Escape key",
+        "Enter key",
+        "Delete key",
+        "Caps Lock key"
+      ],
+      "answer": "Delete key"
+    },
+    {
+      "id": 36,
+      "category": "Keyboard",
+      "question": "What is the purpose of the Caps Lock key?",
+      "options": [
+        "To make all letters uppercase when typing",
+        "To delete words",
+        "To move the cursor left",
+        "To open programs"
+      ],
+      "answer": "To make all letters uppercase when typing"
+    },
+    {
+      "id": 37,
+      "category": "Keyboard",
+      "question": "Which key combination is used to copy selected text?",
+      "options": [
+        "Ctrl + V",
+        "Ctrl + C",
+        "Ctrl + X",
+        "Ctrl + P"
+      ],
+      "answer": "Ctrl + C"
+    },
+    {
+      "id": 38,
+      "category": "Keyboard",
+      "question": "Which key combination pastes copied text?",
+      "options": [
+        "Ctrl + C",
+        "Ctrl + X",
+        "Ctrl + V",
+        "Ctrl + Z"
+      ],
+      "answer": "Ctrl + V"
+    },
+    {
+      "id": 39,
+      "category": "Keyboard",
+      "question": "Which key combination is used to undo the last action?",
+      "options": [
+        "Ctrl + Z",
+        "Ctrl + A",
+        "Ctrl + U",
+        "Ctrl + Y"
+      ],
+      "answer": "Ctrl + Z"
+    },
+    {
+      "id": 40,
+      "category": "Keyboard",
+      "question": "Which key combination is used to select all text in a document?",
+      "options": [
+        "Ctrl + A",
+        "Ctrl + S",
+        "Ctrl + D",
+        "Ctrl + L"
+      ],
+      "answer": "Ctrl + A"
+    },
+    {
+      "id": 41,
+      "category": "Keyboard",
+      "question": "What is the long key at the bottom of the keyboard called?",
+      "options": [
+        "Enter key",
+        "Spacebar",
+        "Shift key",
+        "Tab key"
+      ],
+      "answer": "Spacebar"
+    },
+    {
+      "id": 42,
+      "category": "Keyboard",
+      "question": "Which key is used to start a new paragraph in a text document?",
+      "options": [
+        "Shift key",
+        "Enter key",
+        "Tab key",
+        "Backspace key"
+      ],
+      "answer": "Enter key"
+    },
+    {
+      "id": 43,
+      "category": "Keyboard",
+      "question": "Which keys are used to type capital letters without turning on Caps Lock?",
+      "options": [
+        "Alt key",
+        "Shift key",
+        "Ctrl key",
+        "Fn key"
+      ],
+      "answer": "Shift key"
+    },
+    {
+      "id": 44,
+      "category": "Keyboard",
+      "question": "What is the function of the Tab key?",
+      "options": [
+        "To move the cursor several spaces to the right",
+        "To delete spaces",
+        "To close the window",
+        "To type symbols"
+      ],
+      "answer": "To move the cursor several spaces to the right"
+    },
+    {
+      "id": 45,
+      "category": "Keyboard",
+      "question": "Which key helps to cancel or stop an operation?",
+      "options": [
+        "Caps Lock key",
+        "Escape (Esc) key",
+        "Shift key",
+        "Control key"
+      ],
+      "answer": "Escape (Esc) key"
+    },
+    {
+      "id": 46,
+      "category": "Keyboard",
+      "question": "Which key combination is used to cut selected text?",
+      "options": [
+        "Ctrl + V",
+        "Ctrl + C",
+        "Ctrl + X",
+        "Ctrl + B"
+      ],
+      "answer": "Ctrl + X"
+    },
+    {
+      "id": 47,
+      "category": "Keyboard",
+      "question": "Which group of keys contains letters and numbers?",
+      "options": [
+        "Function keys",
+        "Numeric keypad",
+        "Alphanumeric keys",
+        "Arrow keys"
+      ],
+      "answer": "Alphanumeric keys"
+    },
+    {
+      "id": 48,
+      "category": "Keyboard",
+      "question": "Which key combination is used to print a document?",
+      "options": [
+        "Ctrl + P",
+        "Ctrl + T",
+        "Ctrl + S",
+        "Ctrl + B"
+      ],
+      "answer": "Ctrl + P"
+    },
+    {
+      "id": 49,
+      "category": "Keyboard",
+      "question": "Which key combination saves a document quickly?",
+      "options": [
+        "Ctrl + A",
+        "Ctrl + S",
+        "Ctrl + D",
+        "Ctrl + L"
+      ],
+      "answer": "Ctrl + S"
+    },
+    {
+      "id": 50,
+      "category": "Keyboard",
+      "question": "What are the keys labeled F1 to F12 called?",
+      "options": [
+        "Function keys",
+        "Navigation keys",
+        "Alphabet keys",
+        "Number keys"
+      ],
+      "answer": "Function keys"
+    },
+    {
+      "id": 51,
+      "category": "Keyboard",
+      "question": "Which key moves the cursor one character to the left?",
+      "options": [
+        "Right arrow",
+        "Left arrow",
+        "Up arrow",
+        "Down arrow"
+      ],
+      "answer": "Left arrow"
+    },
+    {
+      "id": 52,
+      "category": "Keyboard",
+      "question": "Which keys are used to move the cursor up, down, left, or right?",
+      "options": [
+        "Alphabet keys",
+        "Number keys",
+        "Arrow keys",
+        "Spacebar"
+      ],
+      "answer": "Arrow keys"
+    },
+    {
+      "id": 53,
+      "category": "Keyboard",
+      "question": "What is the numeric keypad used for?",
+      "options": [
+        "Typing letters",
+        "Entering numbers quickly",
+        "Typing symbols only",
+        "Opening menus"
+      ],
+      "answer": "Entering numbers quickly"
+    },
+    {
+      "id": 54,
+      "category": "Keyboard",
+      "question": "Which key is used to turn on the computer from the keyboard on some systems?",
+      "options": [
+        "Power key",
+        "F12",
+        "Esc key",
+        "Tab key"
+      ],
+      "answer": "Power key"
+    },
+    {
+      "id": 55,
+      "category": "Keyboard",
+      "question": "What is touch typing?",
+      "options": [
+        "Typing with one finger only",
+        "Typing without looking at the keyboard",
+        "Typing with the mouse",
+        "Typing on a touchscreen only"
+      ],
+      "answer": "Typing without looking at the keyboard"
+    },
+    {
+      "id": 56,
+      "category": "Keyboard",
+      "question": "Which finger is used to press the spacebar?",
+      "options": [
+        "Index finger",
+        "Thumb",
+        "Little finger",
+        "Ring finger"
+      ],
+      "answer": "Thumb"
+    },
+    {
+      "id": 57,
+      "category": "Keyboard",
+      "question": "Which key combination locks your computer screen?",
+      "options": [
+        "Ctrl + L",
+        "Windows + L",
+        "Ctrl + Shift + P",
+        "Alt + X"
+      ],
+      "answer": "Windows + L"
+    },
+    {
+      "id": 58,
+      "category": "Keyboard",
+      "question": "Which key is used to make a single capital letter?",
+      "options": [
+        "Shift key",
+        "Tab key",
+        "Alt key",
+        "Fn key"
+      ],
+      "answer": "Shift key"
+    },
+    {
+      "id": 59,
+      "category": "Keyboard",
+      "question": "Which key is used to open the Start Menu in Windows?",
+      "options": [
+        "Windows key",
+        "Alt key",
+        "Ctrl key",
+        "Esc key"
+      ],
+      "answer": "Windows key"
+    },
+    {
+      "id": 60,
+      "category": "Keyboard",
+      "question": "Which function key often helps open the Help window in programs?",
+      "options": [
+        "F1",
+        "F2",
+        "F5",
+        "F12"
+      ],
+      "answer": "F1"
+    },
+    {
+      "id": 61,
+      "category": "Keyboard",
+      "question": "Which key combination refreshes a webpage?",
+      "options": [
+        "Ctrl + R or F5",
+        "Ctrl + E",
+        "Ctrl + H",
+        "Ctrl + N"
+      ],
+      "answer": "Ctrl + R or F5"
+    },
+    {
+      "id": 62,
+      "category": "Keyboard",
+      "question": "Which key combination opens a new tab in a web browser?",
+      "options": [
+        "Ctrl + N",
+        "Ctrl + T",
+        "Ctrl + D",
+        "Ctrl + M"
+      ],
+      "answer": "Ctrl + T"
+    },
+    {
+      "id": 63,
+      "category": "Keyboard",
+      "question": "Which key combination closes the current window or tab?",
+      "options": [
+        "Ctrl + W",
+        "Ctrl + P",
+        "Ctrl + L",
+        "Ctrl + X"
+      ],
+      "answer": "Ctrl + W"
+    },
+    {
+      "id": 64,
+      "category": "Keyboard",
+      "question": "Which key is used to toggle between open applications?",
+      "options": [
+        "Alt + Tab",
+        "Ctrl + Tab",
+        "Shift + Esc",
+        "Windows + D"
+      ],
+      "answer": "Alt + Tab"
+    },
+    {
+      "id": 65,
+      "category": "Keyboard",
+      "question": "What are shortcut keys?",
+      "options": [
+        "Keys used to play games",
+        "Key combinations that perform tasks quickly",
+        "Keys for typing names",
+        "Keys for drawing"
+      ],
+      "answer": "Key combinations that perform tasks quickly"
+    },
+    {
+      "id": 66,
+      "category": "Keyboard",
+      "question": "Which key combination opens Task Manager in Windows?",
+      "options": [
+        "Ctrl + Shift + Esc",
+        "Ctrl + Alt + T",
+        "Alt + F4",
+        "Ctrl + R"
+      ],
+      "answer": "Ctrl + Shift + Esc"
+    },
+    {
+      "id": 67,
+      "category": "Keyboard",
+      "question": "What is the purpose of the Num Lock key?",
+      "options": [
+        "To turn the numeric keypad on or off",
+        "To lock letters in uppercase",
+        "To print pages",
+        "To restart the computer"
+      ],
+      "answer": "To turn the numeric keypad on or off"
+    },
+    {
+      "id": 68,
+      "category": "Keyboard",
+      "question": "Which function key is often used to rename files or folders?",
+      "options": [
+        "F1",
+        "F2",
+        "F3",
+        "F4"
+      ],
+      "answer": "F2"
+    },
+    {
+      "id": 69,
+      "category": "Keyboard",
+      "question": "Which combination opens the Run dialog box in Windows?",
+      "options": [
+        "Windows + R",
+        "Ctrl + R",
+        "Alt + R",
+        "Shift + R"
+      ],
+      "answer": "Windows + R"
+    },
+    {
+      "id": 70,
+      "category": "Keyboard",
+      "question": "Which key combination minimizes all open windows?",
+      "options": [
+        "Windows + D",
+        "Ctrl + D",
+        "Alt + F4",
+        "Ctrl + M"
+      ],
+      "answer": "Windows + D"
+    }
+
