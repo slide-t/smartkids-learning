@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartKids | Features</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f8faff;
+      color: #222;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #007bff;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .intro {
+      text-align: justify;
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+
+    h2 {
+      color: #0056b3;
+      margin-bottom: 10px;
+    }
+
+    /* Accordion styles */
+    .accordion {
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+      padding: 15px;
+      width: 100%;
+      border: none;
+      outline: none;
+      text-align: left;
+      font-size: 18px;
+      border-radius: 6px;
+      transition: background-color 0.3s ease;
+      margin-top: 10px;
+    }
+
+    .accordion:hover {
+      background-color: #0056b3;
+    }
+
+    .panel {
+      padding: 0 15px;
+      display: none;
+      background-color: #f0f6ff;
+      border-left: 3px solid #007bff;
+      border-radius: 0 0 6px 6px;
+      margin-bottom: 10px;
+    }
+
+    .panel p {
+      padding: 15px 0;
+      margin: 0;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .learn-more {
+      display: inline-block;
+      background-color: #007bff;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    .learn-more:hover {
+      background-color: #0056b3;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 14px;
+      color: #555;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Features: Yoruba Morals & Culture</h1>
+  </header>
+
+  <div class="container">
+    <div class="intro">
+      <h2>Introduction</h2>
+      <p>
+        Africa is a continent rich in culture, values, and traditions. Among its diverse peoples, the Yoruba culture of West Africa stands out for its deep sense of morality, respect, and etiquette. 
+        From ancient times, Yoruba people have placed great emphasis on moral behavior, respect for elders, honesty, and communal living. 
+        These values are taught from childhood through proverbs, stories, and everyday interactions that shape character and promote harmony in society.
+      </p>
+    </div>
+
+    <!-- Accordion 1 -->
+    <button class="accordion">Morals and Etiquette</button>
+    <div class="panel">
+      <p>
+        Yoruba morals and etiquette teach respect, discipline, and integrity. Elders are highly respected, and greetings are considered signs of good upbringing. 
+        Children are taught to show humility and politeness in speech and behavior, as these values strengthen family and community ties.
+      </p>
+      <a href="morals.html" class="learn-more">Learn More</a>
+    </div>
+
+    <!-- Accordion 2 -->
+    <button class="accordion">The Use of Gadgets</button>
+    <div class="panel">
+      <p>
+        In modern times, technology has become a vital part of daily life. However, the Yoruba moral system encourages moderation, responsibility, and respect even in digital interactions. 
+        Good morals should guide how gadgets and technology are used, ensuring they support learning and growth rather than distraction.
+      </p>
+      <a href="gadgets.html" class="learn-more">Learn More</a>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 SmartKids Learning. All Rights Reserved.
+  </footer>
+
+  <script>
+    // Accordion Functionality
+    const accordions = document.querySelectorAll(".accordion");
+    accordions.forEach(acc => {
+      acc.addEventListener("click", function() {
+        this.classList.toggle("active");
+        const panel = this.nextElementSibling;
+        panel.style.display = panel.style.display === "block" ? "none" : "block";
+      });
+    });
+  </script>
+
+</body>
+</html>
