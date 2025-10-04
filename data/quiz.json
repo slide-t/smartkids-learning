@@ -1,48 +1,364 @@
 {
-  "mouse": [
+  "quiz": [
     {
-      "id": "m1",
-      "question": "Which button is used to select items on the screen?",
-      "options": ["Left button", "Right button", "Scroll wheel"],
-      "answer": "Left button"
-    },
-    {
-      "id": "m2",
-      "question": "What does double-clicking do?",
-      "options": ["Opens a file or program", "Closes the computer", "Deletes files"],
-      "answer": "Opens a file or program"
-    }
-  ],
-  "keyboard": [
-    {
-      "id": "k1",
-      "question": "Which key is used to remove text to the left of the cursor?",
-      "options": ["Delete", "Backspace", "Shift"],
-      "answer": "Backspace"
-    },
-    {
-      "id": "k2",
-      "question": "Which key is used to start a new line?",
-      "options": ["Spacebar", "Enter", "Ctrl"],
-      "answer": "Enter"
-    }
-  ],
-  "ict": [
-    {
-      "id": "i1",
-      "question": "ICT stands for?",
+      "id": 1,
+      "category": "Mouse",
+      "question": "What is the main function of a computer mouse?",
       "options": [
-        "Information and Computer Technology",
-        "Information and Communication Technology",
-        "Internet and Computing Tools"
+        "To move the pointer on the screen",
+        "To print documents",
+        "To store files",
+        "To display images"
       ],
-      "answer": "Information and Communication Technology"
+      "answer": "To move the pointer on the screen"
     },
     {
-      "id": "i2",
-      "question": "Which of these is a storage device?",
-      "options": ["Monitor", "Keyboard", "Flash drive"],
-      "answer": "Flash drive"
+      "id": 2,
+      "category": "Mouse",
+      "question": "Which part of the mouse do you move on the table to control the pointer?",
+      "options": [
+        "The buttons",
+        "The scroll wheel",
+        "The body of the mouse",
+        "The USB plug"
+      ],
+      "answer": "The body of the mouse"
+    },
+    {
+      "id": 3,
+      "category": "Mouse",
+      "question": "What is the arrow on the screen that moves when you move the mouse called?",
+      "options": [
+        "Icon",
+        "Cursor",
+        "Window",
+        "Pointer card"
+      ],
+      "answer": "Cursor"
+    },
+    {
+      "id": 4,
+      "category": "Mouse",
+      "question": "What happens when you double-click an icon on the desktop?",
+      "options": [
+        "It opens the program or file",
+        "It deletes the file",
+        "It moves the icon",
+        "It colors the icon"
+      ],
+      "answer": "It opens the program or file"
+    },
+    {
+      "id": 5,
+      "category": "Mouse",
+      "question": "What is the right mouse button usually used for?",
+      "options": [
+        "Selecting text quickly",
+        "Opening a context menu with extra options",
+        "Scrolling the page",
+        "Typing letters"
+      ],
+      "answer": "Opening a context menu with extra options"
+    },
+    {
+      "id": 6,
+      "category": "Mouse",
+      "question": "Which finger is commonly used to click the left button of the mouse?",
+      "options": [
+        "Middle finger",
+        "Thumb",
+        "Index (pointer) finger",
+        "Little finger"
+      ],
+      "answer": "Index (pointer) finger"
+    },
+    {
+      "id": 7,
+      "category": "Mouse",
+      "question": "What action is used to move an item from one place to another using the mouse?",
+      "options": [
+        "Click-and-hold then drag and drop",
+        "Double-click very fast",
+        "Right-click and release",
+        "Scroll quickly"
+      ],
+      "answer": "Click-and-hold then drag and drop"
+    },
+    {
+      "id": 8,
+      "category": "Mouse",
+      "question": "What is the scroll wheel on the mouse used for?",
+      "options": [
+        "Opening files",
+        "Changing pointer color",
+        "Scrolling up and down through pages",
+        "Turning the computer off"
+      ],
+      "answer": "Scrolling up and down through pages"
+    },
+    {
+      "id": 9,
+      "category": "Mouse",
+      "question": "What is it called when you quickly press the mouse button twice?",
+      "options": [
+        "Double-click",
+        "Hover",
+        "Drag",
+        "Right-click"
+      ],
+      "answer": "Double-click"
+    },
+    {
+      "id": 10,
+      "category": "Mouse",
+      "question": "How do you open a program using the mouse?",
+      "options": [
+        "Right-click then click Open",
+        "Double-click the program icon",
+        "Hold the icon and press a key",
+        "Click the scroll wheel only"
+      ],
+      "answer": "Double-click the program icon"
+    },
+    {
+      "id": 11,
+      "category": "Mouse",
+      "question": "What type of mouse uses light (an optical sensor) instead of a ball to detect movement?",
+      "options": [
+        "Mechanical mouse",
+        "Ball mouse",
+        "Optical mouse",
+        "Trackball"
+      ],
+      "answer": "Optical mouse"
+    },
+    {
+      "id": 12,
+      "category": "Mouse",
+      "question": "Which mouse action allows you to view more options for a file or an object?",
+      "options": [
+        "Left-click",
+        "Double-click",
+        "Right-click (context menu)",
+        "Scroll-click"
+      ],
+      "answer": "Right-click (context menu)"
+    },
+    {
+      "id": 13,
+      "category": "Mouse",
+      "question": "What does the pointer often change into when placed over a link in a browser?",
+      "options": [
+        "Hand icon",
+        "Crosshair",
+        "Hourglass",
+        "Text cursor"
+      ],
+      "answer": "Hand icon"
+    },
+    {
+      "id": 14,
+      "category": "Mouse",
+      "question": "What happens when you drag and drop a file onto another folder?",
+      "options": [
+        "The file is copied or moved into the folder",
+        "The file is deleted",
+        "Your screen goes blank",
+        "A menu opens with colors"
+      ],
+      "answer": "The file is copied or moved into the folder"
+    },
+    {
+      "id": 15,
+      "category": "Mouse",
+      "question": "What do we call moving the mouse pointer over an item without clicking?",
+      "options": [
+        "Hovering",
+        "Shifting",
+        "Righting",
+        "Tapping"
+      ],
+      "answer": "Hovering"
+    },
+    {
+      "id": 16,
+      "category": "Mouse",
+      "question": "Why is it helpful to use a mouse pad?",
+      "options": [
+        "It prints documents faster",
+        "It improves mouse tracking and protects the surface",
+        "It charges the mouse",
+        "It makes icons bigger"
+      ],
+      "answer": "It improves mouse tracking and protects the surface"
+    },
+    {
+      "id": 17,
+      "category": "Mouse",
+      "question": "Which device on a laptop performs a similar function to a mouse?",
+      "options": [
+        "Touchpad (trackpad)",
+        "USB port",
+        "Webcam",
+        "Power button"
+      ],
+      "answer": "Touchpad (trackpad)"
+    },
+    {
+      "id": 18,
+      "category": "Mouse",
+      "question": "If the mouse pointer stops moving, what is a good first step to fix it?",
+      "options": [
+        "Restart the computer immediately",
+        "Check the connection or batteries and clean the sensor",
+        "Delete all files",
+        "Open too many programs"
+      ],
+      "answer": "Check the connection or batteries and clean the sensor"
+    },
+    {
+      "id": 19,
+      "category": "Mouse",
+      "question": "How does a wireless mouse usually connect to a computer?",
+      "options": [
+        "Through a cable only",
+        "Using Bluetooth or a small USB receiver",
+        "By placing it on the keyboard",
+        "By printing a code"
+      ],
+      "answer": "Using Bluetooth or a small USB receiver"
+    },
+    {
+      "id": 20,
+      "category": "Mouse",
+      "question": "What is the main difference between an optical mouse and an older mechanical (ball) mouse?",
+      "options": [
+        "Optical mice use light sensors; mechanical mice use a rolling ball",
+        "Mechanical mice use batteries; optical mice do not",
+        "Optical mice cannot click",
+        "Mechanical mice are wireless only"
+      ],
+      "answer": "Optical mice use light sensors; mechanical mice use a rolling ball"
+    },
+    {
+      "id": 21,
+      "category": "Mouse",
+      "question": "Which common task is drag-and-drop most useful for?",
+      "options": [
+        "Typing text faster",
+        "Moving files and rearranging items on the screen",
+        "Changing screen brightness",
+        "Turning off the mouse"
+      ],
+      "answer": "Moving files and rearranging items on the screen"
+    },
+    {
+      "id": 22,
+      "category": "Mouse",
+      "question": "How can you select more than one file in a list using the mouse and keyboard?",
+      "options": [
+        "Click each file and press Save",
+        "Click the first file, hold Shift, then click the last file to select a range",
+        "Double-click the folder name",
+        "Right-click without selecting"
+      ],
+      "answer": "Click the first file, hold Shift, then click the last file to select a range"
+    },
+    {
+      "id": 23,
+      "category": "Mouse",
+      "question": "What does it mean to 'right-click and choose Save as'?",
+      "options": [
+        "You are changing the file color",
+        "You open a menu to save a copy of the file with a new name",
+        "You close the file without saving",
+        "You delete the file permanently"
+      ],
+      "answer": "You open a menu to save a copy of the file with a new name"
+    },
+    {
+      "id": 24,
+      "category": "Mouse",
+      "question": "What is a common pointer shape when you are typing in a document (not pointing at objects)?",
+      "options": [
+        "Hand icon",
+        "I-beam or text cursor",
+        "Star",
+        "Arrow with a question mark"
+      ],
+      "answer": "I-beam or text cursor"
+    },
+    {
+      "id": 25,
+      "category": "Mouse",
+      "question": "Which simple care step helps keep your mouse working smoothly?",
+      "options": [
+        "Paint it every month",
+        "Keep it clean and replace batteries when low",
+        "Plug and unplug very fast",
+        "Store it in the freezer"
+      ],
+      "answer": "Keep it clean and replace batteries when low"
+    },
+    {
+      "id": 26,
+      "category": "Mouse",
+      "question": "What happens when you scroll the wheel down on a webpage?",
+      "options": [
+        "The page moves down to show content further down",
+        "The page closes",
+        "The computer restarts",
+        "The icon moves"
+      ],
+      "answer": "The page moves down to show content further down"
+    },
+    {
+      "id": 27,
+      "category": "Mouse",
+      "question": "Which action is best when you want to highlight a single word quickly?",
+      "options": [
+        "Click once on the word",
+        "Double-click the word",
+        "Click and drag over the entire paragraph",
+        "Right-click the word"
+      ],
+      "answer": "Double-click the word"
+    },
+    {
+      "id": 28,
+      "category": "Mouse",
+      "question": "Why is good hand placement important when using a mouse?",
+      "options": [
+        "It keeps your hands comfortable and helps control the pointer accurately",
+        "It makes the mouse lighter",
+        "It makes keys type faster",
+        "It prevents the screen from moving"
+      ],
+      "answer": "It keeps your hands comfortable and helps control the pointer accurately"
+    },
+    {
+      "id": 29,
+      "category": "Mouse",
+      "question": "How can you change the speed of the mouse pointer in most computers?",
+      "options": [
+        "By changing monitor brightness",
+        "Through the mouse or pointer settings in the operating system",
+        "By moving the mouse faster physically",
+        "By changing the keyboard layout"
+      ],
+      "answer": "Through the mouse or pointer settings in the operating system"
+    },
+    {
+      "id": 30,
+      "category": "Mouse",
+      "question": "What is one advantage of a wireless mouse over a wired one?",
+      "options": [
+        "It never needs batteries",
+        "It offers more freedom of movement without a cable",
+        "It can print documents",
+        "It makes sounds when clicked"
+      ],
+      "answer": "It offers more freedom of movement without a cable"
     }
   ]
 }
