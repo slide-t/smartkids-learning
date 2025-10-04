@@ -50,6 +50,41 @@ document.addEventListener("DOMContentLoaded", () => {
     updateAuthButton();
   }
 
+// ---------- Update Auth Button ----------
+function updateAuthButton() {
+  if (!authBtn) return;
+  const id = getCurrentUserId();
+  const name = localStorage.getItem("currentUserName");
+
+  // Clear any previous blink interval
+  if (window.nameBlinkInterval) clearInterval(window.nameBlinkInterval);
+
+  if (id) {
+    // Use innerHTML so we can style the name
+    authBtn.innerHTML = `Logout <span id="usernameLabel" style="font-weight:600; color:#0078D7; margin-left:4px;">${name || ""}</span>`;
+    authBtn.onclick = () => {
+      clearCurrentUser();
+      alert("👋 Logged out.");
+    };
+
+    // ✨ Add blink effect every 5 seconds
+    const nameLabel = document.getElementById("usernameLabel");
+    if (nameLabel) {
+      window.nameBlinkInterval = setInterval(() => {
+        nameLabel.style.visibility = "hidden";
+        setTimeout(() => {
+          nameLabel.style.visibility = "visible";
+        }, 500); // blink duration
+      }, 5000); // every 5 seconds
+    }
+  } else {
+    authBtn.textContent = "Sign Up";
+    authBtn.onclick = () => window.toggleAuth && window.toggleAuth();
+  }
+}
+
+
+  /*
   // ---------- Update Auth Button ----------
   function updateAuthButton() {
     if (!authBtn) return;
@@ -66,7 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
       authBtn.textContent = "Sign Up";
       authBtn.onclick = () => window.toggleAuth && window.toggleAuth();
     }
-  }
+  }*/
 
   // ---------- Clean Up Old Entries ----------
   function cleanupExpiredUsers() {
