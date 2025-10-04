@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartKids Practice Quiz</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* === TIMER FIX === */
+    #timer {
+      position: fixed;
+      top: 70px; /* lowered slightly to clear header */
+      right: 20px;
+      z-index: 40;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 6px 14px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      font-weight: bold;
+      color: #1e3a8a;
+      font-size: 18px;
+    }
+
+    /* === WELCOME MODAL === */
+    #welcomeModal {
+      animation: fadeIn 1s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* === GLOW LINE ANIMATION === */
+    .line {
+      width: 0;
+      height: 3px;
+      margin: 0 auto;
+      border-radius: 10px;
+      background: #a3e635; /* lime-400 */
+      box-shadow: 0 0 12px #bef264, 0 0 24px #84cc16;
+      animation: glowPause 1.5s ease-in-out forwards, growLine 1s ease 1.5s forwards;
+    }
+
+    @keyframes glowPause {
+      0%, 100% { opacity: 1; transform: scaleX(1); }
+      50% { opacity: 0.7; transform: scaleX(0.8); }
+    }
+
+    @keyframes growLine {
+      from { width: 0; }
+      to { width: 130px; }
+    }
+
+    /* === TEXT ANIMATION === */
+    .smartkidsText {
+      font-size: 3rem;
+      font-weight: 800;
+      color: white;
+      letter-spacing: 2px;
+      display: inline-block;
+      overflow: hidden;
+      white-space: nowrap;
+      border-right: 3px solid #a3e635;
+      animation: typing 2s steps(10, end) 2.6s forwards, blink .75s step-end infinite;
+    }
+
+    @keyframes typing {
+      from { width: 1ch; }
+      to { width: 9ch; }
+    }
+
+    @keyframes blink {
+      from, to { border-color: transparent; }
+      50% { border-color: #a3e635; }
+    }
+
+    .fadeIn {
+      animation: fadeInText 1.2s ease forwards;
+    }
+
+    @keyframes fadeInText {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen relative">
+
+  <!-- === WELCOME MODAL === -->
+  <div id="welcomeModal" class="fixed inset-0 bg-black bg-opacity-90 flex flex-col items-center justify-center z-50">
+    <div class="line mb-6"></div>
+    <div id="smartkidsText" class="smartkidsText">S</div>
+    <p id="poweredBy" class="text-gray-300 mt-4 text-lg opacity-0 transition-opacity duration-700">
+      Powered by <span class="text-lime-400 font-semibold">SlideTeck</span>
+    </p>
+    <button id="startQuizBtn" class="hidden mt-8 bg-lime-500 text-black font-semibold px-6 py-2 rounded-lg shadow hover:bg-lime-400 transition">Start Quiz</button>
+  </div>
+
+  <!-- === TIMER FLOATING === -->
+  <div id="timer">Time: 00:00</div>
+
+  <!-- === HEADER === -->
+  <header class="bg-blue-600 text-white py-4 shadow-md text-center font-bold text-xl">
+    SmartKids Practice Quiz
+  </header>
+
+  <!-- === MAIN QUIZ SECTION === -->
+  <main class="max-w-2xl mx-auto mt-8 bg-white p-6 rounded-lg shadow">
+    <h2 class="text-2xl font-bold text-blue-700 mb-4">ICT Practice Category</h2>
+    <div id="quizContainer">
+      <!-- Questions will load dynamically -->
+    </div>
+  </main>
+
+  <script>
+    // === TIMER WITH TAB PAUSE ===
+    let timerDisplay = document.getElementById('timer');
+    let totalSeconds = 0;
+    let timerInterval;
+    let isActive = true;
+
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        if (isActive) {
+          totalSeconds++;
+          let minutes = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
+          let seconds = String(totalSeconds % 60).padStart(2, '0');
+          timerDisplay.textContent = `Time: ${minutes}:${seconds}`;
+        }
+      }, 1000);
+    }
+
+    document.addEventListener('visibilitychange', () => {
+      isActive = !document.hidden;
+    });
+
+    // === WELCOME ANIMATION ===
+    window.addEventListener('load', () => {
+      const modal = document.getElementById('welcomeModal');
+      const text = document.getElementById('smartkidsText');
+      const powered = document.getElementById('poweredBy');
+      const startBtn = document.getElementById('startQuizBtn');
+
+      // Expand S into SmartKids
+      setTimeout(() => {
+        text.textContent = 'SmartKids';
+      }, 2000);
+
+      // Fade in "Powered by SlideTeck"
+      setTimeout(() => {
+        powered.classList.add('fadeIn');
+        powered.style.opacity = 1;
+      }, 3300);
+
+      // Show Start button
+      setTimeout(() => {
+        startBtn.classList.remove('hidden');
+      }, 4000);
+
+      // Start Quiz Button Event
+      startBtn.addEventListener('click', () => {
+        modal.style.display = 'none';
+        startTimer();
+      });
+    });
+  </script>
+</body>
+</html>
