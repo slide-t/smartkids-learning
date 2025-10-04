@@ -11,14 +11,13 @@ document.addEventListener("DOMContentLoaded", () => {
     db = event.target.result;
     if (!db.objectStoreNames.contains("users")) {
       const store = db.createObjectStore("users", { keyPath: "id", autoIncrement: true });
-      store.createIndex("email", "email", { unique: false });
+      store.createIndex("email", "email", { unique: false }); // email not unique, since schools may reuse one
     }
   };
 
   request.onsuccess = (event) => {
     db = event.target.result;
-    updateAuthButton();
-    checkForceRegistration();
+    updateAuthButton(); // refresh UI on load
   };
 
   request.onerror = (event) => {
@@ -38,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function clearCurrentUser() {
     localStorage.removeItem("currentUserId");
     localStorage.removeItem("currentUserName");
-    updateAuthButton();
+    updateAuthButton(); // force button back to Sign Up
   }
 
   // ---------- Update Auth Button ----------
@@ -59,22 +58,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // ---------- Force Registration ----------
-  function checkForceRegistration() {
-    const page = window.location.pathname;
-    const currentUser = getCurrentUserId();
-
-    if (!currentUser && (page.includes("lessons.html") || page.includes("mouse.html"))) {
-      setTimeout(() => {
-        if (!getCurrentUserId()) {
-          window.toggleAuth();
-          const closeBtn = document.getElementById("closeRegistration");
-          if (closeBtn) closeBtn.style.display = "none";
-        }
-      }, 2 * 60 * 1000);
-    }
-  }
-
   // ---------- Toggle Modal ----------
   window.toggleAuth = async function () {
     if (!db) {
@@ -82,11 +65,10 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
+    // Load modal HTML dynamically from registration.html
     if (!document.getElementById("registrationModal")) {
       try {
-        // ✅ Correct root path
-        const res = await fetch("./registration.html");
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const res = await fetch("registration.html");
         const html = await res.text();
         modalContainer.innerHTML = html;
 
@@ -96,16 +78,15 @@ document.addEventListener("DOMContentLoaded", () => {
         const registrationForm = document.getElementById("registrationForm");
         const successMsg = document.getElementById("successMsg");
 
+        // Show modal
         registrationModal.classList.remove("hidden");
 
         // Close modal
-        if (closeRegistration) {
-          closeRegistration.addEventListener("click", () => {
-            registrationModal.classList.add("hidden");
-          });
-        }
+        closeRegistration.addEventListener("click", () => {
+          registrationModal.classList.add("hidden");
+        });
 
-        // Handle registration
+        // Handle registration submit
         registrationForm.addEventListener("submit", (e) => {
           e.preventDefault();
 
@@ -135,8 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
           };
         });
       } catch (err) {
-        console.error("❌ Failed to load registration.html:", err);
-        alert("Unable to load registration form. Please check registration.html is in root folder.");
+        console.error("Failed to load registration form:", err);
       }
     } else {
       document.getElementById("registrationModal").classList.remove("hidden");
