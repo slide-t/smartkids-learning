@@ -120,6 +120,37 @@
     </div>
   </div>
 </section>
+
+<!-- Blinking Features Button -->
+<a href="features.html" class="blinking-button">Features</a>
+
+<style>
+.blinking-button {
+  display: inline-block;
+  background-color: #007bff; /* Blue */
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 16px;
+  text-align: center;
+  animation: blink 1s infinite;
+  transition: transform 0.2s ease-in-out;
+}
+
+.blinking-button:hover {
+  transform: scale(1.05);
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Blinking animation */
+@keyframes blink {
+  0%, 50%, 100% { opacity: 1; }
+  25%, 75% { opacity: 0.3; }
+}
+</style>
+  
 <!-- navigation buttons for tutor-->
 
 <div class="flex flex-col md:flex-row justify-center gap-4 mt-8">
