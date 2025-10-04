@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://cdn.tailwindcss.com"></script>
-  
   <title>SmartKids | Features</title>
   <style>
     body {
@@ -15,39 +14,7 @@
       padding: 0;
     }
 
-    header {
-      background-color: #007bff;
-      color: white;
-      text-align: center;
-      padding: 20px;
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 20px;
-    }
-
-    .container {
-      max-width: 800px;
-      margin: 30px auto;
-      padding: 20px;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-
-    .intro {
-      text-align: justify;
-      margin-bottom: 30px;
-      line-height: 1.6;
-    }
-
-    h2 {
-      color: #0056b3;
-      margin-bottom: 10px;
-    }
-
-    /* Accordion styles */
+    /* Accordion custom styling */
     .accordion {
       background-color: #007bff;
       color: white;
@@ -61,10 +28,21 @@
       border-radius: 6px;
       transition: background-color 0.3s ease;
       margin-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
     .accordion:hover {
       background-color: #0056b3;
+    }
+
+    .chevron {
+      transition: transform 0.3s ease;
+    }
+
+    .accordion.active .chevron {
+      transform: rotate(90deg);
     }
 
     .panel {
@@ -97,62 +75,67 @@
     .learn-more:hover {
       background-color: #0056b3;
     }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      font-size: 14px;
-      color: #555;
-      margin-top: 30px;
-    }
   </style>
 </head>
 <body>
 
-  <header>
-    <h1>Features: Yoruba Morals & Culture</h1>
-   <div>
-    <a href="index.html" class="bg-white text-blue-600 px-4 py-2 rounded-lg font-medium shadow hover:bg-blue-100 transition">Home</a>
-  </div>
+  <!-- Header -->
+  <header class="bg-blue-600 text-white px-4 py-4 flex items-center justify-between">
+    <h1 class="text-lg font-semibold">Features: Yoruba Morals & Culture</h1>
+    <a href="index.html" class="bg-white text-blue-600 px-4 py-2 rounded-lg font-medium shadow hover:bg-blue-100 transition">
+      Home
+    </a>
   </header>
 
-  <div class="container">
-    <div class="intro">
-      <h2>Introduction</h2>
+  <!-- Content -->
+  <div class="max-w-3xl mx-auto mt-8 bg-white rounded-xl shadow p-6">
+    <section class="intro mb-6 text-justify">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-2">Introduction</h2>
       <p>
-        Africa is a continent rich in culture, values, and traditions. Among its diverse peoples, the Yoruba culture of West Africa stands out for its deep sense of morality, respect, and etiquette. 
-        From ancient times, Yoruba people have placed great emphasis on moral behavior, respect for elders, honesty, and communal living. 
+        Africa is a continent rich in culture, values, and traditions. Among its diverse peoples, the Yoruba culture of West Africa stands out for its deep sense of morality, respect, and etiquette.
+        From ancient times, Yoruba people have placed great emphasis on moral behavior, respect for elders, honesty, and communal living.
         These values are taught from childhood through proverbs, stories, and everyday interactions that shape character and promote harmony in society.
       </p>
-    </div>
+    </section>
 
     <!-- Accordion 1 -->
-    <button class="accordion">Morals and Etiquette</button>
+    <button class="accordion">
+      <span>Morals and Etiquette</span>
+      <svg class="chevron w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      </svg>
+    </button>
     <div class="panel">
       <p>
-        Yoruba morals and etiquette teach respect, discipline, and integrity. Elders are highly respected, and greetings are considered signs of good upbringing. 
+        Yoruba morals and etiquette teach respect, discipline, and integrity. Elders are highly respected, and greetings are considered signs of good upbringing.
         Children are taught to show humility and politeness in speech and behavior, as these values strengthen family and community ties.
       </p>
       <a href="morals.html" class="learn-more">Learn More</a>
     </div>
 
     <!-- Accordion 2 -->
-    <button class="accordion">The Use of Gadgets</button>
+    <button class="accordion">
+      <span>The Use of Gadgets</span>
+      <svg class="chevron w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      </svg>
+    </button>
     <div class="panel">
       <p>
-        In modern times, technology has become a vital part of daily life. However, the Yoruba moral system encourages moderation, responsibility, and respect even in digital interactions. 
+        In modern times, technology has become a vital part of daily life. However, the Yoruba moral system encourages moderation, responsibility, and respect even in digital interactions.
         Good morals should guide how gadgets and technology are used, ensuring they support learning and growth rather than distraction.
       </p>
       <a href="gadgets.html" class="learn-more">Learn More</a>
     </div>
   </div>
 
-  <footer>
+  <!-- Footer -->
+  <footer class="text-center text-gray-600 py-6 text-sm">
     &copy; 2025 SmartKids Learning. All Rights Reserved.
   </footer>
 
+  <!-- Script for Accordion -->
   <script>
-    // Accordion Functionality
     const accordions = document.querySelectorAll(".accordion");
     accordions.forEach(acc => {
       acc.addEventListener("click", function() {
@@ -162,6 +145,5 @@
       });
     });
   </script>
-
 </body>
 </html>
