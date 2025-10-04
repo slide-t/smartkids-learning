@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmartKids Quiz</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    /* === Welcome Modal Animations === */
+    #welcomeModal {
+      animation: fadeIn 1s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .line {
+      width: 0;
+      height: 3px;
+      margin: 0 auto;
+      border-radius: 10px;
+      background: #a3e635;
+      box-shadow: 0 0 12px #bef264, 0 0 24px #84cc16;
+      animation: glowPause 1.5s ease-in-out forwards, growLine 1s ease 1.5s forwards;
+    }
+
+    @keyframes glowPause {
+      0%, 100% { opacity: 1; transform: scaleX(1); }
+      50% { opacity: 0.8; transform: scaleX(0.8); }
+    }
+
+    @keyframes growLine {
+      from { width: 0; }
+      to { width: 130px; }
+    }
+
+    .smartkidsText {
+      font-size: 3rem;
+      font-weight: 800;
+      color: white;
+      letter-spacing: 2px;
+      display: inline-block;
+      overflow: hidden;
+      white-space: nowrap;
+      border-right: 3px solid #a3e635;
+      animation: typing 2s steps(10, end) 2.6s forwards, blink .75s step-end infinite;
+    }
+
+    @keyframes typing {
+      from { width: 1ch; }
+      to { width: 9ch; }
+    }
+
+    @keyframes blink {
+      from, to { border-color: transparent; }
+      50% { border-color: #a3e635; }
+    }
+
+    .fadeIn {
+      animation: fadeInText 1.2s ease forwards;
+    }
+
+    @keyframes fadeInText {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* === Timer Adjustments === */
+    #floatingTimer {
+      top: 85px !important;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-100 font-sans">
+
+  <!-- === Welcome Modal === -->
+  <div id="welcomeModal" class="fixed inset-0 bg-black bg-opacity-90 flex flex-col items-center justify-center z-50">
+    <div class="line mb-6"></div>
+    <div id="smartkidsText" class="smartkidsText">S</div>
+    <p id="poweredBy" class="text-gray-300 mt-4 text-lg opacity-0 transition-opacity duration-700">
+      Powered by <span class="text-lime-400 font-semibold">SlideTeck</span>
+    </p>
+    <button id="startQuizBtn" class="hidden mt-8 bg-lime-500 text-black font-semibold px-6 py-2 rounded-lg shadow hover:bg-lime-400 transition">Start Quiz</button>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="bg-blue-600 text-white p-4 shadow flex justify-between items-center">
+    <h1 class="text-xl font-bold">SmartKids Quiz</h1>
+    <div class="flex space-x-4">
+      <a href="classes.html" class="bg-green-500 px-3 py-1 rounded hover:bg-green-600">Keyboard Tutor</a>
+      <a href="mouse.html" class="bg-purple-500 px-3 py-1 rounded hover:bg-purple-600">Mouse Practice</a>
+    </div>
+  </nav>
+
+  <!-- Quiz Container -->
+  <div class="container mx-auto mt-6 p-4 bg-white rounded shadow" id="quizContainer">
+    <h2 class="text-2xl font-bold mb-4 text-center text-blue-700">🧩 SmartKids Quiz Challenge</h2>
+
+    <form id="quizForm" class="space-y-6"></form>
+
+    <div class="flex justify-between mt-6">
+      <button id="prevBtn" class="bg-gray-400 text-white px-4 py-2 rounded hidden">Previous</button>
+      <button id="submitBtn" class="bg-blue-600 text-white px-4 py-2 rounded">Submit</button>
+      <button id="nextBtn" class="bg-green-600 text-white px-4 py-2 rounded hidden">Next</button>
+    </div>
+  </div>
+
+  <!-- Report Card -->
+  <div class="container mx-auto mt-6 p-4 bg-white rounded shadow hidden" id="reportCard">
+    <h2 class="text-xl font-bold mb-4">📊 Mini Report Card</h2>
+    <p id="scoreSummary" class="text-lg font-semibold mb-2"></p>
+    <p id="feedbackMessage" class="text-md"></p>
+  </div>
+
+<script>
+  let allQuestions = [];
+  let currentPage = 0;
+  const pageSize = 5;
+  let totalScore = 0;
+  let timer, timeLeft = 75;
+  let isPaused = false;
+
+  const quizContainer = document.getElementById("quizContainer");
+  const quizForm = document.getElementById("quizForm");
+  const prevBtn = document.getElementById("prevBtn");
+  const submitBtn = document.getElementById("submitBtn");
+  const reportCard = document.getElementById("reportCard");
+  const scoreSummary = document.getElementById("scoreSummary");
+  const feedbackMessage = document.getElementById("feedbackMessage");
+
+  // ------------------ Floating Circular Timer ------------------
+  const timerContainer = document.createElement("div");
+  timerContainer.id = "floatingTimer";
+  timerContainer.className =
+    "fixed top-4 right-4 w-20 h-20 z-50 flex items-center justify-center rounded-full border-4 border-gray-300 bg-white shadow-xl";
+  timerContainer.innerHTML = `
+    <svg class="absolute inset-0" viewBox="0 0 36 36">
+      <path stroke="#e5e7eb" stroke-width="3.8" fill="none"
+        d="M18 2.0845
+          a 15.9155 15.9155 0 0 1 0 31.831
+          a 15.9155 15.9155 0 0 1 0 -31.831"/>
+      <path id="timerPath" stroke="#22c55e" stroke-width="3.8" stroke-dasharray="100, 100" fill="none"
+        d="M18 2.0845
+          a 15.9155 15.9155 0 0 1 0 31.831
+          a 15.9155 15.9155 0 0 1 0 -31.831"/>
+    </svg>
+    <span id="timerText" class="text-lg font-bold text-gray-700">75</span>
+  `;
+  document.body.appendChild(timerContainer);
+
+  // ------------------ Load Questions ------------------
+  async function loadQuestions() {
+    const res = await fetch("data/quiz.json");
+    const data = await res.json();
+    allQuestions = shuffleArray(data.quiz);
+    renderPage();
+    startTimer();
+  }
+
+  // ------------------ Render Page ------------------
+  function renderPage() {
+    quizForm.innerHTML = "";
+    const start = currentPage * pageSize;
+    const end = start + pageSize;
+    const pageQuestions = allQuestions.slice(start, end);
+
+    pageQuestions.forEach((q, index) => {
+      const div = document.createElement("div");
+      div.classList.add("p-4", "border", "rounded", "bg-gray-50", "mb-3");
+      div.innerHTML = `
+        <p class="font-semibold mb-2">${start + index + 1}. ${q.question}</p>
+        ${shuffleArray(q.options)
+          .map(
+            (opt) => `
+          <label class="block cursor-pointer">
+            <input type="radio" name="q${q.id}" value="${opt}" class="mr-2">
+            ${opt}
+          </label>`
+          )
+          .join("")}
+      `;
+      quizForm.appendChild(div);
+    });
+
+    prevBtn.classList.toggle("hidden", currentPage === 0);
+  }
+
+  // ------------------ Timer Logic ------------------
+  function startTimer() {
+    clearInterval(timer);
+    timeLeft = 75;
+    isPaused = false;
+    updateTimerUI();
+
+    timer = setInterval(() => {
+      if (!isPaused) {
+        timeLeft--;
+        updateTimerUI();
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          showNotification("⏰ Time's up! Submitting answers automatically...");
+          submitBtn.click();
+        }
+      }
+    }, 1000);
+  }
+
+  function updateTimerUI() {
+    const percent = (timeLeft / 75) * 100;
+    const timerPath = document.getElementById("timerPath");
+    const timerText = document.getElementById("timerText");
+
+    timerPath.setAttribute("stroke-dasharray", `${percent}, 100`);
+    timerPath.setAttribute("stroke", timeLeft < 15 ? "#ef4444" : "#22c55e");
+    timerText.textContent = timeLeft;
+  }
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      isPaused = true;
+      showNotification("⏸️ Timer paused — you switched tabs!");
+    } else {
+      isPaused = false;
+      showNotification("▶️ Timer resumed — welcome back!");
+    }
+  });
+
+  // ------------------ Submit Logic ------------------
+  submitBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    clearInterval(timer);
+
+    let score = 0;
+    const start = currentPage * pageSize;
+    const end = start + pageSize;
+    const pageQuestions = allQuestions.slice(start, end);
+
+    pageQuestions.forEach((q) => {
+      const selected = quizForm.querySelector(`input[name="q${q.id}"]:checked`);
+      if (selected && selected.value === q.answer) score++;
+    });
+
+    totalScore += score;
+    const totalAttempted = Math.min(end, allQuestions.length);
+    const percentage = Math.round((totalScore / totalAttempted) * 100);
+
+    showNotification(`✅ You scored ${score} / ${pageQuestions.length} on this page.`);
+
+    if (percentage < 50) feedbackMessage.textContent = "💪 Keep trying!";
+    else if (percentage < 80) feedbackMessage.textContent = "👏 Good effort!";
+    else if (percentage < 90) feedbackMessage.textContent = "🌟 Great work!";
+    else feedbackMessage.textContent = "🏆 Excellent! You are a SmartKid star!";
+
+    if (end < allQuestions.length) {
+      currentPage++;
+      renderPage();
+      startTimer();
+    } else {
+      finishQuiz(percentage);
+    }
+  });
+
+  function finishQuiz(percentage) {
+    quizContainer.classList.add("hidden");
+    reportCard.classList.remove("hidden");
+    scoreSummary.textContent = `🎯 Final Score: ${totalScore} / ${allQuestions.length} (${percentage}%)`;
+  }
+
+  function showNotification(message) {
+    let note = document.createElement("div");
+    note.className =
+      "fixed top-5 right-5 bg-gradient-to-r from-green-500 to-emerald-600 text-white px-5 py-3 rounded-xl shadow-lg text-sm font-semibold z-[9999] transition-all duration-500";
+    note.textContent = message;
+    document.body.appendChild(note);
+    setTimeout(() => {
+      note.style.opacity = "0";
+      note.style.transform = "translateY(-10px)";
+      setTimeout(() => note.remove(), 500);
+    }, 3000);
+  }
+
+  function shuffleArray(array) {
+    return array.sort(() => Math.random() - 0.5);
+  }
+
+  // === Welcome Animation Control ===
+  window.addEventListener("load", () => {
+    const modal = document.getElementById("welcomeModal");
+    const text = document.getElementById("smartkidsText");
+    const powered = document.getElementById("poweredBy");
+    const startBtn = document.getElementById("startQuizBtn");
+
+    setTimeout(() => { text.textContent = "SmartKids"; }, 2000);
+    setTimeout(() => { powered.classList.add("fadeIn"); powered.style.opacity = 1; }, 3300);
+    setTimeout(() => { startBtn.classList.remove("hidden"); }, 4000);
+
+    startBtn.addEventListener("click", () => {
+      modal.style.display = "none";
+      loadQuestions();
+    });
+  });
+</script>
+</body>
+</html>
