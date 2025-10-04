@@ -11,14 +11,14 @@ document.addEventListener("DOMContentLoaded", () => {
     db = event.target.result;
     if (!db.objectStoreNames.contains("users")) {
       const store = db.createObjectStore("users", { keyPath: "id", autoIncrement: true });
-      store.createIndex("email", "email", { unique: false }); 
+      store.createIndex("email", "email", { unique: false });
     }
   };
 
   request.onsuccess = (event) => {
     db = event.target.result;
-    updateAuthButton(); 
-    checkForceRegistration(); // 🔥 ensure modal shows on practice pages
+    updateAuthButton();
+    checkForceRegistration();
   };
 
   request.onerror = (event) => {
@@ -59,20 +59,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // ---------- Force Registration on Practice Pages ----------
+  // ---------- Force Registration ----------
   function checkForceRegistration() {
     const page = window.location.pathname;
     const currentUser = getCurrentUserId();
 
-    // Only apply on lessons.html and mouse.html
     if (!currentUser && (page.includes("lessons.html") || page.includes("mouse.html"))) {
       setTimeout(() => {
         if (!getCurrentUserId()) {
           window.toggleAuth();
           const closeBtn = document.getElementById("closeRegistration");
-          if (closeBtn) closeBtn.style.display = "none"; // ❌ remove close option
+          if (closeBtn) closeBtn.style.display = "none";
         }
-      }, 2 * 60 * 1000); // show after 2 minutes practice
+      }, 2 * 60 * 1000);
     }
   }
 
@@ -85,7 +84,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!document.getElementById("registrationModal")) {
       try {
-        const res = await fetch("registration.html");
+        // ✅ Correct root path
+        const res = await fetch("./registration.html");
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const html = await res.text();
         modalContainer.innerHTML = html;
 
@@ -134,7 +135,8 @@ document.addEventListener("DOMContentLoaded", () => {
           };
         });
       } catch (err) {
-        console.error("Failed to load registration form:", err);
+        console.error("❌ Failed to load registration.html:", err);
+        alert("Unable to load registration form. Please check registration.html is in root folder.");
       }
     } else {
       document.getElementById("registrationModal").classList.remove("hidden");
