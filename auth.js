@@ -1,5 +1,5 @@
-// auth.js — SmartKids Enhanced Login/Registration Display
-//---------------------------------------------------------
+// auth.js — SmartKids Registration + Persistent User Display
+// ---------------------------------------------------------
 const modalContainer = document.getElementById("modalContainer") || (() => {
   const div = document.createElement("div");
   div.id = "modalContainer";
@@ -8,10 +8,12 @@ const modalContainer = document.getElementById("modalContainer") || (() => {
 })();
 
 document.addEventListener("DOMContentLoaded", () => {
-  let db;
   const authBtn = document.getElementById("authBtn");
+  const modalContainer = document.getElementById("modalContainer");
+  let blinkInterval;
 
   // ---------- IndexedDB Setup ----------
+  let db;
   const request = indexedDB.open("SmartKidsDB", 2);
 
   request.onupgradeneeded = (event) => {
@@ -31,44 +33,57 @@ document.addEventListener("DOMContentLoaded", () => {
     displayUserCount();
   };
 
+  request.onerror = (event) => console.error("IndexedDB error:", event.target.errorCode);
+
   // ---------- Session Helpers ----------
-  function getCurrentUser() {
-    return {
-      id: localStorage.getItem("currentUserId"),
-      name: localStorage.getItem("currentUserName")
-    };
+  function getCurrentUserId() {
+    return localStorage.getItem("currentUserId");
+  }
+
+  function getCurrentUserName() {
+    return localStorage.getItem("currentUserName");
   }
 
   function setCurrentUser(id, name) {
     localStorage.setItem("currentUserId", id);
     localStorage.setItem("currentUserName", name || "");
-    updateAuthButton(); // ✅ immediately update UI
   }
 
   function clearCurrentUser() {
     localStorage.removeItem("currentUserId");
     localStorage.removeItem("currentUserName");
+    clearInterval(blinkInterval);
     updateAuthButton();
   }
 
   // ---------- Update Auth Button ----------
   function updateAuthButton() {
     if (!authBtn) return;
-    const { id, name } = getCurrentUser();
+    const id = getCurrentUserId();
+    const name = getCurrentUserName();
+
+    clearInterval(blinkInterval);
 
     if (id) {
-      authBtn.innerHTML = `<span style="color:lime;font-weight:600;">${name}</span> • Logout`;
+      authBtn.textContent = `👤 ${name || "User"} (Logout)`;
       authBtn.onclick = () => {
         clearCurrentUser();
-        alert("👋 Logged out successfully!");
+        alert("👋 You’ve logged out successfully!");
       };
+
+      // 🌟 Blinking name animation every 5s
+      blinkInterval = setInterval(() => {
+        authBtn.classList.add("animate-pulse", "text-lime-500");
+        setTimeout(() => authBtn.classList.remove("animate-pulse", "text-lime-500"), 1500);
+      }, 5000);
+
     } else {
       authBtn.textContent = "Sign Up";
       authBtn.onclick = () => window.toggleAuth && window.toggleAuth();
     }
   }
 
-  // ---------- Clean Expired ----------
+  // ---------- Clean Up Old Entries ----------
   function cleanupExpiredUsers() {
     if (!db) return;
     const tx = db.transaction("users", "readwrite");
@@ -76,10 +91,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const now = Date.now();
     const fiveDays = 5 * 24 * 60 * 60 * 1000;
 
-    store.openCursor().onsuccess = (e) => {
-      const cursor = e.target.result;
+    store.openCursor().onsuccess = (event) => {
+      const cursor = event.target.result;
       if (cursor) {
-        if (now - cursor.value.timestamp > fiveDays) {
+        const user = cursor.value;
+        if (now - user.timestamp > fiveDays) {
           store.delete(cursor.primaryKey);
         }
         cursor.continue();
@@ -90,74 +106,92 @@ document.addEventListener("DOMContentLoaded", () => {
   // ---------- Display User Count ----------
   function displayUserCount() {
     if (!db) return;
-    const el = document.getElementById("userCount");
-    if (!el) return;
+    const countDisplay = document.getElementById("userCount");
+    if (!countDisplay) return;
     const tx = db.transaction("users", "readonly");
     const store = tx.objectStore("users");
     const req = store.getAll();
 
-    req.onsuccess = (e) => {
-      const users = e.target.result || [];
-      const unique = [...new Map(users.map(u => [u.fullName.toLowerCase(), u])).values()];
-      el.textContent = unique.length;
+    req.onsuccess = (event) => {
+      const allUsers = event.target.result || [];
+      const uniqueUsers = [...new Map(allUsers.map(u => [u.fullName.toLowerCase(), u])).values()];
+      countDisplay.textContent = uniqueUsers.length;
     };
   }
 
-  // ---------- Expose Admin Fetch ----------
-  window.getAllRegisteredUsers = (callback) => {
+  // ---------- Expose For Admin Page ----------
+  window.getAllRegisteredUsers = function (callback) {
     if (!db) return;
     const tx = db.transaction("users", "readonly");
     const store = tx.objectStore("users");
     const req = store.getAll();
-    req.onsuccess = (e) => {
-      const users = e.target.result || [];
-      const unique = [...new Map(users.map(u => [u.fullName.toLowerCase(), u])).values()];
-      callback(unique);
+
+    req.onsuccess = (event) => {
+      const users = event.target.result || [];
+      const uniqueUsers = [...new Map(users.map(u => [u.fullName.toLowerCase(), u])).values()];
+      callback(uniqueUsers);
     };
   };
 
-  // ---------- Toggle Registration Modal ----------
+  // ---------- Toggle Modal ----------
   window.toggleAuth = async function () {
-    if (!db) return console.error("DB not ready");
+    if (!db) {
+      console.error("DB not ready yet.");
+      return;
+    }
 
     if (!document.getElementById("registrationModal")) {
-      const res = await fetch("registration.html");
-      modalContainer.innerHTML = await res.text();
-      setTimeout(setupRegistrationModal, 150);
+      try {
+        const res = await fetch("registration.html");
+        const html = await res.text();
+        modalContainer.innerHTML = html;
+
+        setTimeout(() => setupRegistrationModal(), 150);
+      } catch (err) {
+        console.error("Failed to load registration form:", err);
+      }
     } else {
       document.getElementById("registrationModal").classList.remove("hidden");
     }
   };
 
-  // ---------- Modal Registration Setup ----------
+  // ---------- Setup Registration Modal ----------
   function setupRegistrationModal() {
-    const modal = document.getElementById("registrationModal");
-    const closeBtn = document.getElementById("closeRegistration");
-    const form = document.getElementById("registrationForm");
+    const registrationModal = document.getElementById("registrationModal");
+    const closeRegistration = document.getElementById("closeRegistration");
+    const registrationForm = document.getElementById("registrationForm");
     const successMsg = document.getElementById("successMsg");
 
-    modal.classList.remove("hidden");
-    if (closeBtn) closeBtn.onclick = () => modal.classList.add("hidden");
+    if (!registrationModal) return;
 
-    form.onsubmit = (e) => {
+    registrationModal.classList.remove("hidden");
+    if (closeRegistration) closeRegistration.onclick = () => registrationModal.classList.add("hidden");
+
+    registrationForm.onsubmit = (e) => {
       e.preventDefault();
-      const data = Object.fromEntries(new FormData(form).entries());
-      data.timestamp = Date.now();
+      const formData = new FormData(registrationForm);
+      const userData = Object.fromEntries(formData.entries());
+      userData.timestamp = Date.now();
 
       const tx = db.transaction("users", "readwrite");
       const store = tx.objectStore("users");
-      const addReq = store.add(data);
 
-      addReq.onsuccess = (ev) => {
-        setCurrentUser(ev.target.result, data.fullName);
+      const addReq = store.add(userData);
+      addReq.onsuccess = (event) => {
+        const newId = event.target.result;
+        setCurrentUser(newId, userData.fullName);
         successMsg.classList.remove("hidden");
+        updateAuthButton();
         displayUserCount();
+
         setTimeout(() => {
-          modal.classList.add("hidden");
+          registrationModal.classList.add("hidden");
           successMsg.classList.add("hidden");
-          form.reset();
+          registrationForm.reset();
         }, 1500);
       };
+
+      addReq.onerror = (err) => console.error("Error saving user:", err);
     };
   }
 });
