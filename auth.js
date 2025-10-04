@@ -1,5 +1,5 @@
-// auth.js — SmartKids Registration + Persistent User Display (Fixed Version)
-// -------------------------------------------------------------------------
+// auth.js — Enhanced SmartKids Registration Manager
+// --------------------------------------------
 const modalContainer = document.getElementById("modalContainer") || (() => {
   const div = document.createElement("div");
   div.id = "modalContainer";
@@ -10,11 +10,10 @@ const modalContainer = document.getElementById("modalContainer") || (() => {
 document.addEventListener("DOMContentLoaded", () => {
   const authBtn = document.getElementById("authBtn");
   const modalContainer = document.getElementById("modalContainer");
-  let blinkInterval;
 
   // ---------- IndexedDB Setup ----------
   let db;
-  const request = indexedDB.open("SmartKidsDB", 2);
+  const request = indexedDB.open("SmartKidsDB", 2); // bump version for new schema
 
   request.onupgradeneeded = (event) => {
     db = event.target.result;
@@ -28,9 +27,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   request.onsuccess = (event) => {
     db = event.target.result;
-    cleanupExpiredUsers();
+    cleanupExpiredUsers(); // 🧹 remove old entries older than 5 days
     updateAuthButton();
-    displayUserCount();
+    displayUserCount(); // update total user count on page
   };
 
   request.onerror = (event) => console.error("IndexedDB error:", event.target.errorCode);
@@ -40,20 +39,14 @@ document.addEventListener("DOMContentLoaded", () => {
     return localStorage.getItem("currentUserId");
   }
 
-  function getCurrentUserName() {
-    return localStorage.getItem("currentUserName");
-  }
-
   function setCurrentUser(id, name) {
-    if (!name) name = "User";
     localStorage.setItem("currentUserId", id);
-    localStorage.setItem("currentUserName", name);
+    localStorage.setItem("currentUserName", name || "");
   }
 
   function clearCurrentUser() {
     localStorage.removeItem("currentUserId");
     localStorage.removeItem("currentUserName");
-    clearInterval(blinkInterval);
     updateAuthButton();
   }
 
@@ -61,28 +54,14 @@ document.addEventListener("DOMContentLoaded", () => {
   function updateAuthButton() {
     if (!authBtn) return;
     const id = getCurrentUserId();
-    const name = getCurrentUserName();
+    const name = localStorage.getItem("currentUserName");
 
-    clearInterval(blinkInterval);
-
-    if (id && name) {
-      // Display with icon + name
-      authBtn.innerHTML = `<span id="userLabel" class="font-semibold text-blue-600">👤 ${name}</span> <span class="ml-2 text-red-500 font-medium">(Logout)</span>`;
-
+    if (id) {
+      authBtn.textContent = `Logout${name ? ` (${name})` : ""}`;
       authBtn.onclick = () => {
         clearCurrentUser();
-        alert("👋 You’ve logged out successfully!");
+        alert("👋 Logged out.");
       };
-
-      // 🌟 Blinking effect every 5 seconds
-      const userLabel = document.getElementById("userLabel");
-      blinkInterval = setInterval(() => {
-        if (userLabel) {
-          userLabel.classList.add("animate-pulse", "text-lime-500");
-          setTimeout(() => userLabel.classList.remove("animate-pulse", "text-lime-500"), 1500);
-        }
-      }, 5000);
-
     } else {
       authBtn.textContent = "Sign Up";
       authBtn.onclick = () => window.toggleAuth && window.toggleAuth();
@@ -109,52 +88,11 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  // ---------- Display User Count ----------
-function updateAuthButton() {
-  if (!authBtn) return;
-  const id = getCurrentUserId();
-  const name = getCurrentUserName();
-
-  clearInterval(blinkInterval);
-
-  if (id && name) {
-    // Stylish glowing username
-    authBtn.innerHTML = `
-      <span id="userLabel"
-        class="font-bold text-transparent bg-clip-text bg-gradient-to-r from-lime-400 via-green-400 to-lime-500 drop-shadow-[0_0_4px_rgba(132,204,22,0.8)]">
-        👤 ${name}
-      </span>
-      <span class="ml-2 text-red-500 font-semibold">(Logout)</span>
-    `;
-
-    authBtn.onclick = () => {
-      clearCurrentUser();
-      alert("👋 You’ve logged out successfully!");
-    };
-
-    // 🌟 Subtle pulsing lime glow every 5s
-    const userLabel = document.getElementById("userLabel");
-    blinkInterval = setInterval(() => {
-      if (userLabel) {
-        userLabel.classList.add("animate-pulse");
-        userLabel.style.textShadow = "0 0 10px #a3e635, 0 0 20px #bef264";
-        setTimeout(() => {
-          userLabel.classList.remove("animate-pulse");
-          userLabel.style.textShadow = "";
-        }, 1500);
-      }
-    }, 5000);
-
-  } else {
-    authBtn.textContent = "Sign Up";
-    authBtn.onclick = () => window.toggleAuth && window.toggleAuth();
-  }
-}
-  
-  /*function displayUserCount() {
+  // ---------- Display User Count (on all practice pages) ----------
+  function displayUserCount() {
     if (!db) return;
     const countDisplay = document.getElementById("userCount");
-    if (!countDisplay) return;
+    if (!countDisplay) return; // only show if placeholder exists
     const tx = db.transaction("users", "readonly");
     const store = tx.objectStore("users");
     const req = store.getAll();
@@ -164,7 +102,7 @@ function updateAuthButton() {
       const uniqueUsers = [...new Map(allUsers.map(u => [u.fullName.toLowerCase(), u])).values()];
       countDisplay.textContent = uniqueUsers.length;
     };
-  }*/
+  }
 
   // ---------- Expose For Admin Page ----------
   window.getAllRegisteredUsers = function (callback) {
@@ -187,6 +125,7 @@ function updateAuthButton() {
       return;
     }
 
+    // Load modal dynamically from registration.html
     if (!document.getElementById("registrationModal")) {
       try {
         const res = await fetch("registration.html");
@@ -227,8 +166,7 @@ function updateAuthButton() {
       const addReq = store.add(userData);
       addReq.onsuccess = (event) => {
         const newId = event.target.result;
-        const fullName = userData.fullName || "User";
-        setCurrentUser(newId, fullName);
+        setCurrentUser(newId, userData.fullName);
         successMsg.classList.remove("hidden");
         updateAuthButton();
         displayUserCount();
@@ -240,7 +178,9 @@ function updateAuthButton() {
         }, 1500);
       };
 
-      addReq.onerror = (err) => console.error("Error saving user:", err);
+      addReq.onerror = (err) => {
+        console.error("Error saving user:", err);
+      };
     };
   }
 });
