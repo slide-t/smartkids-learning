@@ -110,7 +110,48 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ---------- Display User Count ----------
-  function displayUserCount() {
+function updateAuthButton() {
+  if (!authBtn) return;
+  const id = getCurrentUserId();
+  const name = getCurrentUserName();
+
+  clearInterval(blinkInterval);
+
+  if (id && name) {
+    // Stylish glowing username
+    authBtn.innerHTML = `
+      <span id="userLabel"
+        class="font-bold text-transparent bg-clip-text bg-gradient-to-r from-lime-400 via-green-400 to-lime-500 drop-shadow-[0_0_4px_rgba(132,204,22,0.8)]">
+        👤 ${name}
+      </span>
+      <span class="ml-2 text-red-500 font-semibold">(Logout)</span>
+    `;
+
+    authBtn.onclick = () => {
+      clearCurrentUser();
+      alert("👋 You’ve logged out successfully!");
+    };
+
+    // 🌟 Subtle pulsing lime glow every 5s
+    const userLabel = document.getElementById("userLabel");
+    blinkInterval = setInterval(() => {
+      if (userLabel) {
+        userLabel.classList.add("animate-pulse");
+        userLabel.style.textShadow = "0 0 10px #a3e635, 0 0 20px #bef264";
+        setTimeout(() => {
+          userLabel.classList.remove("animate-pulse");
+          userLabel.style.textShadow = "";
+        }, 1500);
+      }
+    }, 5000);
+
+  } else {
+    authBtn.textContent = "Sign Up";
+    authBtn.onclick = () => window.toggleAuth && window.toggleAuth();
+  }
+}
+  
+  /*function displayUserCount() {
     if (!db) return;
     const countDisplay = document.getElementById("userCount");
     if (!countDisplay) return;
@@ -123,7 +164,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const uniqueUsers = [...new Map(allUsers.map(u => [u.fullName.toLowerCase(), u])).values()];
       countDisplay.textContent = uniqueUsers.length;
     };
-  }
+  }*/
 
   // ---------- Expose For Admin Page ----------
   window.getAllRegisteredUsers = function (callback) {
