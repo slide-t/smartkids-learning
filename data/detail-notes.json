@@ -158,11 +158,31 @@
     "title": "Introduction to the Internet",
     "content": "The Internet connects computers worldwide. <br><br>👉 Use browsers to search for information. <br>👉 Communicate via email or messaging. <br>👉 Always ask an adult before visiting new websites.<br><br><img src='images/internet.png' alt='Internet' class='w-64 mt-2 rounded shadow'>"
   },
-  {
-    "id": "ict_files",
-    "title": "Working with Files",
-    "content": "Files store your work on the computer. <br><br>👉 To **open a file**, double-click it. <br>👉 To **save a file**, use 'Save' or **Ctrl + S**. <br>👉 Organize files in folders for easy access.<br><br><img src='images/ict_files.png' alt='Files on Computer' class='w-64 mt-2 rounded shadow'>"
-  },
+{
+  "id": "internet_learning_page",
+  "title": "Exploring the Internet Safely",
+  "sections": [
+    {
+      "id": "uses_of_internet",
+      "title": "Uses of the Internet",
+      "content": "The Internet is a worldwide network that connects millions of computers, allowing people to share information and communicate instantly. It makes learning, working, and connecting with others much easier. <br><br>👉 **Learning:** Pupils can use the Internet to research topics, read e-books, and watch educational videos. <br>👉 **Communication:** We can send messages through email or chat apps like WhatsApp and Telegram. <br>👉 **Entertainment:** You can listen to music, play games, or watch movies online. <br>👉 **Shopping and Banking:** People can buy goods or transfer money safely using online services. <br>👉 **Information Sharing:** The Internet helps people share ideas and stay informed about what is happening around the world. <br><br>Always use the Internet wisely and remember to ask an adult before visiting a new website.<br><br><img src='images/internet.png' alt='Uses of the Internet' class='w-64 mt-2 rounded shadow'>"
+    },
+    {
+      "id": "online_safety_for_kids",
+      "title": "Online Safety for Kids",
+      "content": "While the Internet is full of fun and useful information, it is also important to stay safe while using it. Online safety means protecting yourself, your personal data, and your computer from harm. <br><br>👉 **Do not share personal details:** Never post your full name, address, school name, or phone number online. <br>👉 **Ask an adult for help:** Always tell a parent or teacher if you see something strange or scary online. <br>👉 **Use strong passwords:** Mix letters, numbers, and symbols to make your password harder to guess. <br>👉 **Avoid strangers:** Do not chat or share pictures with people you don’t know. <br>👉 **Be kind online:** Treat others with respect when using social media or chat apps. <br>👉 **Don’t download unknown files:** They may contain viruses that harm your computer. <br><br>Online safety keeps you protected, happy, and confident while using the Internet.<br><br><img src='images/online_safety.png' alt='Online Safety for Kids' class='w-64 mt-2 rounded shadow'>"
+    },
+    {
+      "id": "web_browsers_and_search_engines",
+      "title": "Web Browsers and Search Engines",
+      "content": "To explore the Internet, we use tools called **web browsers** and **search engines**. A browser is a software that allows us to open and view websites, while a search engine helps us find information quickly. <br><br>👉 **Examples of Web Browsers:** Google Chrome, Mozilla Firefox, Microsoft Edge, and Safari. <br>👉 **Examples of Search Engines:** Google, Bing, Yahoo, and DuckDuckGo. <br>👉 **How to Search:** Type what you want to find in the search box and click the search button. <br>👉 **Be Specific:** Use clear words to get better search results. For example, instead of typing 'animals,' you can type 'African wild animals.' <br>👉 **Check Sources:** Not everything online is true. Compare information from more than one website. <br><br>Understanding browsers and search engines helps you become a smart and safe digital learner.<br><br><img src='images/search_engine.png' alt='Web Browsers and Search Engines' class='w-64 mt-2 rounded shadow'>"
+    },
+    {
+  "id": "ict_files",
+  "title": "Working with Files",
+  "content": "Files are where your computer stores all your work, such as documents, pictures, music, and videos. Every file has a **name** and a **type** (like .docx for Word or .jpg for pictures). <br><br>👉 **Creating a File:** You can make a new file using programs like Microsoft Word, Paint, or Notepad. <br>👉 **Opening a File:** Double-click the file icon or right-click and choose 'Open' to view or edit it. <br>👉 **Saving a File:** Click 'Save' or press **Ctrl + S** to keep your work safely stored. Always save your file in the right folder so you can find it later. <br>👉 **Renaming a File:** Click once on the file name, then type a new name that describes its content clearly. <br>👉 **Organizing Files:** Store similar files in one folder, for example: <br>• A folder named *School Work* for assignments <br>• A folder named *Pictures* for images <br>• A folder named *Music* for songs <br>👉 **Deleting Unwanted Files:** When a file is no longer useful, you can delete it. But be careful — always make sure before deleting! <br><br>Proper file management helps keep your computer neat and makes finding your work faster.<br><br><img src='images/ict_files.png' alt='Working with Files' class='w-64 mt-2 rounded shadow'>"
+},
+    
   {
     "id": "ict_internet",
     "title": "Using the Internet",
