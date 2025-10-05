@@ -70,6 +70,48 @@
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
+/* additional css*/
+.tutor-buttons a {
+  position: relative;
+  border-radius: 25px;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* Animated blue shining border */
+.tutor-buttons a::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  width: calc(100% + 4px);
+  height: calc(100% + 4px);
+  background: linear-gradient(90deg, #007bff, #00d4ff, #007bff);
+  background-size: 200% 200%;
+  border-radius: 25px;
+  z-index: -1;
+  animation: blueShine 3s linear infinite;
+}
+
+/* Keep button background visible */
+.tutor-buttons a::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: inherit;
+  border-radius: 25px;
+  z-index: -1;
+}
+
+/* Animation for moving blue border */
+@keyframes blueShine {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
 </style>
   
 </head>
