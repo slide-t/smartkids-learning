@@ -16,12 +16,12 @@
   gap: 1rem;
   margin-top: 2rem;
 }
-/* tutor buttons */
+/* tutor buttons 
 .tutor-buttons a {
   display: inline-block;
   width: 12rem;
   padding: 12px 0;
-  background-color: #2f2f2f; /* dark grey */
+  background-color: #2f2f2f; /* dark grey *
   color: white;
   border-radius: 25px;
   font-weight: 600;
@@ -34,7 +34,7 @@
   transition: all 0.3s ease-in-out;
 }
 
-/* Moving neon border */
+/* Moving neon border *
 .tutor-buttons a::before {
   content: '';
   position: absolute;
@@ -49,7 +49,7 @@
   animation: neonBorder 3s linear infinite;
 }
 
-/* Overlay to keep background dark */
+/* Overlay to keep background dark *
 .tutor-buttons a::after {
   content: '';
   position: absolute;
@@ -66,12 +66,68 @@
   transform: scale(1.05);
 }
 
-/* Animation for moving gradient border */
+/* Animation for moving gradient border *
 @keyframes neonBorder {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
+}*/
+  
+.shiny-button {
+  display: inline-block;
+  padding: 12px 28px;
+  background-color: #d3d3d3; /* light grey background */
+  color: #007bff; /* blue text */
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 25px;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease-in-out;
+  z-index: 1;
 }
+
+/* Animated shining border */
+.shiny-button::before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  width: calc(100% + 6px);
+  height: calc(100% + 6px);
+  background: linear-gradient(90deg, #007bff, #00d4ff, #007bff);
+  background-size: 200% 200%;
+  border-radius: 25px;
+  z-index: -1;
+  animation: shineBorder 2.5s linear infinite;
+}
+
+/* Overlay to keep the button background solid */
+.shiny-button::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #d3d3d3; /* match button background */
+  border-radius: 25px;
+  z-index: -1;
+}
+
+/* Hover effect */
+.shiny-button:hover {
+  transform: scale(1.05);
+}
+
+/* Border animation */
+@keyframes shineBorder {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
 </style>
 </head>
 <body class="bg-gradient-to-b from-sky-50 via-white to-sky-100 text-slate-900 font-sans">
