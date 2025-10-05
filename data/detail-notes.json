@@ -15,11 +15,13 @@
     "title": "Categories of Keys",
     "content": "Keyboard keys are divided into several categories: <br>• **Alphanumeric keys**: letters and numbers <br>• **Function keys (F1–F12)**: perform special tasks <br>• **Control keys**: Ctrl, Alt, Esc <br>• **Navigation keys**: Arrows, Home, End <br>• **Numeric keypad**: numbers and symbols <br>• **Special keys**: Enter, Shift, Spacebar, Backspace <br><br><img src='images/keyboard_categories.png' alt='Categories of Keys' class='w-64 mt-2 rounded shadow'>"
   },
-  {
-    "id": "typing_skills",
-    "title": "How to Use the Keyboard for Typing",
-    "content": "Typing skills help you write quickly and accurately. <br><br>👉 Place your fingers on the **home row keys** (A, S, D, F for left hand, J, K, L, ; for right hand). <br>👉 Thumbs rest on the **spacebar**. <br>👉 Keep fingers curved and use the correct finger for each key. <br>👉 Practice improves speed and accuracy.<br><br><img src='images/typing_skills.png' alt='Typing Skills' class='w-64 mt-2 rounded shadow'>"
-  },
+{
+  "id": "typing_skills",
+  "title": "How to Use the Keyboard for Typing",
+  "content": "Learning how to use the keyboard correctly helps you type faster and more accurately. Typing is an important skill for school work, communication, and computer use. <br><br> <b>1. What is Typing?</b><br>Typing means pressing keys on the keyboard to write words, sentences, or numbers on the screen. Good typing skills save time and make your work neat and professional.<br><br> <b>2. The Home Row Keys</b><br>The home row keys are the base position for your fingers when typing. <br>👉 Left hand: A, S, D, F <br>👉 Right hand: J, K, L, ; <br>Your fingers should always return to these keys after pressing other keys. The small bumps on F and J help you find your place without looking down.<br><br> <b>3. Correct Finger Placement</b><br>Each finger has its own keys to press. This helps you type smoothly and without mistakes. <br>👉 Use your thumbs for the <b>spacebar</b>. <br>👉 Keep your fingers slightly curved over the home row. <br>👉 Avoid using one finger for all keys (called 'hunt and peck').<br><br> <b>4. Good Typing Posture</b><br>Sit up straight with both feet flat on the floor. Keep your wrists slightly raised and avoid resting them on the table. Your eyes should look at the screen, not the keyboard.<br><br> <b>5. Practice for Speed and Accuracy</b><br>Typing fast is not as important as typing correctly. Start slowly and focus on hitting the right keys. With daily practice, your speed will naturally increase.<br><br> <b>6. Tips to Improve Typing</b><br>✅ Practice typing short words, then move to sentences.<br>✅ Use typing tutor games or practice lessons daily.<br>✅ Avoid looking at your fingers when typing.<br>✅ Keep your hands clean and dry before typing.<br><br> <b>7. Importance of Typing Skills</b><br>Typing skills help students complete assignments faster, send emails, write reports, and use computers for creative work like coding or design.<br><br><img src='images/typing_skills.png' alt='Typing Skills' class='w-64 mt-2 rounded shadow'><br><br><b>Remember:</b> The more you practice, the better you type! Stay patient and enjoy learning."
+},
+
+    
 {
   "id": "function_keys",
   "title": "Function Keys (F1–F12)",
