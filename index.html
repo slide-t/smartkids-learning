@@ -266,8 +266,8 @@
 <style>
 .blinking-button {
   display: inline-block;
-  background-color: #007bff; /* Blue */
-  color: white;
+  background-color: #fff/*#007bff*/; /* Blue */
+  color: #007bff;
   padding: 10px 18px;
   border-radius: 25px;
   text-decoration: none;
@@ -280,7 +280,8 @@
 
 .blinking-button:hover {
   transform: scale(1.05);
-  background-color: #0056b3; /* Darker blue on hover */
+  /*background-color: #0056b3; /* Darker blue on hover */
+  border-radius:#0056b3;
 }
 
 /* Blinking animation */
