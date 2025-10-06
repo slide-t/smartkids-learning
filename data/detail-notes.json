@@ -187,8 +187,37 @@
     "id": "ict_internet",
     "title": "Using the Internet",
     "content": "The internet is a tool to find information and communicate. <br><br>👉 Use search engines to locate resources. <br>👉 Watch educational videos. <br>👉 Practice safe browsing habits and do not share passwords.<br><br><img src='images/ict_internet.png' alt='Internet Browser' class='w-64 mt-2 rounded shadow'>"
-  }
-]
-}
-
+  },
     
+    
+{
+  "id": "coding_basics",
+  "name": "Coding Basics",
+  "topics": [
+    {
+      "id": "what_is_coding",
+      "title": "What is Coding?",
+      "content": "Coding means giving step-by-step instructions to a computer so it can perform tasks. It is like teaching the computer how to solve problems or create something new. <br><br>🧠 **Simple Example:** When you play a game, the actions of jumping, scoring, or moving are all controlled by code written by programmers. <br><br>👉 **Coding Helps Us To:** <br>• Create apps, websites, and computer games. <br>• Control robots or smart devices. <br>• Solve problems using logical thinking. <br><br>💬 **Think of coding like a recipe:** You give the computer each step, in the right order, to get a result — just like cooking a meal! <br><br>👉 **Debugging:** Sometimes, programs have errors called *bugs*. Debugging means finding and fixing those errors so the program works correctly. <br><br>✅ **In Summary:** Coding is the language computers understand. It teaches patience, logic, and creativity. <br><br><img src='images/what_is_coding.png' alt='What is Coding' class='w-64 mt-2 rounded shadow'>"
+    },
+    {
+      "id": "coding_languages",
+      "title": "Programming Languages for Kids",
+      "content": "Computers cannot understand our spoken languages. They follow special sets of rules called **programming languages**. These help us communicate with computers clearly. <br><br>🖥️ **Popular Languages for Kids:** <br>• **Scratch:** Uses colorful blocks to make games and animations. <br>• **Python:** Simple and easy to read. Used to make apps, websites, and games. <br>• **JavaScript:** Makes websites interactive and fun. <br>• **HTML & CSS:** Build and design web pages. <br>• **Blockly:** Drag-and-drop blocks for learning coding concepts. <br><br>👉 **Why Learn Programming Languages?** <br>• Improves thinking and problem-solving skills. <br>• Builds creativity and curiosity. <br>• Helps you understand how computers and apps work. <br><br>💡 **Tip:** Start with visual block languages like Scratch or Blockly, then move to text-based languages like Python as you grow in confidence. <br><br><img src='images/coding_languages.png' alt='Programming Languages for Kids' class='w-64 mt-2 rounded shadow'>"
+    },
+    {
+      "id": "block_coding",
+      "title": "Block Coding with Scratch",
+      "content": "Block coding is a fun and easy way to learn programming. Instead of typing long codes, you use colorful blocks that fit together like puzzle pieces. <br><br>🧩 **What is Scratch?** <br>Scratch is a block-based coding platform where you can make games, stories, and animations. <br><br>👉 **How It Works:** <br>• Drag and drop blocks to control characters (called sprites). <br>• Combine blocks to make the sprite move, talk, or change colors. <br>• Use loops and events to make actions repeat or respond to clicks. <br><br>🎮 **Examples of Projects:** <br>• A cat chasing a mouse. <br>• A short story with characters talking. <br>• A simple game where you catch falling stars. <br><br>✅ **Why Kids Love Scratch:** <br>• It’s colorful, visual, and easy to use. <br>• You can see results immediately. <br>• It builds creativity while teaching coding logic. <br><br><img src='images/block_coding.png' alt='Block Coding with Scratch' class='w-64 mt-2 rounded shadow'>"
+    },
+    {
+      "id": "text_coding",
+      "title": "Introduction to Text-Based Coding",
+      "content": "Text-based coding uses written commands and symbols instead of blocks. It is used by professional programmers to build apps, games, and websites. <br><br>✍️ **Examples of Text Coding Languages:** <br>• **Python:** Simple, easy to learn, great for kids. <br>• **JavaScript:** Used for creating websites and animations. <br>• **HTML:** Builds web pages. <br><br>👉 **Differences from Block Coding:** <br>• You type commands instead of dragging blocks. <br>• You must spell and punctuate carefully. <br>• You get more control over how your program works. <br><br>💡 **Example in Python:** <br><code>print('Hello, Smart Kids!')</code> <br>This line tells the computer to display the message ‘Hello, Smart Kids!’ on the screen. <br><br>✅ **Why Text Coding is Important:** <br>• It helps you understand real programming structure. <br>• Builds strong computer science foundations. <br>• Prepares you for future careers in tech. <br><br><img src='images/text_coding.png' alt='Text-Based Coding' class='w-64 mt-2 rounded shadow'>"
+    },
+    {
+      "id": "coding_projects",
+      "title": "Simple Coding Projects for Kids",
+      "content": "Practice makes you a better coder! Start with small, fun projects that use what you’ve learned. <br><br>🎯 **Easy Project Ideas:** <br>• **Create a Story Animation:** Use Scratch to make characters talk and move. <br>• **Make a Quiz Game:** Ask questions and let the player pick answers. <br>• **Design a Greeting Card:** Use code to show messages and play sounds. <br>• **Build a Calculator:** In Python, make a program that adds or multiplies numbers. <br>• **Draw Shapes:** Use a coding tool like Turtle (in Python) to draw a square or star. <br><br>👉 **Tips for Great Projects:** <br>• Plan before you start coding. <br>• Test each step to find mistakes early. <br>• Add colors, sounds, or movements to make your project fun! <br>• Share your project with friends or classmates. <br><br>✅ **Remember:** Coding is about creativity and problem-solving. Every project you make helps you become a better programmer! <br><br><img src='images/coding_projects.png' alt='Coding Projects for Kids' class='w-64 mt-2 rounded shadow'>"
+    }
+  ]
+}
