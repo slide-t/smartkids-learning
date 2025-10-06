@@ -158,10 +158,6 @@
     "title": "Introduction to the Internet",
     "content": "The Internet connects computers worldwide. <br><br>👉 Use browsers to search for information. <br>👉 Communicate via email or messaging. <br>👉 Always ask an adult before visiting new websites.<br><br><img src='images/internet.png' alt='Internet' class='w-64 mt-2 rounded shadow'>"
   },
-{
-  "id": "internet_learning_page",
-  "title": "Exploring the Internet Safely",
-  "sections": [
     {
       "id": "uses_of_internet",
       "title": "Uses of the Internet",
