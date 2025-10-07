@@ -207,36 +207,62 @@
         }
       ]
     },
+   
     {
-      "id": "coding",
-      "title": "Coding Basics",
-      "lessons": [
-        {
-          "id": "what_is_coding",
-          "title": "What is Coding?",
-          "content": ""
-        },
-        {
-          "id": "coding_languages",
-          "title": "Programming Languages for Kids",
-          "content": ""
-        },
-        {
-          "id": "block_coding",
-          "title": "Block Coding with Scratch",
-          "content": ""
-        },
-        {
-          "id": "text_coding",
-          "title": "Introduction to Text-Based Coding",
-          "content": ""
-        },
-        {
-          "id": "coding_projects",
-          "title": "Simple Coding Projects for Kids",
-          "content": ""
-        }
-      ]
+  "id": "ict",
+  "title": "General ICT for Kids",
+  "lessons": [
+    {
+      "id": "what_is_computer",
+      "title": "What is a Computer?",
+      "content": "A computer is an electronic machine that receives data (input), processes it, and gives results (output). It can perform tasks very fast and accurately when given correct instructions. Computers help us type letters, draw pictures, play games, and learn new things.\n\nExamples of computers include desktop computers, laptops, tablets, and smartphones.\n\nMain functions of a computer:\n1. Input – Receiving information (like typing or clicking).\n2. Processing – Working on the data.\n3. Output – Showing the result (like display or print).\n4. Storage – Saving information for later use.\n\nIn summary, a computer is a smart helper that makes work easier, faster, and more accurate."
+    },
+    {
+      "id": "parts_of_computer",
+      "title": "Parts of a Computer",
+      "content": "A computer is made up of hardware and software.\n\n1. Hardware – These are the physical parts you can touch and see.\nExamples:\n• Monitor – Displays text and pictures.\n• Keyboard – Used to type letters and numbers.\n• Mouse – Helps move and click on items.\n• System Unit (CPU) – The brain of the computer that processes information.\n• Printer – Prints out documents or pictures.\n• Speakers – Produce sound.\n\n2. Software – These are the programs or instructions that tell the computer what to do.\nExamples:\n• Microsoft Word\n• Paint\n• Scratch\n• Web browsers (like Chrome)\n\nWithout hardware, you cannot touch the computer, and without software, the computer cannot work."
+    },
+    {
+      "id": "uses_of_computer",
+      "title": "Uses of a Computer",
+      "content": "Computers help us in many areas of life. Here are important uses of computers:\n\n• Education – Learning new topics, typing, and watching lessons.\n• Home – Listening to music, playing games, and watching cartoons.\n• Office – Writing letters, keeping records, and preparing reports.\n• Banks – Keeping customer records and printing receipts.\n• Hospitals – Storing patient information and checking results.\n• Transportation – Booking tickets and controlling traffic.\n\nActivity for pupils: Name three ways computers help people in your community."
+    },
+    {
+      "id": "safe_computer_use",
+      "title": "Safe Use of Computers",
+      "content": "Computers are fun to use, but we must use them safely and responsibly.\n\n1. Health and Safety:\n• Sit properly when using the computer.\n• Keep your eyes a little away from the screen.\n• Avoid using the computer for too long.\n• Wash your hands before and after use.\n\n2. Device Care:\n• Do not eat or drink near the computer.\n• Always shut down properly after use.\n• Keep computer cables safe.\n\n3. Online Safety:\n• Do not share personal information with strangers.\n• Tell a teacher or parent if something online looks bad.\n• Never click on unknown links or adverts.\n\nRemember: Being safe keeps you healthy and protects your computer."
+    },
+    {
+      "id": "introduction_to_coding",
+      "title": "Introduction to Coding",
+      "content": "Coding means writing instructions that tell a computer what to do. Just like we use English to talk to people, we use programming languages to talk to computers.\n\nExamples of coding activities:\n• Making a game or animation in Scratch.\n• Writing instructions to make a robot move.\n\nWhy learn coding?\n• It helps you think logically.\n• It improves creativity.\n• It teaches problem-solving.\n\nExample: In Scratch, you can code a cat to move when you press the space key."
+    },
+    {
+      "id": "scratch_basics",
+      "title": "Scratch and Block Coding",
+      "content": "Scratch is a colorful coding tool for kids. It uses blocks that you can drag and drop to make programs — no typing needed!\n\nFeatures of Scratch:\n• Fun characters called sprites.\n• A stage where your story or game appears.\n• Blocks for movement, sound, and looks.\n\nExamples of block coding:\n• Move 10 steps.\n• Turn right 15 degrees.\n• Say 'Hello!' for 2 seconds.\n\nWhy kids love Scratch:\nIt is easy to use, fun, and helps children learn how to make games, animations, and stories."
+    },
+    {
+      "id": "algorithms_for_kids",
+      "title": "Algorithms for Kids",
+      "content": "An algorithm is a step-by-step way to solve a problem. Computers follow algorithms to complete tasks.\n\nExample: To make tea, your algorithm might be:\n1. Boil water.\n2. Put tea bag in cup.\n3. Pour hot water.\n4. Add milk and sugar.\n5. Stir and drink.\n\nIn coding, algorithms tell the computer what to do in steps.\n\nSimple Example in Scratch:\nWhen green flag clicked → Move 10 steps → Turn 15 degrees → Say 'Hi!'\n\nActivity: Write an algorithm to brush your teeth!"
+    },
+    {
+      "id": "internet_basics",
+      "title": "Introduction to the Internet",
+      "content": "The Internet is a global network that connects computers all over the world. It allows people to share information, send messages, and learn new things.\n\nUses of the Internet:\n• Sending and receiving emails.\n• Watching videos and listening to music.\n• Searching for information on Google.\n• Chatting with friends and family.\n\nRequirements to use the Internet:\n• A device (computer, tablet, or phone).\n• A modem or data connection.\n• A browser (like Chrome or Edge).\n\nRemember: Always use the Internet responsibly and safely."
+    },
+    {
+      "id": "ict_files",
+      "title": "Working with Files",
+      "content": "A file is a collection of data or information stored on a computer. Files can contain text, pictures, music, or videos.\n\nTypes of files:\n• Text files – Documents and notes.\n• Image files – Pictures and drawings.\n• Audio files – Music or recordings.\n• Video files – Movies and clips.\n\nWhat you can do with files:\n• Create – Make a new file.\n• Save – Keep your work for later use.\n• Open – View a saved file.\n• Rename – Change the name of a file.\n• Delete – Remove a file you don’t need.\n\nA folder helps to keep your files organized, just like your school bag keeps your books."
+    },
+    {
+      "id": "ict_internet",
+      "title": "Using the Internet",
+      "content": "When using the Internet, you must know how to browse safely and wisely.\n\nSteps to browse:\n1. Open your browser (like Chrome or Firefox).\n2. Type a web address (like www.google.com).\n3. Press Enter to visit the page.\n4. Click on links to open other pages.\n\nCommon Internet activities:\n• Search for information.\n• Send and receive emails.\n• Watch educational videos.\n• Play safe online games.\n\nInternet Safety Tips:\n• Never share your password.\n• Avoid downloading unknown files.\n• Get permission before visiting websites.\n\nThe Internet is a world of knowledge — use it wisely!"
     }
+  ]
+}
   ]
 }
