@@ -169,10 +169,33 @@
       "content": "Computers help us in many areas of life. Here are important uses of computers:\n\n• Education – Learning new topics, typing, and watching lessons.\n• Home – Listening to music, playing games, and watching cartoons.\n• Office – Writing letters, keeping records, and preparing reports.\n• Banks – Keeping customer records and printing receipts.\n• Hospitals – Storing patient information and checking results.\n• Transportation – Booking tickets and controlling traffic.\n\nActivity for pupils: Name three ways computers help people in your community."
     },
     {
-      "id": "safe_computer_use",
-      "title": "Safe Use of Computers",
-      "content": "Computers are fun to use, but we must use them safely and responsibly.\n\n1. Health and Safety:\n• Sit properly when using the computer.\n• Keep your eyes a little away from the screen.\n• Avoid using the computer for too long.\n• Wash your hands before and after use.\n\n2. Device Care:\n• Do not eat or drink near the computer.\n• Always shut down properly after use.\n• Keep computer cables safe.\n\n3. Online Safety:\n• Do not share personal information with strangers.\n• Tell a teacher or parent if something online looks bad.\n• Never click on unknown links or adverts.\n\nRemember: Being safe keeps you healthy and protects your computer."
-    },
+  "id": "safe_computer_use",
+  "title": "Safe Use of Computers",
+  "content": "Computers are fun to use, but we must use them safely and responsibly.<br><br>
+  <b>1. Health and Safety:</b><br>
+  <ul>
+    <li>Sit properly when using the computer.</li>
+    <li>Keep your eyes a little away from the screen.</li>
+    <li>Avoid using the computer for too long.</li>
+    <li>Wash your hands before and after use.</li>
+  </ul>
+
+  <b>2. Device Care:</b><br>
+  <ul>
+    <li>Do not eat or drink near the computer.</li>
+    <li>Always shut down properly after use.</li>
+    <li>Keep computer cables safe.</li>
+  </ul>
+
+  <b>3. Online Safety:</b><br>
+  <ul>
+    <li>Do not share personal information with strangers.</li>
+    <li>Tell a teacher or parent if something online looks bad.</li>
+    <li>Never click on unknown links or adverts.</li>
+  </ul>
+
+  <b>Remember:</b> Being safe keeps you healthy and protects your computer."
+},
     {
       "id": "introduction_to_coding",
       "title": "Introduction to Coding",
