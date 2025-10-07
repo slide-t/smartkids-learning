@@ -38,7 +38,91 @@
   <button id="nextBtn" class="w-48 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">Next ➡</button>
   <a href="lessons.html" class="w-48 text-center px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition">⬅ Back to Lessons</a>
 </div>
-<script>
+
+  <script>
+async function loadLesson() {
+  const params = new URLSearchParams(window.location.search);
+  const categoryId = params.get('category');
+  const topicId = params.get('id');
+
+  const titleEl = document.getElementById('lessonTitle');
+  const panelTitleEl = document.getElementById('panelTitle');
+  const contentEl = document.getElementById('lessonContent');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+
+  try {
+    const res = await fetch('data/detail-notes.json');
+    const data = await res.json();
+    const categories = data.categories;
+
+    // Flatten all topics into one list for navigation
+    const allTopics = [];
+    categories.forEach(cat => {
+      (cat.topics || cat.lessons || []).forEach(topic => {
+        allTopics.push({
+          ...topic,
+          categoryId: cat.id,
+          categoryTitle: cat.name || cat.title
+        });
+      });
+    });
+
+    // Find the index of the selected topic
+    let index = allTopics.findIndex(
+      t => t.id === topicId && t.categoryId === categoryId
+    );
+    if (index === -1) index = 0;
+
+    function renderTopic(i) {
+      const topic = allTopics[i];
+      if (!topic) return;
+
+      titleEl.textContent = topic.title;
+      panelTitleEl.textContent = topic.title;
+      contentEl.innerHTML = topic.content || "<p>No content available.</p>";
+
+      // Previous button
+      if (i > 0) {
+        prevBtn.disabled = false;
+        prevBtn.onclick = () => renderTopic(i - 1);
+      } else {
+        prevBtn.disabled = true;
+        prevBtn.onclick = () => (window.location.href = 'lessons.html');
+      }
+
+      // Next button
+      if (i < allTopics.length - 1) {
+        nextBtn.disabled = false;
+        nextBtn.onclick = () => renderTopic(i + 1);
+      } else {
+        nextBtn.disabled = true;
+        nextBtn.onclick = () => (window.location.href = 'lessons.html');
+      }
+
+      // Update the browser URL dynamically
+      const newUrl = `detail-notes.html?category=${topic.categoryId}&id=${topic.id}`;
+      window.history.replaceState({}, '', newUrl);
+    }
+
+    renderTopic(index);
+
+  } catch (err) {
+    console.error('Error loading detail-notes.json:', err);
+    titleEl.textContent = "Error Loading Lesson";
+    contentEl.innerHTML = "<p class='text-red-600'>Failed to load detail-notes.json</p>";
+    prevBtn.disabled = true;
+    nextBtn.disabled = true;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', loadLesson);
+</script>  
+    
+    
+    
+    
+    <!--<script>
 async function loadLesson() {
   const params = new URLSearchParams(window.location.search);
   const categoryId = params.get('category');
