@@ -30,11 +30,11 @@
       z-index: 30;
     }
 
-    /* Search container (floating but below header) */
+    /* Search container */
     .search-container {
       position: fixed;
       left: 50%;
-      top: calc(var(--header-height) + 12px); /* below header */
+      top: calc(var(--header-height) + 12px);
       transform: translateX(-50%);
       width: 92%;
       max-width: 640px;
@@ -68,26 +68,31 @@
       background: transparent;
     }
 
-    /* content spacing so the floating bar doesn't overlap cards */
+    /* Page content spacing */
     .page-wrap {
-      padding-top: calc(var(--header-height) + 96px); /* header + search + gap */
+      padding-top: calc(var(--header-height) + 96px);
       max-width: 1200px;
       margin: 0 auto;
       padding-left: 16px;
       padding-right: 16px;
     }
 
+    /* Grid wrapper shadow */
     .lessons-grid {
       display: grid;
       gap: 18px;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      padding: 20px;
+      background: #f9fdff;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(7,89,133,0.06);
     }
 
     .lesson-card {
       background: #e9f7ff;
       border-radius: 12px;
       padding: 18px;
-      box-shadow: 0 6px 18px rgba(7,89,133,0.04);
+      box-shadow: 0 6px 18px rgba(7,89,133,0.05);
       transition: transform .18s ease, box-shadow .18s ease;
       min-height: 120px;
       display:flex;
@@ -97,19 +102,14 @@
 
     .lesson-card:hover {
       transform: translateY(-6px);
-      box-shadow: 0 10px 28px rgba(7,89,133,0.08);
+      box-shadow: 0 10px 28px rgba(7,89,133,0.1);
     }
 
     .lesson-title {
       color: #0f172a;
       font-weight:700;
       margin-bottom: 8px;
-    }
-
-    .lesson-meta {
-      color: #0b5db6;
-      font-weight:600;
-      font-size:0.9rem;
+      line-height: 1.3;
     }
 
     .read-more {
@@ -140,12 +140,12 @@
       font-weight:700;
       color:#fff;
     }
-    .btn-cyber { background:#f97316; } /* orange */
-    .btn-features { background:#475569; } /* grey/indigo */
-    .btn-cyber:hover { filter:brightness(.95); transform:translateY(-3px); }
-    .btn-features:hover { filter:brightness(.95); transform:translateY(-3px); }
+    .btn-cyber { background:#f97316; }
+    .btn-features { background:#475569; }
+    .btn-cyber:hover, .btn-features:hover {
+      filter:brightness(.95); transform:translateY(-3px);
+    }
 
-    /* error / status box */
     .status {
       text-align:center;
       padding:18px;
@@ -154,7 +154,6 @@
       border-radius:10px;
       box-shadow:0 6px 18px rgba(2,6,23,0.04);
     }
-
   </style>
 </head>
 <body>
@@ -179,7 +178,7 @@
       <div class="status">Loading lessons…</div>
     </div>
 
-    <div class="actions" aria-hidden="false">
+    <div class="actions">
       <a class="btn-cyber" href="features/cyber-security.html">🔒 Cyber Security</a>
       <a class="btn-features" href="features/index.html">✨ Features</a>
     </div>
@@ -187,7 +186,6 @@
 
   <script>
   (function () {
-    // Try multiple JSON locations (common places)
     const jsonPaths = [
       'data/lessons.json',
       './data/lessons.json',
@@ -199,57 +197,42 @@
     const lessonsArea = document.getElementById('lessonsArea');
     const searchInput = document.getElementById('searchInput');
     const searchPill = document.getElementById('searchPill');
-
     let allCategories = [];
 
-    // Fetch first successful path
     async function fetchFirstSuccess(paths) {
       for (const p of paths) {
         try {
           const r = await fetch(p, { cache: "no-store" });
-          if (!r.ok) {
-            console.info('lessons.json fetch failed path:', p, 'status:', r.status);
-            continue;
-          }
+          if (!r.ok) continue;
           const json = await r.json();
-          console.info('Loaded lessons from:', p);
           return {json, path: p};
-        } catch (err) {
-          console.info('fetch error for', p, err && err.message);
-          // continue trying
-        }
+        } catch {}
       }
       return null;
     }
 
-    // Normalize incoming data to categories array
     function normalizeData(data) {
       if (!data) return [];
-      // If the file itself is an array of categories
       if (Array.isArray(data)) return data;
-
-      // If root contains categories
       if (Array.isArray(data.categories)) return data.categories;
-
-      // try other common keys
       if (Array.isArray(data.items)) return data.items;
-
-      // nothing matched
       return [];
     }
 
-    // get topic list for a category: support topics or lessons
     function getTopicsForCategory(cat) {
       return cat.topics || cat.lessons || cat.items || [];
     }
 
-    // get human name for category
-    function getCategoryName(cat) {
-      return cat.name || cat.title || cat.id || 'Unknown';
-    }
-
     function renderEmpty(message) {
       lessonsArea.innerHTML = `<div class="status">${message}</div>`;
+    }
+
+    function escapeHtml(s) {
+      return s ? s.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])) : '';
+    }
+
+    function catIdFromName(name) {
+      return (name || 'category').toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g,'');
     }
 
     function renderGrid(categories, filter = '') {
@@ -260,11 +243,9 @@
         const topics = getTopicsForCategory(cat);
         topics.forEach(topic => {
           const tTitle = (topic.title || topic.name || '').toString();
-          const catName = getCategoryName(cat).toString();
-          if (!q || tTitle.toLowerCase().includes(q) || catName.toLowerCase().includes(q)) {
+          if (!q || tTitle.toLowerCase().includes(q)) {
             out.push({
-              categoryId: cat.id || catIdFromName(catName),
-              categoryName: catName,
+              categoryId: cat.id || catIdFromName(cat.name || cat.title || ''),
               id: topic.id || topic.key || '',
               title: tTitle
             });
@@ -272,78 +253,39 @@
         });
       });
 
-      if (!out.length) {
-        renderEmpty('No topics found. Try another search.');
-        return;
-      }
+      if (!out.length) return renderEmpty('No topics found.');
 
-      // build cards
       lessonsArea.innerHTML = '';
       const frag = document.createDocumentFragment();
       out.forEach(item => {
         const card = document.createElement('div');
         card.className = 'lesson-card';
-
-        // Build link - include category param (safe) so detail page can find it quickly
         const linkHref = `detail-notes.html?category=${encodeURIComponent(item.categoryId)}&id=${encodeURIComponent(item.id)}`;
-
         card.innerHTML = `
-          <div>
-            <div class="lesson-title">${escapeHtml(item.title || '(Untitled)')}</div>
-            <div class="lesson-meta">Category: ${escapeHtml(item.categoryName)}</div>
-          </div>
-          <div>
-            <a class="read-more" href="${linkHref}">Read More →</a>
-          </div>
+          <div class="lesson-title">${escapeHtml(item.title)}</div>
+          <div><a class="read-more" href="${linkHref}">Read More →</a></div>
         `;
         frag.appendChild(card);
       });
-
       lessonsArea.appendChild(frag);
     }
 
-    // some categories might miss id; create fallback id from name
-    function catIdFromName(name) {
-      return (name || 'category').toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g,'');
-    }
-
-    // simple html escape for safety
-    function escapeHtml(s) {
-      return s ? s.replace(/[&<>"']/g, function (m) { return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]; }) : '';
-    }
-
-    // initialize
     (async function init() {
-      // try to fetch JSON
       const result = await fetchFirstSuccess(jsonPaths);
-      if (!result) {
-        renderEmpty('Could not find lessons.json. Tried: ' + jsonPaths.join(', '));
-        console.error('Could not fetch any lessons.json from tried paths.');
-        return;
-      }
-
-      const normalizedCategories = normalizeData(result.json);
-      if (!normalizedCategories.length) {
-        renderEmpty('lessons.json loaded but structure not recognised (no categories).');
-        console.error('Unrecognised lessons structure:', result.path, result.json);
-        return;
-      }
-
-      allCategories = normalizedCategories;
+      if (!result) return renderEmpty('Could not find lessons.json.');
+      const normalized = normalizeData(result.json);
+      if (!normalized.length) return renderEmpty('lessons.json loaded but no categories found.');
+      allCategories = normalized;
       renderGrid(allCategories);
 
-      // wire search
       let timer = null;
-      searchInput.addEventListener('input', (e) => {
-        const val = e.target.value;
+      searchInput.addEventListener('input', e => {
         clearTimeout(timer);
-        timer = setTimeout(() => renderGrid(allCategories, val), 120);
+        timer = setTimeout(() => renderGrid(allCategories, e.target.value), 120);
       });
 
-      // focus animation: add/remove class to pill so it moves down when focused
       searchInput.addEventListener('focus', () => searchPill.classList.add('focused'));
       searchInput.addEventListener('blur', () => searchPill.classList.remove('focused'));
-
     })();
   })();
   </script>
