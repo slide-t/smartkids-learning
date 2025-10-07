@@ -97,7 +97,7 @@
 <script>
 async function loadLesson() {
   const params = new URLSearchParams(window.location.search);
-  const categoryId = params.get('category');
+  const categoryId = params.get('categories');
   const topicId = params.get('id');
 
   const titleEl = document.getElementById('lessonTitle');
