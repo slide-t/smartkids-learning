@@ -2,135 +2,63 @@
   "categories": [
     {
       "id": "keyboard",
-      "title": "Keyboard Lessons",
-      "lessons": [
-        {
-          "id": "keyboard_definition",
-          "title": "What is a Computer Keyboard?",
-          "content": "A computer keyboard is an input device that allows users to type letters, numbers, and commands into a computer. <br><br>👉 It is essential for writing documents, entering data, and controlling software. <br>👉 Keyboards can be physical or on-screen. <br><br><img src='images/keyboard.png' alt='Computer Keyboard' class='w-64 mt-2 rounded shadow'>"
-        },
-        {
-          "id": "keyboard_layout",
-          "title": "Layout of the Keyboard",
-          "content": "The keyboard layout shows how keys are arranged on a computer keyboard..."
-        },
-        {
-          "id": "categories_of_keys",
-          "title": "Categories of Keys",
-          "content": "The keyboard is made up of many keys that are grouped according to their functions..."
-        },
-        {
-          "id": "special_keys",
-          "title": "Special Keys and Their Functions",
-          "content": "Special keys are the keys on the keyboard that perform specific tasks..."
-        },
-        {
-          "id": "typing_skills",
-          "title": "How to Use the Keyboard for Typing",
-          "content": "Learning how to use the keyboard correctly helps you type faster and more accurately..."
-        },
-        {
-          "id": "function_keys",
-          "title": "Function Keys (F1–F12)",
-          "content": "Function keys are located at the top of the keyboard and perform special functions..."
-        },
-        {
-          "id": "numeric_keys",
-          "title": "Numeric and Symbol Keys",
-          "content": "Numeric keys are used to type numbers..."
-        },
-        {
-          "id": "keyboard_home_row",
-          "title": "Home Row Keys",
-          "content": "The home row is where your fingers rest when typing..."
-        },
-        {
-          "id": "keyboard_top_row",
-          "title": "Top Row Keys",
-          "content": "The top row contains the letters Q to P..."
-        },
-        {
-          "id": "keyboard_bottom_row",
-          "title": "Bottom Row Keys",
-          "content": "The bottom row has letters Z, X, C, V, B, N, M..."
-        },
-        {
-          "id": "keyboard_punctuation",
-          "title": "Punctuation Keys",
-          "content": "Punctuation keys are important for writing sentences..."
-        },
-        {
-          "id": "keyboard_shortcuts",
-          "title": "Keyboard Shortcuts",
-          "content": "Keyboard shortcuts are special key combinations that help you perform tasks quickly..."
-        }
+      "name": "Computer Keyboard",
+      "topics": [
+        { "id": "keyboard_definition", "title": "What is a Computer Keyboard?", "content": "" },
+        { "id": "keyboard_layout", "title": "Layout of the Keyboard", "content": "" },
+        { "id": "categories_of_keys", "title": "Categories of Keys", "content": "" },
+        { "id": "typing_skills", "title": "How to Use the Keyboard for Typing", "content": "" },
+        { "id": "function_keys", "title": "Function Keys (F1–F12)", "content": "" },
+        { "id": "numeric_keys", "title": "Numeric and Symbol Keys", "content": "" },
+        { "id": "keyboard_home_row", "title": "Home Row Keys", "content": "" },
+        { "id": "keyboard_top_row", "title": "Top Row Keys", "content": "" },
+        { "id": "keyboard_bottom_row", "title": "Bottom Row Keys", "content": "" },
+        { "id": "keyboard_punctuation", "title": "Punctuation Keys", "content": "" },
+        { "id": "keyboard_shortcuts", "title": "Keyboard Shortcuts", "content": "" }
       ]
     },
     {
       "id": "mouse",
-      "title": "Mouse Lessons",
-      "lessons": [
-        {
-          "id": "mouse_definition",
-          "title": "What is a Computer Mouse?",
-          "content": "A computer mouse is a pointing device used to interact with items on the screen..."
-        },
-        {
-          "id": "types_of_mouse",
-          "title": "Types of Computer Mouse",
-          "content": "There are different types of mice for different purposes..."
-        },
-        {
-          "id": "mouse_buttons",
-          "title": "Mouse Buttons and Their Uses",
-          "content": "A standard mouse has several buttons..."
-        },
-        {
-          "id": "mouse_actions",
-          "title": "Mouse Actions",
-          "content": "Common mouse actions include single click, double click..."
-        },
-        {
-          "id": "drag_drop",
-          "title": "Drag and Drop",
-          "content": "Dragging means holding down the mouse button while moving an object..."
-        },
-        {
-          "id": "scrolling",
-          "title": "Scrolling with the Mouse",
-          "content": "Scrolling allows you to move up and down a document or web page..."
-        },
-        {
-          "id": "mouse_clicking",
-          "title": "Clicking Basics",
-          "content": "Clicking is pressing and releasing a mouse button quickly..."
-        },
-        {
-          "id": "mouse_dragging",
-          "title": "Clicking and Dragging",
-          "content": "Dragging means holding a button while moving the mouse..."
-        },
-        {
-          "id": "mouse_precision",
-          "title": "High-Speed Precision Tasks",
-          "content": "Some activities require fast and accurate mouse movement..."
-        },
-        {
-          "id": "mouse_practice",
-          "title": "Mouse Practice Activities",
-          "content": "Practice exercises help improve speed and accuracy..."
-        }
+      "name": "Computer Mouse",
+      "topics": [
+        { "id": "mouse_definition", "title": "What is a Computer Mouse?", "content": "" },
+        { "id": "types_of_mouse", "title": "Types of Computer Mouse", "content": "" },
+        { "id": "mouse_buttons", "title": "Mouse Buttons and Their Uses", "content": "" },
+        { "id": "mouse_actions", "title": "Mouse Actions", "content": "" },
+        { "id": "drag_drop", "title": "Drag and Drop", "content": "" },
+        { "id": "scrolling", "title": "Scrolling with the Mouse", "content": "" },
+        { "id": "mouse_clicking", "title": "Clicking Basics", "content": "" },
+        { "id": "mouse_dragging", "title": "Clicking and Dragging", "content": "" },
+        { "id": "mouse_precision", "title": "High-Speed Precision Tasks", "content": "" },
+        { "id": "mouse_practice", "title": "Mouse Practice Activities", "content": "" }
       ]
     },
     {
-      "id": "ict",
-      "title": "ICT Lessons",
-      "lessons": []
+      "id": "general_ict",
+      "name": "General ICT for Kids",
+      "topics": [
+        { "id": "what_is_computer", "title": "What is a Computer?", "content": "" },
+        { "id": "parts_of_computer", "title": "Parts of a Computer", "content": "" },
+        { "id": "uses_of_computer", "title": "Uses of a Computer", "content": "" },
+        { "id": "safe_computer_use", "title": "Safe Use of Computers", "content": "" },
+        { "id": "introduction_to_coding", "title": "Introduction to Coding", "content": "" },
+        { "id": "scratch_basics", "title": "Scratch and Block Coding", "content": "" },
+        { "id": "algorithms_for_kids", "title": "Algorithms for Kids", "content": "" },
+        { "id": "internet_basics", "title": "Introduction to the Internet", "content": "" },
+        { "id": "ict_files", "title": "Working with Files", "content": "" },
+        { "id": "ict_internet", "title": "Using the Internet", "content": "" }
+      ]
     },
     {
-      "id": "coding",
-      "title": "Coding Lessons",
-      "lessons": []
+      "id": "coding_basics",
+      "name": "Coding Basics",
+      "topics": [
+        { "id": "what_is_coding", "title": "What is Coding?", "content": "" },
+        { "id": "coding_languages", "title": "Programming Languages for Kids", "content": "" },
+        { "id": "block_coding", "title": "Block Coding with Scratch", "content": "" },
+        { "id": "text_coding", "title": "Introduction to Text-Based Coding", "content": "" },
+        { "id": "coding_projects", "title": "Simple Coding Projects for Kids", "content": "" }
+      ]
     }
   ]
 }
