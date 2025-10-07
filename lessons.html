@@ -1,118 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SmartKids Lessons</title>
   <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-50 font-sans">
+  <style>
+    /* Sidebar scroll and sticky title */
+    .category-title {
+      position: sticky;
+      top: 0;
+      background-color: #fff;
+      z-index: 10;
+      padding: 0.25rem 0;
+      border-bottom: 2px solid #e0e7ff;
+    }
 
-  <div class="max-w-5xl mx-auto py-8 px-4">
-    <h1 class="text-3xl font-bold text-blue-700 mb-4 text-center">Computer Lessons</h1>
+    .sidebar {
+      transition: transform 0.3s ease-in-out;
+    }
 
-    <!-- Fixed Search Bar -->
-    <div class="fixed top-0 left-0 w-full bg-gray-50 z-50 p-4 shadow">
-      <div class="max-w-5xl mx-auto text-center">
-        <input
-          id="searchInput"
-          type="text"
-          placeholder="Search lessons or topics..."
-          class="w-full sm:w-2/3 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
-        >
-      </div>
-    </div>
+    @media (min-width: 768px) {
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        overflow-y: auto;
+        background-color: #fff;
+        border-right: 1px solid #e5e7eb;
+        width: 17rem;
+        padding-bottom: 4rem;
+      }
 
-    <!-- Add space below search bar -->
-    <div class="h-24"></div>
-
-    <!-- Topics Container -->
-    <div id="lessonsContainer" class="space-y-6"></div>
-
-    <!-- Back buttons -->
-    <div class="mt-8 flex justify-center space-x-4">
-      <a href="https://slide-t.github.io/smartkids-learning/classes.html"
-         class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">
-        ⬅ Keyboard Drill
-      </a>
-      <a href="https://slide-t.github.io/smartkids-learning/mouse.html"
-         class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">
-        ⬅ Mouse Practice
-      </a>
-    </div>
-  </div>
-
-  <script>
-    let allCategories = [];
-
-    async function loadLessons() {
-      const container = document.getElementById('lessonsContainer');
-      const searchInput = document.getElementById('searchInput');
-
-      container.innerHTML = "<p class='text-gray-500'>Loading lessons...</p>";
-
-      try {
-        const res = await fetch('data/lessons.json'); // your JSON file
-        const data = await res.json();
-        allCategories = data.categories || [];
-
-        renderLessons(allCategories);
-
-        // Search filter
-        searchInput.addEventListener('input', () => {
-          const query = searchInput.value.toLowerCase();
-          const filtered = allCategories.map(cat => {
-            const matchedTopics = (cat.topics || []).filter(topic =>
-              topic.title.toLowerCase().includes(query) ||
-              cat.name.toLowerCase().includes(query)
-            );
-            return { ...cat, topics: matchedTopics };
-          }).filter(cat => cat.topics.length > 0);
-
-          renderLessons(filtered);
-        });
-
-      } catch (err) {
-        container.innerHTML = "<p class='text-red-600'>Error loading lessons file.</p>";
-        console.error(err);
+      main {
+        margin-left: 17rem;
+        max-width: calc(100% - 17rem);
       }
     }
 
-    // Render categories and topics
-    function renderLessons(categories) {
-      const container = document.getElementById('lessonsContainer');
-      container.innerHTML = '';
-
-      categories.forEach(category => {
-        const catDiv = document.createElement('div');
-        catDiv.className = "bg-white p-4 rounded-lg shadow";
-
-        catDiv.innerHTML = `<h2 class="text-xl font-semibold text-blue-600 mb-3">${category.name}</h2>`;
-
-        const topicsGrid = document.createElement('div');
-        topicsGrid.className = "grid sm:grid-cols-2 md:grid-cols-3 gap-4";
-
-        (category.topics || []).forEach(topic => {
-          const topicDiv = document.createElement('div');
-          topicDiv.className = "p-4 bg-blue-50 rounded-lg shadow hover:bg-blue-100 transition";
-
-          topicDiv.innerHTML = `
-            <h3 class="text-lg font-medium text-blue-800">${topic.title}</h3>
-            <a href="detail-notes.html?id=${encodeURIComponent(topic.id)}"
-               class="mt-2 inline-block text-sm text-blue-700 hover:underline">
-               Read Lesson →
-            </a>
-          `;
-          topicsGrid.appendChild(topicDiv);
-        });
-
-        catDiv.appendChild(topicsGrid);
-        container.appendChild(catDiv);
-      });
+    .sidebar::-webkit-scrollbar {
+      width: 8px;
+    }
+    .sidebar::-webkit-scrollbar-thumb {
+      background-color: #93c5fd;
+      border-radius: 4px;
+    }
+    .sidebar::-webkit-scrollbar-thumb:hover {
+      background-color: #2563eb;
     }
 
-    document.addEventListener('DOMContentLoaded', loadLessons);
-  </script>
+    .sidebar-hidden {
+      transform: translateX(-100%);
+    }
 
+    .chevron-btn {
+      position: fixed;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+      z-index: 50;
+      background: #2563eb;
+      color: white;
+      border-radius: 0 8px 8px 0;
+      padding: 0.5rem;
+      cursor: pointer;
+    }
+
+    @media (min-width: 768px) {
+      .chevron-btn {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body class="bg-gray-50 font-sans">
+
+  <!-- Sidebar toggle for mobile -->
+  <button id="toggleSidebar" class="chevron-btn">☰</button>
+
+  <div class="flex flex-col md:flex-row max-w-7xl mx-auto py-8 px-4 gap-6">
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar fixed md:static bg-white w-64 h-full md:h-auto overflow-y-auto p-4 shadow-lg md:shadow-none sidebar-hidden md:translate-x-0">
+      <h2 class="text-xl font-bold text-blue-700 mb-4">Lesson Topics</h2>
+      <div id="lessonList" class="space-y-4">
+        <p class="text-gray-500">Loading lessons...</p>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="flex-1">
+      <h1 class="text-3xl font-bold text-blue-700 text-center mb-6">SmartKids Learning Lessons</h1>
+
+      <div class="bg-white rounded-xl shadow-md p-6">
+        <p class="text-gray-700 leading-relaxed mb-4">
+          Select a topic from the sidebar to view its details. Each category includes interactive ICT lessons, keyboard and mouse practices, and safe computer usage tips designed for young learners.
+        </p>
+
+        <div class="flex justify-center mt-6">
+          <a href="features/cyber-security.html" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition">Cyber Security</a>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+  async function loadLessons() {
+    const list = document.getElementById('lessonList');
+
+    try {
+      const res = await fetch('data/lessons.json');
+      const data = await res.json();
+      const categories = data.categories;
+
+      list.innerHTML = '';
+
+      categories.forEach(cat => {
+        const catDiv = document.createElement('div');
+        catDiv.className = 'mb-4';
+        catDiv.innerHTML = `<h3 class="category-title text-lg font-semibold text-blue-700 mb-2">${cat.name}</h3>`;
+
+        const ul = document.createElement('ul');
+        ul.className = 'space-y-1';
+
+        (cat.topics || []).forEach(topic => {
+          const li = document.createElement('li');
+          li.innerHTML = `
+            <a href="detail-notes.html?category=${cat.id}&id=${topic.id}" 
+               class="block px-3 py-1 rounded hover:bg-blue-100 text-gray-700 transition">
+              ${topic.title}
+            </a>`;
+          ul.appendChild(li);
+        });
+
+        catDiv.appendChild(ul);
+        list.appendChild(catDiv);
+      });
+    } catch (err) {
+      console.error('Error loading lessons.json:', err);
+      list.innerHTML = "<p class='text-red-600'>Failed to load lessons.json</p>";
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', loadLessons);
+
+  // Toggle sidebar on mobile
+  document.getElementById('toggleSidebar').addEventListener('click', () => {
+    document.getElementById('sidebar').classList.toggle('sidebar-hidden');
+  });
+  </script>
 </body>
 </html>
