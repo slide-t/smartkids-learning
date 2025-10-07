@@ -7,11 +7,12 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     :root {
-      --header-height: 72px;
+      --header-height: 64px;
+      --sidebar-width: 240px;
     }
 
     body {
-      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      font-family: Inter, system-ui, sans-serif;
       background-color: #f5fbff;
       margin: 0;
     }
@@ -22,96 +23,139 @@
       align-items:center;
       justify-content:center;
       background: linear-gradient(90deg,#2563eb,#60a5fa);
-      color: white;
+      color:white;
       font-weight:700;
       font-size:1.25rem;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-      position:relative;
-      z-index: 30;
+      box-shadow:0 2px 6px rgba(0,0,0,0.08);
+      position:fixed;
+      top:0;
+      left:0;
+      right:0;
+      z-index:40;
     }
 
-    /* Search container */
+    /* Sidebar */
+    .sidebar {
+      position:fixed;
+      top:var(--header-height);
+      left:0;
+      bottom:0;
+      width:var(--sidebar-width);
+      background:#1e3a8a;
+      color:white;
+      padding:1rem;
+      transform:translateX(-100%);
+      transition:transform .3s ease;
+      z-index:30;
+    }
+    .sidebar.open { transform:translateX(0); }
+    .sidebar h3 {
+      font-weight:700;
+      font-size:1.1rem;
+      margin-bottom:1rem;
+    }
+    .sidebar a {
+      display:block;
+      color:#cbd5e1;
+      padding:8px;
+      border-radius:6px;
+      text-decoration:none;
+      margin-bottom:4px;
+      transition:background .2s;
+    }
+    .sidebar a:hover { background:rgba(255,255,255,0.1); color:white; }
+
+    /* Sidebar toggle button */
+    .menu-toggle {
+      position:fixed;
+      top:16px;
+      left:16px;
+      background:white;
+      color:#2563eb;
+      border:none;
+      border-radius:6px;
+      padding:6px 10px;
+      font-weight:700;
+      box-shadow:0 2px 6px rgba(0,0,0,0.15);
+      z-index:50;
+    }
+
+    /* Floating search */
     .search-container {
-      position: fixed;
-      left: 50%;
-      top: calc(var(--header-height) + 12px);
-      transform: translateX(-50%);
-      width: 92%;
-      max-width: 640px;
-      z-index: 40;
-      transition: transform .32s ease, box-shadow .32s ease;
+      position:fixed;
+      left:50%;
+      top:calc(var(--header-height) + 10px);
+      transform:translateX(-50%);
+      width:92%;
+      max-width:640px;
+      z-index:30;
+      transition:transform .32s ease, box-shadow .32s ease;
     }
-
     .search-pill {
       display:flex;
       align-items:center;
       gap:0.5rem;
-      background: #ffffff;
-      border-radius: 9999px;
-      padding: 10px 14px;
-      box-shadow: 0 6px 18px rgba(37,99,235,0.08);
-      border: 1px solid rgba(37,99,235,0.08);
-      transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease;
+      background:white;
+      border-radius:9999px;
+      padding:10px 14px;
+      box-shadow:0 6px 18px rgba(37,99,235,0.08);
+      border:1px solid rgba(37,99,235,0.08);
+      transition:transform .28s ease, box-shadow .28s ease, border-color .28s ease;
     }
-
     .search-pill.focused {
-      transform: translateY(8px) scale(1.02);
-      box-shadow: 0 10px 30px rgba(37,99,235,0.14);
-      border-color: rgba(37,99,235,0.22);
+      transform:translateY(8px) scale(1.02);
+      box-shadow:0 10px 30px rgba(37,99,235,0.14);
+      border-color:rgba(37,99,235,0.22);
     }
-
     #searchInput {
-      border: none;
-      outline: none;
-      width: 100%;
-      font-size: 1rem;
-      background: transparent;
+      border:none;
+      outline:none;
+      width:100%;
+      font-size:1rem;
+      background:transparent;
     }
 
-    /* Page content spacing */
     .page-wrap {
-      padding-top: calc(var(--header-height) + 96px);
-      max-width: 1200px;
-      margin: 0 auto;
-      padding-left: 16px;
-      padding-right: 16px;
+      padding-top:calc(var(--header-height) + 100px);
+      padding-left:calc(var(--sidebar-width) + 20px);
+      padding-right:20px;
+      max-width:1200px;
+      margin:0 auto;
+      transition:padding-left .3s ease;
     }
+    .sidebar.open ~ .page-wrap { padding-left:calc(var(--sidebar-width) + 20px); }
 
-    /* Grid wrapper shadow */
     .lessons-grid {
-      display: grid;
-      gap: 18px;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      padding: 20px;
-      background: #f9fdff;
-      border-radius: 16px;
-      box-shadow: 0 8px 24px rgba(7,89,133,0.06);
+      display:grid;
+      gap:18px;
+      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
     }
 
     .lesson-card {
-      background: #e9f7ff;
-      border-radius: 12px;
-      padding: 18px;
-      box-shadow: 0 6px 18px rgba(7,89,133,0.05);
-      transition: transform .18s ease, box-shadow .18s ease;
-      min-height: 120px;
+      background:#e9f7ff;
+      border-radius:12px;
+      padding:18px;
+      box-shadow:0 6px 18px rgba(7,89,133,0.04);
+      transition:transform .18s ease, box-shadow .18s ease;
+      min-height:120px;
       display:flex;
       flex-direction:column;
       justify-content:space-between;
     }
-
     .lesson-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 10px 28px rgba(7,89,133,0.1);
+      transform:translateY(-6px);
+      box-shadow:0 10px 28px rgba(7,89,133,0.08);
     }
-
     .lesson-title {
-      color: #0f172a;
+      color:#0f172a;
       font-weight:700;
-      margin-bottom: 8px;
-      line-height: 1.3;
+      margin-bottom:8px;
     }
-
+    .lesson-meta {
+      color:#0b5db6;
+      font-weight:600;
+      font-size:0.9rem;
+    }
     .read-more {
       display:inline-block;
       margin-top:12px;
@@ -121,9 +165,9 @@
       border-radius:8px;
       text-decoration:none;
       font-weight:600;
-      transition: background .18s ease, transform .12s ease;
+      transition:background .18s ease, transform .12s ease;
     }
-    .read-more:hover { background:#1e40af; transform: translateY(-2px); }
+    .read-more:hover { background:#1e40af; transform:translateY(-2px); }
 
     .actions {
       display:flex;
@@ -143,31 +187,47 @@
     .btn-cyber { background:#f97316; }
     .btn-features { background:#475569; }
     .btn-cyber:hover, .btn-features:hover {
-      filter:brightness(.95); transform:translateY(-3px);
+      filter:brightness(.95);
+      transform:translateY(-3px);
     }
 
     .status {
       text-align:center;
       padding:18px;
       color:#0b1220;
-      background: #fff;
+      background:#fff;
       border-radius:10px;
       box-shadow:0 6px 18px rgba(2,6,23,0.04);
+    }
+
+    @media (max-width:768px){
+      .page-wrap { padding-left:20px; }
     }
   </style>
 </head>
 <body>
 
   <header class="app-header">SmartKids Learning — Lessons</header>
+  <button class="menu-toggle" id="menuBtn">☰</button>
 
-  <!-- floating search -->
-  <div class="search-container" aria-hidden="false">
-    <div id="searchPill" class="search-pill" role="search">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+  <!-- Sidebar -->
+  <nav class="sidebar" id="sidebar">
+    <h3>Navigation</h3>
+    <a href="index.html">🏠 Home</a>
+    <a href="classes.html">⌨ Keyboard Tutor</a>
+    <a href="mouse.html">🖱 Mouse Practice</a>
+    <a href="features/cyber-security.html">🔒 Cyber Security</a>
+    <a href="features/index.html">✨ Features</a>
+  </nav>
+
+  <!-- Floating Search -->
+  <div class="search-container">
+    <div id="searchPill" class="search-pill">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
         <path d="M21 21l-4.35-4.35" stroke="#2563eb" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
         <circle cx="11" cy="11" r="6.2" stroke="#2563eb" stroke-width="1.6"/>
       </svg>
-      <input id="searchInput" placeholder="Search lessons or topics..." aria-label="Search lessons" />
+      <input id="searchInput" placeholder="Search lessons or topics..." />
     </div>
   </div>
 
@@ -185,108 +245,75 @@
   </main>
 
   <script>
-  (function () {
-    const jsonPaths = [
-      'data/lessons.json',
-      './data/lessons.json',
-      'lessons.json',
-      './lessons.json',
-      '/data/lessons.json'
-    ];
+  (function(){
+    const jsonPaths = ['data/lessons.json','./data/lessons.json','lessons.json','./lessons.json','/data/lessons.json'];
+    const lessonsArea=document.getElementById('lessonsArea');
+    const searchInput=document.getElementById('searchInput');
+    const searchPill=document.getElementById('searchPill');
+    let allCategories=[];
 
-    const lessonsArea = document.getElementById('lessonsArea');
-    const searchInput = document.getElementById('searchInput');
-    const searchPill = document.getElementById('searchPill');
-    let allCategories = [];
-
-    async function fetchFirstSuccess(paths) {
-      for (const p of paths) {
-        try {
-          const r = await fetch(p, { cache: "no-store" });
-          if (!r.ok) continue;
-          const json = await r.json();
-          return {json, path: p};
-        } catch {}
-      }
-      return null;
+    async function fetchFirstSuccess(paths){
+      for(const p of paths){
+        try{
+          const r=await fetch(p,{cache:"no-store"});
+          if(!r.ok) continue;
+          return await r.json();
+        }catch(e){}
+      }return null;
     }
 
-    function normalizeData(data) {
-      if (!data) return [];
-      if (Array.isArray(data)) return data;
-      if (Array.isArray(data.categories)) return data.categories;
-      if (Array.isArray(data.items)) return data.items;
+    function normalizeData(data){
+      if(!data) return [];
+      if(Array.isArray(data)) return data;
+      if(Array.isArray(data.categories)) return data.categories;
+      if(Array.isArray(data.items)) return data.items;
       return [];
     }
 
-    function getTopicsForCategory(cat) {
-      return cat.topics || cat.lessons || cat.items || [];
-    }
+    function getTopics(cat){return cat.topics||cat.lessons||[];}
+    function renderEmpty(msg){lessonsArea.innerHTML=`<div class='status'>${msg}</div>`;}
+    function escapeHtml(s){return s.replace(/[&<>"']/g,m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;' }[m]));}
 
-    function renderEmpty(message) {
-      lessonsArea.innerHTML = `<div class="status">${message}</div>`;
-    }
-
-    function escapeHtml(s) {
-      return s ? s.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])) : '';
-    }
-
-    function catIdFromName(name) {
-      return (name || 'category').toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g,'');
-    }
-
-    function renderGrid(categories, filter = '') {
-      const q = (filter || '').trim().toLowerCase();
-      const out = [];
-
-      categories.forEach(cat => {
-        const topics = getTopicsForCategory(cat);
-        topics.forEach(topic => {
-          const tTitle = (topic.title || topic.name || '').toString();
-          if (!q || tTitle.toLowerCase().includes(q)) {
-            out.push({
-              categoryId: cat.id || catIdFromName(cat.name || cat.title || ''),
-              id: topic.id || topic.key || '',
-              title: tTitle
-            });
-          }
+    function renderGrid(categories,filter=''){
+      const q=filter.trim().toLowerCase();
+      const out=[];
+      categories.forEach(cat=>{
+        getTopics(cat).forEach(topic=>{
+          const title=(topic.title||topic.name||'').toString();
+          if(!q||title.toLowerCase().includes(q)) out.push({
+            id:topic.id,title
+          });
         });
       });
+      if(!out.length) return renderEmpty('No topics found.');
 
-      if (!out.length) return renderEmpty('No topics found.');
-
-      lessonsArea.innerHTML = '';
-      const frag = document.createDocumentFragment();
-      out.forEach(item => {
-        const card = document.createElement('div');
-        card.className = 'lesson-card';
-        const linkHref = `detail-notes.html?category=${encodeURIComponent(item.categoryId)}&id=${encodeURIComponent(item.id)}`;
-        card.innerHTML = `
-          <div class="lesson-title">${escapeHtml(item.title)}</div>
-          <div><a class="read-more" href="${linkHref}">Read More →</a></div>
+      lessonsArea.innerHTML='';
+      out.forEach(item=>{
+        const card=document.createElement('div');
+        card.className='lesson-card';
+        card.innerHTML=`
+          <div><div class='lesson-title'>${escapeHtml(item.title)}</div></div>
+          <div><a class='read-more' href="detail-notes.html?id=${encodeURIComponent(item.id)}">Read More →</a></div>
         `;
-        frag.appendChild(card);
+        lessonsArea.appendChild(card);
       });
-      lessonsArea.appendChild(frag);
     }
 
-    (async function init() {
-      const result = await fetchFirstSuccess(jsonPaths);
-      if (!result) return renderEmpty('Could not find lessons.json.');
-      const normalized = normalizeData(result.json);
-      if (!normalized.length) return renderEmpty('lessons.json loaded but no categories found.');
-      allCategories = normalized;
+    (async()=>{
+      const json=await fetchFirstSuccess(jsonPaths);
+      const cats=normalizeData(json);
+      if(!cats.length) return renderEmpty('lessons.json not valid.');
+      allCategories=cats;
       renderGrid(allCategories);
 
-      let timer = null;
-      searchInput.addEventListener('input', e => {
-        clearTimeout(timer);
-        timer = setTimeout(() => renderGrid(allCategories, e.target.value), 120);
-      });
-
-      searchInput.addEventListener('focus', () => searchPill.classList.add('focused'));
-      searchInput.addEventListener('blur', () => searchPill.classList.remove('focused'));
+      searchInput.addEventListener('input',e=>renderGrid(allCategories,e.target.value));
+      searchInput.addEventListener('focus',()=>searchPill.classList.add('focused'));
+      searchInput.addEventListener('blur',()=>searchPill.classList.remove('focused'));
     })();
+
+    // Sidebar toggle
+    const sidebar=document.getElementById('sidebar');
+    document.getElementById('menuBtn').addEventListener('click',()=>sidebar.classList.toggle('open'));
   })();
   </script>
 </body>
