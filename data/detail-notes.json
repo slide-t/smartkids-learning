@@ -185,11 +185,6 @@
     "content": "The internet is a tool to find information and communicate. <br><br>👉 Use search engines to locate resources. <br>👉 Watch educational videos. <br>👉 Practice safe browsing habits and do not share passwords.<br><br><img src='images/ict_internet.png' alt='Internet Browser' class='w-64 mt-2 rounded shadow'>"
   },
     
-    
-{
-  "id": "coding_basics",
-  "name": "Coding Basics",
-  "topics": [
     {
       "id": "what_is_coding",
       "title": "What is Coding?",
