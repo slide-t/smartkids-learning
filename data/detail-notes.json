@@ -1,66 +1,66 @@
 {
   "categories": [
     {
-      "id": "keyboard",
-      "title": "Computer Keyboard",
-      "lessons": [
-        {
-          "id": "keyboard_definition",
-          "title": "What is a Computer Keyboard?",
-          "content": ""
-        },
-        {
-          "id": "keyboard_layout",
-          "title": "Layout of the Keyboard",
-          "content": ""
-        },
-        {
-          "id": "categories_of_keys",
-          "title": "Categories of Keys",
-          "content": ""
-        },
-        {
-          "id": "typing_skills",
-          "title": "How to Use the Keyboard for Typing",
-          "content": ""
-        },
-        {
-          "id": "function_keys",
-          "title": "Function Keys (F1–F12)",
-          "content": ""
-        },
-        {
-          "id": "numeric_keys",
-          "title": "Numeric and Symbol Keys",
-          "content": ""
-        },
-        {
-          "id": "keyboard_home_row",
-          "title": "Home Row Keys",
-          "content": ""
-        },
-        {
-          "id": "keyboard_top_row",
-          "title": "Top Row Keys",
-          "content": ""
-        },
-        {
-          "id": "keyboard_bottom_row",
-          "title": "Bottom Row Keys",
-          "content": ""
-        },
-        {
-          "id": "keyboard_punctuation",
-          "title": "Punctuation Keys",
-          "content": ""
-        },
-        {
-          "id": "keyboard_shortcuts",
-          "title": "Keyboard Shortcuts",
-          "content": ""
-        }
-      ]
+  "id": "keyboard",
+  "title": "Computer Keyboard",
+  "lessons": [
+    {
+      "id": "keyboard_definition",
+      "title": "What is a Computer Keyboard?",
+      "content": "A <b>computer keyboard</b> is an input device used to type letters, numbers, and symbols into a computer. It works like the keyboard on your phone or typewriter, but it has many more keys and functions.<br><br><b>1. What It Does:</b><br>The keyboard helps you tell the computer what to do — by typing commands, words, or numbers. For example, when you type a message or your name, you use the keyboard.<br><br><b>2. How It Looks:</b><br>A keyboard has many buttons called <b>keys</b>, arranged in rows. Most keyboards have between 80 and 110 keys.<br><br><b>3. Fun Fact:</b><br>The word ‘keyboard’ means a board with keys! Without it, it would be very hard to use a computer.<br><br><img src='images/keyboard_definition.png' class='rounded shadow w-72 mt-2' alt='Computer Keyboard'>"
     },
+    {
+      "id": "keyboard_layout",
+      "title": "Layout of the Keyboard",
+      "content": "The <b>keyboard layout</b> shows how all the keys are arranged on the keyboard. The most common layout is called the <b>QWERTY layout</b> because the first six letters on the top letter row are Q, W, E, R, T, and Y.<br><br><b>Parts of the Keyboard Layout:</b><br>👉 <b>Typing area</b> – where you find letter, number, and punctuation keys.<br>👉 <b>Function keys</b> – the row at the top (F1 to F12) used for special actions.<br>👉 <b>Navigation keys</b> – used for moving the cursor (arrows, Home, End).<br>👉 <b>Numeric keypad</b> – found on the right side for typing numbers quickly.<br>👉 <b>Control keys</b> – like Ctrl, Alt, and Shift for shortcuts.<br><br><img src='images/keyboard_layout.png' class='rounded shadow w-72 mt-2' alt='Keyboard Layout'>"
+    },
+    {
+      "id": "categories_of_keys",
+      "title": "Categories of Keys",
+      "content": "The keys on a keyboard are grouped by what they do. Here are the main <b>categories of keys:</b><br><br>1️⃣ <b>Alphabet keys</b> – A to Z letters used for typing words.<br>2️⃣ <b>Number keys</b> – 0 to 9, used for typing numbers.<br>3️⃣ <b>Function keys</b> – F1 to F12, used for special tasks like opening help or refreshing pages.<br>4️⃣ <b>Arrow keys</b> – move the cursor up, down, left, or right.<br>5️⃣ <b>Control keys</b> – like Ctrl, Alt, Shift, and Esc, used with other keys for commands.<br>6️⃣ <b>Punctuation keys</b> – for symbols like ! , ? . ; and : .<br>7️⃣ <b>Numeric keypad</b> – a group of number keys on the right side for quick calculations.<br><br><img src='images/categories_of_keys.png' class='rounded shadow w-72 mt-2' alt='Keyboard Keys Categories'>"
+    },
+    {
+      "id": "typing_skills",
+      "title": "How to Use the Keyboard for Typing",
+      "content": "Typing is the skill of pressing the right keys quickly and correctly. <b>Good typing skills</b> make computer work faster and easier.<br><br><b>1. Posture for Typing:</b><br>✅ Sit straight on a chair.<br>✅ Keep both feet flat on the floor.<br>✅ Keep your fingers curved over the keys.<br>✅ Don’t bend your wrists too much.<br><br><b>2. Home Row Rule:</b><br>Start typing with your fingers on the <b>Home Row Keys</b> — A, S, D, F, J, K, L, ;<br>The left hand controls A, S, D, F and the right hand controls J, K, L, ;<br><br><b>3. Practice:</b><br>Use online typing tutors or games to improve your speed and accuracy.<br><br><img src='images/typing_skills.png' class='rounded shadow w-72 mt-2' alt='Typing Practice'>"
+    },
+    {
+      "id": "function_keys",
+      "title": "Function Keys (F1–F12)",
+      "content": "The <b>function keys</b> are located on the top row of the keyboard and labeled F1 to F12. Each one performs a specific task, depending on the program you are using.<br><br><b>Common Uses:</b><br>🔹 <b>F1</b> – Opens Help in most programs.<br>🔹 <b>F2</b> – Renames a selected file or folder.<br>🔹 <b>F3</b> – Opens search in many applications.<br>🔹 <b>F5</b> – Refreshes a webpage.<br>🔹 <b>F7</b> – Checks spelling and grammar in Microsoft Word.<br>🔹 <b>F11</b> – Opens full-screen mode in browsers.<br><br><b>Tip:</b> Function keys can also be combined with <b>Alt</b> or <b>Ctrl</b> for more shortcuts!"
+    },
+    {
+      "id": "numeric_keys",
+      "title": "Numeric and Symbol Keys",
+      "content": "Numeric and symbol keys help you enter numbers and special characters.<br><br><b>1. Numeric Keys:</b><br>These are the number keys 0–9 located above the alphabet keys and also on the numeric keypad.<br><b>Example:</b> You use them when typing your age (10) or doing sums (2 + 3).<br><br><b>2. Symbol Keys:</b><br>These include signs like ! @ # $ % ^ & * ( ) _ + etc. They are typed by holding the <b>Shift</b> key and pressing another key.<br><br><b>3. Uses:</b><br>Symbols are used in email addresses, passwords, and mathematics."
+    },
+    {
+      "id": "keyboard_home_row",
+      "title": "Home Row Keys",
+      "content": "The <b>Home Row Keys</b> are the central row of the keyboard where your fingers rest while typing.<br><br>👉 Left hand: A, S, D, F<br>👉 Right hand: J, K, L, ;<br><br>These are called the home row because your fingers always return here after pressing any key. It helps you type faster and reduces mistakes.<br><br><b>Tip:</b> There are small bumps on F and J keys to help you find them without looking."
+    },
+    {
+      "id": "keyboard_top_row",
+      "title": "Top Row Keys",
+      "content": "The <b>Top Row Keys</b> are located just above the home row and include letters like Q, W, E, R, T, Y, U, I, O, P.<br><br>When typing, you move your fingers slightly upward to reach these keys. They are often used in many English words — for example, ‘type’, ‘word’, and ‘you’.<br><br><b>Fun Fact:</b> The QWERTY layout got its name from the first six letters of this row!"
+    },
+    {
+      "id": "keyboard_bottom_row",
+      "title": "Bottom Row Keys",
+      "content": "The <b>Bottom Row</b> is found below the home row and contains keys such as Z, X, C, V, B, N, M, comma, and period.<br><br>This row also includes important keys like <b>Spacebar</b>, <b>Ctrl</b>, <b>Alt</b>, and <b>Windows</b> key.<br><br><b>Tip:</b> The <b>Spacebar</b> key is the longest key and it adds space between words when typing."
+    },
+    {
+      "id": "keyboard_punctuation",
+      "title": "Punctuation Keys",
+      "content": "<b>Punctuation keys</b> help you make your sentences clear and correct. They include:<br>👉 Full stop (.)<br>👉 Comma (,)<br>👉 Question mark (?)<br>👉 Exclamation mark (!)<br>👉 Colon (:) and semicolon (;)<br>👉 Quotation marks (‘ ’ and “ ”)<br><br><b>Tip:</b> Use punctuation to show pauses, questions, or excitement in your writing."
+    },
+    {
+      "id": "keyboard_shortcuts",
+      "title": "Keyboard Shortcuts",
+      "content": "Keyboard shortcuts are special key combinations that help you perform tasks quickly without using the mouse. They save time and make your work faster and easier.<br><br><b>Examples:</b><br>✅ <b>Ctrl + C</b> – Copy<br>✅ <b>Ctrl + V</b> – Paste<br>✅ <b>Ctrl + X</b> – Cut<br>✅ <b>Ctrl + S</b> – Save<br>✅ <b>Alt + Tab</b> – Switch between windows<br><br><b>Benefits:</b><br>👉 Work faster<br>👉 Reduce mouse use<br>👉 Look like a computer pro!<br><br><b>Practice Tip:</b> Try learning one new shortcut every day."
+    }
+  ]
+},
     {
       "id": "mouse",
       "title": "Computer Mouse",
