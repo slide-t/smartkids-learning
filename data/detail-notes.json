@@ -35,6 +35,7 @@
       "title": "Numeric and Symbol Keys",
       "content": "Numeric and symbol keys help you enter numbers and special characters.<br><br><b>1. Numeric Keys:</b><br>These are the number keys 0–9 located above the alphabet keys and also on the numeric keypad.<br><b>Example:</b> You use them when typing your age (10) or doing sums (2 + 3).<br><br><b>2. Symbol Keys:</b><br>These include signs like ! @ # $ % ^ & * ( ) _ + etc. They are typed by holding the <b>Shift</b> key and pressing another key.<br><br><b>3. Uses:</b><br>Symbols are used in email addresses, passwords, and mathematics."
     },
+
     {
       "id": "keyboard_home_row",
       "title": "Home Row Keys",
@@ -59,7 +60,35 @@
       "id": "keyboard_shortcuts",
       "title": "Keyboard Shortcuts",
       "content": "Keyboard shortcuts are special key combinations that help you perform tasks quickly without using the mouse. They save time and make your work faster and easier.<br><br><b>Examples:</b><br>✅ <b>Ctrl + C</b> – Copy<br>✅ <b>Ctrl + V</b> – Paste<br>✅ <b>Ctrl + X</b> – Cut<br>✅ <b>Ctrl + S</b> – Save<br>✅ <b>Alt + Tab</b> – Switch between windows<br><br><b>Benefits:</b><br>👉 Work faster<br>👉 Reduce mouse use<br>👉 Look like a computer pro!<br><br><b>Practice Tip:</b> Try learning one new shortcut every day."
-    }
+    },
+    {
+  "id": "home_end_keys",
+  "title": "Home and End Keys",
+  "content": "<p>The <b>Home</b> and <b>End</b> keys help you move quickly when typing or reading on your computer. They are usually found near the arrow keys on your keyboard.</p><br> <h4>💻 What They Do:</h4> <ul> <li><b>Home Key</b> – When typing in a line of text, pressing <b>Home</b> takes your cursor to the <b>beginning</b> of that line.</li> <li><b>End Key</b> – Moves your cursor to the <b>end</b> of the line you are typing.</li> </ul><br> <h4>📘 Examples:</h4> <ul> <li>If you are writing: “I love computers.” and your cursor is at the end, press <b>Home</b> to jump back to the ‘I’ quickly.</li> <li>Press <b>End</b> to jump from the beginning of a sentence to the last word instantly.</li> </ul><br> <h4>🔀 When Used with Other Keys:</h4> <ul> <li><b>Ctrl + Home</b> – Moves to the very <b>beginning</b> of a document or webpage.</li> <li><b>Ctrl + End</b> – Moves to the very <b>end</b> of a document or webpage.</li> </ul><br> <p><b>In short:</b> The Home and End keys help you move around your text or page faster, saving time and effort while typing!</p>"
+},
+    {
+  "id": "arrow_keys",
+  "title": "Arrow Keys",
+  "content": "<p>The <b>Arrow Keys</b> are the four keys that point <b>Up</b>, <b>Down</b>, <b>Left</b>, and <b>Right</b>. They help you move around on your computer without using the mouse.</p><br> <h4>🎮 What They Do:</h4> <ul> <li><b>Up Arrow (↑)</b> – Moves the cursor or object upward.</li> <li><b>Down Arrow (↓)</b> – Moves the cursor or object downward.</li> <li><b>Left Arrow (←)</b> – Moves the cursor or object to the left.</li> <li><b>Right Arrow (→)</b> – Moves the cursor or object to the right.</li> </ul><br> <h4>🧠 Common Uses:</h4> <ul> <li>Scroll up or down in a document or webpage.</li> <li>Move a character in computer games.</li> <li>Navigate cells in a table or spreadsheet.</li> </ul><br> <p><b>Tip:</b> Combine arrow keys with <b>Shift</b> to select text or items in a list.</p>"
+},
+   {
+  "id": "control_keys",
+  "title": "Control Keys (Ctrl)",
+  "content": "<p>The <b>Control key (Ctrl)</b> is used together with other keys to perform quick commands called <b>keyboard shortcuts</b>. There are usually two Ctrl keys on a keyboard – one on the left and one on the right.</p><br> <h4>✨ Common Ctrl Shortcuts:</h4> <ul> <li><b>Ctrl + A</b> – Selects <b>all</b> text or items.</li> <li><b>Ctrl + B</b> – Makes selected text <b>bold</b>.</li> <li><b>Ctrl + C</b> – <b>Copies</b> the selected item.</li> <li><b>Ctrl + V</b> – <b>Pastes</b> what you copied.</li> <li><b>Ctrl + X</b> – <b>Cuts</b> the selected text or file.</li> <li><b>Ctrl + Z</b> – <b>Undo</b> the last action (go back one step).</li> <li><b>Ctrl + S</b> – <b>Save</b> your work.</li> <li><b>Ctrl + P</b> – <b>Print</b> the document.</li> <li><b>Ctrl + F</b> – <b>Find</b> a word in a document or webpage.</li> </ul><br> <p><b>In short:</b> The Ctrl key helps you work faster by combining it with letters for powerful shortcuts.</p>"
+},
+
+    {
+  "id": "shift_key",
+  "title": "Shift Key",
+  "content": "<p>The <b>Shift</b> key is used to type capital letters and special symbols. You can find two Shift keys on your keyboard, one on each side.</p><br> <h4>📝 Uses of the Shift Key:</h4> <ul> <li><b>Capital Letters:</b> Hold <b>Shift</b> and press a letter key to type a capital letter (Example: Shift + a = A).</li> <li><b>Symbols:</b> Hold <b>Shift</b> to type the upper symbols on number keys. (Example: Shift + 2 = @).</li> <li><b>Highlight Text:</b> Use <b>Shift + Arrow Keys</b> to select text without using a mouse.</li> </ul><br> <p><b>In short:</b> The Shift key changes what other keys do, helping you type neatly and accurately!</p>"
+},
+    
+{
+  "id": "number_keys",
+  "title": "Number Keys",
+  "content": "<p>The <b>Number Keys</b> are the keys with numbers 0–9. You can find them above the letter keys and also on the numeric keypad (on some keyboards).</p><br> <h4>🔎 Uses of Number Keys:</h4> <ul> <li>Type numbers in your documents, forms, and games.</li> <li>When used with <b>Shift</b>, they type special symbols. Example: <b>Shift + 1 = !</b>, <b>Shift + 2 = @</b>, <b>Shift + 3 = #</b>, and so on.</li> </ul><br> <p><b>Fun fact:</b> The numeric keypad on the right side helps you type numbers faster — just like a calculator!</p>"
+}
+    
   ]
 },
     {
