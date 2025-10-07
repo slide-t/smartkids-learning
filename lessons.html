@@ -45,45 +45,139 @@
     .read-more:hover {
       background-color: #1e40af;
     }
+
+    /* 🔍 Floating search bar */
+    #searchBar {
+      position: fixed;
+      top: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 500px;
+      z-index: 50;
+      background: white;
+      border: 2px solid #93c5fd;
+      border-radius: 9999px;
+      padding: 0.5rem 1rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease-in-out;
+    }
+
+    #searchBar:focus-within {
+      border-color: #2563eb;
+      box-shadow: 0 0 10px rgba(37, 99, 235, 0.3);
+      transform: translateX(-50%) scale(1.03);
+    }
+
+    #searchInput {
+      outline: none;
+      width: 100%;
+      border: none;
+      font-size: 1rem;
+      background: transparent;
+    }
+
+    /* Padding top so content doesn’t hide behind fixed search */
+    .page-content {
+      padding-top: 5rem;
+    }
+
+    /* 🔘 Action buttons */
+    .action-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 2.5rem;
+    }
+
+    .action-buttons a {
+      background-color: #f59e0b;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .action-buttons a:hover {
+      background-color: #d97706;
+      transform: translateY(-2px);
+    }
   </style>
 </head>
 <body>
-  <div class="max-w-6xl mx-auto py-10 px-5">
+  <!-- 🔍 Floating Search Bar -->
+  <div id="searchBar">
+    <input id="searchInput" type="text" placeholder="Search lessons or topics..." />
+  </div>
+
+  <div class="max-w-6xl mx-auto py-10 px-5 page-content">
     <h1 class="text-3xl font-bold text-center text-blue-700 mb-8">SmartKids Learning Lessons</h1>
 
     <div id="lessonContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       <p class="text-gray-500 text-center col-span-full">Loading lessons...</p>
     </div>
+
+    <!-- 🔘 Action Buttons -->
+    <div class="action-buttons">
+      <a href="features/cyber-security.html">🔒 Cyber Security</a>
+      <a href="features/index.html">✨ Features</a>
+    </div>
   </div>
 
   <script>
+    let allCategories = [];
+
     async function loadLessons() {
       const container = document.getElementById('lessonContainer');
+      const searchInput = document.getElementById('searchInput');
+
+      container.innerHTML = "<p class='text-gray-500 text-center col-span-full'>Loading lessons...</p>";
 
       try {
         const res = await fetch('data/lessons.json');
         const data = await res.json();
+        allCategories = data.categories;
+        renderLessons(allCategories);
 
-        container.innerHTML = '';
+        // 🔍 Live Search
+        searchInput.addEventListener('input', () => {
+          const query = searchInput.value.toLowerCase();
+          const filtered = allCategories.map(cat => {
+            const matched = cat.topics.filter(t => 
+              t.title.toLowerCase().includes(query) || cat.name.toLowerCase().includes(query)
+            );
+            return { ...cat, topics: matched };
+          }).filter(cat => cat.topics.length > 0);
 
-        data.categories.forEach(category => {
-          category.topics.forEach(topic => {
-            const card = document.createElement('div');
-            card.className = 'lesson-card';
-
-            card.innerHTML = `
-              <h2 class="lesson-title">${topic.title}</h2>
-              <p class="text-gray-700 text-sm mb-3">Category: <span class="font-semibold">${category.name}</span></p>
-              <a href="detail-notes.html?category=${category.id}&id=${topic.id}" class="read-more">Read More →</a>
-            `;
-
-            container.appendChild(card);
-          });
+          renderLessons(filtered);
         });
-
       } catch (err) {
-        console.error('Error loading lessons.json:', err);
-        container.innerHTML = "<p class='text-red-600 text-center col-span-full'>Failed to load lessons.json</p>";
+        container.innerHTML = "<p class='text-red-600 text-center col-span-full'>Error loading lessons.json</p>";
+        console.error(err);
+      }
+    }
+
+    function renderLessons(categories) {
+      const container = document.getElementById('lessonContainer');
+      container.innerHTML = '';
+
+      categories.forEach(category => {
+        category.topics.forEach(topic => {
+          const card = document.createElement('div');
+          card.className = 'lesson-card';
+          card.innerHTML = `
+            <h2 class="lesson-title">${topic.title}</h2>
+            <p class="text-gray-700 text-sm mb-3">Category: <span class="font-semibold">${category.name}</span></p>
+            <a href="detail-notes.html?category=${category.id}&id=${topic.id}" class="read-more">Read More →</a>
+          `;
+          container.appendChild(card);
+        });
+      });
+
+      if (container.innerHTML.trim() === '') {
+        container.innerHTML = "<p class='text-gray-500 text-center col-span-full'>No topics found.</p>";
       }
     }
 
