@@ -7,7 +7,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-50 font-sans">
-
   <div class="max-w-4xl mx-auto py-8 px-4">
     <h1 class="text-3xl font-bold text-blue-700 mb-4 text-center">Computer Lessons</h1>
 
@@ -15,108 +14,101 @@
     <div class="fixed top-0 left-0 w-full bg-gray-50 z-50 p-4 shadow">
       <div class="max-w-4xl mx-auto text-center">
         <input id="searchInput" type="text" placeholder="Search lessons or topics..."
-          class="w-full sm:w-2/3 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
-        >
+          class="w-full sm:w-2/3 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400">
       </div>
     </div>
 
     <!-- Add spacing below fixed bar to avoid overlap -->
     <div class="h-24"></div>
-  
+
     <!-- Topics container -->
     <div id="lessonsContainer" class="space-y-6"></div>
 
     <!-- Back buttons -->
     <div class="mt-8 flex justify-center space-x-4">
-      <a href="https://slide-t.github.io/smartkids-learning/classes.html" 
+      <a href="https://slide-t.github.io/smartkids-learning/classes.html"
          class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">
         ⬅ Keyboard Drill
       </a>
-      <a href="https://slide-t.github.io/smartkids-learning/mouse.html" 
+      <a href="https://slide-t.github.io/smartkids-learning/mouse.html"
          class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">
-        ⬅ Mouse Practice 
+        ⬅ Mouse Practice
       </a>
     </div>
   </div>
-    
-<script>
-let allCategories = [];
 
-async function loadLessons() {
-  const container = document.getElementById('lessonsContainer');
-  const searchInput = document.getElementById('searchInput');
+  <script>
+    let allCategories = [];
 
-  container.innerHTML = "<p class='text-gray-500'>Loading lessons...</p>";
+    async function loadLessons() {
+      const container = document.getElementById('lessonsContainer');
+      const searchInput = document.getElementById('searchInput');
 
-  try {
-    const res = await fetch('data/lessons.json');
-    const data = await res.json();
-    allCategories = data.categories || [];
+      container.innerHTML = "<p class='text-gray-500'>Loading lessons...</p>";
 
-    renderLessons(allCategories);
+      try {
+        const res = await fetch('data/lessons.json');
+        const data = await res.json();
+        allCategories = data.categories;
 
-    // 🔍 Search function
-    searchInput.addEventListener('input', () => {
-      const query = searchInput.value.toLowerCase();
-      const filtered = allCategories.map(cat => {
-        const matchedLessons = (cat.lessons || []).filter(lesson =>
-          lesson.title.toLowerCase().includes(query) ||
-          cat.title.toLowerCase().includes(query)
-        );
-        return { ...cat, lessons: matchedLessons };
-      }).filter(cat => cat.lessons.length > 0);
+        renderLessons(allCategories);
 
-      renderLessons(filtered);
-    });
+        // Search feature
+        searchInput.addEventListener('input', () => {
+          const query = searchInput.value.toLowerCase();
+          const filtered = allCategories.map(cat => {
+            const matchedTopics = cat.topics.filter(topic =>
+              topic.title.toLowerCase().includes(query) || cat.name.toLowerCase().includes(query)
+            );
+            return { ...cat, topics: matchedTopics };
+          }).filter(cat => cat.topics.length > 0);
 
-  } catch (err) {
-    container.innerHTML = "<p class='text-red-600'>Error loading lessons file.</p>";
-    console.error(err);
-  }
-}
+          renderLessons(filtered);
+        });
 
-// 🟦 Function to render all categories and lessons
-function renderLessons(categories) {
-  const container = document.getElementById('lessonsContainer');
-  container.innerHTML = '';
+      } catch (err) {
+        container.innerHTML = "<p class='text-red-600'>Error loading lessons file.</p>";
+        console.error(err);
+      }
+    }
 
-  categories.forEach(category => {
-    const catDiv = document.createElement('div');
-    catDiv.className = "bg-white p-4 rounded-lg shadow";
+    function renderLessons(categories) {
+      const container = document.getElementById('lessonsContainer');
+      container.innerHTML = '';
 
-    catDiv.innerHTML = `<h2 class="text-xl font-semibold text-blue-600 mb-3">${category.title}</h2>`;
+      categories.forEach(category => {
+        const catDiv = document.createElement('div');
+        catDiv.className = "bg-white p-4 rounded-lg shadow";
 
-    const lessonsGrid = document.createElement('div');
-    lessonsGrid.className = "grid sm:grid-cols-2 gap-4";
+        catDiv.innerHTML = `<h2 class="text-xl font-semibold text-blue-600 mb-3">${category.name}</h2>`;
 
-    (category.lessons || []).forEach(lesson => {
-      const lessonDiv = document.createElement('div');
-      lessonDiv.className = "p-4 bg-blue-50 rounded-lg shadow hover:bg-blue-100 transition";
+        const topicsGrid = document.createElement('div');
+        topicsGrid.className = "grid sm:grid-cols-2 gap-4";
 
-      // ✅ Include category + lesson ID in link
-      lessonDiv.innerHTML = `
-        <h3 class="text-lg font-medium text-blue-800">${lesson.title}</h3>
-        <a href="detail-notes.html?category=${encodeURIComponent(category.id)}&id=${encodeURIComponent(lesson.id)}" 
-           class="mt-2 inline-block text-sm text-blue-700 hover:underline">
-           Read Lesson →
-        </a>
-      `;
-      lessonsGrid.appendChild(lessonDiv);
-    });
+        category.topics.forEach(topic => {
+          const topicDiv = document.createElement('div');
+          topicDiv.className = "p-4 bg-blue-50 rounded-lg shadow hover:bg-blue-100 transition";
 
-    catDiv.appendChild(lessonsGrid);
-    container.appendChild(catDiv);
-  });
-}
+          topicDiv.innerHTML = `
+            <h3 class="text-lg font-medium text-blue-800">${topic.title}</h3>
+            <a href="detail-notes.html?id=${encodeURIComponent(topic.id)}"
+               class="mt-2 inline-block text-sm text-blue-700 hover:underline">
+               Read Lesson →
+            </a>
+          `;
+          topicsGrid.appendChild(topicDiv);
+        });
 
-document.addEventListener('DOMContentLoaded', loadLessons);
-</script>
+        catDiv.appendChild(topicsGrid);
+        container.appendChild(catDiv);
+      });
+    }
 
-<!-- Registration Modal Placeholder -->
-<div id="modalContainer"></div>
+    document.addEventListener('DOMContentLoaded', loadLessons);
+  </script>
 
-<!-- Shared Auth Script -->
-<script src="auth.js"></script>
-
+  <!-- Registration Modal Placeholder -->
+  <div id="modalContainer"></div>
+  <script src="auth.js"></script>
 </body>
 </html>
