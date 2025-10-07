@@ -21,6 +21,16 @@
       border-radius: 8px 8px 0 0;
       text-align: center;
     }
+    /* Keep category title sticky inside the sidebar */
+.category-title {
+  position: sticky;
+  top: 0;
+  background-color: #ffffff;
+  z-index: 10;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 2px solid #e0e7ff;
+}
 
     /* Sidebar animation */
     .sidebar {
@@ -102,7 +112,36 @@ async function loadLesson() {
     const data = await res.json();
     const categories = data.categories;
 
-    // 🟦 Build sidebar topics
+ // 🟦 Build sidebar topics
+lessonList.innerHTML = '';
+categories.forEach(cat => {
+  const catEl = document.createElement('div');
+  catEl.className = 'mb-6';
+
+  catEl.innerHTML = `<h3 class="category-title font-semibold text-blue-700 mb-2">${cat.title}</h3>`;
+
+  const ul = document.createElement('ul');
+  ul.className = 'space-y-1';
+
+  (cat.lessons || cat.topics || []).forEach(topic => {
+    const li = document.createElement('li');
+    const isActive = (cat.id === categoryId && topic.id === topicId);
+    li.innerHTML = `
+      <a href="detail-notes.html?category=${cat.id}&id=${topic.id}" 
+         class="block px-3 py-1 rounded transition ${
+           isActive
+             ? 'bg-blue-600 text-white font-semibold'
+             : 'hover:bg-blue-100 text-gray-700'
+         }">${topic.title}</a>`;
+    ul.appendChild(li);
+  });
+
+  catEl.appendChild(ul);
+  lessonList.appendChild(catEl);
+});
+    
+    
+    /*// 🟦 Build sidebar topics
     lessonList.innerHTML = '';
     categories.forEach(cat => {
       const catEl = document.createElement('div');
@@ -128,7 +167,7 @@ async function loadLesson() {
       catEl.appendChild(ul);
       lessonList.appendChild(catEl);
     });
-
+*/
     // 🟩 Flatten all topics
     const allTopics = [];
     categories.forEach(cat => {
