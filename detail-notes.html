@@ -21,28 +21,25 @@
       border-radius: 8px 8px 0 0;
       text-align: center;
     }
-    /* Keep category title sticky inside the sidebar */
-.category-title {
-  position: sticky;
-  top: 0;
-  background-color: #ffffff;
-  z-index: 10;
-  padding-top: 0.25rem;
-  padding-bottom: 0.25rem;
-  border-bottom: 2px solid #e0e7ff;
-}
 
-    /* Sidebar animation */
-    .sidebar {
-      transition: transform 0.3s ease-in-out;
+    .category-title {
+      position: sticky;
+      top: 0;
+      background-color: #ffffff;
+      z-index: 10;
+      padding-top: 0.25rem;
+      padding-bottom: 0.25rem;
+      border-bottom: 2px solid #e0e7ff;
     }
 
-    /* Mobile hidden state */
+    .sidebar {
+      transition: transform 0.35s ease-in-out;
+    }
+
     .sidebar-hidden {
       transform: translateX(-100%);
     }
 
-    /* Chevron button */
     .chevron-btn {
       position: fixed;
       top: 50%;
@@ -61,11 +58,16 @@
         display: none;
       }
     }
+
+    /* Smooth fade for content area */
+    #lessonContent {
+      transition: opacity 0.3s ease;
+    }
   </style>
 </head>
 <body class="bg-gray-50 font-sans">
 
-  <!-- Chevron Toggle Button for Mobile -->
+  <!-- Sidebar Toggle Button (mobile) -->
   <button id="toggleSidebar" class="chevron-btn">☰</button>
 
   <div class="flex flex-col md:flex-row max-w-6xl mx-auto py-8 px-4 gap-6">
@@ -106,41 +108,40 @@ async function loadLesson() {
   const prevBtn = document.getElementById('prevBtn');
   const nextBtn = document.getElementById('nextBtn');
   const lessonList = document.getElementById('lessonList');
+  const sidebar = document.getElementById('sidebar');
 
   try {
     const res = await fetch('data/detail-notes.json');
     const data = await res.json();
     const categories = data.categories;
 
- // 🟦 Build sidebar topics
-lessonList.innerHTML = '';
-categories.forEach(cat => {
-  const catEl = document.createElement('div');
-  catEl.className = 'mb-6';
+    // Build Sidebar
+    lessonList.innerHTML = '';
+    categories.forEach(cat => {
+      const catEl = document.createElement('div');
+      catEl.className = 'mb-6';
+      catEl.innerHTML = `<h3 class="category-title font-semibold text-blue-700 mb-2">${cat.title}</h3>`;
 
-  catEl.innerHTML = `<h3 class="category-title font-semibold text-blue-700 mb-2">${cat.title}</h3>`;
+      const ul = document.createElement('ul');
+      ul.className = 'space-y-1';
+      (cat.lessons || cat.topics || []).forEach(topic => {
+        const isActive = (cat.id === categoryId && topic.id === topicId);
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <a href="detail-notes.html?category=${cat.id}&id=${topic.id}" 
+             class="block px-3 py-1 rounded transition ${
+               isActive
+                 ? 'bg-blue-600 text-white font-semibold'
+                 : 'hover:bg-blue-100 text-gray-700'
+             }">${topic.title}</a>`;
+        ul.appendChild(li);
+      });
 
-  const ul = document.createElement('ul');
-  ul.className = 'space-y-1';
+      catEl.appendChild(ul);
+      lessonList.appendChild(catEl);
+    });
 
-  (cat.lessons || cat.topics || []).forEach(topic => {
-    const li = document.createElement('li');
-    const isActive = (cat.id === categoryId && topic.id === topicId);
-    li.innerHTML = `
-      <a href="detail-notes.html?category=${cat.id}&id=${topic.id}" 
-         class="block px-3 py-1 rounded transition ${
-           isActive
-             ? 'bg-blue-600 text-white font-semibold'
-             : 'hover:bg-blue-100 text-gray-700'
-         }">${topic.title}</a>`;
-    ul.appendChild(li);
-  });
-
-  catEl.appendChild(ul);
-  lessonList.appendChild(catEl);
-});
-    
-// 🟩 Flatten all topics
+    // Flatten topics
     const allTopics = [];
     categories.forEach(cat => {
       (cat.lessons || cat.topics || []).forEach(topic => {
@@ -152,66 +153,55 @@ categories.forEach(cat => {
       });
     });
 
-    // 🟨 Find selected topic
     let index = allTopics.findIndex(t => t.id === topicId && t.categoryId === categoryId);
     if (index === -1) index = 0;
 
-    // 🟪 Render topic content
     function renderTopic(i) {
       const topic = allTopics[i];
       if (!topic) return;
 
-      titleEl.textContent = topic.title;
-      panelTitleEl.textContent = topic.title;
-      contentEl.innerHTML = topic.content || "<p>No content available.</p>";
+      contentEl.style.opacity = '0';
+      setTimeout(() => {
+        titleEl.textContent = topic.title;
+        panelTitleEl.textContent = topic.title;
+        contentEl.innerHTML = topic.content || "<p>No content available.</p>";
+        contentEl.style.opacity = '1';
+      }, 150);
 
-      // Update sidebar highlight dynamically
+      // Highlight in sidebar
       document.querySelectorAll('#lessonList a').forEach(a => {
         a.classList.remove('bg-blue-600', 'text-white', 'font-semibold');
         a.classList.add('hover:bg-blue-100', 'text-gray-700');
         if (a.href.includes(`category=${topic.categoryId}&id=${topic.id}`)) {
           a.classList.add('bg-blue-600', 'text-white', 'font-semibold');
           a.classList.remove('hover:bg-blue-100', 'text-gray-700');
+          // Scroll to active item
+          a.scrollIntoView({ block: "center", behavior: "smooth" });
         }
       });
 
-      // Prev button
-      if (i > 0) {
-        prevBtn.disabled = false;
-        prevBtn.onclick = () => renderTopic(i - 1);
-      } else {
-        prevBtn.disabled = true;
-        prevBtn.onclick = () => (window.location.href = 'lessons.html');
-      }
+      // Prev
+      prevBtn.disabled = i === 0;
+      prevBtn.onclick = () => i > 0 ? renderTopic(i - 1) : (window.location.href = 'lessons.html');
 
-      // Next button
-      if (i < allTopics.length - 1) {
-        nextBtn.disabled = false;
-        nextBtn.onclick = () => renderTopic(i + 1);
-      } else {
-        nextBtn.disabled = true;
-        nextBtn.onclick = () => (window.location.href = 'lessons.html');
-      }
+      // Next
+      nextBtn.disabled = i >= allTopics.length - 1;
+      nextBtn.onclick = () => i < allTopics.length - 1 ? renderTopic(i + 1) : (window.location.href = 'lessons.html');
 
-      // Update URL
-      const newUrl = `detail-notes.html?category=${topic.categoryId}&id=${topic.id}`;
-      window.history.replaceState({}, '', newUrl);
+      window.history.replaceState({}, '', `detail-notes.html?category=${topic.categoryId}&id=${topic.id}`);
     }
 
     renderTopic(index);
-
   } catch (err) {
     console.error('Error loading detail-notes.json:', err);
     titleEl.textContent = "Error Loading Lesson";
     contentEl.innerHTML = "<p class='text-red-600'>Failed to load detail-notes.json</p>";
-    prevBtn.disabled = true;
-    nextBtn.disabled = true;
   }
 }
 
 document.addEventListener('DOMContentLoaded', loadLesson);
 
-// 🧭 Sidebar toggle for mobile
+// Sidebar Toggle
 document.getElementById('toggleSidebar').addEventListener('click', () => {
   const sidebar = document.getElementById('sidebar');
   sidebar.classList.toggle('sidebar-hidden');
