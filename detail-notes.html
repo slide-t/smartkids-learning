@@ -84,6 +84,133 @@
     </main>
   </div>
 
+<script>
+async function loadLesson() {
+  const params = new URLSearchParams(window.location.search);
+  const categoryId = params.get('category');
+  const topicId = params.get('id');
+
+  const titleEl = document.getElementById('lessonTitle');
+  const panelTitleEl = document.getElementById('panelTitle');
+  const contentEl = document.getElementById('lessonContent');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const lessonList = document.getElementById('lessonList');
+
+  try {
+    const res = await fetch('data/detail-notes.json');
+    const data = await res.json();
+    const categories = data.categories;
+
+    // 🟦 Build sidebar topics
+    lessonList.innerHTML = '';
+    categories.forEach(cat => {
+      const catEl = document.createElement('div');
+      catEl.className = 'mb-4';
+      catEl.innerHTML = `<h3 class="font-semibold text-blue-700 mb-2">${cat.title}</h3>`;
+
+      const ul = document.createElement('ul');
+      ul.className = 'space-y-1';
+
+      (cat.lessons || cat.topics || []).forEach(topic => {
+        const li = document.createElement('li');
+        const isActive = (cat.id === categoryId && topic.id === topicId);
+        li.innerHTML = `
+          <a href="detail-notes.html?category=${cat.id}&id=${topic.id}" 
+             class="block px-3 py-1 rounded transition ${
+               isActive
+                 ? 'bg-blue-600 text-white font-semibold'
+                 : 'hover:bg-blue-100 text-gray-700'
+             }">${topic.title}</a>`;
+        ul.appendChild(li);
+      });
+
+      catEl.appendChild(ul);
+      lessonList.appendChild(catEl);
+    });
+
+    // 🟩 Flatten all topics
+    const allTopics = [];
+    categories.forEach(cat => {
+      (cat.lessons || cat.topics || []).forEach(topic => {
+        allTopics.push({
+          ...topic,
+          categoryId: cat.id,
+          categoryTitle: cat.title
+        });
+      });
+    });
+
+    // 🟨 Find selected topic
+    let index = allTopics.findIndex(t => t.id === topicId && t.categoryId === categoryId);
+    if (index === -1) index = 0;
+
+    // 🟪 Render topic content
+    function renderTopic(i) {
+      const topic = allTopics[i];
+      if (!topic) return;
+
+      titleEl.textContent = topic.title;
+      panelTitleEl.textContent = topic.title;
+      contentEl.innerHTML = topic.content || "<p>No content available.</p>";
+
+      // Update sidebar highlight dynamically
+      document.querySelectorAll('#lessonList a').forEach(a => {
+        a.classList.remove('bg-blue-600', 'text-white', 'font-semibold');
+        a.classList.add('hover:bg-blue-100', 'text-gray-700');
+        if (a.href.includes(`category=${topic.categoryId}&id=${topic.id}`)) {
+          a.classList.add('bg-blue-600', 'text-white', 'font-semibold');
+          a.classList.remove('hover:bg-blue-100', 'text-gray-700');
+        }
+      });
+
+      // Prev button
+      if (i > 0) {
+        prevBtn.disabled = false;
+        prevBtn.onclick = () => renderTopic(i - 1);
+      } else {
+        prevBtn.disabled = true;
+        prevBtn.onclick = () => (window.location.href = 'lessons.html');
+      }
+
+      // Next button
+      if (i < allTopics.length - 1) {
+        nextBtn.disabled = false;
+        nextBtn.onclick = () => renderTopic(i + 1);
+      } else {
+        nextBtn.disabled = true;
+        nextBtn.onclick = () => (window.location.href = 'lessons.html');
+      }
+
+      // Update URL
+      const newUrl = `detail-notes.html?category=${topic.categoryId}&id=${topic.id}`;
+      window.history.replaceState({}, '', newUrl);
+    }
+
+    renderTopic(index);
+
+  } catch (err) {
+    console.error('Error loading detail-notes.json:', err);
+    titleEl.textContent = "Error Loading Lesson";
+    contentEl.innerHTML = "<p class='text-red-600'>Failed to load detail-notes.json</p>";
+    prevBtn.disabled = true;
+    nextBtn.disabled = true;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', loadLesson);
+
+// 🧭 Sidebar toggle for mobile
+document.getElementById('toggleSidebar').addEventListener('click', () => {
+  const sidebar = document.getElementById('sidebar');
+  sidebar.classList.toggle('sidebar-hidden');
+});
+</script>
+
+
+
+
+  <!--
   <script>
 async function loadLesson() {
   const params = new URLSearchParams(window.location.search);
@@ -187,6 +314,6 @@ document.getElementById('toggleSidebar').addEventListener('click', () => {
   const sidebar = document.getElementById('sidebar');
   sidebar.classList.toggle('sidebar-hidden');
 });
-</script>
+</script>-->
 </body>
 </html>
