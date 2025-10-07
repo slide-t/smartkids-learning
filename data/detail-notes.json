@@ -61,7 +61,11 @@
   "id": "keyboard_shortcuts",
   "title": "Keyboard Shortcuts",
   "content": "Keyboard shortcuts are special key combinations that help you perform tasks quickly without using the mouse. They save time and make your work faster and easier. Instead of clicking through menus, you can press two or more keys together to get the same result.<br><br><b>1. What Are Keyboard Shortcuts?</b><br>A keyboard shortcut is a combination of keys that performs a specific action. For example, pressing <b>Ctrl + C</b> copies text, and <b>Ctrl + V</b> pastes it. Shortcuts are useful for typing, editing, and managing files on a computer.<br><br><b>2. Commonly Used Shortcuts</b><br>Here are some popular and useful keyboard shortcuts:<br>👉 <b>Ctrl + C</b> – Copy selected text or items.<br>👉 <b>Ctrl + V</b> – Paste copied or cut text or items.<br>👉 <b>Ctrl + X</b> – Cut (remove) selected text or items.<br>👉 <b>Ctrl + Z</b> – Undo your last action.<br>👉 <b>Ctrl + Y</b> – Redo an action you just undid.<br>👉 <b>Ctrl + S</b> – Save your work or document.<br>👉 <b>Ctrl + P</b> – Print your file.<br>👉 <b>Ctrl + A</b> – Select all text or items in a document.<br>👉 <b>Alt + Tab</b> – Switch between open windows.<br>👉 <b>Ctrl + Alt + Delete</b> – Open the Task Manager or restart the computer.<br><br><b>3. Why Keyboard Shortcuts Are Important</b><br>✅ Save time and effort. <br>✅ Reduce the need to use the mouse. <br>✅ Help you work more efficiently on documents and programs. <br>✅ Make you look like a computer pro!<br><br><b>4. Tips for Practicing Shortcuts</b><br>👉 Start with simple ones like Copy (Ctrl + C) and Paste (Ctrl + V).<br>👉 Use them every day while typing or editing.<br>👉 Write them on a small note until you memorize them.<br><br><b>5. Fun Fact</b><br>Keyboard shortcuts work slightly differently in different programs, but the most common ones like <b>Ctrl + C</b> and <b>Ctrl + V</b> work almost everywhere!<br><br><img src='images/keyboard_shortcuts.png' alt='Keyboard Shortcuts' class='w-64 mt-2 rounded shadow'><br><br><b>Remember:</b> Shortcuts make your work quicker, smarter, and more fun! The more you use them, the faster you become."
-},
+}
+  ],
+  "category": "mouse_practices",
+  "id": "mouse_practice",
+  "title": "Computer Mouse Use",
     
 {
     "id": "mouse_definition",
