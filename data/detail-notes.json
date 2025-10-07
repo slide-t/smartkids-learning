@@ -4,7 +4,9 @@
       "id": "keyboard",
       "name": "Computer Keyboard",
       "topics": [
-        { "id": "keyboard_definition", "title": "What is a Computer Keyboard?", "content": "A computer keyboard is an input device that allows users to type letters, numbers, and commands into a computer. <br><br>👉 It is essential for writing documents, entering data, and controlling software. <br>👉 Keyboards can be physical or on-screen. <br><br><img src='images/keyboard.png' alt='Computer Keyboard' class='w-64 mt-2 rounded shadow'>"
+        { "id": "keyboard_definition",
+          "title": "What is a Computer Keyboard?", 
+          "content": "A computer keyboard is an input device that allows users to type letters, numbers, and commands into a computer. <br><br>👉 It is essential for writing documents, entering data, and controlling software. <br>👉 Keyboards can be physical or on-screen. <br><br><img src='images/keyboard.png' alt='Computer Keyboard' class='w-64 mt-2 rounded shadow'>"
         },
         { "id": "keyboard_layout", "title": "Layout of the Keyboard", "content": "" },
         { "id": "categories_of_keys", "title": "Categories of Keys", "content": "" },
