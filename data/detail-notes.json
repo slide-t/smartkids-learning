@@ -90,11 +90,9 @@
       "id": "numeric_keys",
       "title": "Numeric and Symbol Keys",
       "content": "Numeric and symbol keys help you enter numbers and special characters.<br><br><b>1. Numeric Keys:</b><br>These are the number keys 0–9 located above the alphabet keys and also on the numeric keypad.<br><b>Example:</b> You use them when typing your age (10) or doing sums (2 + 3).<br><br><b>2. Symbol Keys:</b><br>These include signs like ! @ # $ % ^ & * ( ) _ + etc. They are typed by holding the <b>Shift</b> key and pressing another key.<br><br><b>3. Uses:</b><br>Symbols are used in email addresses, passwords, and mathematics."
-    } 
-    
+    }    
   ]
 },
-   
     {
   "id": "mouse",
   "title": "Computer Mouse",
@@ -151,8 +149,6 @@
     }
   ]   
     },
-  
-   
     {
   "id": "ict",
   "title": "General ICT for Kids",
@@ -209,5 +205,4 @@
     }
   ]
 }
-  ]
-}
+
