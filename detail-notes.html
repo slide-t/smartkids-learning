@@ -33,7 +33,13 @@
       <div id="lessonContent" class="mt-2 text-gray-800"></div>
     </div>
 
-    <div class="mt-6 flex justify-between">
+    <div class="mt-6 flex flex-col items-center space-y-4">
+  <button id="prevBtn" class="w-48 px-4 py-2 bg-orange-600 text-white rounded hover:bg-orange-700 transition">⬅ Previous</button>
+  <button id="nextBtn" class="w-48 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">Next ➡</button>
+  <a href="lessons.html" class="w-48 text-center px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition">⬅ Back to Lessons</a>
+</div>
+
+    <!--<div class="mt-6 flex justify-between">
       <button id="prevBtn" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">⬅ Previous</button>
       <button id="nextBtn" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Next ➡</button>
     </div>
@@ -41,7 +47,7 @@
     <div class="mt-6 flex justify-center space-x-4">
       <a href="lessons.html" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">⬅ Back to Lessons</a>
     </div>
-  </div>
+  </div>-->
 <script>
 async function loadLesson() {
   const params = new URLSearchParams(window.location.search);
