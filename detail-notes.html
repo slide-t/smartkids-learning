@@ -59,7 +59,6 @@
       }
     }
 
-    /* Smooth fade for content area */
     #lessonContent {
       transition: opacity 0.3s ease;
     }
@@ -99,8 +98,7 @@
 <script>
 async function loadLesson() {
   const params = new URLSearchParams(window.location.search);
-  const categoryId = params.get('category');
-  const topicId = params.get('id');
+  const topicId = params.get('id'); // no need for category now
 
   const titleEl = document.getElementById('lessonTitle');
   const panelTitleEl = document.getElementById('panelTitle');
@@ -108,7 +106,6 @@ async function loadLesson() {
   const prevBtn = document.getElementById('prevBtn');
   const nextBtn = document.getElementById('nextBtn');
   const lessonList = document.getElementById('lessonList');
-  const sidebar = document.getElementById('sidebar');
 
   try {
     const res = await fetch('data/detail-notes.json');
@@ -125,10 +122,10 @@ async function loadLesson() {
       const ul = document.createElement('ul');
       ul.className = 'space-y-1';
       (cat.lessons || cat.topics || []).forEach(topic => {
-        const isActive = (cat.id === categoryId && topic.id === topicId);
+        const isActive = (topic.id === topicId);
         const li = document.createElement('li');
         li.innerHTML = `
-          <a href="detail-notes.html?category=${cat.id}&id=${topic.id}" 
+          <a href="detail-notes.html?id=${topic.id}" 
              class="block px-3 py-1 rounded transition ${
                isActive
                  ? 'bg-blue-600 text-white font-semibold'
@@ -153,7 +150,8 @@ async function loadLesson() {
       });
     });
 
-    let index = allTopics.findIndex(t => t.id === topicId && t.categoryId === categoryId);
+    // Find by ID only (no category filter)
+    let index = allTopics.findIndex(t => t.id === topicId);
     if (index === -1) index = 0;
 
     function renderTopic(i) {
@@ -168,27 +166,32 @@ async function loadLesson() {
         contentEl.style.opacity = '1';
       }, 150);
 
-      // Highlight in sidebar
+      // Highlight active link
       document.querySelectorAll('#lessonList a').forEach(a => {
         a.classList.remove('bg-blue-600', 'text-white', 'font-semibold');
         a.classList.add('hover:bg-blue-100', 'text-gray-700');
-        if (a.href.includes(`category=${topic.categoryId}&id=${topic.id}`)) {
+        if (a.href.includes(`id=${topic.id}`)) {
           a.classList.add('bg-blue-600', 'text-white', 'font-semibold');
           a.classList.remove('hover:bg-blue-100', 'text-gray-700');
-          // Scroll to active item
           a.scrollIntoView({ block: "center", behavior: "smooth" });
         }
       });
 
-      // Prev
+      // Navigation
       prevBtn.disabled = i === 0;
-      prevBtn.onclick = () => i > 0 ? renderTopic(i - 1) : (window.location.href = 'lessons.html');
-
-      // Next
       nextBtn.disabled = i >= allTopics.length - 1;
-      nextBtn.onclick = () => i < allTopics.length - 1 ? renderTopic(i + 1) : (window.location.href = 'lessons.html');
 
-      window.history.replaceState({}, '', `detail-notes.html?category=${topic.categoryId}&id=${topic.id}`);
+      prevBtn.onclick = () => {
+        if (i > 0) renderTopic(i - 1);
+        else window.location.href = 'lessons.html';
+      };
+      nextBtn.onclick = () => {
+        if (i < allTopics.length - 1) renderTopic(i + 1);
+        else window.location.href = 'lessons.html';
+      };
+
+      // Update URL
+      window.history.replaceState({}, '', `detail-notes.html?id=${topic.id}`);
     }
 
     renderTopic(index);
@@ -203,8 +206,7 @@ document.addEventListener('DOMContentLoaded', loadLesson);
 
 // Sidebar Toggle
 document.getElementById('toggleSidebar').addEventListener('click', () => {
-  const sidebar = document.getElementById('sidebar');
-  sidebar.classList.toggle('sidebar-hidden');
+  document.getElementById('sidebar').classList.toggle('sidebar-hidden');
 });
 </script>
 
