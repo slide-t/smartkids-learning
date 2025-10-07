@@ -1,185 +1,351 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SmartKids Learning - Lessons</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SmartKids Lessons</title>
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
+    :root {
+      --header-height: 72px;
+    }
+
     body {
-      font-family: "Poppins", sans-serif;
-      background-color: #f5faff;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background-color: #f5fbff;
       margin: 0;
-      padding: 0;
     }
 
-    header {
-      background-color: #007bff;
+    header.app-header {
+      height: var(--header-height);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: linear-gradient(90deg,#2563eb,#60a5fa);
       color: white;
-      text-align: center;
-      padding: 20px 0;
-      font-size: 24px;
-      font-weight: bold;
-      position: relative;
-      z-index: 2;
+      font-weight:700;
+      font-size:1.25rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+      position:relative;
+      z-index: 30;
     }
 
-    /* Search bar floating just below header */
+    /* Search container (floating but below header) */
     .search-container {
       position: fixed;
-      top: 70px; /* below header */
       left: 50%;
+      top: calc(var(--header-height) + 12px); /* below header */
       transform: translateX(-50%);
-      width: 80%;
-      max-width: 500px;
-      z-index: 100;
-      transition: all 0.4s ease-in-out;
+      width: 92%;
+      max-width: 640px;
+      z-index: 40;
+      transition: transform .32s ease, box-shadow .32s ease;
     }
 
-    .search-container input {
-      width: 100%;
+    .search-pill {
+      display:flex;
+      align-items:center;
+      gap:0.5rem;
+      background: #ffffff;
+      border-radius: 9999px;
       padding: 10px 14px;
+      box-shadow: 0 6px 18px rgba(37,99,235,0.08);
+      border: 1px solid rgba(37,99,235,0.08);
+      transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease;
+    }
+
+    .search-pill.focused {
+      transform: translateY(8px) scale(1.02);
+      box-shadow: 0 10px 30px rgba(37,99,235,0.14);
+      border-color: rgba(37,99,235,0.22);
+    }
+
+    #searchInput {
       border: none;
-      border-radius: 30px;
       outline: none;
-      background-color: #fff;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-      font-size: 16px;
-      transition: all 0.3s ease;
+      width: 100%;
+      font-size: 1rem;
+      background: transparent;
     }
 
-    .search-container input:focus {
-      transform: translateY(10px);
-      width: 90%;
-      max-width: 600px;
-      box-shadow: 0 4px 12px rgba(0, 123, 255, 0.5);
+    /* content spacing so the floating bar doesn't overlap cards */
+    .page-wrap {
+      padding-top: calc(var(--header-height) + 96px); /* header + search + gap */
+      max-width: 1200px;
+      margin: 0 auto;
+      padding-left: 16px;
+      padding-right: 16px;
     }
 
-    .lessons-container {
+    .lessons-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      padding: 120px 20px 60px; /* extra top space for search */
+      gap: 18px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     }
 
     .lesson-card {
-      background-color: #e9f3ff;
-      border-radius: 15px;
-      padding: 20px;
-      text-align: center;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      background: #e9f7ff;
+      border-radius: 12px;
+      padding: 18px;
+      box-shadow: 0 6px 18px rgba(7,89,133,0.04);
+      transition: transform .18s ease, box-shadow .18s ease;
+      min-height: 120px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
     }
 
     .lesson-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+      transform: translateY(-6px);
+      box-shadow: 0 10px 28px rgba(7,89,133,0.08);
     }
 
-    .lesson-card h3 {
-      color: #007bff;
-      margin-bottom: 10px;
+    .lesson-title {
+      color: #0f172a;
+      font-weight:700;
+      margin-bottom: 8px;
     }
 
-    .lesson-card a {
-      display: inline-block;
-      margin-top: 10px;
-      padding: 8px 16px;
-      background-color: #007bff;
-      color: white;
-      border-radius: 20px;
-      text-decoration: none;
-      transition: background-color 0.3s ease;
+    .lesson-meta {
+      color: #0b5db6;
+      font-weight:600;
+      font-size:0.9rem;
     }
 
-    .lesson-card a:hover {
-      background-color: #0056b3;
+    .read-more {
+      display:inline-block;
+      margin-top:12px;
+      background:#2563eb;
+      color:white;
+      padding:8px 12px;
+      border-radius:8px;
+      text-decoration:none;
+      font-weight:600;
+      transition: background .18s ease, transform .12s ease;
+    }
+    .read-more:hover { background:#1e40af; transform: translateY(-2px); }
+
+    .actions {
+      display:flex;
+      gap:12px;
+      justify-content:center;
+      margin-top:28px;
+      margin-bottom:60px;
+      flex-wrap:wrap;
+    }
+    .actions a {
+      padding:10px 16px;
+      border-radius:10px;
+      text-decoration:none;
+      font-weight:700;
+      color:#fff;
+    }
+    .btn-cyber { background:#f97316; } /* orange */
+    .btn-features { background:#475569; } /* grey/indigo */
+    .btn-cyber:hover { filter:brightness(.95); transform:translateY(-3px); }
+    .btn-features:hover { filter:brightness(.95); transform:translateY(-3px); }
+
+    /* error / status box */
+    .status {
+      text-align:center;
+      padding:18px;
+      color:#0b1220;
+      background: #fff;
+      border-radius:10px;
+      box-shadow:0 6px 18px rgba(2,6,23,0.04);
     }
 
-    /* Tutor buttons below cards */
-    .tutor-buttons {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      margin-top: 40px;
-      margin-bottom: 60px;
-    }
-
-    .tutor-buttons a {
-      display: inline-block;
-      padding: 12px 28px;
-      background-color: #d3d3d3;
-      color: #007bff;
-      font-size: 16px;
-      border-radius: 25px;
-      text-decoration: none;
-      font-weight: bold;
-      transition: all 0.3s ease;
-    }
-
-    .tutor-buttons a:hover {
-      background-color: #007bff;
-      color: white;
-      transform: translateY(-3px);
-      box-shadow: 0 4px 12px rgba(0, 123, 255, 0.4);
-    }
   </style>
 </head>
 <body>
-  <header>SmartKids Learning - Lessons</header>
 
-  <div class="search-container">
-    <input type="text" id="searchInput" placeholder="Search lessons..." />
+  <header class="app-header">SmartKids Learning — Lessons</header>
+
+  <!-- floating search -->
+  <div class="search-container" aria-hidden="false">
+    <div id="searchPill" class="search-pill" role="search">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M21 21l-4.35-4.35" stroke="#2563eb" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="11" cy="11" r="6.2" stroke="#2563eb" stroke-width="1.6"/>
+      </svg>
+      <input id="searchInput" placeholder="Search lessons or topics..." aria-label="Search lessons" />
+    </div>
   </div>
 
-  <div class="lessons-container" id="lessonsContainer">
-    <!-- Lesson cards loaded from JSON -->
-  </div>
+  <main class="page-wrap">
+    <h2 style="text-align:center;font-size:1.6rem;color:#0b2545;margin-bottom:20px;">Choose a topic to learn</h2>
 
-  <div class="tutor-buttons">
-    <a href="features/cyber-security.html">Cyber Security</a>
-    <a href="features.html">Features</a>
-  </div>
+    <div id="lessonsArea" class="lessons-grid">
+      <div class="status">Loading lessons…</div>
+    </div>
+
+    <div class="actions" aria-hidden="false">
+      <a class="btn-cyber" href="features/cyber-security.html">🔒 Cyber Security</a>
+      <a class="btn-features" href="features/index.html">✨ Features</a>
+    </div>
+  </main>
 
   <script>
-    async function loadLessons() {
-      try {
-        const response = await fetch("lessons.json");
-        const data = await response.json();
-        const container = document.getElementById("lessonsContainer");
-        const searchInput = document.getElementById("searchInput");
+  (function () {
+    // Try multiple JSON locations (common places)
+    const jsonPaths = [
+      'data/lessons.json',
+      './data/lessons.json',
+      'lessons.json',
+      './lessons.json',
+      '/data/lessons.json'
+    ];
 
-        const renderLessons = (filter = "") => {
-          container.innerHTML = "";
-          data.categories.forEach((cat) => {
-            cat.topics.forEach((topic) => {
-              if (
-                topic.title.toLowerCase().includes(filter.toLowerCase()) ||
-                cat.name.toLowerCase().includes(filter.toLowerCase())
-              ) {
-                const card = document.createElement("div");
-                card.className = "lesson-card";
-                card.innerHTML = `
-                  <h3>${topic.title}</h3>
-                  <p><b>Category:</b> ${cat.name}</p>
-                  <a href="detail-notes.html?id=${topic.id}">Read More</a>
-                `;
-                container.appendChild(card);
-              }
-            });
-          });
-        };
+    const lessonsArea = document.getElementById('lessonsArea');
+    const searchInput = document.getElementById('searchInput');
+    const searchPill = document.getElementById('searchPill');
 
-        renderLessons();
+    let allCategories = [];
 
-        searchInput.addEventListener("input", (e) => {
-          renderLessons(e.target.value);
-        });
-      } catch (error) {
-        console.error("Error loading lessons:", error);
+    // Fetch first successful path
+    async function fetchFirstSuccess(paths) {
+      for (const p of paths) {
+        try {
+          const r = await fetch(p, { cache: "no-store" });
+          if (!r.ok) {
+            console.info('lessons.json fetch failed path:', p, 'status:', r.status);
+            continue;
+          }
+          const json = await r.json();
+          console.info('Loaded lessons from:', p);
+          return {json, path: p};
+        } catch (err) {
+          console.info('fetch error for', p, err && err.message);
+          // continue trying
+        }
       }
+      return null;
     }
 
-    loadLessons();
+    // Normalize incoming data to categories array
+    function normalizeData(data) {
+      if (!data) return [];
+      // If the file itself is an array of categories
+      if (Array.isArray(data)) return data;
+
+      // If root contains categories
+      if (Array.isArray(data.categories)) return data.categories;
+
+      // try other common keys
+      if (Array.isArray(data.items)) return data.items;
+
+      // nothing matched
+      return [];
+    }
+
+    // get topic list for a category: support topics or lessons
+    function getTopicsForCategory(cat) {
+      return cat.topics || cat.lessons || cat.items || [];
+    }
+
+    // get human name for category
+    function getCategoryName(cat) {
+      return cat.name || cat.title || cat.id || 'Unknown';
+    }
+
+    function renderEmpty(message) {
+      lessonsArea.innerHTML = `<div class="status">${message}</div>`;
+    }
+
+    function renderGrid(categories, filter = '') {
+      const q = (filter || '').trim().toLowerCase();
+      const out = [];
+
+      categories.forEach(cat => {
+        const topics = getTopicsForCategory(cat);
+        topics.forEach(topic => {
+          const tTitle = (topic.title || topic.name || '').toString();
+          const catName = getCategoryName(cat).toString();
+          if (!q || tTitle.toLowerCase().includes(q) || catName.toLowerCase().includes(q)) {
+            out.push({
+              categoryId: cat.id || catIdFromName(catName),
+              categoryName: catName,
+              id: topic.id || topic.key || '',
+              title: tTitle
+            });
+          }
+        });
+      });
+
+      if (!out.length) {
+        renderEmpty('No topics found. Try another search.');
+        return;
+      }
+
+      // build cards
+      lessonsArea.innerHTML = '';
+      const frag = document.createDocumentFragment();
+      out.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'lesson-card';
+
+        // Build link - include category param (safe) so detail page can find it quickly
+        const linkHref = `detail-notes.html?category=${encodeURIComponent(item.categoryId)}&id=${encodeURIComponent(item.id)}`;
+
+        card.innerHTML = `
+          <div>
+            <div class="lesson-title">${escapeHtml(item.title || '(Untitled)')}</div>
+            <div class="lesson-meta">Category: ${escapeHtml(item.categoryName)}</div>
+          </div>
+          <div>
+            <a class="read-more" href="${linkHref}">Read More →</a>
+          </div>
+        `;
+        frag.appendChild(card);
+      });
+
+      lessonsArea.appendChild(frag);
+    }
+
+    // some categories might miss id; create fallback id from name
+    function catIdFromName(name) {
+      return (name || 'category').toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g,'');
+    }
+
+    // simple html escape for safety
+    function escapeHtml(s) {
+      return s ? s.replace(/[&<>"']/g, function (m) { return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]; }) : '';
+    }
+
+    // initialize
+    (async function init() {
+      // try to fetch JSON
+      const result = await fetchFirstSuccess(jsonPaths);
+      if (!result) {
+        renderEmpty('Could not find lessons.json. Tried: ' + jsonPaths.join(', '));
+        console.error('Could not fetch any lessons.json from tried paths.');
+        return;
+      }
+
+      const normalizedCategories = normalizeData(result.json);
+      if (!normalizedCategories.length) {
+        renderEmpty('lessons.json loaded but structure not recognised (no categories).');
+        console.error('Unrecognised lessons structure:', result.path, result.json);
+        return;
+      }
+
+      allCategories = normalizedCategories;
+      renderGrid(allCategories);
+
+      // wire search
+      let timer = null;
+      searchInput.addEventListener('input', (e) => {
+        const val = e.target.value;
+        clearTimeout(timer);
+        timer = setTimeout(() => renderGrid(allCategories, val), 120);
+      });
+
+      // focus animation: add/remove class to pill so it moves down when focused
+      searchInput.addEventListener('focus', () => searchPill.classList.add('focused'));
+      searchInput.addEventListener('blur', () => searchPill.classList.remove('focused'));
+
+    })();
+  })();
   </script>
 </body>
 </html>
