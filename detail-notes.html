@@ -1,218 +1,320 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SmartKids Lesson Details</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SmartKids Lessons</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    .panel {
-      border-radius: 12px;
-      background-color: #ebf8ff;
-      padding: 1rem;
-      max-height: 60vh;
-      overflow-y: auto;
-    }
-    .panel-title {
-      font-weight: bold;
-      background-color: #4299e1;
-      color: white;
-      padding: 0.5rem;
-      border-radius: 8px 8px 0 0;
-      text-align: center;
+    :root {
+      --header-height: 64px;
+      --sidebar-width: 240px;
     }
 
-    .category-title {
-      position: sticky;
-      top: 0;
-      background-color: #ffffff;
-      z-index: 10;
-      padding-top: 0.25rem;
-      padding-bottom: 0.25rem;
-      border-bottom: 2px solid #e0e7ff;
+    body {
+      font-family: Inter, system-ui, sans-serif;
+      background-color: #f5fbff;
+      margin: 0;
     }
 
+    header.app-header {
+      height: var(--header-height);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: linear-gradient(90deg,#2563eb,#60a5fa);
+      color:white;
+      font-weight:700;
+      font-size:1.25rem;
+      box-shadow:0 2px 6px rgba(0,0,0,0.08);
+      position:fixed;
+      top:0;
+      left:0;
+      right:0;
+      z-index:40;
+    }
+
+    /* Sidebar */
     .sidebar {
-      transition: transform 0.3s ease-in-out;
+      position:fixed;
+      top:var(--header-height);
+      left:0;
+      bottom:0;
+      width:var(--sidebar-width);
+      background:#1e3a8a;
+      color:white;
+      padding:1rem;
+      transform:translateX(-100%);
+      transition:transform .3s ease;
+      z-index:30;
+    }
+    .sidebar.open { transform:translateX(0); }
+    .sidebar h3 {
+      font-weight:700;
+      font-size:1.1rem;
+      margin-bottom:1rem;
+    }
+    .sidebar a {
+      display:block;
+      color:#cbd5e1;
+      padding:8px;
+      border-radius:6px;
+      text-decoration:none;
+      margin-bottom:4px;
+      transition:background .2s;
+    }
+    .sidebar a:hover { background:rgba(255,255,255,0.1); color:white; }
+
+    /* Sidebar toggle button */
+    .menu-toggle {
+      position:fixed;
+      top:16px;
+      left:16px;
+      background:white;
+      color:#2563eb;
+      border:none;
+      border-radius:6px;
+      padding:6px 10px;
+      font-weight:700;
+      box-shadow:0 2px 6px rgba(0,0,0,0.15);
+      z-index:50;
     }
 
-    .sidebar-hidden {
-      transform: translateX(-100%);
+    /* Floating search */
+    .search-container {
+      position:fixed;
+      left:50%;
+      top:calc(var(--header-height) + 10px);
+      transform:translateX(-50%);
+      width:92%;
+      max-width:640px;
+      z-index:30;
+      transition:transform .32s ease, box-shadow .32s ease;
+    }
+    .search-pill {
+      display:flex;
+      align-items:center;
+      gap:0.5rem;
+      background:white;
+      border-radius:9999px;
+      padding:10px 14px;
+      box-shadow:0 6px 18px rgba(37,99,235,0.08);
+      border:1px solid rgba(37,99,235,0.08);
+      transition:transform .28s ease, box-shadow .28s ease, border-color .28s ease;
+    }
+    .search-pill.focused {
+      transform:translateY(8px) scale(1.02);
+      box-shadow:0 10px 30px rgba(37,99,235,0.14);
+      border-color:rgba(37,99,235,0.22);
+    }
+    #searchInput {
+      border:none;
+      outline:none;
+      width:100%;
+      font-size:1rem;
+      background:transparent;
     }
 
-    .chevron-btn {
-      position: fixed;
-      top: 50%;
-      left: 0;
-      transform: translateY(-50%);
-      z-index: 50;
-      background: #2563eb;
-      color: white;
-      border-radius: 0 8px 8px 0;
-      padding: 0.5rem;
-      cursor: pointer;
+    .page-wrap {
+      padding-top:calc(var(--header-height) + 100px);
+      padding-left:calc(var(--sidebar-width) + 20px);
+      padding-right:20px;
+      max-width:1200px;
+      margin:0 auto;
+      transition:padding-left .3s ease;
+    }
+    .sidebar.open ~ .page-wrap { padding-left:calc(var(--sidebar-width) + 20px); }
+
+    .lessons-grid {
+      display:grid;
+      gap:18px;
+      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
     }
 
-    @media (min-width: 768px) {
-      .chevron-btn {
-        display: none;
-      }
+    .lesson-card {
+      background:#e9f7ff;
+      border-radius:12px;
+      padding:18px;
+      box-shadow:0 6px 18px rgba(7,89,133,0.04);
+      transition:transform .18s ease, box-shadow .18s ease;
+      min-height:120px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+    .lesson-card:hover {
+      transform:translateY(-6px);
+      box-shadow:0 10px 28px rgba(7,89,133,0.08);
+    }
+    .lesson-title {
+      color:#0f172a;
+      font-weight:700;
+      margin-bottom:8px;
+    }
+    .lesson-meta {
+      color:#0b5db6;
+      font-weight:600;
+      font-size:0.9rem;
+    }
+    .read-more {
+      display:inline-block;
+      margin-top:12px;
+      background:#2563eb;
+      color:white;
+      padding:8px 12px;
+      border-radius:8px;
+      text-decoration:none;
+      font-weight:600;
+      transition:background .18s ease, transform .12s ease;
+    }
+    .read-more:hover { background:#1e40af; transform:translateY(-2px); }
+
+    .actions {
+      display:flex;
+      gap:12px;
+      justify-content:center;
+      margin-top:28px;
+      margin-bottom:60px;
+      flex-wrap:wrap;
+    }
+    .actions a {
+      padding:10px 16px;
+      border-radius:10px;
+      text-decoration:none;
+      font-weight:700;
+      color:#fff;
+    }
+    .btn-cyber { background:#f97316; }
+    .btn-features { background:#475569; }
+    .btn-cyber:hover, .btn-features:hover {
+      filter:brightness(.95);
+      transform:translateY(-3px);
+    }
+
+    .status {
+      text-align:center;
+      padding:18px;
+      color:#0b1220;
+      background:#fff;
+      border-radius:10px;
+      box-shadow:0 6px 18px rgba(2,6,23,0.04);
+    }
+
+    @media (max-width:768px){
+      .page-wrap { padding-left:20px; }
     }
   </style>
 </head>
-<body class="bg-gray-50 font-sans">
+<body>
 
-  <!-- Chevron Toggle Button for Mobile -->
-  <button id="toggleSidebar" class="chevron-btn">☰</button>
+  <header class="app-header">SmartKids Learning — Lessons</header>
+  <button class="menu-toggle" id="menuBtn">☰</button>
 
-  <div class="flex flex-col md:flex-row max-w-6xl mx-auto py-8 px-4 gap-6">
-    <!-- Sidebar -->
-    <aside id="sidebar" class="sidebar fixed md:static bg-white w-64 h-full md:h-auto overflow-y-auto p-4 shadow-lg md:shadow-none sidebar-hidden md:translate-x-0">
-      <h2 class="text-xl font-bold text-blue-700 mb-4">Lessons</h2>
-      <div id="lessonList" class="space-y-2">
-        <p class="text-gray-500">Loading topics...</p>
-      </div>
-    </aside>
+  <!-- Sidebar -->
+  <nav class="sidebar" id="sidebar">
+    <h3>Navigation</h3>
+    <a href="index.html">🏠 Home</a>
+    <a href="classes.html">⌨ Keyboard Tutor</a>
+    <a href="mouse.html">🖱 Mouse Practice</a>
+    <a href="features/cyber-security.html">🔒 Cyber Security</a>
+    <a href="features/index.html">✨ Features</a>
+  </nav>
 
-    <!-- Main Content -->
-    <main class="flex-1 md:ml-64">
-      <h1 id="lessonTitle" class="text-3xl font-bold text-blue-700 mb-6 text-center">Loading...</h1>
-
-      <div class="panel">
-        <div id="panelTitle" class="panel-title">Lesson</div>
-        <div id="lessonContent" class="mt-2 text-gray-800"></div>
-      </div>
-
-      <div class="mt-6 flex flex-col items-center space-y-4">
-        <button id="prevBtn" class="w-48 px-4 py-2 bg-orange-600 text-white rounded hover:bg-orange-700 transition">⬅ Previous</button>
-        <button id="nextBtn" class="w-48 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">Next ➡</button>
-        <a href="lessons.html" class="w-48 text-center px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition">⬅ Back to Lessons</a>
-      </div>
-    </main>
+  <!-- Floating Search -->
+  <div class="search-container">
+    <div id="searchPill" class="search-pill">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+        <path d="M21 21l-4.35-4.35" stroke="#2563eb" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="11" cy="11" r="6.2" stroke="#2563eb" stroke-width="1.6"/>
+      </svg>
+      <input id="searchInput" placeholder="Search lessons or topics..." />
+    </div>
   </div>
 
-<script>
-async function loadLesson() {
-  const params = new URLSearchParams(window.location.search);
-  const categoryId = params.get('categories');
-  const topicId = params.get('id');
+  <main class="page-wrap">
+    <h2 style="text-align:center;font-size:1.6rem;color:#0b2545;margin-bottom:20px;">Choose a topic to learn</h2>
 
-  const titleEl = document.getElementById('lessonTitle');
-  const panelTitleEl = document.getElementById('panelTitle');
-  const contentEl = document.getElementById('lessonContent');
-  const prevBtn = document.getElementById('prevBtn');
-  const nextBtn = document.getElementById('nextBtn');
-  const lessonList = document.getElementById('lessonList');
+    <div id="lessonsArea" class="lessons-grid">
+      <div class="status">Loading lessons…</div>
+    </div>
 
-  try {
-    const res = await fetch('data/detail-notes.json');
-    const data = await res.json();
-    const categories = data.categories;
+    <div class="actions">
+      <a class="btn-cyber" href="features/cyber-security.html">🔒 Cyber Security</a>
+      <a class="btn-features" href="features/index.html">✨ Features</a>
+    </div>
+  </main>
 
-    // 🟦 Build sidebar topics
-    lessonList.innerHTML = '';
-    categories.forEach(cat => {
-      const catEl = document.createElement('div');
-      catEl.className = 'mb-6';
-      catEl.innerHTML = `<h3 class="category-title font-semibold text-blue-700 mb-2">${cat.title}</h3>`;
+  <script>
+  (function(){
+    const jsonPaths = ['data/lessons.json','./data/lessons.json','lessons.json','./lessons.json','/data/lessons.json'];
+    const lessonsArea=document.getElementById('lessonsArea');
+    const searchInput=document.getElementById('searchInput');
+    const searchPill=document.getElementById('searchPill');
+    let allCategories=[];
 
-      const ul = document.createElement('ul');
-      ul.className = 'space-y-1';
-
-      (cat.lessons || cat.topics || []).forEach(topic => {
-        const li = document.createElement('li');
-        const isActive = (cat.id === categoryId && topic.id === topicId);
-        li.innerHTML = `
-          <a href="detail-notes.html?category=${cat.id}&id=${topic.id}"
-             class="block px-3 py-1 rounded transition ${
-               isActive
-                 ? 'bg-blue-600 text-white font-semibold'
-                 : 'hover:bg-blue-100 text-gray-700'
-             }">${topic.title}</a>`;
-        ul.appendChild(li);
-      });
-
-      catEl.appendChild(ul);
-      lessonList.appendChild(catEl);
-    });
-
-    // 🟩 Flatten all topics
-    const allTopics = [];
-    categories.forEach(cat => {
-      (cat.lessons || cat.topics || []).forEach(topic => {
-        allTopics.push({
-          ...topic,
-          categoryId: cat.id,
-          categoryTitle: cat.title
-        });
-      });
-    });
-
-    // 🟨 Find selected topic
-    let index = allTopics.findIndex(t => t.id === topicId && t.categoryId === categoryId);
-    if (index === -1) index = 0;
-
-    // 🟪 Render topic content
-    function renderTopic(i) {
-      const topic = allTopics[i];
-      if (!topic) return;
-
-      titleEl.textContent = topic.title;
-      panelTitleEl.textContent = topic.title;
-      contentEl.innerHTML = topic.content || "<p>No content available.</p>";
-
-      // Sidebar active link highlight
-      document.querySelectorAll('#lessonList a').forEach(a => {
-        a.classList.remove('bg-blue-600', 'text-white', 'font-semibold');
-        a.classList.add('hover:bg-blue-100', 'text-gray-700');
-        if (a.href.includes(`category=${topic.categoryId}&id=${topic.id}`)) {
-          a.classList.add('bg-blue-600', 'text-white', 'font-semibold');
-          a.classList.remove('hover:bg-blue-100', 'text-gray-700');
-        }
-      });
-
-      // Prev button
-      if (i > 0) {
-        prevBtn.disabled = false;
-        prevBtn.onclick = () => renderTopic(i - 1);
-      } else {
-        prevBtn.disabled = true;
-        prevBtn.onclick = () => (window.location.href = 'lessons.html');
-      }
-
-      // Next button
-      if (i < allTopics.length - 1) {
-        nextBtn.disabled = false;
-        nextBtn.onclick = () => renderTopic(i + 1);
-      } else {
-        nextBtn.disabled = true;
-        nextBtn.onclick = () => (window.location.href = 'lessons.html');
-      }
-
-      // Update URL dynamically
-      const newUrl = `detail-notes.html?category=${topic.categoryId}&id=${topic.id}`;
-      window.history.replaceState({}, '', newUrl);
+    async function fetchFirstSuccess(paths){
+      for(const p of paths){
+        try{
+          const r=await fetch(p,{cache:"no-store"});
+          if(!r.ok) continue;
+          return await r.json();
+        }catch(e){}
+      }return null;
     }
 
-    renderTopic(index);
+    function normalizeData(data){
+      if(!data) return [];
+      if(Array.isArray(data)) return data;
+      if(Array.isArray(data.categories)) return data.categories;
+      if(Array.isArray(data.items)) return data.items;
+      return [];
+    }
 
-  } catch (err) {
-    console.error('Error loading detail-notes.json:', err);
-    titleEl.textContent = "Error Loading Lesson";
-    contentEl.innerHTML = "<p class='text-red-600'>Failed to load detail-notes.json</p>";
-    prevBtn.disabled = true;
-    nextBtn.disabled = true;
-  }
-}
+    function getTopics(cat){return cat.topics||cat.lessons||[];}
+    function renderEmpty(msg){lessonsArea.innerHTML=`<div class='status'>${msg}</div>`;}
+    function escapeHtml(s){return s.replace(/[&<>"']/g,m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;' }[m]));}
 
-document.addEventListener('DOMContentLoaded', loadLesson);
+    function renderGrid(categories,filter=''){
+      const q=filter.trim().toLowerCase();
+      const out=[];
+      categories.forEach(cat=>{
+        getTopics(cat).forEach(topic=>{
+          const title=(topic.title||topic.name||'').toString();
+          if(!q||title.toLowerCase().includes(q)) out.push({
+            id:topic.id,title
+          });
+        });
+      });
+      if(!out.length) return renderEmpty('No topics found.');
 
-// 🧭 Sidebar toggle for mobile
-document.getElementById('toggleSidebar').addEventListener('click', () => {
-  const sidebar = document.getElementById('sidebar');
-  sidebar.classList.toggle('sidebar-hidden');
-});
-</script>
+      lessonsArea.innerHTML='';
+      out.forEach(item=>{
+        const card=document.createElement('div');
+        card.className='lesson-card';
+        card.innerHTML=`
+          <div><div class='lesson-title'>${escapeHtml(item.title)}</div></div>
+          <div><a class='read-more' href="detail-notes.html?id=${encodeURIComponent(item.id)}">Read More →</a></div>
+        `;
+        lessonsArea.appendChild(card);
+      });
+    }
 
+    (async()=>{
+      const json=await fetchFirstSuccess(jsonPaths);
+      const cats=normalizeData(json);
+      if(!cats.length) return renderEmpty('lessons.json not valid.');
+      allCategories=cats;
+      renderGrid(allCategories);
+
+      searchInput.addEventListener('input',e=>renderGrid(allCategories,e.target.value));
+      searchInput.addEventListener('focus',()=>searchPill.classList.add('focused'));
+      searchInput.addEventListener('blur',()=>searchPill.classList.remove('focused'));
+    })();
+
+    // Sidebar toggle
+    const sidebar=document.getElementById('sidebar');
+    document.getElementById('menuBtn').addEventListener('click',()=>sidebar.classList.toggle('open'));
+  })();
+  </script>
 </body>
 </html>
