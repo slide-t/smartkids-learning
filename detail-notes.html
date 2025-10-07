@@ -21,7 +21,6 @@
       border-radius: 8px 8px 0 0;
       text-align: center;
     }
-    /* Keep category title sticky inside the sidebar */
     .category-title {
       position: sticky;
       top: 0;
@@ -32,47 +31,43 @@
       border-bottom: 2px solid #e0e7ff;
     }
 
-    
-/* Sidebar animation */
-.sidebar {
-  transition: transform 0.3s ease-in-out;
-}
+    .sidebar {
+      transition: transform 0.3s ease-in-out;
+    }
 
-/* Make sidebar self-scrollable on desktop */
-@media (min-width: 768px) {
-  .sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;              /* full screen height */
-    overflow-y: auto;           /* allow scrolling */
-    padding-bottom: 4rem;       /* add breathing room */
-    background-color: #ffffff;  /* keep background clean */
-    border-right: 1px solid #e5e7eb;
-  }
+    @media (min-width: 768px) {
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        overflow-y: auto;
+        padding-bottom: 4rem;
+        background-color: #ffffff;
+        border-right: 1px solid #e5e7eb;
+      }
 
-  main {
-    margin-left: 17rem;         /* space for sidebar */
-    max-width: calc(100% - 17rem);
-  }
-}
-   .sidebar::-webkit-scrollbar {
-  width: 8px;
-}
-.sidebar::-webkit-scrollbar-thumb {
-  background-color: #93c5fd;
-  border-radius: 4px;
-}
-.sidebar::-webkit-scrollbar-thumb:hover {
-  background-color: #2563eb;
-} 
-  
-    /* Mobile hidden state */
+      main {
+        margin-left: 17rem;
+        max-width: calc(100% - 17rem);
+      }
+    }
+
+    .sidebar::-webkit-scrollbar {
+      width: 8px;
+    }
+    .sidebar::-webkit-scrollbar-thumb {
+      background-color: #93c5fd;
+      border-radius: 4px;
+    }
+    .sidebar::-webkit-scrollbar-thumb:hover {
+      background-color: #2563eb;
+    }
+
     .sidebar-hidden {
       transform: translateX(-100%);
     }
 
-    /* Chevron button */
     .chevron-btn {
       position: fixed;
       top: 50%;
@@ -91,19 +86,11 @@
         display: none;
       }
     }
-
-    /* Adjust main layout width */
-    @media (min-width: 768px) {
-      main {
-        margin-left: 17rem; /* keeps spacing clean with sidebar */
-        max-width: calc(100% - 17rem);
-      }
-    }
   </style>
 </head>
 <body class="bg-gray-50 font-sans">
 
-  <!-- Chevron Toggle Button for Mobile -->
+  <!-- Chevron Toggle Button -->
   <button id="toggleSidebar" class="chevron-btn">☰</button>
 
   <div class="flex flex-col md:flex-row max-w-7xl mx-auto py-8 px-4 gap-6">
@@ -135,7 +122,6 @@
 <script>
 async function loadLesson() {
   const params = new URLSearchParams(window.location.search);
-  const categoryId = params.get('category');
   const topicId = params.get('id');
 
   const titleEl = document.getElementById('lessonTitle');
@@ -148,56 +134,47 @@ async function loadLesson() {
   try {
     const res = await fetch('data/detail-notes.json');
     const data = await res.json();
-    const categories = data.categories;
+    const categories = data.categories || [];
 
-    // 🟦 Build sidebar topics safely
+    // Build sidebar topics
     lessonList.innerHTML = '';
-    categories.forEach(cat => {
-      if (!cat || !cat.title) return; // skip invalid categories
+    const allTopics = [];
 
-      const catEl = document.createElement('div');
-      catEl.className = 'mb-6';
-      catEl.innerHTML = `<h3 class="category-title font-semibold text-blue-700 mb-2">${cat.title}</h3>`;
+    categories.forEach(cat => {
+      if (!cat.title) return;
+
+      const catDiv = document.createElement('div');
+      catDiv.className = 'mb-6';
+      catDiv.innerHTML = `<h3 class="category-title font-semibold text-blue-700 mb-2">${cat.title}</h3>`;
 
       const ul = document.createElement('ul');
       ul.className = 'space-y-1';
 
-      const lessons = cat.lessons || []; // ensure always array
-      lessons.forEach(topic => {
-        if (!topic || !topic.title) return;
-        const li = document.createElement('li');
-        const isActive = (cat.id === categoryId && topic.id === topicId);
-        li.innerHTML = `
-          <a href="detail-notes.html?category=${cat.id}&id=${topic.id}" 
-             class="block px-3 py-1 rounded transition ${
-               isActive
-                 ? 'bg-blue-600 text-white font-semibold'
-                 : 'hover:bg-blue-100 text-gray-700'
-             }">${topic.title}</a>`;
-        ul.appendChild(li);
-      });
-
-      catEl.appendChild(ul);
-      lessonList.appendChild(catEl);
-    });
-    
-    // 🟩 Flatten all topics
-    const allTopics = [];
-    categories.forEach(cat => {
-      (cat.lessons || []).forEach(topic => {
+      (cat.lessons || []).forEach(lesson => {
         allTopics.push({
-          ...topic,
+          ...lesson,
           categoryId: cat.id,
           categoryTitle: cat.title
         });
+
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <a href="detail-notes.html?id=${lesson.id}"
+             class="block px-3 py-1 rounded transition hover:bg-blue-100 text-gray-700">
+             ${lesson.title}
+          </a>`;
+        ul.appendChild(li);
       });
+
+      catDiv.appendChild(ul);
+      lessonList.appendChild(catDiv);
     });
 
-    // 🟨 Find selected topic
-    let index = allTopics.findIndex(t => t.id === topicId && t.categoryId === categoryId);
+    // Find topic by ID
+    let index = allTopics.findIndex(t => t.id === topicId);
     if (index === -1) index = 0;
 
-    // 🟪 Render topic content
+    // Render topic
     function renderTopic(i) {
       const topic = allTopics[i];
       if (!topic) return;
@@ -206,36 +183,25 @@ async function loadLesson() {
       panelTitleEl.textContent = topic.title;
       contentEl.innerHTML = topic.content || "<p>No content available.</p>";
 
-      // Update sidebar highlight dynamically
+      // Highlight active topic in sidebar
       document.querySelectorAll('#lessonList a').forEach(a => {
         a.classList.remove('bg-blue-600', 'text-white', 'font-semibold');
         a.classList.add('hover:bg-blue-100', 'text-gray-700');
-        if (a.href.includes(`category=${topic.categoryId}&id=${topic.id}`)) {
+        if (a.href.includes(`id=${topic.id}`)) {
           a.classList.add('bg-blue-600', 'text-white', 'font-semibold');
           a.classList.remove('hover:bg-blue-100', 'text-gray-700');
         }
       });
 
-      // Prev button
-      if (i > 0) {
-        prevBtn.disabled = false;
-        prevBtn.onclick = () => renderTopic(i - 1);
-      } else {
-        prevBtn.disabled = true;
-        prevBtn.onclick = () => (window.location.href = 'lessons.html');
-      }
+      // Prev/Next navigation
+      prevBtn.disabled = i === 0;
+      nextBtn.disabled = i === allTopics.length - 1;
 
-      // Next button
-      if (i < allTopics.length - 1) {
-        nextBtn.disabled = false;
-        nextBtn.onclick = () => renderTopic(i + 1);
-      } else {
-        nextBtn.disabled = true;
-        nextBtn.onclick = () => (window.location.href = 'lessons.html');
-      }
+      prevBtn.onclick = () => renderTopic(i - 1);
+      nextBtn.onclick = () => renderTopic(i + 1);
 
       // Update URL
-      const newUrl = `detail-notes.html?category=${topic.categoryId}&id=${topic.id}`;
+      const newUrl = `detail-notes.html?id=${topic.id}`;
       window.history.replaceState({}, '', newUrl);
     }
 
@@ -245,17 +211,14 @@ async function loadLesson() {
     console.error('Error loading detail-notes.json:', err);
     titleEl.textContent = "Error Loading Lesson";
     contentEl.innerHTML = "<p class='text-red-600'>Failed to load detail-notes.json</p>";
-    prevBtn.disabled = true;
-    nextBtn.disabled = true;
   }
 }
 
 document.addEventListener('DOMContentLoaded', loadLesson);
 
-// 🧭 Sidebar toggle for mobile
+// Sidebar toggle
 document.getElementById('toggleSidebar').addEventListener('click', () => {
-  const sidebar = document.getElementById('sidebar');
-  sidebar.classList.toggle('sidebar-hidden');
+  document.getElementById('sidebar').classList.toggle('sidebar-hidden');
 });
 </script>
 
