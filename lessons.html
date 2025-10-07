@@ -11,7 +11,7 @@
   <div class="max-w-5xl mx-auto py-8 px-4">
     <h1 class="text-3xl font-bold text-blue-700 mb-4 text-center">Computer Lessons</h1>
 
-    <!-- Search Bar -->
+    <!-- Fixed Search Bar -->
     <div class="fixed top-0 left-0 w-full bg-gray-50 z-50 p-4 shadow">
       <div class="max-w-5xl mx-auto text-center">
         <input
@@ -26,10 +26,10 @@
     <!-- Add space below search bar -->
     <div class="h-24"></div>
 
-    <!-- Lessons Container -->
+    <!-- Topics Container -->
     <div id="lessonsContainer" class="space-y-6"></div>
 
-    <!-- Navigation Buttons -->
+    <!-- Back buttons -->
     <div class="mt-8 flex justify-center space-x-4">
       <a href="https://slide-t.github.io/smartkids-learning/classes.html"
          class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">
@@ -48,24 +48,26 @@
     async function loadLessons() {
       const container = document.getElementById('lessonsContainer');
       const searchInput = document.getElementById('searchInput');
+
       container.innerHTML = "<p class='text-gray-500'>Loading lessons...</p>";
 
       try {
-        const res = await fetch('data/detail-notes.json'); // use same source as detail-notes.html
+        const res = await fetch('data/lessons.json'); // your JSON file
         const data = await res.json();
         allCategories = data.categories || [];
 
         renderLessons(allCategories);
 
-        // 🔍 Search filter
+        // Search filter
         searchInput.addEventListener('input', () => {
           const query = searchInput.value.toLowerCase();
           const filtered = allCategories.map(cat => {
-            const matchedLessons = (cat.lessons || []).filter(lesson =>
-              lesson.title.toLowerCase().includes(query) || cat.title.toLowerCase().includes(query)
+            const matchedTopics = (cat.topics || []).filter(topic =>
+              topic.title.toLowerCase().includes(query) ||
+              cat.name.toLowerCase().includes(query)
             );
-            return { ...cat, lessons: matchedLessons };
-          }).filter(cat => cat.lessons.length > 0);
+            return { ...cat, topics: matchedTopics };
+          }).filter(cat => cat.topics.length > 0);
 
           renderLessons(filtered);
         });
@@ -76,7 +78,7 @@
       }
     }
 
-    // 🧩 Render Categories and Lessons
+    // Render categories and topics
     function renderLessons(categories) {
       const container = document.getElementById('lessonsContainer');
       container.innerHTML = '';
@@ -85,26 +87,26 @@
         const catDiv = document.createElement('div');
         catDiv.className = "bg-white p-4 rounded-lg shadow";
 
-        catDiv.innerHTML = `<h2 class="text-xl font-semibold text-blue-600 mb-3">${category.title}</h2>`;
+        catDiv.innerHTML = `<h2 class="text-xl font-semibold text-blue-600 mb-3">${category.name}</h2>`;
 
-        const grid = document.createElement('div');
-        grid.className = "grid sm:grid-cols-2 md:grid-cols-3 gap-4";
+        const topicsGrid = document.createElement('div');
+        topicsGrid.className = "grid sm:grid-cols-2 md:grid-cols-3 gap-4";
 
-        (category.lessons || []).forEach(lesson => {
-          const card = document.createElement('div');
-          card.className = "p-4 bg-blue-50 rounded-lg shadow hover:bg-blue-100 transition";
+        (category.topics || []).forEach(topic => {
+          const topicDiv = document.createElement('div');
+          topicDiv.className = "p-4 bg-blue-50 rounded-lg shadow hover:bg-blue-100 transition";
 
-          card.innerHTML = `
-            <h3 class="text-lg font-medium text-blue-800">${lesson.title}</h3>
-            <a href="detail-notes.html?category=${encodeURIComponent(category.id)}&id=${encodeURIComponent(lesson.id)}"
+          topicDiv.innerHTML = `
+            <h3 class="text-lg font-medium text-blue-800">${topic.title}</h3>
+            <a href="detail-notes.html?id=${encodeURIComponent(topic.id)}"
                class="mt-2 inline-block text-sm text-blue-700 hover:underline">
-              Read Lesson →
+               Read Lesson →
             </a>
           `;
-          grid.appendChild(card);
+          topicsGrid.appendChild(topicDiv);
         });
 
-        catDiv.appendChild(grid);
+        catDiv.appendChild(topicsGrid);
         container.appendChild(catDiv);
       });
     }
