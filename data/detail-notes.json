@@ -151,62 +151,7 @@
     }
   ]   
     },
-    {
-      "id": "ict",
-      "title": "General ICT for Kids",
-      "lessons": [
-        {
-          "id": "what_is_computer",
-          "title": "What is a Computer?",
-          "content": ""
-        },
-        {
-          "id": "parts_of_computer",
-          "title": "Parts of a Computer",
-          "content": ""
-        },
-        {
-          "id": "uses_of_computer",
-          "title": "Uses of a Computer",
-          "content": ""
-        },
-        {
-          "id": "safe_computer_use",
-          "title": "Safe Use of Computers",
-          "content": ""
-        },
-        {
-          "id": "introduction_to_coding",
-          "title": "Introduction to Coding",
-          "content": ""
-        },
-        {
-          "id": "scratch_basics",
-          "title": "Scratch and Block Coding",
-          "content": ""
-        },
-        {
-          "id": "algorithms_for_kids",
-          "title": "Algorithms for Kids",
-          "content": ""
-        },
-        {
-          "id": "internet_basics",
-          "title": "Introduction to the Internet",
-          "content": ""
-        },
-        {
-          "id": "ict_files",
-          "title": "Working with Files",
-          "content": ""
-        },
-        {
-          "id": "ict_internet",
-          "title": "Using the Internet",
-          "content": ""
-        }
-      ]
-    },
+  
    
     {
   "id": "ict",
