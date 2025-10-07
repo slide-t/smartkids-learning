@@ -1,21 +1,28 @@
 {
   "categories": [
     {
-      "id": "keyboard",
-      "name": "Computer Keyboard",
-      "topics": [
-        { "id": "keyboard_definition", "title": "What is a Computer Keyboard?" },
-        { "id": "keyboard_layout", "title": "Layout of the Keyboard" },
-        { "id": "categories_of_keys", "title": "Categories of Keys" },
-        { "id": "typing_skills", "title": "How to Use the Keyboard for Typing" },
-        { "id": "function_keys", "title": "Function Keys (F1–F12)" },
-        { "id": "numeric_keys", "title": "Numeric and Symbol Keys" },
-        { "id": "keyboard_home_row", "title": "Home Row Keys" },
-        { "id": "keyboard_top_row", "title": "Top Row Keys" },
-        { "id": "keyboard_bottom_row", "title": "Bottom Row Keys" },
-        { "id": "keyboard_punctuation", "title": "Punctuation Keys" },
-        { "id": "keyboard_shortcuts", "title": "Keyboard Shortcuts" }
-      ]
+      {
+  "id": "keyboard",
+  "name": "Computer Keyboard",
+  "topics": [
+    { "id": "keyboard_definition", "title": "What is a Computer Keyboard?" },
+    { "id": "keyboard_layout", "title": "Layout of the Keyboard" },
+    { "id": "categories_of_keys", "title": "Categories of Keys" },
+    { "id": "typing_skills", "title": "How to Use the Keyboard for Typing" },
+    { "id": "function_keys", "title": "Function Keys (F1–F12)" },
+    { "id": "home_end_keys", "title": "Home and End Keys" },
+    { "id": "arrow_keys", "title": "Arrow Keys" },
+    { "id": "control_keys", "title": "Control Keys (Ctrl)" },
+    { "id": "shift_key", "title": "Shift Key" },
+    { "id": "number_keys", "title": "Number Keys" },
+    { "id": "numeric_keys", "title": "Numeric and Symbol Keys" },
+    { "id": "keyboard_home_row", "title": "Home Row Keys" },
+    { "id": "keyboard_top_row", "title": "Top Row Keys" },
+    { "id": "keyboard_bottom_row", "title": "Bottom Row Keys" },
+    { "id": "keyboard_punctuation", "title": "Punctuation Keys" },
+    { "id": "keyboard_shortcuts", "title": "Keyboard Shortcuts" }
+  ]
+
     },
     {
       "id": "mouse",
