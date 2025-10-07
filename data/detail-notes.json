@@ -94,61 +94,62 @@
     
   ]
 },
+   
     {
-      "id": "mouse",
-      "title": "Computer Mouse",
-      "lessons": [
-        {
-          "id": "mouse_definition",
-          "title": "What is a Computer Mouse?",
-          "content": ""
-        },
-        {
-          "id": "types_of_mouse",
-          "title": "Types of Computer Mouse",
-          "content": ""
-        },
-        {
-          "id": "mouse_buttons",
-          "title": "Mouse Buttons and Their Uses",
-          "content": ""
-        },
-        {
-          "id": "mouse_actions",
-          "title": "Mouse Actions",
-          "content": ""
-        },
-        {
-          "id": "drag_drop",
-          "title": "Drag and Drop",
-          "content": ""
-        },
-        {
-          "id": "scrolling",
-          "title": "Scrolling with the Mouse",
-          "content": ""
-        },
-        {
-          "id": "mouse_clicking",
-          "title": "Clicking Basics",
-          "content": ""
-        },
-        {
-          "id": "mouse_dragging",
-          "title": "Clicking and Dragging",
-          "content": ""
-        },
-        {
-          "id": "mouse_precision",
-          "title": "High-Speed Precision Tasks",
-          "content": ""
-        },
-        {
-          "id": "mouse_practice",
-          "title": "Mouse Practice Activities",
-          "content": ""
-        }
-      ]
+  "id": "mouse",
+  "title": "Computer Mouse",
+  "lessons": [
+    {
+      "id": "mouse_definition",
+      "title": "What is a Computer Mouse?",
+      "content": "A computer mouse is a small device used to move the pointer on the computer screen. It helps you click, select, drag, and open items. The mouse sends signals to the computer as you move it.<br><br><b>Examples:</b><br>🖱️ Moving the mouse moves the pointer on the screen.<br>🖱️ Clicking opens files or programs.<br><br><b>Fun Fact:</b> The mouse got its name because its wire looked like a tail!"
+    },
+    {
+      "id": "types_of_mouse",
+      "title": "Types of Computer Mouse",
+      "content": "There are different types of computer mice depending on how they work and connect to the computer.<br><br><b>1. Mechanical Mouse:</b> Uses a rubber ball to detect movement.<br><b>2. Optical Mouse:</b> Uses a light sensor to detect movement (most common today).<br><b>3. Wireless Mouse:</b> Connects to the computer using Bluetooth or a USB receiver — no wire needed!<br><b>4. Touchpad:</b> Found on laptops; you move your finger to control the pointer.<br><br><b>Example:</b> A laptop uses a touchpad instead of a physical mouse."
+    },
+    {
+      "id": "mouse_buttons",
+      "title": "Mouse Buttons and Their Uses",
+      "content": "A standard mouse has two or three buttons:<br><br>🟦 <b>Left Button:</b> Used to select, open, or click items.<br>🟩 <b>Right Button:</b> Opens a short menu called a <i>context menu</i> with options.<br>🟨 <b>Scroll Wheel:</b> Used to move up and down a page easily.<br><br><b>Tip:</b> Most mice also allow you to press the scroll wheel as a button to open links in a new tab."
+    },
+    {
+      "id": "mouse_actions",
+      "title": "Mouse Actions",
+      "content": "Mouse actions are movements or clicks you perform to control the computer.<br><br><b>Common Mouse Actions:</b><br>🖱️ <b>Point:</b> Move the pointer over an item.<br>🖱️ <b>Click:</b> Press and release the left mouse button once.<br>🖱️ <b>Double-click:</b> Quickly press the left button twice to open items.<br>🖱️ <b>Right-click:</b> Press the right button to open a menu.<br>🖱️ <b>Drag:</b> Hold down the button and move the mouse to move an item."
+    },
+    {
+      "id": "drag_drop",
+      "title": "Drag and Drop",
+      "content": "Drag and drop means moving an object from one place to another on the screen using the mouse.<br><br><b>Steps:</b><br>1️⃣ Point to the item you want to move.<br>2️⃣ Hold down the left mouse button.<br>3️⃣ Move (drag) the mouse to the new location.<br>4️⃣ Release the button to drop it.<br><br><b>Example:</b> You can drag an icon from the desktop into a folder."
+    },
+    {
+      "id": "scrolling",
+      "title": "Scrolling with the Mouse",
+      "content": "Scrolling means moving up and down on a page or document using the scroll wheel.<br><br><b>How to scroll:</b><br>🔹 Roll the wheel forward to move up.<br>🔹 Roll the wheel backward to move down.<br><br><b>Tip:</b> You can also hold the scroll bar at the side of the screen and drag it to move through long pages."
+    },
+    {
+      "id": "mouse_clicking",
+      "title": "Clicking Basics",
+      "content": "Clicking is one of the most important mouse skills!<br><br><b>Types of Clicking:</b><br>🖱️ <b>Single Click:</b> Selects an item.<br>🖱️ <b>Double Click:</b> Opens an item or program.<br>🖱️ <b>Right Click:</b> Shows options for the selected item.<br><br><b>Practice:</b> Try single-clicking and double-clicking icons on your desktop!"
+    },
+    {
+      "id": "mouse_dragging",
+      "title": "Clicking and Dragging",
+      "content": "Clicking and dragging is a way to select or move items.<br><br><b>Example 1:</b> Click and drag the mouse to highlight words in a document.<br><b>Example 2:</b> Click and drag a picture to move it to another folder.<br><br><b>Tip:</b> Release the mouse button when you want to drop the selected item."
+    },
+    {
+      "id": "mouse_precision",
+      "title": "High-Speed Precision Tasks",
+      "content": "Some computer tasks require careful and accurate mouse movement.<br><br><b>Examples:</b><br>🎨 Drawing in Paint programs.<br>🕹️ Playing games that need fast reaction.<br>📂 Dragging files into small folders.<br><br><b>Tip:</b> Move the mouse slowly for better control when selecting small items."
+    },
+    {
+      "id": "mouse_practice",
+      "title": "Mouse Practice Activities",
+      "content": "Practice makes you better with the mouse! Here are some fun exercises:<br><br>✅ Open <b>Paint</b> and try drawing simple shapes.<br>✅ Practice <b>drag and drop</b> icons on your desktop.<br>✅ Use <b>scrolling</b> to read a long webpage.<br>✅ Try <b>double-clicking</b> to open programs.<br><br><b>Goal:</b> Become fast and accurate when using the mouse!"
+    }
+  ]   
     },
     {
       "id": "ict",
