@@ -94,29 +94,55 @@
     {
       "id": "mouse_definition",
       "title": "What is a Computer Mouse?",
-      "content": "A <b>computer mouse</b> is an input device that lets you interact with a computer by moving a pointer on the screen and clicking buttons.<br><br><b>Uses of a mouse:</b><br>• Point and click to open programs and files.<br>• Drag items to move them.<br>• Scroll through pages using the scroll wheel.<br><br><b>Parts of a mouse:</b><br>• <b>Left button</b> – select or click items.<br>• <b>Right button</b> – open menus or options.<br>• <b>Scroll wheel</b> – scroll up and down.<br>• <b>Body</b> – holds your hand comfortably.<br><br><img src='images/mouse_definition.png' alt='Computer Mouse' class='w-64 mt-2 rounded shadow'>"
+      "content": "A <b>computer mouse</b> is an input device that allows you to point, click, and move objects on your computer screen. It helps you interact with programs without typing commands.<br><br><b>Parts of a mouse:</b><br>• <b>Left button</b> – select items and click.<br>• <b>Right button</b> – open menus.<br>• <b>Scroll wheel</b> – scroll through pages.<br>• <b>Body</b> – fits your hand comfortably.<br><br><img src='images/mouse_definition.png' class='w-64 mt-2 rounded shadow' alt='Computer Mouse'>"
     },
     {
       "id": "types_of_mouse",
       "title": "Types of Computer Mouse",
-      "content": "There are different types of computer mice, each with its own features.<br><br><b>Main types:</b><br>• <b>Wired Mouse</b> – connects to the computer using a cable.<br>• <b>Wireless Mouse</b> – works with batteries and connects via Bluetooth or USB receiver.<br>• <b>Optical Mouse</b> – uses light to detect movement.<br>• <b>Trackball Mouse</b> – has a ball on top that you rotate to move the pointer.<br>• <b>Gaming Mouse</b> – extra buttons and high precision for gaming.<br><br>Choose a mouse based on comfort, precision, and how you plan to use it."
+      "content": "There are different types of mice you can use.<br><br><b>Common types:</b><br>• <b>Wired Mouse</b> – connected with a cable.<br>• <b>Wireless Mouse</b> – uses Bluetooth or a USB receiver.<br>• <b>Optical Mouse</b> – uses light to detect movement.<br>• <b>Trackball Mouse</b> – move the cursor by rotating a ball.<br>• <b>Gaming Mouse</b> – extra buttons for games.<br><br>Each type works the same way but may feel different in your hand.<br><br><img src='images/mouse_types.png' class='w-64 mt-2 rounded shadow' alt='Types of Computer Mouse'>"
     },
     {
       "id": "mouse_buttons",
       "title": "Mouse Buttons and Their Uses",
-      "content": "A mouse usually has two main buttons and sometimes extra buttons.<br><br><b>Left button:</b> Click to select or open items.<br><b>Right button:</b> Opens context menus with extra options.<br><b>Scroll wheel:</b> Scroll up and down, can also be clicked to act as a third button.<br><br><b>Extra buttons:</b> Some mice have back/forward buttons for browsers or custom shortcuts.<br><br><img src='images/mouse_buttons.png' alt='Mouse Buttons' class='w-64 mt-2 rounded shadow'>"
+      "content": "A standard mouse usually has two or three buttons.<br><br><b>Left button:</b> Click to select or open files.<br><b>Right button:</b> Click to see a menu with options.<br><b>Middle button / scroll wheel:</b> Scroll pages, sometimes click to open links in a new tab.<br><br>Practice using each button for different tasks to become faster on the computer."
     },
     {
       "id": "mouse_actions",
       "title": "Mouse Actions",
-      "content": "The mouse allows several actions to interact with your computer.<br><br><b>Main actions:</b><br>• <b>Click</b> – Press and release the left button to select.<br>• <b>Double-click</b> – Quickly press twice to open files or folders.<br>• <b>Right-click</b> – Opens menus with more options.<br>• <b>Drag</b> – Hold the button while moving to move items.<br>• <b>Scroll</b> – Use the wheel to move up or down.<br><br>Practicing these actions helps you use the computer efficiently."
+      "content": "Using a mouse involves different actions:<br><br><b>Click:</b> Press and release the left button to select.<br><b>Double-click:</b> Quickly click twice to open files or programs.<br><b>Right-click:</b> Press the right button to show a menu.<br><b>Scroll:</b> Use the wheel to move up and down pages.<br><b>Drag and drop:</b> Hold the left button while moving an item.<br><br>Learning these actions helps you navigate the computer easily."
     },
     {
       "id": "drag_drop",
       "title": "Drag and Drop",
-      "content": "Drag and drop is a way to move items using the mouse.<br><br><b>Steps:</b><br>1. Click and hold the left mouse button on the item.<br>2. Move the mouse to the desired location.<br>3. Release the button to drop the item.<br><br>Use drag and drop to move files, rearrange icons, or organize folders easily.<br><br><img src='images/drag_drop.png' alt='Drag and Drop' class='w-64 mt-2 rounded shadow'>"
+      "content": "Drag and drop lets you move files or objects on your screen.<br><br><b>How to do it:</b><br>1. Place the pointer over the item.<br>2. Press and hold the left mouse button.<br>3. Move the item to a new location.<br>4. Release the button.<br><br>This action is useful for organizing files, copying items, or creating folders.<br><br><img src='images/drag_drop.png' class='w-64 mt-2 rounded shadow' alt='Drag and Drop'>"
+    },
+    {
+      "id": "scrolling",
+      "title": "Scrolling with the Mouse",
+      "content": "Scrolling lets you move through long pages without using the keyboard.<br><br><b>How to scroll:</b><br>• Use the scroll wheel up or down.<br>• Click and drag the scrollbar on the side of the screen.<br><br>Scrolling is faster than pressing arrow keys, especially for reading documents or browsing websites."
+    },
+    {
+      "id": "mouse_clicking",
+      "title": "Clicking Basics",
+      "content": "Clicking is the main way to interact with your computer.<br><br><b>Types of clicks:</b><br>• <b>Single click:</b> Select an item.<br>• <b>Double click:</b> Open files or folders.<br>• <b>Right click:</b> Open context menus.<br>• <b>Click and hold:</b> Drag an object.<br><br>Practice clicking accurately to avoid mistakes while working."
+    },
+    {
+      "id": "mouse_dragging",
+      "title": "Clicking and Dragging",
+      "content": "Clicking and dragging is used to move files or select multiple items.<br><br><b>Steps:</b><br>1. Click and hold the left button on an object.<br>2. Move the mouse to the desired location.<br>3. Release the button.<br><br>It’s important for organizing files or selecting large blocks of text."
+    },
+    {
+      "id": "mouse_precision",
+      "title": "High-Speed Precision Tasks",
+      "content": "Some tasks need precise mouse movements, like drawing, gaming, or graphic design.<br><br><b>Tips for precision:</b><br>• Move the mouse slowly for accuracy.<br>• Adjust the mouse sensitivity in settings.<br>• Use a mouse pad for smooth movement.<br>• Keep your hand relaxed to reduce fatigue."
+    },
+    {
+      "id": "mouse_practice",
+      "title": "Mouse Practice Activities",
+      "content": "Practice helps you become a fast and accurate mouse user.<br><br><b>Activities:</b><br>• Open and close programs using clicks.<br>• Drag and drop files into folders.<br>• Scroll through documents and websites.<br>• Play beginner mouse games online to improve speed and accuracy.<br><br>Regular practice builds confidence and skill."
     }
   ]
+}
 
     },
     {
