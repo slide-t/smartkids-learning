@@ -609,6 +609,184 @@
       "options": ["Windows + S", "Ctrl + S", "Alt + S", "Shift + S"],
       "answer": "Windows + S"
     },
+
+
+  {
+    "id": 1,
+    "category": "Internet",
+    "question": "The Internet is a network that connects ____.",
+    "options": ["Only one computer", "Many computers worldwide", "Only phones", "Printers only"],
+    "answer": "Many computers worldwide"
+  },
+  {
+    "id": 2,
+    "category": "Internet",
+    "question": "The full meaning of WWW is ____.",
+    "options": ["World Wide Web", "World White Web", "Wide World Web", "Web World Window"],
+    "answer": "World Wide Web"
+  },
+  {
+    "id": 3,
+    "category": "Internet",
+    "question": "A person who uses the internet is called a ____.",
+    "options": ["Listener", "Viewer", "User", "Server"],
+    "answer": "User"
+  },
+  {
+    "id": 4,
+    "category": "Internet",
+    "question": "To open a website, you need a program called a ____.",
+    "options": ["Word processor", "Browser", "Calculator", "Editor"],
+    "answer": "Browser"
+  },
+  {
+    "id": 5,
+    "category": "Internet",
+    "question": "Which of the following is an example of a web browser?",
+    "options": ["Microsoft Word", "Google Chrome", "Adobe Reader", "Paint"],
+    "answer": "Google Chrome"
+  },
+  {
+    "id": 6,
+    "category": "Internet",
+    "question": "The Internet allows people to ____ information.",
+    "options": ["Hide", "Share", "Destroy", "Forget"],
+    "answer": "Share"
+  },
+  {
+    "id": 7,
+    "category": "Internet",
+    "question": "The Internet helps people to communicate using ____.",
+    "options": ["Letters only", "Email and chat", "Smoke signals", "Post office"],
+    "answer": "Email and chat"
+  },
+  {
+    "id": 8,
+    "category": "Internet",
+    "question": "Google.com is an example of a ____.",
+    "options": ["Game", "Search engine", "Antivirus", "Spreadsheet"],
+    "answer": "Search engine"
+  },
+  {
+    "id": 9,
+    "category": "Internet",
+    "question": "Which of the following devices can connect to the Internet?",
+    "options": ["Television only", "Radio", "Computer and smartphone", "Typewriter"],
+    "answer": "Computer and smartphone"
+  },
+  {
+    "id": 10,
+    "category": "Internet",
+    "question": "The Internet helps students to ____.",
+    "options": ["Sleep in class", "Find learning materials", "Avoid school", "Forget lessons"],
+    "answer": "Find learning materials"
+  },
+  {
+    "id": 11,
+    "category": "Internet",
+    "question": "To use the Internet, you must have an ____ connection.",
+    "options": ["Electric", "Internet", "Audio", "Printer"],
+    "answer": "Internet"
+  },
+  {
+    "id": 12,
+    "category": "Internet",
+    "question": "Websites are made up of connected ____.",
+    "options": ["Books", "Pages", "Files", "Toys"],
+    "answer": "Pages"
+  },
+  {
+    "id": 13,
+    "category": "Internet",
+    "question": "The Internet can be used to send messages through ____.",
+    "options": ["Messenger apps", "Radio", "Television", "Post office"],
+    "answer": "Messenger apps"
+  },
+  {
+    "id": 14,
+    "category": "Internet",
+    "question": "You can attend online classes through the ____.",
+    "options": ["Internet", "Telephone", "Library", "Radio"],
+    "answer": "Internet"
+  },
+  {
+    "id": 15,
+    "category": "Internet",
+    "question": "Information on the Internet is stored on special computers called ____.",
+    "options": ["Tables", "Servers", "Keyboards", "Desktops"],
+    "answer": "Servers"
+  },
+  {
+    "id": 16,
+    "category": "Internet",
+    "question": "The Internet can be misused by people to ____.",
+    "options": ["Learn good things", "Spread false news", "Do homework", "Study online"],
+    "answer": "Spread false news"
+  },
+  {
+    "id": 17,
+    "category": "Internet",
+    "question": "The address you type to visit a website is called a ____.",
+    "options": ["URL", "CPU", "IP", "USB"],
+    "answer": "URL"
+  },
+  {
+    "id": 18,
+    "category": "Internet",
+    "question": "The part of the Internet where people share information is called the ____.",
+    "options": ["Network", "Web", "Link", "Folder"],
+    "answer": "Web"
+  },
+  {
+    "id": 19,
+    "category": "Internet",
+    "question": "Which of these is used to find information quickly on the Internet?",
+    "options": ["Search engine", "Video player", "File manager", "Game app"],
+    "answer": "Search engine"
+  },
+  {
+    "id": 20,
+    "category": "Internet",
+    "question": "Which of the following is a safe Internet practice?",
+    "options": ["Sharing passwords", "Visiting trusted websites", "Clicking all pop-ups", "Posting personal details"],
+    "answer": "Visiting trusted websites"
+  },
+  {
+    "id": 21,
+    "category": "Internet",
+    "question": "The Internet can be used for ____.",
+    "options": ["Learning, communication, and entertainment", "Sleeping", "Cooking food", "Driving cars"],
+    "answer": "Learning, communication, and entertainment"
+  },
+  {
+    "id": 22,
+    "category": "Internet",
+    "question": "When using the Internet, children should be guided by ____.",
+    "options": ["Friends", "Teachers or parents", "Strangers online", "Hackers"],
+    "answer": "Teachers or parents"
+  },
+  {
+    "id": 23,
+    "category": "Internet",
+    "question": "Online safety means protecting your ____ while using the Internet.",
+    "options": ["Shoes", "Personal information", "Books", "Uniform"],
+    "answer": "Personal information"
+  },
+  {
+    "id": 24,
+    "category": "Internet",
+    "question": "The Internet is sometimes called the ____.",
+    "options": ["Information Superhighway", "Digital Jungle", "Computer Tree", "Electric Line"],
+    "answer": "Information Superhighway"
+  },
+  {
+    "id": 25,
+    "category": "Internet",
+    "question": "Which of these is an advantage of the Internet?",
+    "options": ["Helps in research and communication", "Wastes time only", "Damages computers", "Prevents learning"],
+    "answer": "Helps in research and communication"
+  },
+   
   {
     "id": 1,
     "category": "ICT",
