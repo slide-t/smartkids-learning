@@ -256,29 +256,34 @@
   "title": "Microsoft Office Tools",
   "lessons": [
     {
-      "id": "ms_word",
-      "title": "Microsoft Word - Writing and Formatting",
-      "content": "Microsoft Word is a word processing program used to create documents like letters, reports, and stories.<br><br><b>Main Features:</b><br>• <b>Typing and Editing:</b> Write, delete, copy, and paste text.<br>• <b>Formatting:</b> Change font type, size, color, bold, italics, underline.<br>• <b>Paragraph Options:</b> Align text, add bullets, numbering, and spacing.<br>• <b>Insert Tools:</b> Add images, tables, charts, headers, and footers.<br><br><b>Tips for Kids:</b><br>• Use spell check to correct mistakes.<br>• Practice formatting titles and paragraphs for neat documents.<br><br><img src='images/ms_word.png' class='w-64 mt-2 rounded shadow' alt='Microsoft Word'>"
+      "id": "ms_word_intro",
+      "title": "Microsoft Word – Introduction",
+      "content": "Microsoft Word is a <b>word processing software</b> used for typing, editing, and printing documents. It helps you create neat and well-arranged letters, stories, notes, and reports.<br><br><b>Uses of Microsoft Word:</b><br>• Typing school notes or letters.<br>• Editing and correcting spelling or grammar mistakes.<br>• Inserting pictures, tables, and shapes.<br>• Printing your work neatly.<br><br><b>Main Parts of the MS Word Window:</b><br>1️⃣ <b>Title Bar</b> – shows the document name.<br>2️⃣ <b>Ribbon</b> – contains tabs like Home, Insert, and Layout.<br>3️⃣ <b>Workspace</b> – the blank area where you type.<br>4️⃣ <b>Status Bar</b> – shows page number and word count.<br><br><b>Fun Tip:</b> You can change the font, color, or size of your text to make it beautiful!<br><br><img src='images/ms_word_intro.png' alt='Microsoft Word Window' class='w-64 mt-2 rounded shadow'>"
     },
     {
-      "id": "ms_excel",
-      "title": "Microsoft Excel - Spreadsheets and Charts",
-      "content": "Microsoft Excel is a program to organize, calculate, and visualize data using spreadsheets.<br><br><b>Main Features:</b><br>• <b>Cells:</b> Each box in a spreadsheet where you type data.<br>• <b>Formulas:</b> Perform calculations automatically (e.g., =SUM(A1:A5)).<br>• <b>Charts:</b> Turn data into bar, line, or pie charts for easy understanding.<br>• <b>Formatting:</b> Adjust column widths, colors, borders, and fonts.<br><br><b>Tips for Kids:</b><br>• Practice making a table of your daily activities or scores.<br>• Use simple formulas for addition and averages.<br><br><img src='images/ms_excel.png' class='w-64 mt-2 rounded shadow' alt='Microsoft Excel'>"
+      "id": "ms_word_editing",
+      "title": "Editing and Formatting Text",
+      "content": "Editing means making corrections or changes to your work in Word. Formatting means making the text look more attractive.<br><br><b>Editing Tools:</b><br>• <b>Backspace/Delete:</b> remove unwanted letters.<br>• <b>Undo (Ctrl + Z):</b> cancel a mistake.<br>• <b>Redo (Ctrl + Y):</b> restore an undone action.<br><br><b>Formatting Tools:</b><br>• <b>Bold (B):</b> make text darker.<br>• <b>Italic (I):</b> slant your text.<br>• <b>Underline (U):</b> draw a line under your text.<br>• <b>Font Style and Size:</b> change how your letters look.<br>• <b>Text Alignment:</b> left, center, or right alignment.<br><br><b>Example:</b><br>Normal: Welcome to ICT Class<br>Formatted: <b><i><u>Welcome to ICT Class</u></i></b><br><br><img src='images/ms_word_editing.png' class='w-64 mt-2 rounded shadow' alt='Formatting Tools in MS Word'>"
     },
     {
-      "id": "ms_powerpoint",
-      "title": "Microsoft PowerPoint - Presentations",
-      "content": "Microsoft PowerPoint is used to create slideshows for presentations.<br><br><b>Main Features:</b><br>• <b>Slides:</b> Each page of your presentation.<br>• <b>Text and Images:</b> Add titles, bullet points, pictures, and shapes.<br>• <b>Animations:</b> Make text or images move on slides.<br>• <b>Transitions:</b> Add effects between slides.<br><br><b>Tips for Kids:</b><br>• Keep slides simple and colorful.<br>• Use images to explain ideas instead of too much text.<br><br><img src='images/ms_powerpoint.png' class='w-64 mt-2 rounded shadow' alt='Microsoft PowerPoint'>"
+      "id": "ms_excel_intro",
+      "title": "Microsoft Excel – Introduction",
+      "content": "Microsoft Excel is a <b>spreadsheet software</b> used for working with numbers, calculations, and data. It helps to record, organize, and analyze information easily.<br><br><b>Main Features:</b><br>• Each Excel file is called a <b>Workbook</b>.<br>• Each workbook has <b>Worksheets</b> made up of rows and columns.<br>• A <b>cell</b> is where a row and a column meet – it’s where you type your data.<br><br><b>Common Uses of Excel:</b><br>• Creating a timetable or class list.<br>• Recording exam scores.<br>• Adding and subtracting numbers.<br>• Making simple charts or graphs.<br><br><b>Example:</b><br>| Name | Maths | English |<br>|-------|--------|----------|<br>| Ada | 85 | 90 |<br>| Tunde | 78 | 88 |<br><br><img src='images/ms_excel_intro.png' class='w-64 mt-2 rounded shadow' alt='Microsoft Excel Spreadsheet'>"
     },
     {
-      "id": "ms_access",
-      "title": "Microsoft Access - Databases",
-      "content": "Microsoft Access is used to create and manage databases, which store information in an organized way.<br><br><b>Main Features:</b><br>• <b>Tables:</b> Store data in rows and columns.<br>• <b>Queries:</b> Search and filter information.<br>• <b>Forms:</b> User-friendly screens to enter data.<br>• <b>Reports:</b> Present data neatly for printing or sharing.<br><br><b>Tips for Kids:</b><br>• Start with small databases like a list of your books or classmates.<br>• Practice searching and sorting data to find information easily.<br><br><img src='images/ms_access.png' class='w-64 mt-2 rounded shadow' alt='Microsoft Access'>"
+      "id": "ms_excel_formulas",
+      "title": "Using Formulas in Excel",
+      "content": "Formulas are used in Excel to perform calculations automatically.<br><br><b>Common Excel Formulas:</b><br>• <b>=A1+B1</b> → Adds two numbers.<br>• <b>=A1-B1</b> → Subtracts.<br>• <b>=A1*B1</b> → Multiplies.<br>• <b>=A1/B1</b> → Divides.<br>• <b>=SUM(A1:A5)</b> → Adds all numbers from cell A1 to A5.<br><br><b>Steps to Use a Formula:</b><br>1️⃣ Click on a cell where you want the answer.<br>2️⃣ Type the equal sign (=).<br>3️⃣ Type your formula (e.g., A1 + B1).<br>4️⃣ Press Enter.<br><br><b>Fun Tip:</b> You can use formulas to calculate totals in your class score sheet automatically!<br><br><img src='images/ms_excel_formulas.png' class='w-64 mt-2 rounded shadow' alt='Excel Formulas Example'>"
     },
     {
-      "id": "ms_outlook",
-      "title": "Microsoft Outlook - Emails and Calendars",
-      "content": "Microsoft Outlook is used to send emails and organize schedules.<br><br><b>Main Features:</b><br>• <b>Email:</b> Write, send, receive, and organize messages.<br>• <b>Calendar:</b> Schedule appointments and set reminders.<br>• <b>Contacts:</b> Store important email addresses and phone numbers.<br>• <b>Tasks:</b> Keep track of homework or project deadlines.<br><br><b>Tips for Kids:</b><br>• Check emails regularly to stay updated.<br>• Use the calendar to plan schoolwork and activities.<br><br><img src='images/ms_outlook.png' class='w-64 mt-2 rounded shadow' alt='Microsoft Outlook'>"
+      "id": "ms_powerpoint_intro",
+      "title": "Microsoft PowerPoint – Introduction",
+      "content": "Microsoft PowerPoint is a program used to create <b>presentations</b> made up of slides. It is useful for teaching, storytelling, and showing information in an interesting way.<br><br><b>Main Features:</b><br>• <b>Slides:</b> each slide contains text, pictures, or charts.<br>• <b>Design Tab:</b> lets you add colorful themes.<br>• <b>Transitions:</b> control how slides change.<br>• <b>Animations:</b> make text or pictures move.<br><br><b>Common Uses:</b><br>• Classroom lessons.<br>• School projects.<br>• Business or church presentations.<br><br><b>Fun Tip:</b> Add background music and pictures to make your slides more fun!<br><br><img src='images/ms_powerpoint_intro.png' class='w-64 mt-2 rounded shadow' alt='PowerPoint Slides Example'>"
+    },
+    {
+      "id": "ms_powerpoint_slides",
+      "title": "Creating and Presenting Slides",
+      "content": "To make a PowerPoint presentation, you combine several slides and then present them one by one.<br><br><b>Steps to Create a Slide Show:</b><br>1️⃣ Open PowerPoint and click <b>New Slide</b>.<br>2️⃣ Add a title and some text or pictures.<br>3️⃣ Use the <b>Design Tab</b> to choose colors and backgrounds.<br>4️⃣ Use <b>Animations</b> and <b>Transitions</b> to add movement.<br>5️⃣ Click <b>Slide Show</b> → <b>From Beginning</b> to present.<br><br><b>Good Presentation Tips:</b><br>• Don’t put too much text on one slide.<br>• Use large, clear fonts.<br>• Add relevant pictures.<br>• Speak clearly and confidently when presenting.<br><br><img src='images/ms_powerpoint_slides.png' class='w-64 mt-2 rounded shadow' alt='Creating Slides in PowerPoint'>"
     }
   ]
 },
