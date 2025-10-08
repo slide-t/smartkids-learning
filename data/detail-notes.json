@@ -230,25 +230,25 @@
   "title": "Computer Software",
   "lessons": [
     {
-      "id": "software_definition",
-      "title": "What is Computer Software?",
-      "content": "Computer software is a set of instructions that tells a computer what to do. Unlike hardware, software is intangible — you cannot touch it, but it makes the computer useful.<br><br><b>Types of software tasks:</b><br>• Run applications like games, word processors, and web browsers.<br>• Control computer hardware and manage files.<br>• Connect to the internet and communicate with other devices.<br><br><b>Examples:</b> Microsoft Word, Google Chrome, Antivirus programs.<br><br><img src='images/software_definition.png' class='w-64 mt-2 rounded shadow' alt='Computer Software'>"
-    },
-    {
-      "id": "software_types",
-      "title": "Types of Software (System, Application, Utility)",
-      "content": "Software is grouped based on its function:<br><br><b>1. System Software:</b> Helps the computer run and manages hardware (e.g., Operating System, drivers).<br><b>2. Application Software:</b> Programs that perform tasks for users (e.g., Word, Excel, Games, Browsers).<br><b>3. Utility Software:</b> Tools that maintain or protect the computer (e.g., Antivirus, Disk Cleanup, Backup tools).<br><br>Knowing the types of software helps you choose the right tool for a task."
-    },
-    {
-      "id": "security_software",
-      "title": "Security Software (Antivirus, Firewalls)",
-      "content": "Security software protects your computer from viruses, hackers, and unwanted programs.<br><br><b>Common security software:</b><br>• <b>Antivirus:</b> Detects and removes viruses and malware.<br>• <b>Firewall:</b> Blocks unauthorized access to your computer from the internet.<br>• <b>Anti-spyware:</b> Stops programs that try to steal your information.<br><br><b>Tips for safety:</b><br>• Keep software updated.<br>• Scan files regularly.<br>• Avoid downloading files from unknown sources.<br><br><img src='images/security_software.png' class='w-64 mt-2 rounded shadow' alt='Security Software'>"
-    },
-    {
-      "id": "productivity_software",
-      "title": "Productivity Software (Office, Browsers, Tools)",
-      "content": "Productivity software helps you perform tasks efficiently.<br><br><b>Examples:</b><br>• <b>Office suites:</b> Microsoft Office (Word, Excel, PowerPoint) for documents, spreadsheets, and presentations.<br>• <b>Web browsers:</b> Google Chrome, Firefox, Edge to access the internet.<br>• <b>Tools:</b> Calendar apps, note-taking apps, PDF readers.<br><br>Using productivity software improves your ability to complete tasks faster and with better quality.<br><br><img src='images/productivity_software.png' class='w-64 mt-2 rounded shadow' alt='Productivity Software'>"
-    }
+  "id": "software_definition",
+  "title": "What is Computer Software?",
+  "content": "Computer software is a collection of programs or instructions that tell a computer what to do. Without software, a computer would just be an empty box of metal and plastic. It is the software that makes the hardware come alive and perform useful tasks.<br><br><b>Meaning:</b><br>Software is <i>intangible</i> — you cannot see or touch it like a mouse or keyboard, but it controls how the computer behaves. Every time you open a game, type a letter, or browse the internet, software is working behind the scenes.<br><br><b>What Software Does:</b><br>• Helps you run applications like games, typing tools, and browsers.<br>• Tells the hardware (like the CPU and memory) what actions to take.<br>• Lets you store, manage, and retrieve information.<br>• Enables communication between computers through the internet.<br><br><b>Examples:</b><br>• <b>Microsoft Word:</b> Used for typing documents.<br>• <b>Google Chrome:</b> Used for browsing the web.<br>• <b>Windows or macOS:</b> Helps the computer start and run smoothly.<br>• <b>Antivirus Software:</b> Protects your computer from harmful files.<br><br><b>Fun Fact:</b> Every mobile app or computer game you play is a type of software designed by programmers!<br><br><img src='images/software_definition.png' class='w-64 mt-2 rounded shadow' alt='Computer Software'>"
+},
+{
+  "id": "software_types",
+  "title": "Types of Software (System, Application, Utility)",
+  "content": "Computer software is grouped based on what it does. Each type has a special role that helps the computer and the user work better together.<br><br><b>1. System Software:</b><br>This software helps the computer itself run properly. It controls the hardware and allows other programs to function.<br>• <b>Examples:</b> Windows, macOS, Linux, Android, iOS.<br>• <b>Purpose:</b> Starts the computer, manages memory, runs files, and connects devices like printers or USB drives.<br><br><b>2. Application Software:</b><br>These are the programs people use to perform specific tasks. They make the computer useful to us for work, school, or fun.<br>• <b>Examples:</b> Microsoft Word, Excel, Paint, Scratch, Google Chrome, and video games.<br>• <b>Purpose:</b> Writing documents, browsing the web, editing photos, or playing games.<br><br><b>3. Utility Software:</b><br>These are helper programs that maintain and protect the computer to make sure it runs smoothly.<br>• <b>Examples:</b> Antivirus programs, Disk Cleanup, Backup tools, File compression apps (like WinRAR).<br>• <b>Purpose:</b> Cleaning up files, fixing problems, and keeping the computer safe from harm.<br><br><b>Why It Matters:</b><br>Knowing the types of software helps you choose the right one for your task — whether for study, play, or protection.<br><br><img src='images/software_types.png' class='w-64 mt-2 rounded shadow' alt='Types of Software'>"
+},
+{
+  "id": "security_software",
+  "title": "Security Software (Antivirus, Firewalls)",
+  "content": "Security software keeps your computer safe from harmful programs, hackers, and other online threats. Just as you lock your doors to protect your home, security software locks and guards your computer.<br><br><b>Common Types of Security Software:</b><br>• <b>Antivirus:</b> Detects, blocks, and removes viruses or malware that can damage your computer or steal information. Example: Avast, Norton, Windows Defender.<br>• <b>Firewall:</b> Acts as a gatekeeper that blocks unwanted connections from the internet and allows only safe communication.<br>• <b>Anti-spyware:</b> Prevents hidden programs from secretly collecting your personal data.<br>• <b>Password Managers:</b> Help you store and use strong, secure passwords.<br><br><b>Why It’s Important:</b><br>• Prevents loss of important files and personal data.<br>• Keeps your system running smoothly and virus-free.<br>• Protects you when shopping, learning, or playing online.<br><br><b>Tips for Staying Safe:</b><br>• Keep your operating system and antivirus updated.<br>• Avoid clicking on suspicious links or ads.<br>• Scan files before opening or installing them.<br>• Use strong passwords and change them regularly.<br><br><b>Fun Fact:</b> Some modern antivirus programs use Artificial Intelligence (AI) to detect new viruses automatically!<br><br><img src='images/security_software.png' class='w-64 mt-2 rounded shadow' alt='Security Software'>"
+},
+{
+  "id": "productivity_software",
+  "title": "Productivity Software (Office, Browsers, Tools)",
+  "content": "Productivity software helps people complete tasks faster, stay organized, and work more efficiently. It is widely used in schools, offices, and even at home to make learning and working easier.<br><br><b>Common Types of Productivity Software:</b><br>• <b>Office Suites:</b> Programs like Microsoft Office, Google Workspace, and WPS Office include tools such as:<br>– <b>Word:</b> For typing letters and documents.<br>– <b>Excel:</b> For making tables and performing calculations.<br>– <b>PowerPoint:</b> For creating colorful presentations.<br>• <b>Web Browsers:</b> Tools like Google Chrome, Firefox, and Microsoft Edge help you search for information, stream videos, or use web apps.<br>• <b>Communication Tools:</b> Software such as Zoom, WhatsApp, or Gmail allows users to chat, make calls, or send emails.<br>• <b>Other Useful Tools:</b> Calendar apps, PDF readers, note-taking apps (like OneNote or Evernote), and to-do list managers.<br><br><b>Benefits of Using Productivity Software:</b><br>• Makes study and work easier and more enjoyable.<br>• Improves accuracy and speed when handling tasks.<br>• Helps organize daily schedules and projects.<br>• Encourages teamwork through file sharing and online collaboration.<br><br><b>Fun Fact:</b> The first version of Microsoft Word was released in 1983 — long before smartphones existed!<br><br><img src='images/productivity_software.png' class='w-64 mt-2 rounded shadow' alt='Productivity Software'>"
+}
   ]
 },
     {
