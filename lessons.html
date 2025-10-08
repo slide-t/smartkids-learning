@@ -191,7 +191,91 @@
     </div>
   </main>
 
-  <script>
+ <script>
+(function(){
+  const jsonPaths = ['data/lessons.json','./data/lessons.json','lessons.json','./lessons.json','/data/lessons.json'];
+  const lessonsArea=document.getElementById('lessonsArea');
+  const searchInput=document.getElementById('searchInput');
+  const searchPill=document.getElementById('searchPill');
+  let allCategories=[];
+
+  async function fetchFirstSuccess(paths){
+    for(const p of paths){
+      try{
+        const r=await fetch(p,{cache:"no-store"});
+        if(!r.ok) continue;
+        return await r.json();
+      }catch(e){}
+    }return null;
+  }
+
+  function normalizeData(data){
+    if(!data) return [];
+    if(Array.isArray(data)) return data;
+    if(Array.isArray(data.categories)) return data.categories;
+    if(Array.isArray(data.items)) return data.items;
+    return [];
+  }
+
+  function getTopics(cat){return cat.topics||cat.lessons||[];}
+  function renderEmpty(msg){lessonsArea.innerHTML=`<div class='status'>${msg}</div>`;}
+  function escapeHtml(s){return s.replace(/[&<>"']/g,m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;' }[m]));}
+
+  function renderGrid(categories,filter=''){
+    const q=filter.trim().toLowerCase();
+    const out=[];
+    categories.forEach(cat=>{
+      getTopics(cat).forEach(topic=>{
+        const title=(topic.title||topic.name||'').toString();
+        if(!q||title.toLowerCase().includes(q)) out.push({
+          id: topic.id,
+          title,
+          categoryId: cat.id
+        });
+      });
+    });
+    if(!out.length) return renderEmpty('No topics found.');
+
+    lessonsArea.innerHTML='';
+    out.forEach(item=>{
+      const card=document.createElement('div');
+      card.className='lesson-card shadow-lg'; // Added shadow
+      card.innerHTML=`
+        <div><div class='lesson-title'>${escapeHtml(item.title)}</div></div>
+        <div>
+          <a class='read-more' href="detail-notes.html?category=${encodeURIComponent(item.categoryId)}&id=${encodeURIComponent(item.id)}">Read More →</a>
+        </div>
+      `;
+      lessonsArea.appendChild(card);
+    });
+  }
+
+  (async()=>{
+    const json=await fetchFirstSuccess(jsonPaths);
+    const cats=normalizeData(json);
+    if(!cats.length) return renderEmpty('lessons.json not valid.');
+    allCategories=cats;
+    renderGrid(allCategories);
+
+    searchInput.addEventListener('input',e=>renderGrid(allCategories,e.target.value));
+    searchInput.addEventListener('focus',()=>searchPill.classList.add('focused'));
+    searchInput.addEventListener('blur',()=>searchPill.classList.remove('focused'));
+  })();
+
+  // Sidebar toggle (if sidebar exists)
+  const sidebar=document.getElementById('sidebar');
+  const menuBtn=document.getElementById('menuBtn');
+  if(sidebar && menuBtn){
+    menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+  }
+})();
+</script>
+  
+  
+  
+  
+  
+  <!--<script>
   (function(){
     const jsonPaths = ['data/lessons.json','./data/lessons.json','lessons.json','./lessons.json','/data/lessons.json'];
     const lessonsArea=document.getElementById('lessonsArea');
@@ -258,6 +342,6 @@
       searchInput.addEventListener('blur',()=>searchPill.classList.remove('focused'));
     })();
   })();
-  </script>
+  </script>-->
 </body>
 </html>
