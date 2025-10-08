@@ -1,0 +1,60 @@
+{
+  "categories": [
+    {
+      "id": "keyboard",
+      "title": "Computer Keyboard",
+      "lessons": [
+        {
+          "id": "keyboard_definition",
+          "title": "What is a Computer Keyboard?",
+          "content": "A <b>computer keyboard</b> is an input device used to type letters, numbers, and symbols into a computer. It works like the keyboard on your phone or typewriter, but it has many more keys and functions.<br><br><b>1. What It Does:</b><br>The keyboard helps you tell the computer what to do — by typing commands, words, or numbers. For example, when you type a message or your name, you use the keyboard.<br><br><b>2. How It Looks:</b><br>A keyboard has many buttons called <b>keys</b>, arranged in rows. Most keyboards have between 80 and 110 keys.<br><br><b>3. Fun Fact:</b><br>The word ‘keyboard’ means a board with keys! Without it, it would be very hard to use a computer.<br><br><img src='images/keyboard_definition.png' class='rounded shadow w-72 mt-2' alt='Computer Keyboard'>"
+        },
+        {
+          "id": "keyboard_layout",
+          "title": "Layout of the Keyboard",
+          "content": "The <b>keyboard layout</b> shows how all the keys are arranged on the keyboard. The most common layout is called the <b>QWERTY layout</b> because the first six letters on the top letter row are Q, W, E, R, T, and Y.<br><br><b>Parts of the Keyboard Layout:</b><br>👉 <b>Typing area</b> – where you find letter, number, and punctuation keys.<br>👉 <b>Function keys</b> – the row at the top (F1 to F12) used for special actions.<br>👉 <b>Navigation keys</b> – used for moving the cursor (arrows, Home, End).<br>👉 <b>Numeric keypad</b> – found on the right side for typing numbers quickly.<br>👉 <b>Control keys</b> – like Ctrl, Alt, and Shift for shortcuts.<br><br><img src='images/keyboard_layout.png' class='rounded shadow w-72 mt-2' alt='Keyboard Layout'>"
+        },
+        {
+          "id": "categories_of_keys",
+          "title": "Categories of Keys",
+          "content": "The keys on a keyboard are grouped by what they do. Here are the main <b>categories of keys:</b><br><br>1️⃣ <b>Alphabet keys</b> – A to Z letters used for typing words.<br>2️⃣ <b>Number keys</b> – 0 to 9, used for typing numbers.<br>3️⃣ <b>Function keys</b> – F1 to F12, used for special tasks like opening help or refreshing pages.<br>4️⃣ <b>Arrow keys</b> – move the cursor up, down, left, or right.<br>5️⃣ <b>Control keys</b> – like Ctrl, Alt, Shift, and Esc, used with other keys for commands.<br>6️⃣ <b>Punctuation keys</b> – for symbols like ! , ? . ; and : .<br>7️⃣ <b>Numeric keypad</b> – a group of number keys on the right side for quick calculations.<br><br><img src='images/categories_of_keys.png' class='rounded shadow w-72 mt-2' alt='Keyboard Keys Categories'>"
+        },
+        {
+          "id": "typing_skills",
+          "title": "How to Use the Keyboard for Typing",
+          "content": "Typing is the skill of pressing the right keys quickly and correctly. <b>Good typing skills</b> make computer work faster and easier.<br><br><b>1. Posture for Typing:</b><br>✅ Sit straight on a chair.<br>✅ Keep both feet flat on the floor.<br>✅ Keep your fingers curved over the keys.<br>✅ Don’t bend your wrists too much.<br><br><b>2. Home Row Rule:</b><br>Start typing with your fingers on the <b>Home Row Keys</b> — A, S, D, F, J, K, L, ;<br>The left hand controls A, S, D, F and the right hand controls J, K, L, ;<br><br><b>3. Practice:</b><br>Use online typing tutors or games to improve your speed and accuracy.<br><br><img src='images/typing_skills.png' class='rounded shadow w-72 mt-2' alt='Typing Practice'>"
+        },
+        {
+          "id": "function_keys",
+          "title": "Function Keys (F1–F12)",
+          "content": "<p>The <b>Function Keys</b> are the special keys at the top of the keyboard, labeled from <b>F1</b> to <b>F12</b>. Each key has its own job or command that helps you work faster on the computer. Their functions can change depending on the program you are using.</p><br> <h4>🖱️ Here’s What Each Function Key Does:</h4> <ul> <li><b>F1</b> – Opens the <b>Help</b> window in most programs. (Example: If you are stuck, press F1 for help!)</li> <li><b>F2</b> – Used to <b>rename</b> a selected file or folder quickly. Just click on a file and press F2 to change its name.</li> <li><b>F3</b> – Opens the <b>search</b> feature in many programs or browsers so you can find things faster.</li> <li><b>F4</b> – In Windows, pressing <b>Alt + F4</b> closes the active window or program. (Use it to quickly close a page!)</li> <li><b>F5</b> – Used to <b>refresh</b> or reload a webpage or document. Try it when a page isn’t showing updates.</li> <li><b>F6</b> – Moves the cursor to the <b>address bar</b> in most web browsers. Helpful for typing website links quickly.</li> <li><b>F7</b> – Opens the <b>spelling and grammar check</b> tool in Microsoft Word and some other writing programs.</li> <li><b>F8</b> – Commonly used to access <b>Safe Mode</b> when starting a computer (for troubleshooting).</li> <li><b>F9</b> – Refreshes or <b>sends/receives emails</b> in Microsoft Outlook. Also updates formulas in Excel.</li> <li><b>F10</b> – Activates the <b>menu bar</b> in many programs. With <b>Shift + F10</b>, it acts like a right-click on a selected item.</li> <li><b>F11</b> – Turns the browser into <b>full-screen mode</b>. Press again to return to normal view.</li> <li><b>F12</b> – Opens the <b>Save As</b> window in Microsoft Word. You can use it to save a copy of your work quickly.</li> </ul><br> <h4>💡 Extra Tips:</h4> <ul> <li>You can hold <b>Fn</b> (Function key) with F1–F12 on laptops to activate special actions like <b>volume, brightness, or Wi-Fi</b>.</li> <li>Each function key can do different things depending on the software you are using.</li> </ul><br> <p><b>In short:</b> Function keys help you work faster and smarter. Try using them to explore shortcuts and make computing fun!</p>"
+        }
+        // (Remaining lessons of keyboard category continue...)
+      ]
+    },
+    {
+      "id": "mouse",
+      "title": "Computer Mouse",
+      "lessons": [
+        {
+          "id": "mouse_definition",
+          "title": "What is a Computer Mouse?",
+          "content": "A computer mouse is a small device used to move the pointer on the computer screen. It helps you click, select, drag, and open items. The mouse sends signals to the computer as you move it.<br><br><b>Examples:</b><br>🖱️ Moving the mouse moves the pointer on the screen.<br>🖱️ Clicking opens files or programs.<br><br><b>Fun Fact:</b> The mouse got its name because its wire looked like a tail!"
+        }
+        // (Remaining lessons of mouse category continue...)
+      ]
+    },
+    {
+      "id": "ict",
+      "title": "General ICT for Kids",
+      "lessons": [
+        {
+          "id": "what_is_computer",
+          "title": "What is a Computer?",
+          "content": "A computer is an electronic machine that receives data (input), processes it, and gives results (output). It can perform tasks very fast and accurately when given correct instructions. Computers help us type letters, draw pictures, play games, and learn new things.\n\nExamples of computers include desktop computers, laptops, tablets, and smartphones.\n\nMain functions of a computer:\n1. Input – Receiving information (like typing or clicking).\n2. Processing – Working on the data.\n3. Output – Showing the result (like display or print).\n4. Storage – Saving information for later use.\n\nIn summary, a computer is a smart helper that makes work easier, faster, and more accurate."
+        }
+        // (Remaining lessons of ICT category continue...)
+      ]
+    }
+  ]
+}
