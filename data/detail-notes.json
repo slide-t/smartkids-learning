@@ -88,20 +88,36 @@
   ]
     },
     {
-      "id": "mouse",
-      "title": "Computer Mouse",
-      "lessons": [
-        { "id": "mouse_definition", "title": "What is a Computer Mouse?", "content": "" },
-        { "id": "types_of_mouse", "title": "Types of Computer Mouse", "content": "" },
-        { "id": "mouse_buttons", "title": "Mouse Buttons and Their Uses", "content": "" },
-        { "id": "mouse_actions", "title": "Mouse Actions", "content": "" },
-        { "id": "drag_drop", "title": "Drag and Drop", "content": "" },
-        { "id": "scrolling", "title": "Scrolling with the Mouse", "content": "" },
-        { "id": "mouse_clicking", "title": "Clicking Basics", "content": "" },
-        { "id": "mouse_dragging", "title": "Clicking and Dragging", "content": "" },
-        { "id": "mouse_precision", "title": "High-Speed Precision Tasks", "content": "" },
-        { "id": "mouse_practice", "title": "Mouse Practice Activities", "content": "" }
-      ]
+  "id": "mouse",
+  "title": "Computer Mouse",
+  "lessons": [
+    {
+      "id": "mouse_definition",
+      "title": "What is a Computer Mouse?",
+      "content": "A <b>computer mouse</b> is an input device that lets you interact with a computer by moving a pointer on the screen and clicking buttons.<br><br><b>Uses of a mouse:</b><br>• Point and click to open programs and files.<br>• Drag items to move them.<br>• Scroll through pages using the scroll wheel.<br><br><b>Parts of a mouse:</b><br>• <b>Left button</b> – select or click items.<br>• <b>Right button</b> – open menus or options.<br>• <b>Scroll wheel</b> – scroll up and down.<br>• <b>Body</b> – holds your hand comfortably.<br><br><img src='images/mouse_definition.png' alt='Computer Mouse' class='w-64 mt-2 rounded shadow'>"
+    },
+    {
+      "id": "types_of_mouse",
+      "title": "Types of Computer Mouse",
+      "content": "There are different types of computer mice, each with its own features.<br><br><b>Main types:</b><br>• <b>Wired Mouse</b> – connects to the computer using a cable.<br>• <b>Wireless Mouse</b> – works with batteries and connects via Bluetooth or USB receiver.<br>• <b>Optical Mouse</b> – uses light to detect movement.<br>• <b>Trackball Mouse</b> – has a ball on top that you rotate to move the pointer.<br>• <b>Gaming Mouse</b> – extra buttons and high precision for gaming.<br><br>Choose a mouse based on comfort, precision, and how you plan to use it."
+    },
+    {
+      "id": "mouse_buttons",
+      "title": "Mouse Buttons and Their Uses",
+      "content": "A mouse usually has two main buttons and sometimes extra buttons.<br><br><b>Left button:</b> Click to select or open items.<br><b>Right button:</b> Opens context menus with extra options.<br><b>Scroll wheel:</b> Scroll up and down, can also be clicked to act as a third button.<br><br><b>Extra buttons:</b> Some mice have back/forward buttons for browsers or custom shortcuts.<br><br><img src='images/mouse_buttons.png' alt='Mouse Buttons' class='w-64 mt-2 rounded shadow'>"
+    },
+    {
+      "id": "mouse_actions",
+      "title": "Mouse Actions",
+      "content": "The mouse allows several actions to interact with your computer.<br><br><b>Main actions:</b><br>• <b>Click</b> – Press and release the left button to select.<br>• <b>Double-click</b> – Quickly press twice to open files or folders.<br>• <b>Right-click</b> – Opens menus with more options.<br>• <b>Drag</b> – Hold the button while moving to move items.<br>• <b>Scroll</b> – Use the wheel to move up or down.<br><br>Practicing these actions helps you use the computer efficiently."
+    },
+    {
+      "id": "drag_drop",
+      "title": "Drag and Drop",
+      "content": "Drag and drop is a way to move items using the mouse.<br><br><b>Steps:</b><br>1. Click and hold the left mouse button on the item.<br>2. Move the mouse to the desired location.<br>3. Release the button to drop the item.<br><br>Use drag and drop to move files, rearrange icons, or organize folders easily.<br><br><img src='images/drag_drop.png' alt='Drag and Drop' class='w-64 mt-2 rounded shadow'>"
+    }
+  ]
+
     },
     {
       "id": "general_ict",
