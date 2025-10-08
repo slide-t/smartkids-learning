@@ -1,173 +1,142 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SmartKids Lessons</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    :root { --header-height: 64px; }
-
     body {
-      font-family: 'Poppins', sans-serif;
+      font-family: Inter, system-ui, sans-serif;
       background-color: #f5fbff;
       margin: 0;
-      line-height: 1.7;
-      font-size: 18px;
-      color: #0f172a;
+      padding: 90px 20px 40px; /* space for fixed header */
     }
-
     header.app-header {
-      height: var(--header-height);
-      display:flex;
-      align-items:center;
-      justify-content:center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       background: linear-gradient(90deg,#2563eb,#60a5fa);
-      color:white;
-      font-weight:700;
-      font-size:1.5rem;
-      box-shadow:0 2px 6px rgba(0,0,0,0.08);
-      position:fixed;
-      top:0;
-      left:0;
-      right:0;
-      z-index:40;
+      color: white;
+      font-weight: 700;
+      font-size: 1.25rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      z-index: 50;
     }
 
-    /* Floating search */
     .search-container {
-      position:fixed;
-      left:50%;
-      top:calc(var(--header-height) + 12px);
-      transform:translateX(-50%);
-      width:92%;
-      max-width:640px;
-      z-index:30;
+      max-width: 640px;
+      margin: 0 auto 30px;
     }
+
     .search-pill {
-      display:flex;
-      align-items:center;
-      gap:0.5rem;
-      background:white;
-      border-radius:9999px;
-      padding:12px 16px;
-      box-shadow:0 6px 18px rgba(37,99,235,0.08);
-      border:1px solid rgba(37,99,235,0.08);
-      font-size: 1rem;
-      transition:transform .28s ease, box-shadow .28s ease, border-color .28s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: white;
+      border-radius: 9999px;
+      padding: 10px 14px;
+      box-shadow: 0 6px 18px rgba(37,99,235,0.08);
+      border: 1px solid rgba(37,99,235,0.08);
+      transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease;
     }
     .search-pill.focused {
-      transform:translateY(8px) scale(1.02);
-      box-shadow:0 10px 30px rgba(37,99,235,0.14);
-      border-color:rgba(37,99,235,0.22);
+      transform: scale(1.02);
+      box-shadow: 0 10px 30px rgba(37,99,235,0.14);
+      border-color: rgba(37,99,235,0.22);
     }
     #searchInput {
-      border:none;
-      outline:none;
-      width:100%;
-      font-size:1rem;
-      background:transparent;
-    }
-
-    .page-wrap {
-      padding-top:calc(var(--header-height) + 120px);
-      padding-left:20px;
-      padding-right:20px;
-      max-width:1200px;
-      margin:0 auto;
-    }
-
-    h2 {
-      font-size:2rem;
-      margin-bottom:25px;
-      text-align:center;
-      color:#0b2545;
+      border: none;
+      outline: none;
+      width: 100%;
+      font-size: 1rem;
+      background: transparent;
     }
 
     .lessons-grid {
-      display:grid;
-      gap:20px;
-      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+      display: grid;
+      gap: 18px;
+      grid-template-columns: repeat(auto-fit, minmax(240px,1fr));
     }
 
     .lesson-card {
-      background:#ffffff;
-      border-radius:16px;
-      padding:22px;
-      box-shadow:0 8px 20px rgba(0,0,0,0.08);
-      transition:transform .2s ease, box-shadow .2s ease;
-      min-height:140px;
-      display:flex;
-      flex-direction:column;
-      justify-content:space-between;
+      background: #e9f7ff;
+      border-radius: 12px;
+      padding: 18px;
+      box-shadow: 0 6px 18px rgba(7,89,133,0.04);
+      transition: transform .18s ease, box-shadow .18s ease;
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
     .lesson-card:hover {
-      transform:translateY(-6px);
-      box-shadow:0 12px 28px rgba(0,0,0,0.12);
+      transform: translateY(-6px);
+      box-shadow: 0 10px 28px rgba(7,89,133,0.08);
     }
-    .lesson-title {
-      font-size:1.2rem;
-      font-weight:700;
-      margin-bottom:10px;
-      color:#1e3a8a;
-    }
-    .read-more {
-      display:inline-block;
-      margin-top:14px;
-      background:#2563eb;
-      color:white;
-      padding:10px 16px;
-      border-radius:10px;
-      text-decoration:none;
-      font-weight:700;
-      font-size:1rem;
-      transition:background .18s ease, transform .12s ease;
-    }
-    .read-more:hover { background:#1e40af; transform:translateY(-2px); }
 
-    .actions {
-      display:flex;
-      gap:16px;
-      justify-content:center;
-      margin-top:32px;
-      margin-bottom:60px;
-      flex-wrap:wrap;
+    .lesson-title {
+      color: #0f172a;
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 8px;
     }
-    .actions a {
-      padding:12px 18px;
-      border-radius:12px;
-      text-decoration:none;
-      font-weight:700;
-      color:#fff;
-      font-size:1rem;
+
+    .read-more {
+      display: inline-block;
+      margin-top: 12px;
+      background: #2563eb;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background .18s ease, transform .12s ease;
     }
-    .btn-cyber { background:#f97316; }
-    .btn-features { background:#ccc; }
-    .btn-cyber:hover, .btn-features:hover {
-      filter:brightness(.95);
-      transform:translateY(-3px);
+    .read-more:hover { 
+      background: #1e40af;
+      transform: translateY(-2px);
     }
 
     .status {
-      text-align:center;
-      padding:20px;
-      color:#0b1220;
-      background:#ffffff;
-      border-radius:12px;
-      box-shadow:0 8px 20px rgba(0,0,0,0.06);
-      font-size:1.1rem;
+      text-align: center;
+      padding: 18px;
+      color: #0b1220;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 6px 18px rgba(2,6,23,0.04);
     }
 
-    @media (max-width:768px){
-      .page-wrap { padding-left:20px; }
+    .actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 40px;
+      flex-wrap: wrap;
+    }
+    .actions a {
+      padding: 10px 16px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 700;
+      color: #fff;
+    }
+    .btn-cyber { background:#f97316; }
+    .btn-features { background:#475569; }
+    .btn-cyber:hover, .btn-features:hover {
+      filter: brightness(.95);
+      transform: translateY(-3px);
     }
   </style>
 </head>
 <body>
-
   <header class="app-header">SmartKids Learning — Lessons</header>
 
-  <!-- Floating Search -->
   <div class="search-container">
     <div id="searchPill" class="search-pill">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -178,8 +147,8 @@
     </div>
   </div>
 
-  <main class="page-wrap">
-    <h2>Choose a topic to learn</h2>
+  <main class="max-w-6xl mx-auto">
+    <h2 style="text-align:center;font-size:1.6rem;color:#0b2545;margin-bottom:20px;">Choose a topic to learn</h2>
 
     <div id="lessonsArea" class="lessons-grid">
       <div class="status">Loading lessons…</div>
@@ -187,95 +156,11 @@
 
     <div class="actions">
       <a class="btn-cyber" href="features/cyber-security.html">🔒 Cyber Security</a>
-      <a class="btn-features" href="features.html">✨ Features</a>
+      <a class="btn-features" href="features/index.html">✨ Features</a>
     </div>
   </main>
 
- <script>
-(function(){
-  const jsonPaths = ['data/lessons.json','./data/lessons.json','lessons.json','./lessons.json','/data/lessons.json'];
-  const lessonsArea=document.getElementById('lessonsArea');
-  const searchInput=document.getElementById('searchInput');
-  const searchPill=document.getElementById('searchPill');
-  let allCategories=[];
-
-  async function fetchFirstSuccess(paths){
-    for(const p of paths){
-      try{
-        const r=await fetch(p,{cache:"no-store"});
-        if(!r.ok) continue;
-        return await r.json();
-      }catch(e){}
-    }return null;
-  }
-
-  function normalizeData(data){
-    if(!data) return [];
-    if(Array.isArray(data)) return data;
-    if(Array.isArray(data.categories)) return data.categories;
-    if(Array.isArray(data.items)) return data.items;
-    return [];
-  }
-
-  function getTopics(cat){return cat.topics||cat.lessons||[];}
-  function renderEmpty(msg){lessonsArea.innerHTML=`<div class='status'>${msg}</div>`;}
-  function escapeHtml(s){return s.replace(/[&<>"']/g,m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;' }[m]));}
-
-  function renderGrid(categories,filter=''){
-    const q=filter.trim().toLowerCase();
-    const out=[];
-    categories.forEach(cat=>{
-      getTopics(cat).forEach(topic=>{
-        const title=(topic.title||topic.name||'').toString();
-        if(!q||title.toLowerCase().includes(q)) out.push({
-          id: topic.id,
-          title,
-          categoryId: cat.id
-        });
-      });
-    });
-    if(!out.length) return renderEmpty('No topics found.');
-
-    lessonsArea.innerHTML='';
-    out.forEach(item=>{
-      const card=document.createElement('div');
-      card.className='lesson-card shadow-lg'; // Added shadow
-      card.innerHTML=`
-        <div><div class='lesson-title'>${escapeHtml(item.title)}</div></div>
-        <div>
-          <a class='read-more' href="detail-notes.html?category=${encodeURIComponent(item.categoryId)}&id=${encodeURIComponent(item.id)}">Read More →</a>
-        </div>
-      `;
-      lessonsArea.appendChild(card);
-    });
-  }
-
-  (async()=>{
-    const json=await fetchFirstSuccess(jsonPaths);
-    const cats=normalizeData(json);
-    if(!cats.length) return renderEmpty('lessons.json not valid.');
-    allCategories=cats;
-    renderGrid(allCategories);
-
-    searchInput.addEventListener('input',e=>renderGrid(allCategories,e.target.value));
-    searchInput.addEventListener('focus',()=>searchPill.classList.add('focused'));
-    searchInput.addEventListener('blur',()=>searchPill.classList.remove('focused'));
-  })();
-
-  // Sidebar toggle (if sidebar exists)
-  const sidebar=document.getElementById('sidebar');
-  const menuBtn=document.getElementById('menuBtn');
-  if(sidebar && menuBtn){
-    menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
-  }
-})();
-</script>
-  
-  
-  
-  
-  
-  <!--<script>
+  <script>
   (function(){
     const jsonPaths = ['data/lessons.json','./data/lessons.json','lessons.json','./lessons.json','/data/lessons.json'];
     const lessonsArea=document.getElementById('lessonsArea');
@@ -312,7 +197,9 @@
         getTopics(cat).forEach(topic=>{
           const title=(topic.title||topic.name||'').toString();
           if(!q||title.toLowerCase().includes(q)) out.push({
-            id:topic.id,title
+            id:topic.id,
+            title,
+            categoryId: cat.id
           });
         });
       });
@@ -323,8 +210,8 @@
         const card=document.createElement('div');
         card.className='lesson-card';
         card.innerHTML=`
-          <div><div class='lesson-title'>${escapeHtml(item.title)}</div></div>
-          <div><a class='read-more' href="detail-notes.html?id=${encodeURIComponent(item.id)}">Read More →</a></div>
+          <div class='lesson-title'>${escapeHtml(item.title)}</div>
+          <a class='read-more' href="detail-notes.html?category=${encodeURIComponent(item.categoryId)}&id=${encodeURIComponent(item.id)}">Read More →</a>
         `;
         lessonsArea.appendChild(card);
       });
@@ -342,6 +229,6 @@
       searchInput.addEventListener('blur',()=>searchPill.classList.remove('focused'));
     })();
   })();
-  </script>-->
+  </script>
 </body>
 </html>
