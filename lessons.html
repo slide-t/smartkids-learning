@@ -9,9 +9,12 @@
     :root { --header-height: 64px; }
 
     body {
-      font-family: Inter, system-ui, sans-serif;
+      font-family: 'Poppins', sans-serif;
       background-color: #f5fbff;
       margin: 0;
+      line-height: 1.7;
+      font-size: 18px;
+      color: #0f172a;
     }
 
     header.app-header {
@@ -22,7 +25,7 @@
       background: linear-gradient(90deg,#2563eb,#60a5fa);
       color:white;
       font-weight:700;
-      font-size:1.25rem;
+      font-size:1.5rem;
       box-shadow:0 2px 6px rgba(0,0,0,0.08);
       position:fixed;
       top:0;
@@ -35,12 +38,11 @@
     .search-container {
       position:fixed;
       left:50%;
-      top:calc(var(--header-height) + 10px);
+      top:calc(var(--header-height) + 12px);
       transform:translateX(-50%);
       width:92%;
       max-width:640px;
       z-index:30;
-      transition:transform .32s ease, box-shadow .32s ease;
     }
     .search-pill {
       display:flex;
@@ -48,9 +50,10 @@
       gap:0.5rem;
       background:white;
       border-radius:9999px;
-      padding:10px 14px;
+      padding:12px 16px;
       box-shadow:0 6px 18px rgba(37,99,235,0.08);
       border:1px solid rgba(37,99,235,0.08);
+      font-size: 1rem;
       transition:transform .28s ease, box-shadow .28s ease, border-color .28s ease;
     }
     .search-pill.focused {
@@ -67,66 +70,76 @@
     }
 
     .page-wrap {
-      padding-top:calc(var(--header-height) + 100px);
+      padding-top:calc(var(--header-height) + 120px);
       padding-left:20px;
       padding-right:20px;
       max-width:1200px;
       margin:0 auto;
     }
 
+    h2 {
+      font-size:2rem;
+      margin-bottom:25px;
+      text-align:center;
+      color:#0b2545;
+    }
+
     .lessons-grid {
       display:grid;
-      gap:18px;
-      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+      gap:20px;
+      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
     }
 
     .lesson-card {
-      background:#e9f7ff;
-      border-radius:12px;
-      padding:18px;
-      box-shadow:0 6px 18px rgba(7,89,133,0.04);
-      transition:transform .18s ease, box-shadow .18s ease;
-      min-height:120px;
+      background:#ffffff;
+      border-radius:16px;
+      padding:22px;
+      box-shadow:0 8px 20px rgba(0,0,0,0.08);
+      transition:transform .2s ease, box-shadow .2s ease;
+      min-height:140px;
       display:flex;
       flex-direction:column;
       justify-content:space-between;
     }
     .lesson-card:hover {
       transform:translateY(-6px);
-      box-shadow:0 10px 28px rgba(7,89,133,0.08);
+      box-shadow:0 12px 28px rgba(0,0,0,0.12);
     }
     .lesson-title {
-      color:#0f172a;
+      font-size:1.2rem;
       font-weight:700;
-      margin-bottom:8px;
+      margin-bottom:10px;
+      color:#1e3a8a;
     }
     .read-more {
       display:inline-block;
-      margin-top:12px;
+      margin-top:14px;
       background:#2563eb;
       color:white;
-      padding:8px 12px;
-      border-radius:8px;
+      padding:10px 16px;
+      border-radius:10px;
       text-decoration:none;
-      font-weight:600;
+      font-weight:700;
+      font-size:1rem;
       transition:background .18s ease, transform .12s ease;
     }
     .read-more:hover { background:#1e40af; transform:translateY(-2px); }
 
     .actions {
       display:flex;
-      gap:12px;
+      gap:16px;
       justify-content:center;
-      margin-top:28px;
+      margin-top:32px;
       margin-bottom:60px;
       flex-wrap:wrap;
     }
     .actions a {
-      padding:10px 16px;
-      border-radius:10px;
+      padding:12px 18px;
+      border-radius:12px;
       text-decoration:none;
       font-weight:700;
       color:#fff;
+      font-size:1rem;
     }
     .btn-cyber { background:#f97316; }
     .btn-features { background:#475569; }
@@ -137,11 +150,16 @@
 
     .status {
       text-align:center;
-      padding:18px;
+      padding:20px;
       color:#0b1220;
-      background:#fff;
-      border-radius:10px;
-      box-shadow:0 6px 18px rgba(2,6,23,0.04);
+      background:#ffffff;
+      border-radius:12px;
+      box-shadow:0 8px 20px rgba(0,0,0,0.06);
+      font-size:1.1rem;
+    }
+
+    @media (max-width:768px){
+      .page-wrap { padding-left:20px; }
     }
   </style>
 </head>
@@ -161,7 +179,7 @@
   </div>
 
   <main class="page-wrap">
-    <h2 style="text-align:center;font-size:1.6rem;color:#0b2545;margin-bottom:20px;">Choose a topic to learn</h2>
+    <h2>Choose a topic to learn</h2>
 
     <div id="lessonsArea" class="lessons-grid">
       <div class="status">Loading lessons…</div>
