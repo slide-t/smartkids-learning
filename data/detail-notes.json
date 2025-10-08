@@ -1,26 +1,91 @@
 {
   "categories": [
+    
+      {
+  "id": "keyboard",
+  "title": "Computer Keyboard",
+  "lessons": [
     {
-      "id": "keyboard",
-      "title": "Computer Keyboard",
-      "lessons": [
-        { "id": "keyboard_definition", "title": "What is a Computer Keyboard?", "content": "" },
-        { "id": "keyboard_layout", "title": "Layout of the Keyboard", "content": "" },
-        { "id": "categories_of_keys", "title": "Categories of Keys", "content": "" },
-        { "id": "typing_skills", "title": "How to Use the Keyboard for Typing", "content": "" },
-        { "id": "function_keys", "title": "Function Keys (F1–F12)", "content": "" },
-        { "id": "home_end_keys", "title": "Home and End Keys", "content": "" },
-        { "id": "arrow_keys", "title": "Arrow Keys", "content": "" },
-        { "id": "control_keys", "title": "Control Keys (Ctrl)", "content": "" },
-        { "id": "shift_key", "title": "Shift Key", "content": "" },
-        { "id": "number_keys", "title": "Number Keys", "content": "" },
-        { "id": "numeric_keys", "title": "Numeric and Symbol Keys", "content": "" },
-        { "id": "keyboard_home_row", "title": "Home Row Keys", "content": "" },
-        { "id": "keyboard_top_row", "title": "Top Row Keys", "content": "" },
-        { "id": "keyboard_bottom_row", "title": "Bottom Row Keys", "content": "" },
-        { "id": "keyboard_punctuation", "title": "Punctuation Keys", "content": "" },
-        { "id": "keyboard_shortcuts", "title": "Keyboard Shortcuts", "content": "" }
-      ]
+      "id": "keyboard_definition",
+      "title": "What is a Computer Keyboard?",
+      "content": "A <b>computer keyboard</b> is an input device used to type letters, numbers, and symbols into a computer. It works like the keyboard on your phone or a typewriter, but it has many more keys and special functions.<br><br><b>What it does:</b><br>• Lets you write messages, type schoolwork, and give commands to the computer.<br>• Helps you use shortcuts to work faster.<br><br><b>How it looks:</b><br>Keyboards usually have several sections: letters, numbers, function keys, navigation keys, and a numeric keypad. Most have small bumps on the F and J keys to help you find the home row without looking.<br><br><img src='images/keyboard_definition.png' alt='Computer Keyboard' class='w-64 mt-2 rounded shadow'>"
+    },
+    {
+      "id": "keyboard_layout",
+      "title": "Layout of the Keyboard",
+      "content": "The <b>keyboard layout</b> is how keys are arranged on the keyboard. The most common layout is called <b>QWERTY</b> because the first six letters in the top row are Q W E R T Y.<br><br><b>Main areas:</b><br>• <b>Typing area</b>: letters and punctuation.<br>• <b>Number row</b>: numbers and symbols above the letters.<br>• <b>Function keys</b>: F1–F12 across the top.<br>• <b>Navigation keys</b>: arrows, Home, End, Page Up, Page Down.<br>• <b>Numeric keypad</b>: on the right for fast number entry.<br><br><b>Other layouts:</b> AZERTY (used in France), DVORAK (designed to reduce finger movement), and QWERTZ (Central Europe). Different countries and languages choose layouts that suit their needs.<br><br><img src='images/keyboard_layout.png' alt='Keyboard Layout' class='w-64 mt-2 rounded shadow'>"
+    },
+    {
+      "id": "categories_of_keys",
+      "title": "Categories of Keys",
+      "content": "Keys on the keyboard are grouped by what they do. Knowing the groups helps you learn faster.<br><br><b>Main categories:</b><br>• <b>Alphabet (A–Z)</b>: Used to type words.<br>• <b>Number keys (0–9)</b>: Above letters and on the numeric keypad.<br>• <b>Function keys (F1–F12)</b>: Special tasks depending on the program.<br>• <b>Control keys</b>: Ctrl, Alt, Esc — used with other keys for shortcuts.<br>• <b>Navigation keys</b>: Arrow keys, Home, End, Page Up, Page Down.<br>• <b>Numeric keypad</b>: Quick number entry for calculations.<br>• <b>Special keys</b>: Enter, Shift, Spacebar, Backspace, Tab.<br><br>Knowing categories makes typing and using shortcuts easier."
+    },
+    {
+      "id": "typing_skills",
+      "title": "How to Use the Keyboard for Typing",
+      "content": "Typing well helps you finish schoolwork faster and write neatly on a computer.<br><br><b>Good posture:</b><br>• Sit up straight, feet flat on the floor.<br>• Keep the screen at eye level and your wrists slightly raised.<br><br><b>Home row:</b><br>• Place your left fingers on A, S, D, F and your right fingers on J, K, L, ;. Thumbs rest on the spacebar. The bumps on F and J help you find the position without looking.<br><br><b>Finger use:</b><br>• Each finger is responsible for certain keys — don’t use just one finger for everything.<br><br><b>Practice tips:</b><br>• Start slowly, focus on accuracy, then build speed.<br>• Try typing games and short daily lessons.<br><br><img src='images/typing_skills.png' alt='Typing Skills' class='w-64 mt-2 rounded shadow'>"
+    },
+    {
+      "id": "function_keys",
+      "title": "Function Keys (F1–F12)",
+      "content": "<p>The <b>Function Keys</b> are the special keys at the top of the keyboard, labeled from <b>F1</b> to <b>F12</b>. Each key has its own job or command that helps you work faster on the computer. Their functions can change depending on the program you are using.</p><br><h4>🖱️ Here’s What Each Function Key Does:</h4><ul><li><b>F1</b> – Opens the <b>Help</b> window in most programs.</li><li><b>F2</b> – <b>Rename</b> a selected file or folder.</li><li><b>F3</b> – Opens <b>search</b> in many programs and browsers.</li><li><b>F4</b> – <b>Alt + F4</b> closes the active window or program.</li><li><b>F5</b> – <b>Refresh</b> or reload a webpage or document.</li><li><b>F6</b> – Moves cursor to the browser <b>address bar</b> (in many browsers).</li><li><b>F7</b> – Starts <b>spelling and grammar</b> checks in some programs like Word.</li><li><b>F8</b> – Used for accessing <b>Safe Mode</b> on startup on some computers (advanced).</li><li><b>F9</b> – Refreshes or runs <b>send/receive</b> in some email programs and updates spreadsheets.</li><li><b>F10</b> – Activates the program <b>menu bar</b>. <b>Shift + F10</b> acts like a right-click menu.</li><li><b>F11</b> – Toggles <b>full-screen</b> mode in web browsers.</li><li><b>F12</b> – Often opens <b>Save As</b> or developer tools in browsers.</li></ul><br><p><b>Tip:</b> On laptops you may need to hold the <b>Fn</b> key to use F1–F12. Function keys can also be combined with Ctrl, Alt, or Shift for extra shortcuts.</p>"
+    },
+    {
+      "id": "home_end_keys",
+      "title": "Home and End Keys",
+      "content": "The <b>Home</b> and <b>End</b> keys help you move quickly through text and pages.<br><br><b>What they do:</b><br>• <b>Home</b> – Moves the cursor to the <b>start</b> of the current line.<br>• <b>End</b> – Moves the cursor to the <b>end</b> of the current line.<br><br><b>When used with Ctrl:</b><br>• <b>Ctrl + Home</b> – Jump to the <b>beginning</b> of the document or page.<br>• <b>Ctrl + End</b> – Jump to the <b>end</b> of the document or page.<br><br>These keys save time when you edit long documents."
+    },
+    {
+      "id": "arrow_keys",
+      "title": "Arrow Keys",
+      "content": "The <b>Arrow Keys</b> let you move the cursor or selection without using the mouse.<br><br><b>How they work:</b><br>• <b>Up (↑)</b> – move up<br>• <b>Down (↓)</b> – move down<br>• <b>Left (←)</b> – move left<br>• <b>Right (→)</b> – move right<br><br><b>Common uses:</b><br>• Move through text, navigate menus, move a character in games, or move between spreadsheet cells.<br><br><b>Tip:</b> Hold <b>Shift</b> + arrow keys to <b>select</b> text or items."
+    },
+    {
+      "id": "control_keys",
+      "title": "Control Keys (Ctrl)",
+      "content": "The <b>Ctrl</b> key is used with other keys to perform quick commands called shortcuts.<br><br><b>Useful Ctrl shortcuts:</b><br>• <b>Ctrl + A</b> – Select all<br>• <b>Ctrl + C</b> – Copy selected text or files<br>• <b>Ctrl + V</b> – Paste copied items<br>• <b>Ctrl + X</b> – Cut (remove and copy)<br>• <b>Ctrl + Z</b> – Undo last action<br>• <b>Ctrl + Y</b> – Redo<br>• <b>Ctrl + S</b> – Save<br>• <b>Ctrl + P</b> – Print<br><br>Using Ctrl shortcuts makes tasks faster and reduces mouse clicks."
+    },
+    {
+      "id": "shift_key",
+      "title": "Shift Key",
+      "content": "The <b>Shift</b> key changes what other keys do. You usually have two Shift keys on the keyboard.<br><br><b>Common uses:</b><br>• Hold <b>Shift</b> + letter to type a <b>capital</b> letter (Shift + a = A).<br>• Hold <b>Shift</b> + number keys to type the top symbol (Shift + 1 = !, Shift + 2 = @).<br>• Use <b>Shift + Arrow</b> to select text without using the mouse.<br><br>Shift is simple but very useful for typing capitals and symbols."
+    },
+    {
+      "id": "number_keys",
+      "title": "Number Keys",
+      "content": "Number keys are the keys labeled 0–9 above the letter row. They let you type numbers in documents, forms, and calculators.<br><br><b>Quick tips:</b><br>• Use the row above letters for small numbers in text.<br>• Use the numeric keypad on the right for fast number entry (if your keyboard has one).<br>• Hold <b>Shift</b> with number keys for symbols: <b>Shift + 1 = !</b>, <b>Shift + 2 = @</b>, and so on."
+    },
+    {
+      "id": "numeric_keys",
+      "title": "Numeric and Symbol Keys",
+      "content": "This topic covers the <b>numeric keypad</b> and symbol keys used for math and special characters.<br><br><b>Numeric keypad:</b><br>• Located on the right side of many keyboards.<br>• Works like a calculator for quick entry of numbers and math signs (+, -, *, /).<br>• Turn on <b>Num Lock</b> to use it as numbers.<br><br><b>Symbol keys:</b><br>• Symbols like ! @ # $ % ^ & * are typed with <b>Shift</b> + the number or symbol key.<br>• Use symbols for passwords, email addresses, and math.\n<br><br><img src='images/keyboard_numeric.png' alt='Numeric Keys' class='w-64 mt-2 rounded shadow'>"
+    },
+    {
+      "id": "keyboard_home_row",
+      "title": "Home Row Keys",
+      "content": "The <b>Home Row</b> is the middle row of letters where your fingers rest while typing.<br><br><b>Finger positions:</b><br>• Left hand: A S D F<br>• Right hand: J K L ;<br><br>Your thumbs rest on the <b>spacebar</b>. The little bumps on <b>F</b> and <b>J</b> help you find the home row without looking at the keyboard.<br><br>Practicing the home row helps you type faster and without looking at the keys."
+    },
+    {
+      "id": "keyboard_top_row",
+      "title": "Top Row Keys",
+      "content": "The <b>Top Row</b> contains the letters Q W E R T Y U I O P and sits above the home row.<br><br>These keys are used in many common words (like 'type', 'quick', 'you'), so learning them improves typing speed. Move your fingers up from the home row to reach these keys and return to home row after pressing them."
+    },
+    {
+      "id": "keyboard_bottom_row",
+      "title": "Bottom Row Keys",
+      "content": "The <b>Bottom Row</b> sits below the home row and includes Z X C V B N M and punctuation keys like comma and period.<br><br>Other important keys near the bottom row include <b>Spacebar</b>, <b>Ctrl</b>, <b>Alt</b>, and the <b>Windows</b> key. Practice reaching these keys smoothly from the home row."
+    },
+    {
+      "id": "keyboard_punctuation",
+      "title": "Punctuation Keys",
+      "content": "Punctuation marks make writing clear. The keyboard provides keys for all the punctuation you need.<br><br><b>Common punctuation:</b><br>• <b>Period (.)</b> – ends a sentence.<br>• <b>Comma (,)</b> – small pause in a sentence.<br>• <b>Question mark (?)</b> – asks a question.<br>• <b>Exclamation (!)</b> – shows excitement.<br>• <b>Colon (:)</b> and <b>semicolon (;)</b> – link ideas.<br>• <b>Quotation marks</b> – show speech.<br><br>Use punctuation correctly to make your writing easy to read."
+    },
+    {
+      "id": "keyboard_shortcuts",
+      "title": "Keyboard Shortcuts",
+      "content": "Keyboard shortcuts are special key combinations that help you perform tasks quickly without using the mouse. They save time and make your work faster and easier.<br><br><b>What Are Keyboard Shortcuts?</b><br>Keyboard shortcuts use one or more keys pressed together to tell the computer to do something. For example, instead of moving your mouse to click 'Copy', you can press <b>Ctrl + C</b>.<br><br><b>Common Keyboard Shortcuts:</b><br>✅ <b>Ctrl + C</b> – Copy selected text or files<br>✅ <b>Ctrl + V</b> – Paste what you copied<br>✅ <b>Ctrl + X</b> – Cut (remove and copy) selected text<br>✅ <b>Ctrl + S</b> – Save your document<br>✅ <b>Ctrl + Z</b> – Undo your last action<br>✅ <b>Ctrl + A</b> – Select all<br>✅ <b>Ctrl + P</b> – Print<br>✅ <b>Alt + Tab</b> – Switch between open windows<br>✅ <b>Ctrl + Alt + Delete</b> – Open Task Manager (to close or restart apps)<br><br><b>Windows Shortcuts:</b><br>🪟 <b>Windows + E</b> – Open File Explorer<br>🪟 <b>Windows + D</b> – Show or hide the desktop<br>🪟 <b>Windows + L</b> – Lock your computer<br>🪟 <b>Windows + R</b> – Open the Run box<br>🪟 <b>Windows + I</b> – Open Settings<br>🪟 <b>Windows + Shift + S</b> – Take a screenshot (snip tool)<br><br><b>Typing Special Characters:</b><br>✨ Use the <b>Alt</b> key with numbers to type symbols (on the numeric keypad):<br>➡ <b>Alt + 0169</b> → ©<br>➡ <b>Alt + 0174</b> → ®<br>➡ <b>Alt + 0153</b> → ™<br>➡ <b>Alt + 3</b> → ♥<br><br><b>Function Keys (F1 – F12):</b><br>🔹 <b>F1</b> – Help<br>🔹 <b>F2</b> – Rename a file or folder<br>🔹 <b>F5</b> – Refresh a page<br>🔹 <b>F11</b> – Full screen mode<br><br><b>Practice Tip:</b><br>Learn one new shortcut each day. Keep sticky notes near the keyboard until you memorize them!<br><br><img src='images/keyboard_shortcuts.png' alt='Keyboard Shortcuts Chart' class='w-64 mt-2 rounded shadow'>"
+    }
+  ]
     },
     {
       "id": "mouse",
