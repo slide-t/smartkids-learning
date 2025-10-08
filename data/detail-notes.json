@@ -142,24 +142,62 @@
       "content": "Practice helps you become a fast and accurate mouse user.<br><br><b>Activities:</b><br>• Open and close programs using clicks.<br>• Drag and drop files into folders.<br>• Scroll through documents and websites.<br>• Play beginner mouse games online to improve speed and accuracy.<br><br>Regular practice builds confidence and skill."
     }
   ]
-}
-
     },
     {
-      "id": "general_ict",
-      "title": "General ICT for Kids",
-      "lessons": [
-        { "id": "what_is_computer", "title": "What is a Computer?", "content": "" },
-        { "id": "parts_of_computer", "title": "Parts of a Computer", "content": "" },
-        { "id": "uses_of_computer", "title": "Uses of a Computer", "content": "" },
-        { "id": "safe_computer_use", "title": "Safe Use of Computers", "content": "" },
-        { "id": "introduction_to_coding", "title": "Introduction to Coding", "content": "" },
-        { "id": "scratch_basics", "title": "Scratch and Block Coding", "content": "" },
-        { "id": "algorithms_for_kids", "title": "Algorithms for Kids", "content": "" },
-        { "id": "internet_basics", "title": "Introduction to the Internet", "content": "" },
-        { "id": "ict_files", "title": "Working with Files", "content": "" },
-        { "id": "ict_internet", "title": "Using the Internet", "content": "" }
-      ]
+  "id": "general_ict",
+  "title": "General ICT for Kids",
+  "lessons": [
+    {
+      "id": "what_is_computer",
+      "title": "What is a Computer?",
+      "content": "A <b>computer</b> is an electronic device that processes data and performs tasks according to instructions. It can store, retrieve, and display information.<br><br><b>Key features:</b><br>• Accepts input from devices like keyboard and mouse.<br>• Processes information using the CPU.<br>• Produces output on a monitor, printer, or speakers.<br>• Stores information in memory or storage devices.<br><br><b>Examples:</b> Desktop computers, laptops, tablets, and smartphones.<br><br><img src='images/what_is_computer.png' class='w-64 mt-2 rounded shadow' alt='What is a Computer'>"
+    },
+    {
+      "id": "parts_of_computer",
+      "title": "Parts of a Computer",
+      "content": "A computer has different parts that work together to perform tasks.<br><br><b>Main parts:</b><br>• <b>CPU (Central Processing Unit)</b>: The brain of the computer that processes data.<br>• <b>Monitor</b>: Displays information.<br>• <b>Keyboard</b>: Input device for typing.<br>• <b>Mouse</b>: Input device for pointing and clicking.<br>• <b>Printer</b>: Outputs documents on paper.<br>• <b>Storage</b>: Hard drives, SSDs, or USB drives store information.<br>• <b>RAM (Memory)</b>: Temporarily holds data for running programs.<br><br>Understanding each part helps you use the computer effectively.<br><br><img src='images/computer_parts.png' class='w-64 mt-2 rounded shadow' alt='Computer Parts'>"
+    },
+    {
+      "id": "uses_of_computer",
+      "title": "Uses of a Computer",
+      "content": "Computers are used in many areas of life and learning.<br><br><b>Common uses:</b><br>• <b>Education:</b> Learn, type assignments, access e-books.<br>• <b>Communication:</b> Send emails, messages, video calls.<br>• <b>Entertainment:</b> Play games, watch videos, listen to music.<br>• <b>Business:</b> Manage accounts, create reports, handle inventory.<br>• <b>Research:</b> Find information online quickly.<br><br>Knowing uses helps you use a computer for the right tasks."
+    },
+    {
+      "id": "safe_computer_use",
+      "title": "Safe Use of Computers",
+      "content": "Using a computer safely protects your body and information.<br><br><b>Physical safety:</b><br>• Sit properly with feet flat and back straight.<br>• Keep the screen at eye level.<br>• Take breaks to rest eyes and hands.<br><br><b>Digital safety:</b><br>• Don’t share passwords with anyone.<br>• Avoid suspicious websites and downloads.<br>• Log out from accounts on shared computers.<br><br>Safe use prevents accidents, fatigue, and cyber threats."
+    },
+    {
+      "id": "introduction_to_coding",
+      "title": "Introduction to Coding",
+      "content": "Coding is writing instructions for a computer to follow.<br><br><b>Why learn coding:</b><br>• Makes computers do tasks automatically.<br>• Helps you create games, animations, and apps.<br>• Develops logical thinking and problem-solving skills.<br><br><b>Basic idea:</b> Computers follow instructions line by line. Coding languages tell the computer what to do in a way it understands.<br><br><img src='images/introduction_to_coding.png' class='w-64 mt-2 rounded shadow' alt='Introduction to Coding'>"
+    },
+    {
+      "id": "scratch_basics",
+      "title": "Scratch and Block Coding",
+      "content": "Scratch is a <b>block-based coding platform</b> for beginners. Instead of typing code, you drag blocks that represent commands.<br><br><b>How it works:</b><br>• <b>Sprites:</b> Characters or objects in the program.<br>• <b>Blocks:</b> Commands like move, turn, speak, or change color.<br>• <b>Stage:</b> The area where sprites act.<br><br>By snapping blocks together, you can create animations, games, and interactive stories.<br><br><img src='images/scratch_basics.png' class='w-64 mt-2 rounded shadow' alt='Scratch Basics'>"
+    },
+    {
+      "id": "algorithms_for_kids",
+      "title": "Algorithms for Kids",
+      "content": "An <b>algorithm</b> is a set of steps to solve a problem or complete a task.<br><br><b>Examples:</b><br>• How to brush your teeth:<br>  1. Pick up toothbrush.<br>  2. Apply toothpaste.<br>  3. Brush all teeth.<br>  4. Rinse mouth.<br><br>• How to make a sandwich:<br>  1. Take bread.<br>  2. Add filling.<br>  3. Close bread.<br>  4. Eat.<br><br>Algorithms in coding tell the computer exactly what steps to follow. Writing them clearly is very important."
+    },
+    {
+      "id": "internet_basics",
+      "title": "Introduction to the Internet",
+      "content": "The <b>Internet</b> is a network of computers all over the world connected to share information.<br><br><b>Uses:</b><br>• Send and receive emails.<br>• Search for information online.<br>• Watch videos and listen to music.<br>• Play online games and communicate with friends.<br><br><b>Tips:</b> Always use the Internet responsibly and safely."
+    },
+    {
+      "id": "ict_files",
+      "title": "Working with Files",
+      "content": "Files are digital documents, images, videos, or programs stored on a computer.<br><br><b>Common tasks:</b><br>• <b>Create:</b> Make a new document or folder.<br>• <b>Save:</b> Keep your work safe.<br>• <b>Open:</b> View a file.<br>• <b>Rename:</b> Give it a new name.<br>• <b>Delete:</b> Remove files you no longer need.<br><br>Understanding files helps you organize and manage information efficiently."
+    },
+    {
+      "id": "ict_internet",
+      "title": "Using the Internet",
+      "content": "Using the Internet safely and efficiently is an essential ICT skill.<br><br><b>Steps:</b><br>• Open a browser like Chrome or Firefox.<br>• Type the website address or search in the search engine.<br>• Click links to view information.<br>• Download or save content carefully.<br>• Keep personal information private.<br><br>Practicing these steps makes learning online fun and secure.<br><br><img src='images/using_internet.png' class='w-64 mt-2 rounded shadow' alt='Using the Internet'>"
+    }
+  ]
     },
     {
       "id": "operating_systems",
