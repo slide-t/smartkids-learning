@@ -7,7 +7,7 @@
         {
           "id": "what_is_computer",
           "title": "What is a Computer?",
-          "content": ""
+          "content": "A <b>computer keyboard</b> is an input device used to type letters, numbers, and symbols into a computer. It works like the keyboard on your phone or typewriter, but it has many more keys and functions.<br><br><b>1. What It Does:</b><br>The keyboard helps you tell the computer what to do — by typing commands, words, or numbers. For example, when you type a message or your name, you use the keyboard.<br><br><b>2. How It Looks:</b><br>A keyboard has many buttons called <b>keys</b>, arranged in rows. Most keyboards have between 80 and 110 keys.<br><br><b>3. Fun Fact:</b><br>The word ‘keyboard’ means a board with keys! Without it, it would be very hard to use a computer.<br><br><img src='images/keyboard_definition.png' class='rounded shadow w-72 mt-2' alt='Computer Keyboard'>"
         },
         {
           "id": "parts_of_computer",
