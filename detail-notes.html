@@ -3,225 +3,194 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lesson Details</title>
+  <title>SmartKids Lesson Details</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body {
-      font-family: Inter, system-ui, sans-serif;
-      background-color: #f5fbff;
-      margin: 0;
-    }
-
-    header.app-header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 64px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(90deg,#2563eb,#60a5fa);
-      color: white;
-      font-weight: 700;
-      font-size: 1.25rem;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-      z-index: 50;
-    }
-
-    .page-wrap {
-      display: flex;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding-top: 80px;
-      gap: 20px;
-    }
-
-    /* Sidebar */
-    .sidebar {
-      width: 240px;
-      background: #1e3a8a;
-      color: white;
+    .panel {
       border-radius: 12px;
-      padding: 16px;
-      max-height: 80vh;
+      background-color: #ebf8ff;
+      padding: 1rem;
+      max-height: 60vh;
       overflow-y: auto;
-      flex-shrink: 0;
     }
-    .sidebar h2 {
-      font-size: 1.25rem;
-      font-weight: bold;
-      margin-bottom: 12px;
-    }
-    .sidebar a {
-      display: block;
-      padding: 6px 10px;
-      margin-bottom: 4px;
-      border-radius: 8px;
-      color: #cbd5e1;
-      text-decoration: none;
-      transition: background 0.2s;
-    }
-    .sidebar a:hover, .sidebar a.active {
-      background: rgba(255,255,255,0.15);
-      color: white;
-    }
-
-    /* Main content */
-    main.content {
-      flex: 1;
-      background: #fff;
-      border-radius: 12px;
-      padding: 24px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.05);
-    }
-
     .panel-title {
       font-weight: bold;
-      font-size: 1.5rem;
-      margin-bottom: 12px;
-      color: #2563eb;
+      background-color: #4299e1;
+      color: white;
+      padding: 0.5rem;
+      border-radius: 8px 8px 0 0;
       text-align: center;
     }
+    /* Keep category title sticky inside the sidebar */
+.category-title {
+  position: sticky;
+  top: 0;
+  background-color: #ffffff;
+  z-index: 10;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 2px solid #e0e7ff;
+}
 
-    .lesson-content img {
-      max-width: 100%;
-      border-radius: 12px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-      margin-top: 12px;
+    /* Sidebar animation */
+    .sidebar {
+      transition: transform 0.3s ease-in-out;
     }
 
-    .navigation {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin-top: 24px;
-      flex-wrap: wrap;
+    /* Mobile hidden state */
+    .sidebar-hidden {
+      transform: translateX(-100%);
     }
-    .navigation button, .navigation a {
-      padding: 10px 16px;
-      border-radius: 10px;
-      font-weight: 600;
-      color: #fff;
-      border: none;
+
+    /* Chevron button */
+    .chevron-btn {
+      position: fixed;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+      z-index: 50;
+      background: #2563eb;
+      color: white;
+      border-radius: 0 8px 8px 0;
+      padding: 0.5rem;
       cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
     }
-    .navigation button:hover, .navigation a:hover {
-      transform: translateY(-2px);
-    }
-    .prev-btn { background: #f97316; }
-    .next-btn { background: #2563eb; }
-    .back-btn { background: #475569; }
 
-    @media(max-width:768px) {
-      .page-wrap { flex-direction: column; padding: 90px 12px 20px; }
-      .sidebar { width: 100%; max-height: none; }
+    @media (min-width: 768px) {
+      .chevron-btn {
+        display: none;
+      }
     }
   </style>
 </head>
-<body>
-  <header class="app-header">SmartKids Learning — Lesson Details</header>
+<body class="bg-gray-50 font-sans">
 
-  <div class="page-wrap">
+  <!-- Chevron Toggle Button for Mobile -->
+  <button id="toggleSidebar" class="chevron-btn">☰</button>
+
+  <div class="flex flex-col md:flex-row max-w-6xl mx-auto py-8 px-4 gap-6">
     <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar">
-      <h2>Lessons</h2>
-      <div id="lessonList">Loading topics...</div>
+    <aside id="sidebar" class="sidebar fixed md:static bg-white w-64 h-full md:h-auto overflow-y-auto p-4 shadow-lg md:shadow-none sidebar-hidden md:translate-x-0">
+      <h2 class="text-xl font-bold text-blue-700 mb-4">Lessons</h2>
+      <div id="lessonList" class="space-y-2">
+        <p class="text-gray-500">Loading topics...</p>
+      </div>
     </aside>
 
     <!-- Main Content -->
-    <main class="content">
-      <div id="lessonTitle" class="panel-title">Loading...</div>
-      <div id="lessonContent" class="lesson-content text-gray-800"></div>
+    <main class="flex-1 md:ml-64">
+      <h1 id="lessonTitle" class="text-3xl font-bold text-blue-700 mb-6 text-center">Loading...</h1>
 
-      <div class="navigation">
-        <button id="prevBtn" class="prev-btn">⬅ Previous</button>
-        <button id="nextBtn" class="next-btn">Next ➡</button>
-        <a href="lessons.html" class="back-btn">⬅ Back to Lessons</a>
+      <div class="panel">
+        <div id="panelTitle" class="panel-title">Lesson</div>
+        <div id="lessonContent" class="mt-2 text-gray-800"></div>
+      </div>
+
+      <div class="mt-6 flex flex-col items-center space-y-4">
+        <button id="prevBtn" class="w-48 px-4 py-2 bg-orange-600 text-white rounded hover:bg-orange-700 transition">⬅ Previous</button>
+        <button id="nextBtn" class="w-48 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">Next ➡</button>
+        <a href="lessons.html" class="w-48 text-center px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition">⬅ Back to Lessons</a>
       </div>
     </main>
   </div>
 
-  <script>
+<script>
 async function loadLesson() {
   const params = new URLSearchParams(window.location.search);
   const categoryId = params.get('category');
   const topicId = params.get('id');
 
-  const lessonListEl = document.getElementById('lessonList');
   const titleEl = document.getElementById('lessonTitle');
+  const panelTitleEl = document.getElementById('panelTitle');
   const contentEl = document.getElementById('lessonContent');
   const prevBtn = document.getElementById('prevBtn');
   const nextBtn = document.getElementById('nextBtn');
+  const lessonList = document.getElementById('lessonList');
 
   try {
     const res = await fetch('data/detail-notes.json');
     const data = await res.json();
-    const categories = data.categories || [];
+    const categories = data.categories;
 
-    // Build sidebar
-    lessonListEl.innerHTML = '';
-    categories.forEach(cat => {
-      const catEl = document.createElement('div');
-      catEl.className = 'mb-4';
-      const catTitle = document.createElement('h3');
-      catTitle.textContent = cat.title || cat.name;
-      catTitle.className = 'font-semibold text-white mb-2';
-      catEl.appendChild(catTitle);
+ // 🟦 Build sidebar topics
+lessonList.innerHTML = '';
+categories.forEach(cat => {
+  const catEl = document.createElement('div');
+  catEl.className = 'mb-6';
 
-      const ul = document.createElement('ul');
-      (cat.lessons || []).forEach(topic => {
-        const li = document.createElement('li');
-        const a = document.createElement('a');
-        a.href = `detail-notes.html?category=${encodeURIComponent(cat.id)}&id=${encodeURIComponent(topic.id)}`;
-        a.textContent = topic.title;
-        li.appendChild(a);
-        ul.appendChild(li);
-      });
+  catEl.innerHTML = `<h3 class="category-title font-semibold text-blue-700 mb-2">${cat.title}</h3>`;
 
-      catEl.appendChild(ul);
-      lessonListEl.appendChild(catEl);
-    });
+  const ul = document.createElement('ul');
+  ul.className = 'space-y-1';
 
-    // Flatten all topics
+  (cat.lessons || cat.topics || []).forEach(topic => {
+    const li = document.createElement('li');
+    const isActive = (cat.id === categoryId && topic.id === topicId);
+    li.innerHTML = `
+      <a href="detail-notes.html?category=${cat.id}&id=${topic.id}" 
+         class="block px-3 py-1 rounded transition ${
+           isActive
+             ? 'bg-blue-600 text-white font-semibold'
+             : 'hover:bg-blue-100 text-gray-700'
+         }">${topic.title}</a>`;
+    ul.appendChild(li);
+  });
+
+  catEl.appendChild(ul);
+  lessonList.appendChild(catEl);
+});
+    
+// 🟩 Flatten all topics
     const allTopics = [];
     categories.forEach(cat => {
-      (cat.lessons || []).forEach(topic => {
-        allTopics.push({ ...topic, categoryId: cat.id });
+      (cat.lessons || cat.topics || []).forEach(topic => {
+        allTopics.push({
+          ...topic,
+          categoryId: cat.id,
+          categoryTitle: cat.title
+        });
       });
     });
 
-    // Find current topic index
+    // 🟨 Find selected topic
     let index = allTopics.findIndex(t => t.id === topicId && t.categoryId === categoryId);
-    if(index === -1) index = 0;
+    if (index === -1) index = 0;
 
+    // 🟪 Render topic content
     function renderTopic(i) {
       const topic = allTopics[i];
-      if(!topic) return;
+      if (!topic) return;
 
       titleEl.textContent = topic.title;
+      panelTitleEl.textContent = topic.title;
       contentEl.innerHTML = topic.content || "<p>No content available.</p>";
 
-      // Highlight active in sidebar
-      document.querySelectorAll('#lessonList a').forEach(a => a.classList.remove('active'));
-      const activeLink = document.querySelector(`#lessonList a[href$="id=${topic.id}"]`);
-      if(activeLink) activeLink.classList.add('active');
+      // Update sidebar highlight dynamically
+      document.querySelectorAll('#lessonList a').forEach(a => {
+        a.classList.remove('bg-blue-600', 'text-white', 'font-semibold');
+        a.classList.add('hover:bg-blue-100', 'text-gray-700');
+        if (a.href.includes(`category=${topic.categoryId}&id=${topic.id}`)) {
+          a.classList.add('bg-blue-600', 'text-white', 'font-semibold');
+          a.classList.remove('hover:bg-blue-100', 'text-gray-700');
+        }
+      });
 
-      // Previous button
-      if(i > 0) {
+      // Prev button
+      if (i > 0) {
         prevBtn.disabled = false;
         prevBtn.onclick = () => renderTopic(i - 1);
       } else {
         prevBtn.disabled = true;
+        prevBtn.onclick = () => (window.location.href = 'lessons.html');
       }
 
       // Next button
-      if(i < allTopics.length - 1) {
+      if (i < allTopics.length - 1) {
         nextBtn.disabled = false;
         nextBtn.onclick = () => renderTopic(i + 1);
       } else {
         nextBtn.disabled = true;
+        nextBtn.onclick = () => (window.location.href = 'lessons.html');
       }
 
       // Update URL
@@ -241,6 +210,13 @@ async function loadLesson() {
 }
 
 document.addEventListener('DOMContentLoaded', loadLesson);
+
+// 🧭 Sidebar toggle for mobile
+document.getElementById('toggleSidebar').addEventListener('click', () => {
+  const sidebar = document.getElementById('sidebar');
+  sidebar.classList.toggle('sidebar-hidden');
+});
 </script>
+
 </body>
 </html>
