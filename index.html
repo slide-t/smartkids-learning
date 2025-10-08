@@ -130,6 +130,45 @@
   </div>
 </header>
 
+<!-- Desktop Hero Banner -->
+<div class="hidden lg:block relative mt-16">
+  <img src="https://images.unsplash.com/photo-1600880292089-90a7e086ee0c?auto=format&fit=crop&w=1500&q=80" 
+       alt="SmartKids Learning Banner"
+       class="w-full h-[420px] object-cover shadow-md" />
+       
+  <div class="absolute inset-0 bg-gradient-to-r from-blue-900/60 to-sky-700/30 flex flex-col justify-center items-start px-24">
+    <h1 class="text-5xl font-extrabold text-white mb-6 drop-shadow-lg">
+      Welcome to SmartKids Learning
+    </h1>
+
+    <!-- Rotating Captions -->
+    <div class="text-xl text-blue-50 font-medium h-8 relative overflow-hidden">
+      <span class="caption-text absolute opacity-100 transition-opacity duration-1000">Inspiring young minds through fun computer literacy and coding lessons.</span>
+      <span class="caption-text absolute opacity-0 transition-opacity duration-1000">Test of Knowledge and Fun Learning for Future Innovators.</span>
+      <span class="caption-text absolute opacity-0 transition-opacity duration-1000">Building Tech Skills and Confidence for the Digital World.</span>
+    </div>
+
+    <a href="lessons.html" 
+       class="mt-10 inline-block bg-white text-blue-600 font-semibold px-6 py-3 rounded-full hover:bg-blue-50 transition shadow-lg">
+      🚀 Start Learning Now
+    </a>
+  </div>
+</div>
+
+<!-- Rotating Caption Script -->
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const captions = document.querySelectorAll(".caption-text");
+    let index = 0;
+
+    setInterval(() => {
+      captions[index].style.opacity = 0;
+      index = (index + 1) % captions.length;
+      captions[index].style.opacity = 1;
+    }, 4000); // change every 4 seconds
+  });
+</script>
+  
   <!-- Hero Section -->
   <main class="pt-28">
     <!-- Keep your hero and other sections as before -->
