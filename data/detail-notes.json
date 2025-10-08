@@ -315,15 +315,35 @@
 
     },
     {
-      "id": "coding_basics",
-      "title": "Coding Basics",
-      "lessons": [
-        { "id": "what_is_coding", "title": "What is Coding?", "content": "" },
-        { "id": "coding_languages", "title": "Programming Languages for Kids", "content": "" },
-        { "id": "block_coding", "title": "Block Coding with Scratch", "content": "" },
-        { "id": "text_coding", "title": "Introduction to Text-Based Coding", "content": "" },
-        { "id": "coding_projects", "title": "Simple Coding Projects for Kids", "content": "" }
-      ]
+  "id": "coding_basics",
+  "title": "Coding Basics",
+  "lessons": [
+    {
+      "id": "what_is_coding",
+      "title": "What is Coding?",
+      "content": "Coding, also called <b>programming</b>, is giving instructions to a computer to make it perform tasks.<br><br><b>Why Coding is Important:</b><br>• Helps computers understand what you want them to do.<br>• Lets you create games, apps, and websites.<br>• Improves problem-solving and logical thinking skills.<br><br><b>How it Works:</b><br>• You write code in a <b>programming language</b>.<br>• The computer reads the instructions and executes them.<br><br><b>Fun Fact:</b> Even video games are built using coding!<br><br><img src='images/what_is_coding.png' class='w-64 mt-2 rounded shadow' alt='What is Coding'>"
+    },
+    {
+      "id": "coding_languages",
+      "title": "Programming Languages for Kids",
+      "content": "Programming languages are tools we use to write instructions for computers.<br><br><b>Popular Languages for Kids:</b><br>• <b>Scratch:</b> Uses blocks to create animations and games.<br>• <b>Python:</b> Easy-to-read text-based language.<br>• <b>HTML/CSS:</b> For creating web pages.<br>• <b>JavaScript:</b> Makes web pages interactive.<br><br><b>Tips for Beginners:</b><br>• Start with visual languages like Scratch.<br>• Practice regularly with small projects.<br>• Don’t worry about mistakes; debugging helps you learn.<br><br><img src='images/coding_languages.png' class='w-64 mt-2 rounded shadow' alt='Programming Languages'>"
+    },
+    {
+      "id": "block_coding",
+      "title": "Block Coding with Scratch",
+      "content": "Block coding lets you create programs by stacking colored blocks instead of typing code.<br><br><b>Advantages:</b><br>• Easier for beginners to understand.<br>• Reduces errors caused by typing mistakes.<br>• Lets you focus on logic and creativity.<br><br><b>Getting Started:</b><br>• Open Scratch online or offline.<br>• Drag blocks from the toolbox into the workspace.<br>• Snap blocks together to make characters move, speak, or change colors.<br><br><b>Fun Project Ideas:</b><br>• Make a simple game where a cat catches falling objects.<br>• Create a short animated story.<br>• Design interactive greeting cards.<br><br><img src='images/block_coding.png' class='w-64 mt-2 rounded shadow' alt='Block Coding'>"
+    },
+    {
+      "id": "text_coding",
+      "title": "Introduction to Text-Based Coding",
+      "content": "Text-based coding is writing instructions using words and symbols in a programming language.<br><br><b>Examples:</b><br>• <b>Python:</b> print(\"Hello, World!\")<br>• <b>HTML:</b> &lt;h1&gt;My First Web Page&lt;/h1&gt;<br><br><b>Tips for Beginners:</b><br>• Start with simple commands and small programs.<br>• Learn to read error messages; they tell you what went wrong.<br>• Practice daily to improve.<br><br><b>Fun Fact:</b> All major software and apps you use are built with text-based coding!<br><br><img src='images/text_coding.png' class='w-64 mt-2 rounded shadow' alt='Text-Based Coding'>"
+    },
+    {
+      "id": "coding_projects",
+      "title": "Simple Coding Projects for Kids",
+      "content": "Practicing coding by creating projects helps you understand programming better.<br><br><b>Project Ideas:</b><br>• <b>Interactive Story:</b> Make characters move, talk, or change backgrounds.<br>• <b>Simple Game:</b> Create a game with scoring, levels, and sounds.<br>• <b>Calculator:</b> Build a program that adds, subtracts, multiplies, or divides.<br>• <b>Animation:</b> Make characters dance, move, or react to clicks.<br><br><b>Tips:</b><br>• Start small and add features gradually.<br>• Test often to see if your program works.<br>• Share your projects with friends or teachers for feedback.<br><br><img src='images/coding_projects.png' class='w-64 mt-2 rounded shadow' alt='Coding Projects'>"
+    }
+  ]
     }
   ]
 }
