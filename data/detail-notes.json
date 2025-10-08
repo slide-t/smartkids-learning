@@ -283,15 +283,36 @@
   ]
 },
     {
-      "id": "internet_and_safety",
-      "title": "Internet and Online Safety",
-      "lessons": [
-        { "id": "web_browsers", "title": "Web Browsers and Search Engines", "content": "" },
-        { "id": "email_basics", "title": "Email Basics", "content": "" },
-        { "id": "social_media", "title": "Introduction to Social Media", "content": "" },
-        { "id": "cybersecurity", "title": "Cybersecurity for Kids", "content": "" },
-        { "id": "online_safety_rules", "title": "Rules for Safe Internet Use", "content": "" }
-      ]
+  "id": "internet_and_safety",
+  "title": "Internet and Online Safety",
+  "lessons": [
+    {
+      "id": "web_browsers",
+      "title": "Web Browsers and Search Engines",
+      "content": "A <b>web browser</b> is a program that lets you explore the internet. Examples include Google Chrome, Firefox, Safari, and Edge.<br><br><b>Main Features:</b><br>• <b>Address Bar:</b> Type a website address to visit it.<br>• <b>Tabs:</b> Open multiple websites at the same time.<br>• <b>Bookmarks:</b> Save your favorite websites.<br>• <b>History:</b> Review the websites you visited.<br><br>A <b>search engine</b> helps you find information online. Examples include Google, Bing, and Yahoo.<br><br><b>Tips for Kids:</b><br>• Always ask permission from parents or teachers before searching.<br>• Type clear keywords to find information quickly.<br><br><img src='images/web_browsers.png' class='w-64 mt-2 rounded shadow' alt='Web Browsers'>"
+    },
+    {
+      "id": "email_basics",
+      "title": "Email Basics",
+      "content": "Email is a way to send messages using the internet.<br><br><b>Main Parts of an Email:</b><br>• <b>To:</b> Who you are sending the email to.<br>• <b>Subject:</b> A short description of your email.<br>• <b>Body:</b> The main message.<br>• <b>Attachments:</b> Files or pictures you want to share.<br><br><b>Tips for Kids:</b><br>• Always write polite and clear messages.<br>• Don’t share passwords or personal information.<br>• Check emails regularly for school updates.<br><br><img src='images/email_basics.png' class='w-64 mt-2 rounded shadow' alt='Email Basics'>"
+    },
+    {
+      "id": "social_media",
+      "title": "Introduction to Social Media",
+      "content": "Social media platforms like Facebook, Instagram, and TikTok let people share messages, pictures, and videos.<br><br><b>Important Points for Kids:</b><br>• Only use social media with adult supervision.<br>• Don’t share personal details like your address or phone number.<br>• Think before you post; what you share online can be permanent.<br>• Be kind and respectful when interacting with others.<br><br><b>Benefits:</b><br>• Stay connected with friends and family.<br>• Learn new skills and discover educational content.<br><br><img src='images/social_media.png' class='w-64 mt-2 rounded shadow' alt='Social Media'>"
+    },
+    {
+      "id": "cybersecurity",
+      "title": "Cybersecurity for Kids",
+      "content": "<b>Cybersecurity</b> means keeping your devices and information safe from hackers and viruses.<br><br><b>Tips to Stay Safe:</b><br>• Use strong passwords that are hard to guess.<br>• Don’t click on unknown links or ads.<br>• Keep software and antivirus programs up-to-date.<br>• Ask an adult before downloading files from the internet.<br><br><b>Why it’s Important:</b><br>• Protects your personal information.<br>• Keeps your computer free from harmful programs.<br><br><img src='images/cybersecurity.png' class='w-64 mt-2 rounded shadow' alt='Cybersecurity'>"
+    },
+    {
+      "id": "online_safety_rules",
+      "title": "Rules for Safe Internet Use",
+      "content": "<b>Safe internet use</b> is important to avoid dangers online.<br><br><b>Basic Rules:</b><br>• Never share personal information (address, phone, school) online.<br>• Don’t talk to strangers on the internet.<br>• Ask permission from a parent or teacher before visiting new websites.<br>• Be respectful and kind in online chats.<br>• Report anything that makes you uncomfortable.<br><br><b>Fun Tip:</b> Create a checklist of safe internet habits and follow it every day.<br><br><img src='images/online_safety.png' class='w-64 mt-2 rounded shadow' alt='Online Safety'>"
+    }
+  ]
+
     },
     {
       "id": "coding_basics",
