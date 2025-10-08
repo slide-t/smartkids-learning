@@ -200,36 +200,88 @@
   ]
     },
     {
-      "id": "operating_systems",
-      "title": "Operating Systems",
-      "lessons": [
-        { "id": "os_definition", "title": "What is an Operating System?", "content": "" },
-        { "id": "os_types", "title": "Types of Operating Systems (Windows, Mac, Linux)", "content": "" },
-        { "id": "os_installation", "title": "How to Install an Operating System", "content": "" },
-        { "id": "os_functions", "title": "Functions of an Operating System", "content": "" }
-      ]
+  "id": "operating_systems",
+  "title": "Operating Systems",
+  "lessons": [
+    {
+      "id": "os_definition",
+      "title": "What is an Operating System?",
+      "content": "An <b>Operating System (OS)</b> is software that manages all the hardware and software on a computer. It acts as a bridge between the user and the computer hardware.<br><br><b>Main roles:</b><br>• Controls how the computer's hardware works.<br>• Manages memory, files, and applications.<br>• Provides a user interface so you can interact with the computer.<br><br><b>Examples:</b> Windows, macOS, Linux, Android, iOS.<br><br><img src='images/os_definition.png' class='w-64 mt-2 rounded shadow' alt='Operating System'>"
     },
     {
-      "id": "software",
-      "title": "Computer Software",
-      "lessons": [
-        { "id": "software_definition", "title": "What is Computer Software?", "content": "" },
-        { "id": "software_types", "title": "Types of Software (System, Application, Utility)", "content": "" },
-        { "id": "security_software", "title": "Security Software (Antivirus, Firewalls)", "content": "" },
-        { "id": "productivity_software", "title": "Productivity Software (Office, Browsers, Tools)", "content": "" }
-      ]
+      "id": "os_types",
+      "title": "Types of Operating Systems (Windows, Mac, Linux)",
+      "content": "There are different types of operating systems for different devices and needs.<br><br><b>Main types:</b><br>• <b>Windows:</b> Popular on desktops and laptops, user-friendly with many software options.<br>• <b>Mac (macOS):</b> Used on Apple computers, known for design and reliability.<br>• <b>Linux:</b> Open-source, customizable, used for servers and programming.<br>• <b>Mobile OS:</b> Android and iOS for smartphones and tablets.<br><br>Choosing the right OS depends on the tasks you want to perform and the device you have."
     },
     {
-      "id": "microsoft_office",
-      "title": "Microsoft Office Tools",
-      "lessons": [
-        { "id": "ms_word", "title": "Microsoft Word - Writing and Formatting", "content": "" },
-        { "id": "ms_excel", "title": "Microsoft Excel - Spreadsheets and Charts", "content": "" },
-        { "id": "ms_powerpoint", "title": "Microsoft PowerPoint - Presentations", "content": "" },
-        { "id": "ms_access", "title": "Microsoft Access - Databases", "content": "" },
-        { "id": "ms_outlook", "title": "Microsoft Outlook - Emails and Calendars", "content": "" }
-      ]
+      "id": "os_installation",
+      "title": "How to Install an Operating System",
+      "content": "Installing an OS sets up your computer so it can run programs.<br><br><b>Steps:</b><br>1. Backup important files.<br>2. Insert installation media (USB/DVD) or download OS installer.<br>3. Boot the computer from the installation media.<br>4. Follow on-screen instructions to select language, region, and partition.<br>5. Complete installation and restart the computer.<br><br><b>Tip:</b> Make sure your computer meets the OS requirements and you have a license if needed."
     },
+    {
+      "id": "os_functions",
+      "title": "Functions of an Operating System",
+      "content": "The OS performs many important functions to keep the computer running smoothly.<br><br><b>Main functions:</b><br>• <b>File Management:</b> Organizes files and folders on storage devices.<br>• <b>Memory Management:</b> Allocates RAM to running programs efficiently.<br>• <b>Process Management:</b> Controls the execution of applications and background tasks.<br>• <b>Device Management:</b> Controls hardware like printers, keyboards, and monitors.<br>• <b>User Interface:</b> Provides a graphical interface (GUI) or command-line interface (CLI) for user interaction.<br>• <b>Security:</b> Protects against unauthorized access and malware.<br><br>Understanding these functions helps you use a computer safely and effectively.<br><br><img src='images/os_functions.png' class='w-64 mt-2 rounded shadow' alt='Operating System Functions'>"
+    }
+  ]
+},
+    {
+  "id": "software",
+  "title": "Computer Software",
+  "lessons": [
+    {
+      "id": "software_definition",
+      "title": "What is Computer Software?",
+      "content": "Computer software is a set of instructions that tells a computer what to do. Unlike hardware, software is intangible — you cannot touch it, but it makes the computer useful.<br><br><b>Types of software tasks:</b><br>• Run applications like games, word processors, and web browsers.<br>• Control computer hardware and manage files.<br>• Connect to the internet and communicate with other devices.<br><br><b>Examples:</b> Microsoft Word, Google Chrome, Antivirus programs.<br><br><img src='images/software_definition.png' class='w-64 mt-2 rounded shadow' alt='Computer Software'>"
+    },
+    {
+      "id": "software_types",
+      "title": "Types of Software (System, Application, Utility)",
+      "content": "Software is grouped based on its function:<br><br><b>1. System Software:</b> Helps the computer run and manages hardware (e.g., Operating System, drivers).<br><b>2. Application Software:</b> Programs that perform tasks for users (e.g., Word, Excel, Games, Browsers).<br><b>3. Utility Software:</b> Tools that maintain or protect the computer (e.g., Antivirus, Disk Cleanup, Backup tools).<br><br>Knowing the types of software helps you choose the right tool for a task."
+    },
+    {
+      "id": "security_software",
+      "title": "Security Software (Antivirus, Firewalls)",
+      "content": "Security software protects your computer from viruses, hackers, and unwanted programs.<br><br><b>Common security software:</b><br>• <b>Antivirus:</b> Detects and removes viruses and malware.<br>• <b>Firewall:</b> Blocks unauthorized access to your computer from the internet.<br>• <b>Anti-spyware:</b> Stops programs that try to steal your information.<br><br><b>Tips for safety:</b><br>• Keep software updated.<br>• Scan files regularly.<br>• Avoid downloading files from unknown sources.<br><br><img src='images/security_software.png' class='w-64 mt-2 rounded shadow' alt='Security Software'>"
+    },
+    {
+      "id": "productivity_software",
+      "title": "Productivity Software (Office, Browsers, Tools)",
+      "content": "Productivity software helps you perform tasks efficiently.<br><br><b>Examples:</b><br>• <b>Office suites:</b> Microsoft Office (Word, Excel, PowerPoint) for documents, spreadsheets, and presentations.<br>• <b>Web browsers:</b> Google Chrome, Firefox, Edge to access the internet.<br>• <b>Tools:</b> Calendar apps, note-taking apps, PDF readers.<br><br>Using productivity software improves your ability to complete tasks faster and with better quality.<br><br><img src='images/productivity_software.png' class='w-64 mt-2 rounded shadow' alt='Productivity Software'>"
+    }
+  ]
+},
+    {
+  "id": "microsoft_office",
+  "title": "Microsoft Office Tools",
+  "lessons": [
+    {
+      "id": "ms_word",
+      "title": "Microsoft Word - Writing and Formatting",
+      "content": "Microsoft Word is a word processing program used to create documents like letters, reports, and stories.<br><br><b>Main Features:</b><br>• <b>Typing and Editing:</b> Write, delete, copy, and paste text.<br>• <b>Formatting:</b> Change font type, size, color, bold, italics, underline.<br>• <b>Paragraph Options:</b> Align text, add bullets, numbering, and spacing.<br>• <b>Insert Tools:</b> Add images, tables, charts, headers, and footers.<br><br><b>Tips for Kids:</b><br>• Use spell check to correct mistakes.<br>• Practice formatting titles and paragraphs for neat documents.<br><br><img src='images/ms_word.png' class='w-64 mt-2 rounded shadow' alt='Microsoft Word'>"
+    },
+    {
+      "id": "ms_excel",
+      "title": "Microsoft Excel - Spreadsheets and Charts",
+      "content": "Microsoft Excel is a program to organize, calculate, and visualize data using spreadsheets.<br><br><b>Main Features:</b><br>• <b>Cells:</b> Each box in a spreadsheet where you type data.<br>• <b>Formulas:</b> Perform calculations automatically (e.g., =SUM(A1:A5)).<br>• <b>Charts:</b> Turn data into bar, line, or pie charts for easy understanding.<br>• <b>Formatting:</b> Adjust column widths, colors, borders, and fonts.<br><br><b>Tips for Kids:</b><br>• Practice making a table of your daily activities or scores.<br>• Use simple formulas for addition and averages.<br><br><img src='images/ms_excel.png' class='w-64 mt-2 rounded shadow' alt='Microsoft Excel'>"
+    },
+    {
+      "id": "ms_powerpoint",
+      "title": "Microsoft PowerPoint - Presentations",
+      "content": "Microsoft PowerPoint is used to create slideshows for presentations.<br><br><b>Main Features:</b><br>• <b>Slides:</b> Each page of your presentation.<br>• <b>Text and Images:</b> Add titles, bullet points, pictures, and shapes.<br>• <b>Animations:</b> Make text or images move on slides.<br>• <b>Transitions:</b> Add effects between slides.<br><br><b>Tips for Kids:</b><br>• Keep slides simple and colorful.<br>• Use images to explain ideas instead of too much text.<br><br><img src='images/ms_powerpoint.png' class='w-64 mt-2 rounded shadow' alt='Microsoft PowerPoint'>"
+    },
+    {
+      "id": "ms_access",
+      "title": "Microsoft Access - Databases",
+      "content": "Microsoft Access is used to create and manage databases, which store information in an organized way.<br><br><b>Main Features:</b><br>• <b>Tables:</b> Store data in rows and columns.<br>• <b>Queries:</b> Search and filter information.<br>• <b>Forms:</b> User-friendly screens to enter data.<br>• <b>Reports:</b> Present data neatly for printing or sharing.<br><br><b>Tips for Kids:</b><br>• Start with small databases like a list of your books or classmates.<br>• Practice searching and sorting data to find information easily.<br><br><img src='images/ms_access.png' class='w-64 mt-2 rounded shadow' alt='Microsoft Access'>"
+    },
+    {
+      "id": "ms_outlook",
+      "title": "Microsoft Outlook - Emails and Calendars",
+      "content": "Microsoft Outlook is used to send emails and organize schedules.<br><br><b>Main Features:</b><br>• <b>Email:</b> Write, send, receive, and organize messages.<br>• <b>Calendar:</b> Schedule appointments and set reminders.<br>• <b>Contacts:</b> Store important email addresses and phone numbers.<br>• <b>Tasks:</b> Keep track of homework or project deadlines.<br><br><b>Tips for Kids:</b><br>• Check emails regularly to stay updated.<br>• Use the calendar to plan schoolwork and activities.<br><br><img src='images/ms_outlook.png' class='w-64 mt-2 rounded shadow' alt='Microsoft Outlook'>"
+    }
+  ]
+},
     {
       "id": "internet_and_safety",
       "title": "Internet and Online Safety",
