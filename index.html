@@ -102,13 +102,10 @@
   onclick="toggleAuth()"
   class="ml-4 px-4 py-1.5 border border-blue-600 rounded-full text-blue-600 text-sm font-medium bg-white transition duration-200 ease-in-out hover:bg-blue-50 active:scale-95 active:shadow-[0_0_10px_rgba(59,130,246,0.7)]">
   Sign Up
-</button>
-   
+</button>  
 <!-- Blinking Features Button -->
-<a href="features.html" class="blinking-button">Features</a>
-        
+<a href="features.html" class="blinking-button">Features</a>      
   </div>
-
       <!-- Desktop Menu -->
       <nav class="hidden md:flex items-center gap-6 text-sm">
         <a href="https://slide-t.github.io/smartkids-learning/admin.html" class="block">Admin Only</a>
@@ -129,7 +126,6 @@
       </div>
     </div>
   </div>
-
   <!-- Mobile Menu -->
   <div id="mobile-menu" class="hidden flex-col space-y-3 px-6 py-4 bg-white shadow-md transition-all ease-in-out duration-300">
     <a href="quiz.html" class="block">Ability Test</a>
@@ -138,7 +134,6 @@
     <a href="lessons.html" class="block">Start Lessons</a>
   </div>
 </header>
-
 <!-- Hero Banner -->
 <div class="relative mt-16">
   <!-- Desktop Images (3 rotating) -->
@@ -153,20 +148,17 @@
          alt="SmartKids Team"
          class="hero-image absolute w-full h-[420px] object-cover opacity-0 transition-opacity duration-1000" />
   </div>
-
   <!-- Mobile: Single static image -->
   <div class="lg:hidden">
     <img src="https://raw.githubusercontent.com/slide-t/smartkids-learning/main/Image/smartkids_2.jpg"
          alt="SmartKids Learning Mobile"
          class="w-full h-[300px] object-cover shadow-md" />
   </div>
-
   <!-- Overlay Content -->
   <div class="absolute inset-0 bg-gradient-to-r from-blue-900/60 to-sky-700/30 flex flex-col justify-center items-start px-6 lg:px-24">
     <h1 class="text-3xl lg:text-5xl font-extrabold text-white mb-6 drop-shadow-lg">
       Welcome to SmartKids Learning
     </h1>
-
     <!-- Rotating Captions -->
     <div class="text-lg lg:text-xl font-semibold h-8 relative overflow-hidden">
       <span class="caption-text absolute text-blue-200 opacity-100 transition-opacity duration-1000">
@@ -179,7 +171,6 @@
         Building Tech Skills and Confidence for the Digital World.
       </span>
     </div>
-
     <a href="lessons.html" 
        class="mt-8 lg:mt-10 inline-block bg-white text-blue-600 font-semibold px-6 py-3 rounded-full hover:bg-blue-50 transition shadow-lg">
       🚀 Start Learning Now
@@ -225,77 +216,11 @@
     }, fadeDuration + displayDuration);
   });
 </script>
-
-
-  
-<!-- Desktop Hero Banner Old--
-  <div class="hidden lg:block relative mt-16">
-  <img src="https://raw.githubusercontent.com/slide-t/smartkids-learning/main/Image/smartkids_coding.jpg" 
-       alt="SmartKids Learning Banner"
-       class="w-full h-[420px] object-cover shadow-md" />
-       
-  <div class="absolute inset-0 bg-gradient-to-r from-blue-900/60 to-sky-700/30 flex flex-col justify-center items-start px-24">
-    <h1 class="text-5xl font-extrabold text-white mb-6 drop-shadow-lg">
-      Welcome to SmartKids Learning
-    </h1>
-
-    <!-- Rotating Captions --
-    <div class="text-xl font-semibold h-8 relative overflow-hidden">
-      <span class="caption-text absolute text-blue-200 opacity-100 transition-opacity duration-1000">
-        Inspiring young minds through fun computer literacy and coding lessons.
-      </span>
-      <span class="caption-text absolute text-yellow-200 opacity-0 transition-opacity duration-1000">
-        Test of Knowledge and Fun Learning for Future Innovators.
-      </span>
-      <span class="caption-text absolute text-pink-200 opacity-0 transition-opacity duration-1000">
-        Building Tech Skills and Confidence for the Digital World.
-      </span>
-    </div>
-
-    <a href="lessons.html" 
-       class="mt-10 inline-block bg-white text-blue-600 font-semibold px-6 py-3 rounded-full hover:bg-blue-50 transition shadow-lg">
-      🚀 Start Learning Now
-    </a>
-  </div>
-</div>
-
-<!-- Rotating Caption Script --
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const captions = document.querySelectorAll(".caption-text");
-    let index = 0;
-    const fadeDuration = 1000; // 1 second
-    const displayDuration = 3000; // visible for 3 seconds
-
-    // Initial state
-    captions.forEach((caption, i) => {
-      caption.style.opacity = i === 0 ? 1 : 0;
-      caption.style.transition = `opacity ${fadeDuration}ms ease`;
-    });
-
-    setInterval(() => {
-      const current = captions[index];
-      const nextIndex = (index + 1) % captions.length;
-      const next = captions[nextIndex];
-
-      // Fade out current
-      current.style.opacity = 0;
-
-      // Fade in next
-      setTimeout(() => {
-        next.style.opacity = 1;
-      }, fadeDuration / 2);
-
-      index = nextIndex;
-    }, fadeDuration + displayDuration);
-  });
-</script>
  <!-- Hero Section -->
   <main class="pt-28">
     <!-- Keep your hero and other sections as before -->
   </main>
 <!-- About Smart Learning Kids Section -->
-<!--<section class="py-12 px-6 max-w-5xl mx-auto" id="about">-->
   <section class="mt-24 py-12 px-6 max-w-5xl mx-auto" id="about">
   <h2 class="text-3xl md:text-4xl font-bold text-center mb-6">About SmartKids Learning</h2>
   <p class="text-lg md:text-xl text-gray-700 leading-relaxed text-justify mb-8">
