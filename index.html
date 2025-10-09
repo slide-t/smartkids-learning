@@ -112,7 +112,7 @@
       <!-- Desktop Menu -->
       <nav class="hidden md:flex items-center gap-6 text-sm">
         <a href="https://slide-t.github.io/smartkids-learning/admin.html" class="block">Admin Only</a>
-        <a href="about.html" class="hover:underline">About</a>
+        <a href="#about" class="hover:underline">About</a>
         
       </nav>
 
@@ -201,65 +201,7 @@
     }, fadeDuration + displayDuration);
   });
 </script>
-
-<!-- Desktop Hero Banner --
-<div class="hidden lg:block relative mt-16">
-  <img src="https://raw.githubusercontent.com/slide-t/smartkids-learning/main/Image/smartkids_coding.jpg" 
-       alt="SmartKids Learning Banner"
-       class="w-full h-[420px] object-cover shadow-md" />
-       
-  <div class="absolute inset-0 bg-gradient-to-r from-blue-900/60 to-sky-700/30 flex flex-col justify-center items-start px-24">
-    <h1 class="text-5xl font-extrabold text-white mb-6 drop-shadow-lg">
-      Welcome to SmartKids Learning
-    </h1>
-
-    <!-- Rotating Captions --
-    <div class="text-xl text-blue-50 font-medium h-8 relative overflow-hidden">
-      <span class="caption-text absolute opacity-100 transition-opacity duration-1000">Inspiring young minds through fun computer literacy and coding lessons.</span>
-      <span class="caption-text absolute opacity-0 transition-opacity duration-1000">Test of Knowledge and Fun Learning for Future Innovators.</span>
-      <span class="caption-text absolute opacity-0 transition-opacity duration-1000">Building Tech Skills and Confidence for the Digital World.</span>
-    </div>
-
-    <a href="lessons.html" 
-       class="mt-10 inline-block bg-white text-blue-600 font-semibold px-6 py-3 rounded-full hover:bg-blue-50 transition shadow-lg">
-      🚀 Start Learning Now
-    </a>
-  </div>
-</div>
-
-<!-- Rotating Caption Script --
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const captions = document.querySelectorAll(".caption-text");
-    let index = 0;
-    const fadeDuration = 1000; // 1 second
-    const displayDuration = 3000; // visible for 3 seconds
-
-    // Ensure only the first caption is visible
-    captions.forEach((caption, i) => {
-      caption.style.opacity = i === 0 ? 1 : 0;
-    });
-
-    setInterval(() => {
-      const current = captions[index];
-      const next = captions[(index + 1) % captions.length];
-
-      // Fade out current caption
-      current.style.transition = `opacity ${fadeDuration}ms ease`;
-      current.style.opacity = 0;
-
-      // Fade in next caption after fadeDuration
-      setTimeout(() => {
-        next.style.transition = `opacity ${fadeDuration}ms ease`;
-        next.style.opacity = 1;
-      }, fadeDuration);
-
-      index = (index + 1) % captions.length;
-    }, fadeDuration + displayDuration);
-  });
-</script>-->
-  
-  <!-- Hero Section -->
+ <!-- Hero Section -->
   <main class="pt-28">
     <!-- Keep your hero and other sections as before -->
   </main>
