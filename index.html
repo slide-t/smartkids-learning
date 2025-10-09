@@ -134,9 +134,54 @@
     <a href="lessons.html" class="block">Start Lessons</a>
   </div>
 </header>
+
 <!-- Hero Banner -->
 <div class="relative mt-16">
-  <!-- Desktop Images (3 rotating) -->
+  <!-- Responsive Hero Images -->
+  <div class="relative w-full">
+    <img src="https://raw.githubusercontent.com/slide-t/smartkids-learning/main/Image/smartkids_coding.jpg"
+         alt="SmartKids Coding"
+         class="hero-image absolute w-full h-full object-cover opacity-100 transition-opacity duration-1000" />
+    <img src="https://raw.githubusercontent.com/slide-t/smartkids-learning/main/Image/smartkids_2.jpg"
+         alt="SmartKids Learning"
+         class="hero-image absolute w-full h-full object-cover opacity-0 transition-opacity duration-1000" />
+    <img src="https://raw.githubusercontent.com/slide-t/smartkids-learning/main/Image/smartkids_1.jpg"
+         alt="SmartKids Team"
+         class="hero-image absolute w-full h-full object-cover opacity-0 transition-opacity duration-1000" />
+    
+    <!-- Set height dynamically -->
+    <div class="aspect-[16/9] sm:aspect-[5/2] md:aspect-[3/1] lg:aspect-[21/9]"></div>
+  </div>
+
+  <!-- Overlay Content -->
+  <div class="absolute inset-0 bg-gradient-to-r from-blue-900/60 to-sky-700/30 flex flex-col justify-center items-start px-6 lg:px-24">
+    <h1 class="text-3xl lg:text-5xl font-extrabold text-white mb-6 drop-shadow-lg">
+      Welcome to SmartKids Learning
+    </h1>
+
+    <!-- Rotating Captions -->
+    <div class="text-lg lg:text-xl font-semibold h-8 relative overflow-hidden">
+      <span class="caption-text absolute text-blue-200 opacity-100 transition-opacity duration-1000">
+        Inspiring young minds through fun computer literacy and coding lessons.
+      </span>
+      <span class="caption-text absolute text-yellow-200 opacity-0 transition-opacity duration-1000">
+        Test of Knowledge and Fun Learning for Future Innovators.
+      </span>
+      <span class="caption-text absolute text-pink-200 opacity-0 transition-opacity duration-1000">
+        Building Tech Skills and Confidence for the Digital World.
+      </span>
+    </div>
+
+    <a href="lessons.html" 
+       class="mt-8 lg:mt-10 inline-block bg-white text-blue-600 font-semibold px-6 py-3 rounded-full hover:bg-blue-50 transition shadow-lg">
+      🚀 Start Learning Now
+    </a>
+  </div>
+</div>
+  
+<!-- Hero Banner --
+<div class="relative mt-16">
+  <!-- Desktop Images (3 rotating) --
   <div class="hidden lg:block relative">
     <img src="https://raw.githubusercontent.com/slide-t/smartkids-learning/main/Image/smartkids_coding.jpg" 
          alt="SmartKids Coding"
@@ -148,18 +193,18 @@
          alt="SmartKids Team"
          class="hero-image absolute w-full h-[420px] object-cover opacity-0 transition-opacity duration-1000" />
   </div>
-  <!-- Mobile: Single static image -->
+  <!-- Mobile: Single static image --
   <div class="lg:hidden">
     <img src="https://raw.githubusercontent.com/slide-t/smartkids-learning/main/Image/smartkids_2.jpg"
          alt="SmartKids Learning Mobile"
          class="w-full h-[300px] object-cover shadow-md" />
   </div>
-  <!-- Overlay Content -->
+  <!-- Overlay Content --
   <div class="absolute inset-0 bg-gradient-to-r from-blue-900/60 to-sky-700/30 flex flex-col justify-center items-start px-6 lg:px-24">
     <h1 class="text-3xl lg:text-5xl font-extrabold text-white mb-6 drop-shadow-lg">
       Welcome to SmartKids Learning
     </h1>
-    <!-- Rotating Captions -->
+    <!-- Rotating Captions --
     <div class="text-lg lg:text-xl font-semibold h-8 relative overflow-hidden">
       <span class="caption-text absolute text-blue-200 opacity-100 transition-opacity duration-1000">
         Inspiring young minds through fun computer literacy and coding lessons.
@@ -221,7 +266,8 @@
     <!-- Keep your hero and other sections as before -->
   </main>
 <!-- About Smart Learning Kids Section -->
-  <section class="mt-24 py-12 px-6 max-w-5xl mx-auto" id="about">
+  <!--<section class="mt-24 py-12 px-6 max-w-5xl mx-auto" id="about">-->
+  <section class="mt-10 sm:mt-14 md:mt-16 lg:mt-20 xl:mt-24 py-12 px-6 max-w-5xl mx-auto relative z-10" id="about">
   <h2 class="text-3xl md:text-4xl font-bold text-center mb-6">About SmartKids Learning</h2>
   <p class="text-lg md:text-xl text-gray-700 leading-relaxed text-justify mb-8">
     SmartKids Learning is a modern learning platform designed for children in primary and secondary schools. 
