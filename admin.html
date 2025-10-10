@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SmartKids Learning - Admin Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- SheetJS for Excel export -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
-  <!-- jsPDF for PDF export -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="bg-gray-100 font-sans">
@@ -44,11 +43,9 @@
     </div>
   </nav>
 
-  <!-- Records Section -->
+  <!-- Student Records -->
   <section class="container mx-auto p-6">
     <h2 class="text-2xl font-bold mb-4">Student Records</h2>
-
-    <!-- Search by School -->
     <div class="mb-4 flex space-x-2">
       <input type="text" id="searchSchool" placeholder="Search by School Name" class="border p-2 rounded w-1/2">
       <button id="searchBtn" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Search</button>
@@ -71,74 +68,28 @@
     </table>
 
     <div class="mt-4 flex space-x-4">
-      <button id="exportExcel" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Export to Excel</button>
-      <button id="exportPdf" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Export to PDF</button>
+      <button id="exportExcelRecords" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Export to Excel</button>
+      <button id="exportPdfRecords" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Export to PDF</button>
     </div>
   </section>
-<div class="mt-10">
-  <h2 class="text-2xl font-bold mb-4">Practice Analytics</h2>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <!-- Daily Chart -->
-    <div class="bg-white p-4 rounded shadow">
-      <h3 class="text-lg font-semibold mb-2">Daily Activity</h3>
-      <canvas id="dailyChart" height="200"></canvas>
-    </div>
 
-    <!-- Weekly Chart -->
-    <div class="bg-white p-4 rounded shadow">
-      <h3 class="text-lg font-semibold mb-2">Weekly Activity</h3>
-      <canvas id="weeklyChart" height="200"></canvas>
+  <!-- Practice Analytics -->
+  <div class="container mx-auto p-6 mt-10">
+    <h2 class="text-2xl font-bold mb-4">Practice Analytics</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="bg-white p-4 rounded shadow">
+        <h3 class="text-lg font-semibold mb-2">Daily Activity</h3>
+        <canvas id="dailyChart" height="200"></canvas>
+      </div>
+      <div class="bg-white p-4 rounded shadow">
+        <h3 class="text-lg font-semibold mb-2">Weekly Activity</h3>
+        <canvas id="weeklyChart" height="200"></canvas>
+      </div>
     </div>
   </div>
-</div>
-<script>
-  let db;
-  const DB_NAME = "SmartKidsDB";
-  const STORE_NAME = "students";
 
-  // Open IndexedDB
-  function openDB() {
-    const request = indexedDB.open(DB_NAME, 1);
-    request.onupgradeneeded = (event) => {
-      db = event.target.result;
-      if (!db.objectStoreNames.contains(STORE_NAME)) {
-        db.createObjectStore(STORE_NAME, { keyPath: "id", autoIncrement: true });
-      }
-    };
-
-   // ===== FETCH ALL REGISTERED USERS FROM AUTH.JS =====
-function fetchRegisteredUsers() {
-  const request = indexedDB.open("SmartKidsDB", 2); // same version as auth.js
-
-  request.onsuccess = (event) => {
-    const db = event.target.result;
-    const tx = db.transaction("users", "readonly");
-    const store = tx.objectStore("users");
-    const req = store.getAll();
-
-    req.onsuccess = (e) => {
-      const users = e.target.result || [];
-      displayRegisteredUsers(users);
-    };
-  };
-
-  request.onerror = (event) => {
-    console.error("Failed to read registered users:", event.target.errorCode);
-  };
-}
-
-// ===== DISPLAY USERS ON DASHBOARD =====
-function displayRegisteredUsers(users) {
-  // Create a new section for user registrations if not already present
-  let section = document.getElementById("registeredUsersSection");
-  if (!section) {
-    section = document.createElement("section");
-    section.id = "registeredUsersSection";
-    section.className = "container mx-auto p-6 mt-10";
-    document.body.appendChild(section);
-  }
-
-  section.innerHTML = `
+  <!-- Registered Pupils Section -->
+  <section id="registeredUsersSection" class="container mx-auto p-6 mt-10 hidden">
     <h2 class="text-2xl font-bold mb-4">Registered Pupils / Kids</h2>
     <table class="w-full bg-white rounded shadow" id="registeredUsersTable">
       <thead class="bg-gray-200">
@@ -150,192 +101,156 @@ function displayRegisteredUsers(users) {
       </thead>
       <tbody></tbody>
     </table>
-  `;
 
-  const tbody = section.querySelector("tbody");
-  tbody.innerHTML = "";
+    <div class="mt-4 flex space-x-4">
+      <button id="exportExcelUsers" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Export to Excel</button>
+      <button id="exportPdfUsers" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Export to PDF</button>
+    </div>
+  </section>
 
-  if (users.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="3" class="text-center p-3 text-gray-500">No registrations found</td></tr>`;
-    return;
-  }
+  <script>
+    let db;
+    const DB_NAME = "SmartKidsDB";
+    const STORE_NAME = "students";
 
-  users
-    .sort((a, b) => a.fullName.localeCompare(b.fullName))
-    .forEach((u) => {
-      const date = new Date(u.timestamp).toLocaleString();
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td class="p-2">${u.fullName}</td>
-        <td class="p-2">${u.email || "-"}</td>
-        <td class="p-2">${date}</td>
-      `;
-      tbody.appendChild(tr);
-    });
-} 
-    request.onsuccess = (event) => {
-      db = event.target.result;
-      fetchRecords();
-      // Auto-refresh every 30s
-      setInterval(() => fetchRecords(), 30000);
-    };
-    request.onerror = () => {
-      console.error("❌ IndexedDB error");
-    };
-  }
+    // ===== OPEN MAIN DATABASE =====
+    function openDB() {
+      const request = indexedDB.open(DB_NAME, 1);
+      request.onupgradeneeded = (event) => {
+        db = event.target.result;
+        if (!db.objectStoreNames.contains(STORE_NAME)) {
+          db.createObjectStore(STORE_NAME, { keyPath: "id", autoIncrement: true });
+        }
+      };
+      request.onsuccess = (event) => {
+        db = event.target.result;
+        fetchRecords();
+        setInterval(fetchRecords, 30000);
+      };
+      request.onerror = () => console.error("❌ IndexedDB error");
+    }
 
-  if (username === "smartkids" && password === "myNias9ja#") {
-  document.getElementById("loginModal").classList.add("hidden");
-  openDB();
-  fetchRegisteredUsers(); // <-- add this line
-}
-  // Fetch all student records
-  function fetchRecords(filterSchool = "") {
-    const transaction = db.transaction(STORE_NAME, "readonly");
-    const store = transaction.objectStore(STORE_NAME);
-    const request = store.getAll();
-    request.onsuccess = () => {
-      let records = request.result;
+    // ===== FETCH STUDENT RECORDS =====
+    function fetchRecords(filterSchool = "") {
+      const transaction = db.transaction(STORE_NAME, "readonly");
+      const store = transaction.objectStore(STORE_NAME);
+      const request = store.getAll();
 
-      // Sort by fullName (alphabetical)
-      records.sort((a, b) => a.fullName.localeCompare(b.fullName));
+      request.onsuccess = () => {
+        const records = request.result || [];
+        records.sort((a, b) => a.fullName.localeCompare(b.fullName));
+        displayRecords(records, filterSchool);
+      };
+    }
 
-      displayRecords(records, filterSchool);
-      displayAnalytics(records);
-    };
-  }
+    // ===== DISPLAY STUDENT RECORDS =====
+    function displayRecords(records, filterSchool) {
+      const tbody = document.querySelector("#recordsTable tbody");
+      tbody.innerHTML = "";
 
-  // Display records in table
-  function displayRecords(records, filterSchool) {
-    const tbody = document.querySelector("#recordsTable tbody");
-    tbody.innerHTML = "";
+      const filtered = records.filter(r => !filterSchool || r.schoolName.toLowerCase().includes(filterSchool.toLowerCase()));
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="text-center p-3 text-gray-500">No records found</td></tr>`;
+        return;
+      }
 
-    records
-      .filter(r => !filterSchool || r.schoolName.toLowerCase().includes(filterSchool.toLowerCase()))
-      .forEach(record => {
+      filtered.forEach(r => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td class="p-2">${record.fullName}</td>
-          <td class="p-2">${record.className}</td>
-          <td class="p-2">${record.subject}</td>
-          <td class="p-2">${record.session}</td>
-          <td class="p-2">${record.term}</td>
-          <td class="p-2">${record.schoolName}</td>
-          <td class="p-2">${record.location || "-"}</td>
-          <td class="p-2">${record.country || "-"}</td>
+          <td class="p-2">${r.fullName}</td>
+          <td class="p-2">${r.className}</td>
+          <td class="p-2">${r.subject}</td>
+          <td class="p-2">${r.session}</td>
+          <td class="p-2">${r.term}</td>
+          <td class="p-2">${r.schoolName}</td>
+          <td class="p-2">${r.location || "-"}</td>
+          <td class="p-2">${r.country || "-"}</td>
         `;
         tbody.appendChild(tr);
       });
-  }
-
-  // ===== Display per-school analytics =====
-  function displayAnalytics(records) {
-    const analyticsDiv = document.getElementById("analytics");
-    analyticsDiv.innerHTML = "";
-
-    if (records.length === 0) {
-      analyticsDiv.innerHTML = "<p class='text-gray-500'>No records available.</p>";
-      return;
     }
 
-    // Count students per school
-    const schoolCounts = {};
-    records.forEach(r => {
-      if (r.schoolName) {
-        schoolCounts[r.schoolName] = (schoolCounts[r.schoolName] || 0) + 1;
+    // ===== FETCH REGISTERED USERS =====
+    function fetchRegisteredUsers() {
+      const request = indexedDB.open(DB_NAME, 2);
+      request.onsuccess = (event) => {
+        const db = event.target.result;
+        if (!db.objectStoreNames.contains("users")) {
+          console.warn("No 'users' store found in SmartKidsDB.");
+          return;
+        }
+        const tx = db.transaction("users", "readonly");
+        const store = tx.objectStore("users");
+        const req = store.getAll();
+        req.onsuccess = (e) => displayRegisteredUsers(e.target.result || []);
+      };
+    }
+
+    // ===== DISPLAY REGISTERED USERS =====
+    function displayRegisteredUsers(users) {
+      const section = document.getElementById("registeredUsersSection");
+      const tbody = document.querySelector("#registeredUsersTable tbody");
+      section.classList.remove("hidden");
+      tbody.innerHTML = "";
+
+      if (users.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="3" class="text-center p-3 text-gray-500">No registrations found</td></tr>`;
+        return;
+      }
+
+      users.sort((a, b) => a.fullName.localeCompare(b.fullName));
+      users.forEach(u => {
+        const tr = document.createElement("tr");
+        const date = new Date(u.timestamp).toLocaleString();
+        tr.innerHTML = `
+          <td class="p-2">${u.fullName}</td>
+          <td class="p-2">${u.email || "-"}</td>
+          <td class="p-2">${date}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // ===== EXPORT FUNCTIONS =====
+    function exportTableToExcel(tableId, filename) {
+      const table = document.getElementById(tableId);
+      const wb = XLSX.utils.book_new();
+      const ws = XLSX.utils.table_to_sheet(table);
+      XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+      XLSX.writeFile(wb, filename + ".xlsx");
+    }
+
+    function exportTableToPDF(tableId, filename) {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.autoTable({ html: "#" + tableId });
+      doc.save(filename + ".pdf");
+    }
+
+    // ===== EVENT LISTENERS =====
+    document.getElementById("searchBtn").addEventListener("click", () => {
+      const school = document.getElementById("searchSchool").value;
+      fetchRecords(school);
+    });
+    document.getElementById("exportExcelRecords").addEventListener("click", () => exportTableToExcel("recordsTable", "SmartKids_Records"));
+    document.getElementById("exportPdfRecords").addEventListener("click", () => exportTableToPDF("recordsTable", "SmartKids_Records"));
+    document.getElementById("exportExcelUsers").addEventListener("click", () => exportTableToExcel("registeredUsersTable", "SmartKids_Registered"));
+    document.getElementById("exportPdfUsers").addEventListener("click", () => exportTableToPDF("registeredUsersTable", "SmartKids_Registered"));
+
+    // ===== ADMIN LOGIN =====
+    document.getElementById("loginForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const username = document.getElementById("adminUsername").value;
+      const password = document.getElementById("adminPassword").value;
+
+      if (username === "smartkids" && password === "myNias9ja#") {
+        document.getElementById("loginModal").classList.add("hidden");
+        openDB();
+        fetchRegisteredUsers();
+      } else {
+        document.getElementById("loginError").classList.remove("hidden");
       }
     });
-
-    // Create a summary list
-    const ul = document.createElement("ul");
-    ul.classList.add("list-disc", "ml-5");
-    for (const [school, count] of Object.entries(schoolCounts)) {
-      const li = document.createElement("li");
-      li.textContent = `${school}: ${count} student(s)`;
-      ul.appendChild(li);
-    }
-
-    analyticsDiv.innerHTML = "<h3 class='font-bold mb-2'>📊 Students Per School</h3>";
-    analyticsDiv.appendChild(ul);
-  }
-
-  // ===== EXPORT EXCEL =====
-  function exportToExcel() {
-    const table = document.getElementById("recordsTable");
-    const wb = XLSX.utils.book_new();
-
-    const rows = [];
-    table.querySelectorAll("tbody tr").forEach(tr => {
-      if (tr.style.display !== "none") {
-        const cells = Array.from(tr.querySelectorAll("td")).map(td => td.innerText);
-        rows.push(cells);
-      }
-    });
-
-    if (rows.length === 0) {
-      alert("⚠️ No records to export!");
-      return;
-    }
-
-    const headers = Array.from(table.querySelectorAll("thead th")).map(th => th.innerText);
-    const ws = XLSX.utils.aoa_to_sheet([headers, ...rows]);
-
-    XLSX.utils.book_append_sheet(wb, ws, "Students");
-    XLSX.writeFile(wb, "SmartKids_Records.xlsx");
-  }
-
-  // ===== EXPORT PDF =====
-  function exportToPDF() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-
-    const table = document.getElementById("recordsTable");
-    const headers = Array.from(table.querySelectorAll("thead th")).map(th => th.innerText);
-    const rows = [];
-
-    table.querySelectorAll("tbody tr").forEach(tr => {
-      if (tr.style.display !== "none") {
-        const cells = Array.from(tr.querySelectorAll("td")).map(td => td.innerText);
-        rows.push(cells);
-      }
-    });
-
-    if (rows.length === 0) {
-      alert("⚠️ No records to export!");
-      return;
-    }
-
-    doc.autoTable({
-      head: [headers],
-      body: rows,
-    });
-
-    doc.save("SmartKids_Records.pdf");
-  }
-
-  // ===== Event Listeners =====
-  document.getElementById("searchBtn").addEventListener("click", () => {
-    const school = document.getElementById("searchSchool").value;
-    fetchRecords(school);
-  });
-
-  document.getElementById("exportExcel").addEventListener("click", exportToExcel);
-  document.getElementById("exportPdf").addEventListener("click", exportToPDF);
-
-  // ===== Admin Login =====
-  document.getElementById("loginForm").addEventListener("submit", (e) => {
-    e.preventDefault();
-    const username = document.getElementById("adminUsername").value;
-    const password = document.getElementById("adminPassword").value;
-
-    if (username === "smartkids" && password === "myNias9ja#") {
-      document.getElementById("loginModal").classList.add("hidden");
-      openDB();
-    } else {
-      document.getElementById("loginError").classList.remove("hidden");
-    }
-  });
-</script>
-  
+  </script>
 </body>
 </html>
