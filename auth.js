@@ -1,4 +1,4 @@
-/* ========= AUTH.JS (Updated and Conflict-Safe) ========= */
+/* ========= AUTH.JS (Final Integrated Version) ========= */
 
 // IndexedDB setup for multiple users
 let db;
@@ -17,82 +17,99 @@ openDB.onupgradeneeded = (event) => {
 openDB.onsuccess = (event) => (db = event.target.result);
 openDB.onerror = (event) => console.error("IndexedDB error:", event.target.errorCode);
 
-// ✅ Utility for adding or updating user
-function saveUser(user) {
-  const tx = db.transaction(storeName, "readwrite");
-  const store = tx.objectStore(storeName);
-  store.put(user);
-}
+/* ========= SIGN UP / LOGIN HANDLING ========= */
 
-// ✅ Utility for getting a user
-function getUser(username, callback) {
-  const tx = db.transaction(storeName, "readonly");
-  const store = tx.objectStore(storeName);
-  const req = store.get(username);
-  req.onsuccess = () => callback(req.result);
-}
-
-// ✅ Registration
-document.getElementById("registerBtn")?.addEventListener("click", () => {
-  const username = document.getElementById("regUsername").value.trim();
-  const email = document.getElementById("regEmail").value.trim();
-  const password = document.getElementById("regPassword").value.trim();
-  const schoolName = document.getElementById("regSchoolName").value.trim();
-
-  if (!username || !email || !password || !schoolName)
-    return alert("Please fill all fields.");
-
-  if (!email.includes("@") || !email.includes(".")) {
-    return alert("Enter a valid school email address.");
+// ✅ Open registration modal when “Sign Up” button beside logo is clicked
+function toggleAuth() {
+  const modal = document.getElementById("registrationModal");
+  if (modal.classList.contains("hidden")) {
+    modal.classList.remove("hidden");
+  } else {
+    modal.classList.add("hidden");
   }
+}
 
-  const user = { username, email, password, schoolName, createdAt: new Date().toISOString() };
-  saveUser(user);
-  localStorage.setItem("activeUser", JSON.stringify(user));
-  showUserBadge(username, schoolName);
-  closeModal("registrationModal");
-
-  // Placeholder for future server sync
-  syncToServer(user);
+// ✅ Close modal via “×” button
+document.getElementById("closeRegistration")?.addEventListener("click", () => {
+  document.getElementById("registrationModal").classList.add("hidden");
 });
 
-// ✅ Login
-document.getElementById("loginBtn")?.addEventListener("click", () => {
-  const username = document.getElementById("loginUsername").value.trim();
-  const password = document.getElementById("loginPassword").value.trim();
+// ✅ Handle registration form submission
+const registrationForm = document.getElementById("registrationForm");
+if (registrationForm) {
+  registrationForm.addEventListener("submit", (e) => {
+    e.preventDefault();
 
-  if (!username || !password)
-    return alert("Please enter username and password.");
+    const name = registrationForm.name.value.trim();
+    const email = registrationForm.email.value.trim();
+    const age = registrationForm.age.value.trim();
+    const className = registrationForm.class.value.trim();
+    const schoolName = registrationForm.schoolName.value.trim();
+    const location = registrationForm.location.value.trim();
+    const country = registrationForm.country.value.trim();
 
-  getUser(username, (user) => {
-    if (!user || user.password !== password)
-      return alert("Invalid username or password.");
+    // Basic validation
+    if (!name || !email || !age || !className || !schoolName || !location || !country) {
+      alert("Please fill in all fields.");
+      return;
+    }
+
+    // Email validation — must be a school email (simple rule)
+    if (!email.endsWith(".edu.ng") && !email.endsWith(".school.ng")) {
+      alert("Please use your official school email address.");
+      return;
+    }
+
+    // User object
+    const user = {
+      username: name,
+      email,
+      age,
+      className,
+      schoolName,
+      location,
+      country,
+      createdAt: new Date().toISOString(),
+    };
+
+    const tx = db.transaction(storeName, "readwrite");
+    const store = tx.objectStore(storeName);
+    store.put(user);
 
     localStorage.setItem("activeUser", JSON.stringify(user));
-    showUserBadge(user.username, user.schoolName);
-    closeModal("loginModal");
+
+    document.getElementById("successMsg").classList.remove("hidden");
+    setTimeout(() => {
+      document.getElementById("registrationModal").classList.add("hidden");
+      document.getElementById("successMsg").classList.add("hidden");
+      showUserBadge(name, schoolName);
+    }, 1200);
+
+    syncToServer(user);
   });
-});
+}
 
-// ✅ Logout
-document.getElementById("logoutBtn")?.addEventListener("click", () => {
-  localStorage.removeItem("activeUser");
-  hideUserBadge();
-});
-
-// ✅ Auto show badge if logged in
+// ✅ Auto-show username badge if logged in
 window.addEventListener("load", () => {
   const activeUser = JSON.parse(localStorage.getItem("activeUser"));
   if (activeUser) showUserBadge(activeUser.username, activeUser.schoolName);
 });
 
-// ✅ Slide-in badge
+// ✅ Logout handler
+document.getElementById("logoutBtn")?.addEventListener("click", () => {
+  localStorage.removeItem("activeUser");
+  hideUserBadge();
+});
+
+/* ========= SLIDE-IN USER BADGE ========= */
+
 function showUserBadge(username, schoolName) {
   let badge = document.getElementById("userBadge");
   if (!badge) {
     badge = document.createElement("div");
     badge.id = "userBadge";
-    badge.className = "fixed top-20 left-0 bg-blue-600 text-white px-4 py-2 rounded-r-2xl shadow-lg transform -translate-x-full transition-transform duration-500 z-50";
+    badge.className =
+      "fixed top-20 left-0 bg-blue-600 text-white px-4 py-2 rounded-r-2xl shadow-lg transform -translate-x-full transition-transform duration-500 z-50";
     document.body.appendChild(badge);
   }
 
@@ -106,15 +123,8 @@ function hideUserBadge() {
   if (badge) badge.classList.add("-translate-x-full");
 }
 
-// ✅ Helper to close modal
-function closeModal(id) {
-  const modal = document.getElementById(id);
-  if (modal) modal.classList.add("hidden");
-}
-
-// ✅ Placeholder for syncing data to server.js (later)
+/* ========= FUTURE SERVER INTEGRATION ========= */
 function syncToServer(user) {
-  // Future expansion point:
-  // fetch('/api/register', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(user) });
-  console.log("Prepared for server sync:", user);
+  // Placeholder for connection with server.js later
+  console.log("Prepared to sync with server:", user);
 }
