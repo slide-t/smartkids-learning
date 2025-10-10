@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmartKids Learning - Admin Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
+</head>
+
+<body class="bg-gray-100 font-sans min-h-screen">
+
+  <!-- ===== ADMIN LOGIN MODAL ===== -->
+  <div id="loginModal" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg shadow-lg p-8 w-96 text-center">
+      <h2 class="text-2xl font-bold mb-6 text-blue-700">SmartKids Admin Login</h2>
+
+      <div class="space-y-4">
+        <input id="adminUser" type="text" placeholder="Username" class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500" />
+        <input id="adminPass" type="password" placeholder="Password" class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500" />
+        <button id="loginBtn" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">Login</button>
+      </div>
+
+      <p id="loginError" class="text-red-500 text-sm mt-3 hidden">Invalid admin credentials!</p>
+    </div>
+  </div>
+
+  <!-- ===== DASHBOARD CONTENT ===== -->
+  <div id="dashboard" class="hidden">
+    <!-- Navbar -->
+    <nav class="bg-blue-600 text-white p-4 shadow flex justify-between items-center">
+      <h1 class="text-xl font-bold">SmartKids Admin Dashboard</h1>
+      <div class="flex items-center space-x-4">
+        <button id="logoutBtn" class="bg-red-500 px-4 py-2 rounded hover:bg-red-600 transition">Logout</button>
+      </div>
+    </nav>
+
+    <!-- Records Section -->
+    <section class="container mx-auto p-6">
+      <h2 class="text-2xl font-bold mb-4 text-gray-800">Registered Pupils</h2>
+
+      <!-- Search -->
+      <div class="mb-4 flex space-x-2">
+        <input id="searchInput" type="text" placeholder="Search by Name or School" class="border p-2 rounded w-1/2 focus:ring-2 focus:ring-blue-400" />
+        <button id="searchBtn" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition">Search</button>
+      </div>
+
+      <!-- Pupils Table -->
+      <div class="overflow-x-auto bg-white rounded shadow">
+        <table id="usersTable" class="min-w-full text-sm">
+          <thead class="bg-gray-200 text-gray-700">
+            <tr>
+              <th class="p-3 text-left">Full Name</th>
+              <th class="p-3 text-left">Email</th>
+              <th class="p-3 text-left">Age</th>
+              <th class="p-3 text-left">Class</th>
+              <th class="p-3 text-left">School</th>
+              <th class="p-3 text-left">Location</th>
+              <th class="p-3 text-left">Country</th>
+              <th class="p-3 text-left">Date Registered</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <!-- Export Buttons -->
+      <div class="mt-5 flex space-x-4">
+        <button id="exportExcel" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition">Export Excel</button>
+        <button id="exportPDF" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition">Export PDF</button>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const DB_NAME = "SmartKidsDB";
+    const STORE_NAME = "users";
+    let db;
+
+    // ===== OPEN DB =====
+    function openDB(callback) {
+      const request = indexedDB.open(DB_NAME, 2);
+      request.onsuccess = (e) => {
+        db = e.target.result;
+        callback();
+      };
+      request.onerror = () => console.error("❌ Failed to open DB");
+    }
+
+    // ===== FETCH USERS =====
+    function fetchUsers(filter = "") {
+      const tx = db.transaction(STORE_NAME, "readonly");
+      const store = tx.objectStore(STORE_NAME);
+      const req = store.getAll();
+
+      req.onsuccess = (e) => {
+        let users = e.target.result || [];
+        if (filter) {
+          const search = filter.toLowerCase();
+          users = users.filter(u =>
+            u.fullName?.toLowerCase().includes(search) ||
+            u.schoolName?.toLowerCase().includes(search)
+          );
+        }
+        displayUsers(users);
+      };
+    }
+
+    // ===== DISPLAY USERS =====
+    function displayUsers(users) {
+      const tbody = document.querySelector("#usersTable tbody");
+      tbody.innerHTML = "";
+
+      if (users.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="text-center p-4 text-gray-500">No registered pupils found.</td></tr>`;
+        return;
+      }
+
+      users
+        .sort((a, b) => a.fullName.localeCompare(b.fullName))
+        .forEach(u => {
+          const date = new Date(u.timestamp || Date.now()).toLocaleString();
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td class="p-2 border">${u.fullName}</td>
+            <td class="p-2 border">${u.email || "-"}</td>
+            <td class="p-2 border">${u.age || "-"}</td>
+            <td class="p-2 border">${u.class || "-"}</td>
+            <td class="p-2 border">${u.schoolName || "-"}</td>
+            <td class="p-2 border">${u.location || "-"}</td>
+            <td class="p-2 border">${u.country || "-"}</td>
+            <td class="p-2 border">${date}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+    }
+
+    // ===== EXPORT TO EXCEL =====
+    function exportToExcel() {
+      const table = document.getElementById("usersTable");
+      const wb = XLSX.utils.table_to_book(table, { sheet: "Pupils" });
+      XLSX.writeFile(wb, "SmartKids_Pupils.xlsx");
+    }
+
+    // ===== EXPORT TO PDF =====
+    function exportToPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.text("SmartKids Registered Pupils", 14, 15);
+      doc.autoTable({ html: "#usersTable", startY: 20 });
+      doc.save("SmartKids_Pupils.pdf");
+    }
+
+    // ===== ADMIN LOGIN =====
+    function loginAdmin() {
+      const username = document.getElementById("adminUser").value.trim();
+      const password = document.getElementById("adminPass").value.trim();
+
+      if (username === "smartkids" && password === "myNias9ja#") {
+        localStorage.setItem("adminLoggedIn", "true");
+        showDashboard();
+      } else {
+        document.getElementById("loginError").classList.remove("hidden");
+      }
+    }
+
+    // ===== SHOW DASHBOARD =====
+    function showDashboard() {
+      document.getElementById("loginModal").classList.add("hidden");
+      document.getElementById("dashboard").classList.remove("hidden");
+      openDB(() => fetchUsers());
+      setInterval(() => fetchUsers(), 30000);
+    }
+
+    // ===== LOGOUT =====
+    function logoutAdmin() {
+      localStorage.removeItem("adminLoggedIn");
+      document.getElementById("dashboard").classList.add("hidden");
+      document.getElementById("loginModal").classList.remove("hidden");
+    }
+
+    // ===== EVENT LISTENERS =====
+    document.getElementById("loginBtn").addEventListener("click", loginAdmin);
+    document.getElementById("logoutBtn").addEventListener("click", logoutAdmin);
+    document.getElementById("exportExcel").addEventListener("click", exportToExcel);
+    document.getElementById("exportPDF").addEventListener("click", exportToPDF);
+    document.getElementById("searchBtn").addEventListener("click", () => {
+      const val = document.getElementById("searchInput").value;
+      fetchUsers(val);
+    });
+
+    // ===== AUTO LOGIN CHECK =====
+    window.addEventListener("load", () => {
+      if (localStorage.getItem("adminLoggedIn") === "true") {
+        showDashboard();
+      }
+    });
+  </script>
+</body>
+</html>
