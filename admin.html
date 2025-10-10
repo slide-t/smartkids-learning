@@ -1,501 +1,270 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SmartKids Learning - Admin Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body class="bg-gray-100 font-sans">
+<body class="bg-gray-100 font-sans min-h-screen">
 
-  <!-- Login Modal --
+  <!-- ===== LOGIN MODAL ===== -->
   <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
     <div class="bg-white p-6 rounded-lg shadow-lg w-96">
-      <h2 class="text-xl font-bold mb-4 text-center">Admin Login</h2>
-      <form id="loginForm" class="space-y-3">
+      <h2 class="text-2xl font-bold mb-4 text-center text-blue-600">Admin Login</h2>
+      <form id="loginForm" class="space-y-4">
         <div>
-          <label class="block mb-1">Username</label>
-          <input type="text" id="adminUsername" class="w-full border p-2 rounded" required>
+          <label class="block mb-1 font-semibold">Username</label>
+          <input type="text" id="adminUser" class="w-full border p-2 rounded" required placeholder="Enter admin username">
         </div>
         <div>
-          <label class="block mb-1">Password</label>
-          <input type="password" id="adminPassword" class="w-full border p-2 rounded" required>
+          <label class="block mb-1 font-semibold">Password</label>
+          <input type="password" id="adminPass" class="w-full border p-2 rounded" required placeholder="Enter admin password">
         </div>
         <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Login</button>
       </form>
-      <p id="loginError" class="text-red-500 text-sm mt-2 hidden">Invalid username or password!</p>
+      <p id="loginError" class="text-red-500 text-sm mt-3 text-center hidden">Invalid username or password!</p>
     </div>
   </div>
 
-  <!-- Navbar -->
-  <nav class="bg-blue-600 text-white p-4 shadow">
-    <div class="container mx-auto flex justify-between items-center">
-      <h1 class="text-xl font-bold">SmartKids Learning</h1>
-      <ul class="flex space-x-4">
-        <li><a href="https://slide-t.github.io/smartkids-learning/index.html" class="hover:underline">Home</a></li>
-        <li><a href="#" class="hover:underline">Records</a></li>
-        <li><a href="#" class="hover:underline">Export</a></li>
-     <li>
-  <button id="logoutBtn" class="bg-red-500 px-3 py-1 rounded hover:bg-red-600 hidden">Logout</button>
-     </li>
-      </ul>
-    </div>
-    
-  </nav>
-
-  <!-- Student Records -->
-  <section class="container mx-auto p-6">
-    <h2 class="text-2xl font-bold mb-4">Student Records</h2>
-    <div class="mb-4 flex space-x-2">
-      <input type="text" id="searchSchool" placeholder="Search by School Name" class="border p-2 rounded w-1/2">
-      <button id="searchBtn" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Search</button>
-    </div>
-
-    <table class="w-full bg-white rounded shadow" id="recordsTable">
-      <thead class="bg-gray-200">
-        <tr>
-          <th class="p-2">Full Name</th>
-          <th class="p-2">Class</th>
-          <th class="p-2">Subject</th>
-          <th class="p-2">Session</th>
-          <th class="p-2">Term</th>
-          <th class="p-2">School</th>
-          <th class="p-2">Location</th>
-          <th class="p-2">Country</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-
-    <div class="mt-4 flex space-x-4">
-      <button id="exportExcelRecords" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Export to Excel</button>
-      <button id="exportPdfRecords" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Export to PDF</button>
-    </div>
-  </section>
-
-  <!-- Practice Analytics -->
-  <div class="container mx-auto p-6 mt-10">
-    <h2 class="text-2xl font-bold mb-4">Practice Analytics</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div class="bg-white p-4 rounded shadow">
-        <h3 class="text-lg font-semibold mb-2">Daily Activity</h3>
-        <canvas id="dailyChart" height="200"></canvas>
+  <!-- ===== DASHBOARD ===== -->
+  <div id="dashboard" class="hidden">
+    <!-- NAVBAR -->
+    <nav class="bg-blue-600 text-white p-4 shadow flex justify-between items-center">
+      <h1 class="text-xl font-bold">SmartKids Admin Dashboard</h1>
+      <div class="flex space-x-4">
+        <a href="https://slide-t.github.io/smartkids-learning/index.html" class="hover:underline">Home</a>
+        <button id="logoutBtn" class="bg-red-500 px-3 py-1 rounded hover:bg-red-600">Logout</button>
       </div>
-      <div class="bg-white p-4 rounded shadow">
-        <h3 class="text-lg font-semibold mb-2">Weekly Activity</h3>
-        <canvas id="weeklyChart" height="200"></canvas>
-      </div>
-    </div>
+    </nav>
+
+    <main class="container mx-auto p-6 space-y-10">
+      
+      <!-- REGISTERED USERS SECTION -->
+      <section id="registeredUsersSection">
+        <h2 class="text-2xl font-bold mb-4">Registered Pupils / Kids</h2>
+        <div class="overflow-x-auto bg-white rounded shadow">
+          <table id="registeredUsersTable" class="min-w-full text-sm">
+            <thead class="bg-gray-200 text-gray-700">
+              <tr>
+                <th class="p-2 text-left">Full Name</th>
+                <th class="p-2 text-left">Email</th>
+                <th class="p-2 text-left">Registered On</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="mt-3 flex space-x-3">
+          <button id="exportUsersExcel" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Export to Excel</button>
+          <button id="exportUsersPdf" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Export to PDF</button>
+        </div>
+      </section>
+
+      <!-- STUDENT RECORDS SECTION -->
+      <section>
+        <h2 class="text-2xl font-bold mb-4">Student Records</h2>
+        <div class="flex space-x-2 mb-3">
+          <input type="text" id="searchSchool" placeholder="Search by school name" class="border p-2 rounded w-1/2">
+          <button id="searchBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Search</button>
+        </div>
+        <div class="overflow-x-auto bg-white rounded shadow">
+          <table id="recordsTable" class="min-w-full text-sm">
+            <thead class="bg-gray-200 text-gray-700">
+              <tr>
+                <th class="p-2">Full Name</th>
+                <th class="p-2">Class</th>
+                <th class="p-2">Subject</th>
+                <th class="p-2">Session</th>
+                <th class="p-2">Term</th>
+                <th class="p-2">School</th>
+                <th class="p-2">Location</th>
+                <th class="p-2">Country</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="mt-3 flex space-x-3">
+          <button id="exportExcel" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Export to Excel</button>
+          <button id="exportPdf" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Export to PDF</button>
+        </div>
+      </section>
+    </main>
   </div>
 
-  <!-- Registered Pupils Section -->
-  <section id="registeredUsersSection" class="container mx-auto p-6 mt-10 hidden">
-    <h2 class="text-2xl font-bold mb-4">Registered Pupils / Kids</h2>
-    <table class="w-full bg-white rounded shadow" id="registeredUsersTable">
-      <thead class="bg-gray-200">
-        <tr>
-          <th class="p-2">Full Name</th>
-          <th class="p-2">Email</th>
-          <th class="p-2">Timestamp</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-
-    <div class="mt-4 flex space-x-4">
-      <button id="exportExcelUsers" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Export to Excel</button>
-      <button id="exportPdfUsers" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Export to PDF</button>
-    </div>
-  </section>
-
-<script>
-  // ====== ADMIN DASHBOARD SCRIPT FOR SMARTKIDS LEARNING ======
-  // Version: 2.0 — Includes pupil registration info + export tools
-
-  // Open SmartKidsDB database
-  function openDB() {
-    const request = indexedDB.open("SmartKidsDB", 2);
-
-    request.onupgradeneeded = (event) => {
-      const db = event.target.result;
-      if (!db.objectStoreNames.contains("students")) {
-        db.createObjectStore("students", { keyPath: "id", autoIncrement: true });
-      }
-      if (!db.objectStoreNames.contains("users")) {
-        db.createObjectStore("users", { keyPath: "id", autoIncrement: true });
-      }
-    };
-
-    request.onsuccess = (event) => {
-      const db = event.target.result;
-      fetchStudents(db);
-      fetchRegisteredUsers(db);
-    };
-
-    request.onerror = (event) => {
-      console.error("Database error:", event.target.errorCode);
-    };
-  }
-
-  // ====== FETCH STUDENTS FROM DATABASE ======
-  function fetchStudents(db) {
-    const tx = db.transaction("students", "readonly");
-    const store = tx.objectStore("students");
-    const req = store.getAll();
-
-    req.onsuccess = (e) => {
-      const students = e.target.result || [];
-      displayStudents(students);
-    };
-  }
-
-  // ====== DISPLAY STUDENTS IN TABLE ======
-  function displayStudents(students) {
-    const section = document.getElementById("studentsSection") || createSection("studentsSection", "Enrolled Students");
-    const tableId = "studentsTable";
-
-    section.innerHTML = `
-      <h2 class="text-2xl font-bold mb-4">Enrolled Students</h2>
-      ${exportButtons(tableId)}
-      <table class="w-full bg-white rounded shadow mt-4" id="${tableId}">
-        <thead class="bg-gray-200">
-          <tr>
-            <th class="p-2">Name</th>
-            <th class="p-2">Class</th>
-            <th class="p-2">Age</th>
-            <th class="p-2">Date Added</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    `;
-
-    const tbody = section.querySelector("tbody");
-    tbody.innerHTML = "";
-
-    if (students.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="4" class="p-3 text-center text-gray-500">No students found</td></tr>`;
-      return;
-    }
-
-    students.forEach((s) => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td class="p-2">${s.name || "-"}</td>
-        <td class="p-2">${s.className || "-"}</td>
-        <td class="p-2">${s.age || "-"}</td>
-        <td class="p-2">${new Date(s.date || Date.now()).toLocaleString()}</td>
-      `;
-      tbody.appendChild(tr);
-    });
-  }
-
-  // ====== FETCH REGISTERED USERS (from auth.js) ======
-  function fetchRegisteredUsers(db) {
-    const tx = db.transaction("users", "readonly");
-    const store = tx.objectStore("users");
-    const req = store.getAll();
-
-    req.onsuccess = (e) => {
-      const users = e.target.result || [];
-      displayRegisteredUsers(users);
-    };
-  }
-
-  // ====== DISPLAY REGISTERED USERS ======
-  function displayRegisteredUsers(users) {
-    const section = document.getElementById("registeredUsersSection") || createSection("registeredUsersSection", "Registered Pupils / Kids");
-    const tableId = "registeredUsersTable";
-
-    section.innerHTML = `
-      <h2 class="text-2xl font-bold mb-4">Registered Pupils / Kids</h2>
-      ${exportButtons(tableId)}
-      <table class="w-full bg-white rounded shadow mt-4" id="${tableId}">
-        <thead class="bg-gray-200">
-          <tr>
-            <th class="p-2">Full Name</th>
-            <th class="p-2">Email</th>
-            <th class="p-2">Date Registered</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    `;
-
-    const tbody = section.querySelector("tbody");
-    tbody.innerHTML = "";
-
-    if (users.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="3" class="p-3 text-center text-gray-500">No registrations found</td></tr>`;
-      return;
-    }
-
-    users
-      .sort((a, b) => a.fullName.localeCompare(b.fullName))
-      .forEach((u) => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td class="p-2">${u.fullName || "-"}</td>
-          <td class="p-2">${u.email || "-"}</td>
-          <td class="p-2">${new Date(u.timestamp || Date.now()).toLocaleString()}</td>
-        `;
-        tbody.appendChild(tr);
-      });
-  }
-
-  // ====== CREATE SECTION HELPER ======
-  function createSection(id, title) {
-    const section = document.createElement("section");
-    section.id = id;
-    section.className = "container mx-auto p-6 mt-10 bg-gray-50 rounded";
-    document.body.appendChild(section);
-    return section;
-  }
-
-  // ====== EXPORT BUTTONS HTML ======
-  function exportButtons(tableId) {
-    return `
-      <div class="flex justify-end mb-2 gap-2">
-        <button onclick="exportToExcel('${tableId}')" class="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600">Export Excel</button>
-        <button onclick="exportToPDF('${tableId}')" class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">Export PDF</button>
-      </div>
-    `;
-  }
-
-  // ====== EXPORT TO EXCEL ======
-  function exportToExcel(tableId) {
-    const table = document.getElementById(tableId);
-    if (!table) return alert("Table not found");
-
-    let csv = [];
-    const rows = table.querySelectorAll("tr");
-    for (let row of rows) {
-      const cols = row.querySelectorAll("td, th");
-      const rowData = Array.from(cols).map(col => `"${col.innerText}"`);
-      csv.push(rowData.join(","));
-    }
-
-    const blob = new Blob([csv.join("\n")], { type: "text/csv" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = tableId + ".csv";
-    link.click();
-  }
-
-  // ====== EXPORT TO PDF ======
-  function exportToPDF(tableId) {
-    const table = document.getElementById(tableId);
-    if (!table) return alert("Table not found");
-
-    const win = window.open("");
-    win.document.write("<html><head><title>Export PDF</title>");
-    win.document.write('<style>table {width:100%;border-collapse:collapse;} th,td{border:1px solid #ccc;padding:8px;text-align:left;}</style>');
-    win.document.write("</head><body>");
-    win.document.write("<h2>SmartKids Learning Data</h2>");
-    win.document.write(table.outerHTML);
-    win.document.write("</body></html>");
-    win.document.close();
-    win.print();
-  }
-// ====== ADMIN LOGIN CHECK ======
-function loginAdmin() {
-  const username = document.getElementById("adminUser").value.trim();
-  const password = document.getElementById("adminPass").value.trim();
-
-  if (username === "smartkids" && password === "myNias9ja#") {
-    document.getElementById("loginModal").classList.add("hidden");
-    document.getElementById("logoutBtn").classList.remove("hidden"); // show logout
-    openDB();
-  } else {
-    alert("Invalid admin credentials!");
-  }
-}
-
-// ====== ADMIN LOGOUT ======
-document.getElementById("logoutBtn").addEventListener("click", () => {
-  if (confirm("Are you sure you want to logout?")) {
-    // Clear any sensitive dashboard data if needed
-    document.querySelector("#recordsTable tbody").innerHTML = "";
-    const usersSection = document.getElementById("registeredUsersSection");
-    if (usersSection) usersSection.remove();
-
-    // Hide logout and reopen login modal
-    document.getElementById("logoutBtn").classList.add("hidden");
-    document.getElementById("loginModal").classList.remove("hidden");
-
-    // Optionally reset form fields
-    document.getElementById("adminUser").value = "";
-    document.getElementById("adminPass").value = "";
-  }
-});
- /* // ====== ADMIN LOGIN CHECK ======
-  function loginAdmin() {
-    const username = document.getElementById("adminUser").value.trim();
-    const password = document.getElementById("adminPass").value.trim();
-
-    if (username === "smartkids" && password === "myNias9ja#") {
-      document.getElementById("loginModal").classList.add("hidden");
-      openDB();
-    } else {
-      alert("Invalid admin credentials!");
-    }
-  }
-
-  // ====== AUTO FOCUS LOGIN INPUT ======
-  window.onload = () => {
-    const input = document.getElementById("adminUser");
-    if (input) input.focus();
-  };*/
-</script>
-
-  <!--
   <script>
-    let db;
+    const ADMIN_USER = "smartkids";
+    const ADMIN_PASS = "myNias9ja#";
     const DB_NAME = "SmartKidsDB";
-    const STORE_NAME = "students";
 
-    // ===== OPEN MAIN DATABASE =====
+    // ===== Check Login Status on Page Load =====
+    window.onload = () => {
+      const isLoggedIn = localStorage.getItem("adminLoggedIn");
+      if (isLoggedIn === "true") {
+        showDashboard();
+        openDB();
+      } else {
+        showLogin();
+      }
+    };
+
+    function showDashboard() {
+      document.getElementById("loginModal").classList.add("hidden");
+      document.getElementById("dashboard").classList.remove("hidden");
+    }
+
+    function showLogin() {
+      document.getElementById("loginModal").classList.remove("hidden");
+      document.getElementById("dashboard").classList.add("hidden");
+    }
+
+    // ===== ADMIN LOGIN =====
+    document.getElementById("loginForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const user = document.getElementById("adminUser").value.trim();
+      const pass = document.getElementById("adminPass").value.trim();
+
+      if (user === ADMIN_USER && pass === ADMIN_PASS) {
+        localStorage.setItem("adminLoggedIn", "true");
+        showDashboard();
+        openDB();
+      } else {
+        document.getElementById("loginError").classList.remove("hidden");
+      }
+    });
+
+    // ===== LOGOUT =====
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      if (confirm("Are you sure you want to logout?")) {
+        localStorage.removeItem("adminLoggedIn");
+        showLogin();
+      }
+    });
+
+    // ===== OPEN INDEXEDDB =====
+    let db;
     function openDB() {
-      const request = indexedDB.open(DB_NAME, 1);
+      const request = indexedDB.open(DB_NAME, 2);
       request.onupgradeneeded = (event) => {
         db = event.target.result;
-        if (!db.objectStoreNames.contains(STORE_NAME)) {
-          db.createObjectStore(STORE_NAME, { keyPath: "id", autoIncrement: true });
+        if (!db.objectStoreNames.contains("students")) {
+          db.createObjectStore("students", { keyPath: "id", autoIncrement: true });
+        }
+        if (!db.objectStoreNames.contains("users")) {
+          db.createObjectStore("users", { keyPath: "id", autoIncrement: true });
         }
       };
       request.onsuccess = (event) => {
         db = event.target.result;
         fetchRecords();
-        setInterval(fetchRecords, 30000);
+        fetchRegisteredUsers();
       };
-      request.onerror = () => console.error("❌ IndexedDB error");
-    }
-
-    // ===== FETCH STUDENT RECORDS =====
-    function fetchRecords(filterSchool = "") {
-      const transaction = db.transaction(STORE_NAME, "readonly");
-      const store = transaction.objectStore(STORE_NAME);
-      const request = store.getAll();
-
-      request.onsuccess = () => {
-        const records = request.result || [];
-        records.sort((a, b) => a.fullName.localeCompare(b.fullName));
-        displayRecords(records, filterSchool);
-      };
-    }
-
-    // ===== DISPLAY STUDENT RECORDS =====
-    function displayRecords(records, filterSchool) {
-      const tbody = document.querySelector("#recordsTable tbody");
-      tbody.innerHTML = "";
-
-      const filtered = records.filter(r => !filterSchool || r.schoolName.toLowerCase().includes(filterSchool.toLowerCase()));
-      if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" class="text-center p-3 text-gray-500">No records found</td></tr>`;
-        return;
-      }
-
-      filtered.forEach(r => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td class="p-2">${r.fullName}</td>
-          <td class="p-2">${r.className}</td>
-          <td class="p-2">${r.subject}</td>
-          <td class="p-2">${r.session}</td>
-          <td class="p-2">${r.term}</td>
-          <td class="p-2">${r.schoolName}</td>
-          <td class="p-2">${r.location || "-"}</td>
-          <td class="p-2">${r.country || "-"}</td>
-        `;
-        tbody.appendChild(tr);
-      });
     }
 
     // ===== FETCH REGISTERED USERS =====
     function fetchRegisteredUsers() {
-      const request = indexedDB.open(DB_NAME, 2);
-      request.onsuccess = (event) => {
-        const db = event.target.result;
-        if (!db.objectStoreNames.contains("users")) {
-          console.warn("No 'users' store found in SmartKidsDB.");
-          return;
-        }
-        const tx = db.transaction("users", "readonly");
-        const store = tx.objectStore("users");
-        const req = store.getAll();
-        req.onsuccess = (e) => displayRegisteredUsers(e.target.result || []);
-      };
+      const tx = db.transaction("users", "readonly");
+      const store = tx.objectStore("users");
+      const req = store.getAll();
+      req.onsuccess = (e) => displayUsers(e.target.result || []);
     }
 
-    // ===== DISPLAY REGISTERED USERS =====
-    function displayRegisteredUsers(users) {
-      const section = document.getElementById("registeredUsersSection");
+    function displayUsers(users) {
       const tbody = document.querySelector("#registeredUsersTable tbody");
-      section.classList.remove("hidden");
       tbody.innerHTML = "";
-
       if (users.length === 0) {
         tbody.innerHTML = `<tr><td colspan="3" class="text-center p-3 text-gray-500">No registrations found</td></tr>`;
         return;
       }
-
-      users.sort((a, b) => a.fullName.localeCompare(b.fullName));
       users.forEach(u => {
-        const tr = document.createElement("tr");
         const date = new Date(u.timestamp).toLocaleString();
-        tr.innerHTML = `
-          <td class="p-2">${u.fullName}</td>
-          <td class="p-2">${u.email || "-"}</td>
-          <td class="p-2">${date}</td>
-        `;
-        tbody.appendChild(tr);
+        tbody.innerHTML += `
+          <tr class="border-b hover:bg-gray-50">
+            <td class="p-2">${u.fullName}</td>
+            <td class="p-2">${u.email || "-"}</td>
+            <td class="p-2">${date}</td>
+          </tr>`;
       });
     }
 
-    // ===== EXPORT FUNCTIONS =====
-    function exportTableToExcel(tableId, filename) {
+    // ===== FETCH STUDENT RECORDS =====
+    function fetchRecords(filter = "") {
+      const tx = db.transaction("students", "readonly");
+      const store = tx.objectStore("students");
+      const req = store.getAll();
+      req.onsuccess = (e) => {
+        const data = e.target.result || [];
+        const filtered = data.filter(r => !filter || r.schoolName?.toLowerCase().includes(filter.toLowerCase()));
+        displayRecords(filtered);
+      };
+    }
+
+    function displayRecords(records) {
+      const tbody = document.querySelector("#recordsTable tbody");
+      tbody.innerHTML = "";
+      if (records.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="text-center p-3 text-gray-500">No records available</td></tr>`;
+        return;
+      }
+      records.forEach(r => {
+        tbody.innerHTML += `
+          <tr class="border-b hover:bg-gray-50">
+            <td class="p-2">${r.fullName}</td>
+            <td class="p-2">${r.className}</td>
+            <td class="p-2">${r.subject}</td>
+            <td class="p-2">${r.session}</td>
+            <td class="p-2">${r.term}</td>
+            <td class="p-2">${r.schoolName}</td>
+            <td class="p-2">${r.location || "-"}</td>
+            <td class="p-2">${r.country || "-"}</td>
+          </tr>`;
+      });
+    }
+
+    document.getElementById("searchBtn").addEventListener("click", () => {
+      const query = document.getElementById("searchSchool").value;
+      fetchRecords(query);
+    });
+
+    // ===== EXPORT TO EXCEL =====
+    function exportTableToExcel(tableId, fileName) {
       const table = document.getElementById(tableId);
       const wb = XLSX.utils.book_new();
       const ws = XLSX.utils.table_to_sheet(table);
       XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-      XLSX.writeFile(wb, filename + ".xlsx");
+      XLSX.writeFile(wb, fileName);
     }
 
-    function exportTableToPDF(tableId, filename) {
+    document.getElementById("exportExcel").addEventListener("click", () =>
+      exportTableToExcel("recordsTable", "SmartKids_Records.xlsx")
+    );
+    document.getElementById("exportUsersExcel").addEventListener("click", () =>
+      exportTableToExcel("registeredUsersTable", "Registered_Users.xlsx")
+    );
+
+    // ===== EXPORT TO PDF =====
+    function exportTableToPDF(tableId, fileName) {
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
-      doc.autoTable({ html: "#" + tableId });
-      doc.save(filename + ".pdf");
+      const table = document.getElementById(tableId);
+      const headers = Array.from(table.querySelectorAll("thead th")).map(th => th.innerText);
+      const rows = Array.from(table.querySelectorAll("tbody tr")).map(tr =>
+        Array.from(tr.querySelectorAll("td")).map(td => td.innerText)
+      );
+      doc.autoTable({ head: [headers], body: rows });
+      doc.save(fileName);
     }
 
-    // ===== EVENT LISTENERS =====
-    document.getElementById("searchBtn").addEventListener("click", () => {
-      const school = document.getElementById("searchSchool").value;
-      fetchRecords(school);
-    });
-    document.getElementById("exportExcelRecords").addEventListener("click", () => exportTableToExcel("recordsTable", "SmartKids_Records"));
-    document.getElementById("exportPdfRecords").addEventListener("click", () => exportTableToPDF("recordsTable", "SmartKids_Records"));
-    document.getElementById("exportExcelUsers").addEventListener("click", () => exportTableToExcel("registeredUsersTable", "SmartKids_Registered"));
-    document.getElementById("exportPdfUsers").addEventListener("click", () => exportTableToPDF("registeredUsersTable", "SmartKids_Registered"));
-
-    // ===== ADMIN LOGIN =====
-    document.getElementById("loginForm").addEventListener("submit", (e) => {
-      e.preventDefault();
-      const username = document.getElementById("adminUsername").value;
-      const password = document.getElementById("adminPassword").value;
-
-      if (username === "smartkids" && password === "myNias9ja#") {
-        document.getElementById("loginModal").classList.add("hidden");
-        openDB();
-        fetchRegisteredUsers();
-      } else {
-        document.getElementById("loginError").classList.remove("hidden");
-      }
-    });
-  </script>-->
+    document.getElementById("exportPdf").addEventListener("click", () =>
+      exportTableToPDF("recordsTable", "SmartKids_Records.pdf")
+    );
+    document.getElementById("exportUsersPdf").addEventListener("click", () =>
+      exportTableToPDF("registeredUsersTable", "Registered_Users.pdf")
+    );
+  </script>
 </body>
 </html>
