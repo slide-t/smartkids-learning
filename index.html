@@ -433,5 +433,117 @@
   }
 }
 </style>
+<!-- Registration Modal -->
+<div id="registrationModal" class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-50">
+  <div class="bg-white rounded-lg shadow-xl w-full max-w-md p-6 relative">
+    
+    <!-- Close Button -->
+    <button id="closeRegistration" 
+      class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-xl font-bold">
+      ×
+    </button>
+
+    <h2 class="text-xl font-semibold mb-4 text-center">Sign Up</h2>
+
+    <form id="registrationForm" class="space-y-3">
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Full Name</label>
+        <input type="text" name="name" required
+          class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">School Email</label>
+        <input type="email" name="email" required placeholder="e.g. pupil@schoolname.edu"
+          class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Username</label>
+        <input type="text" name="username" required placeholder="Unique username"
+          class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Age</label>
+        <input type="number" name="age" required
+          class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Class</label>
+        <select name="class" required
+          class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+          <option value="">Select Class</option>
+          <option value="Year 1">Year 1</option>
+          <option value="Year 2">Year 2</option>
+          <option value="Year 3">Year 3</option>
+          <option value="Year 4">Year 4</option>
+          <option value="Year 5">Year 5</option>
+          <option value="Year 6">Year 6</option>
+          <option value="Year 7">Year 7</option>
+          <option value="Year 8">Year 8</option>
+          <option value="Year 9">Year 9</option>
+          <option value="Year 10">Year 10</option>
+          <option value="Year 11">Year 11</option>
+          <option value="Year 12">Year 12</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">School Name</label>
+        <input type="text" name="schoolName" required
+          class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Location (State)</label>
+        <input type="text" name="location" required
+          class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Country</label>
+        <input type="text" name="country" required
+          class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" 
+        class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
+        Register
+      </button>
+    </form>
+
+    <!-- ✅ Success Message -->
+    <p id="successMsg" class="hidden text-green-600 mt-4 text-center font-medium">
+      ✅ Registration successful!
+    </p>
+  </div>
+</div>
+<script>
+  // Modal toggle logic
+  const registrationModal = document.getElementById('registrationModal');
+  const authBtn = document.getElementById('authBtn');
+  const closeRegistration = document.getElementById('closeRegistration');
+
+  // Show modal when Sign Up is clicked
+  function toggleAuth() {
+    registrationModal.classList.remove('hidden');
+  }
+
+  // Hide modal on close
+  closeRegistration.addEventListener('click', () => {
+    registrationModal.classList.add('hidden');
+  });
+
+  // Hide modal if clicked outside form
+  window.addEventListener('click', (e) => {
+    if (e.target === registrationModal) {
+      registrationModal.classList.add('hidden');
+    }
+  });
+</script>
+  
 </body>
 </html>
