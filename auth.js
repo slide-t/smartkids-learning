@@ -56,12 +56,38 @@ document.addEventListener("DOMContentLoaded", () => {
     const id = getCurrentUserId();
     const name = localStorage.getItem("currentUserName");
 
+    // clear previous blink intervals
+    if (window.nameBlinkInterval) clearInterval(window.nameBlinkInterval);
+
+    // remove any old label beside button
+    const oldLabel = document.getElementById("usernameLabel");
+    if (oldLabel) oldLabel.remove();
+
     if (id) {
-      authBtn.textContent = `Logout${name ? ` (${name})` : ""}`;
+      // show logout text
+      authBtn.textContent = "Logout";
       authBtn.onclick = () => {
         clearCurrentUser();
         alert("👋 Logged out.");
       };
+
+      // create blinking username beside Logout
+      const nameSpan = document.createElement("span");
+      nameSpan.id = "usernameLabel";
+      nameSpan.textContent = ` ${name || ""}`;
+      nameSpan.style.marginLeft = "6px";
+      nameSpan.style.fontWeight = "600";
+      nameSpan.style.color = "#0078D7";
+      nameSpan.style.transition = "opacity 0.3s ease-in-out";
+
+      // insert after button
+      authBtn.insertAdjacentElement("afterend", nameSpan);
+
+      // gentle blink every 5s
+      window.nameBlinkInterval = setInterval(() => {
+        nameSpan.style.opacity = "0";
+        setTimeout(() => (nameSpan.style.opacity = "1"), 500);
+      }, 5000);
     } else {
       authBtn.textContent = "Sign Up";
       authBtn.onclick = () => window.toggleAuth && window.toggleAuth();
