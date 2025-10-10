@@ -105,6 +105,74 @@
         db.createObjectStore(STORE_NAME, { keyPath: "id", autoIncrement: true });
       }
     };
+
+   // ===== FETCH ALL REGISTERED USERS FROM AUTH.JS =====
+function fetchRegisteredUsers() {
+  const request = indexedDB.open("SmartKidsDB", 2); // same version as auth.js
+
+  request.onsuccess = (event) => {
+    const db = event.target.result;
+    const tx = db.transaction("users", "readonly");
+    const store = tx.objectStore("users");
+    const req = store.getAll();
+
+    req.onsuccess = (e) => {
+      const users = e.target.result || [];
+      displayRegisteredUsers(users);
+    };
+  };
+
+  request.onerror = (event) => {
+    console.error("Failed to read registered users:", event.target.errorCode);
+  };
+}
+
+// ===== DISPLAY USERS ON DASHBOARD =====
+function displayRegisteredUsers(users) {
+  // Create a new section for user registrations if not already present
+  let section = document.getElementById("registeredUsersSection");
+  if (!section) {
+    section = document.createElement("section");
+    section.id = "registeredUsersSection";
+    section.className = "container mx-auto p-6 mt-10";
+    document.body.appendChild(section);
+  }
+
+  section.innerHTML = `
+    <h2 class="text-2xl font-bold mb-4">Registered Pupils / Kids</h2>
+    <table class="w-full bg-white rounded shadow" id="registeredUsersTable">
+      <thead class="bg-gray-200">
+        <tr>
+          <th class="p-2">Full Name</th>
+          <th class="p-2">Email</th>
+          <th class="p-2">Timestamp</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  `;
+
+  const tbody = section.querySelector("tbody");
+  tbody.innerHTML = "";
+
+  if (users.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="3" class="text-center p-3 text-gray-500">No registrations found</td></tr>`;
+    return;
+  }
+
+  users
+    .sort((a, b) => a.fullName.localeCompare(b.fullName))
+    .forEach((u) => {
+      const date = new Date(u.timestamp).toLocaleString();
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td class="p-2">${u.fullName}</td>
+        <td class="p-2">${u.email || "-"}</td>
+        <td class="p-2">${date}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+} 
     request.onsuccess = (event) => {
       db = event.target.result;
       fetchRecords();
@@ -116,6 +184,11 @@
     };
   }
 
+  if (username === "smartkids" && password === "myNias9ja#") {
+  document.getElementById("loginModal").classList.add("hidden");
+  openDB();
+  fetchRegisteredUsers(); // <-- add this line
+}
   // Fetch all student records
   function fetchRecords(filterSchool = "") {
     const transaction = db.transaction(STORE_NAME, "readonly");
