@@ -1,122 +1,675 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SmartKids Admin Dashboard</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SmartKids — Admin Dashboard</title>
+
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- XLSX (Excel export) -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+  <!-- jsPDF + autotable (PDF export) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
+
   <style>
-    .fade {
-      transition: opacity 0.3s ease-in-out;
-    }
+    /* small helpers */
+    .card { background: #fff; border-radius: .75rem; padding: 1rem; box-shadow: 0 6px 18px rgba(0,0,0,0.06); }
+    .hidden-by-default { display: none; }
   </style>
 </head>
-<body class="bg-gray-50 min-h-screen flex flex-col items-center justify-center">
+<body class="bg-gray-100 min-h-screen">
 
-  <!-- ===== ADMIN LOGIN MODAL ===== -->
-  <div id="adminLoginModal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 fade">
-    <div class="bg-white p-6 rounded-2xl shadow-lg w-full max-w-sm">
-      <h2 class="text-2xl font-semibold text-center text-blue-600 mb-4">Admin Login</h2>
-      <div class="mb-3">
-        <label class="block text-gray-700 mb-1">Username</label>
-        <input id="adminUser" type="text" class="w-full p-2 border rounded-lg focus:ring focus:ring-blue-300" placeholder="Enter username">
-      </div>
-      <div class="mb-3">
-        <label class="block text-gray-700 mb-1">Password</label>
-        <input id="adminPass" type="password" class="w-full p-2 border rounded-lg focus:ring focus:ring-blue-300" placeholder="Enter password">
-      </div>
-      <button onclick="loginAdmin()" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">Login</button>
-    </div>
-  </div>
+  <!-- ===== LOGIN MODAL ===== -->
+  <div id="loginModal" class="fixed inset-0 z-50 bg-black/60 flex items-center justify-center">
+    <div class="bg-white rounded-xl w-full max-w-md p-6">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-4 text-center">Admin Login</h2>
 
-  <!-- ===== ADMIN DASHBOARD ===== -->
-  <div id="adminDashboard" class="hidden w-full max-w-5xl mx-auto p-6">
-    <div class="flex justify-between items-center mb-6">
-      <h1 class="text-3xl font-bold text-gray-800">SmartKids Admin Panel</h1>
-      <button onclick="logoutAdmin()" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">Logout</button>
-    </div>
-
-    <!-- Dashboard Cards -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <div class="bg-white p-5 rounded-xl shadow hover:shadow-md cursor-pointer">
-        <h2 class="text-xl font-semibold text-gray-800 mb-2">📚 Manage Lessons</h2>
-        <p class="text-gray-600 text-sm">Create, edit, or delete lessons and topics.</p>
-      </div>
-
-      <div class="bg-white p-5 rounded-xl shadow hover:shadow-md cursor-pointer">
-        <h2 class="text-xl font-semibold text-gray-800 mb-2">👩‍🎓 Manage Users</h2>
-        <p class="text-gray-600 text-sm">View and control registered users.</p>
-      </div>
-
-      <div class="bg-white p-5 rounded-xl shadow hover:shadow-md cursor-pointer">
-        <h2 class="text-xl font-semibold text-gray-800 mb-2">📈 Reports</h2>
-        <p class="text-gray-600 text-sm">Track activity, lessons, and performance.</p>
-      </div>
-
-      <div class="bg-white p-5 rounded-xl shadow hover:shadow-md cursor-pointer">
-        <h2 class="text-xl font-semibold text-gray-800 mb-2">💾 Backup Data</h2>
-        <p class="text-gray-600 text-sm">Export or sync your data to the cloud.</p>
-      </div>
-
-      <div class="bg-white p-5 rounded-xl shadow hover:shadow-md cursor-pointer">
-        <h2 class="text-xl font-semibold text-gray-800 mb-2">⚙️ Settings</h2>
-        <p class="text-gray-600 text-sm">Change admin credentials or system options.</p>
-      </div>
-
-      <div class="bg-white p-5 rounded-xl shadow hover:shadow-md cursor-pointer">
-        <h2 class="text-xl font-semibold text-gray-800 mb-2">🗂 Database</h2>
-        <p class="text-gray-600 text-sm">Connect to your IndexedDB for lesson storage.</p>
+      <div class="space-y-3">
+        <input id="adminUser" type="text" placeholder="Username" class="w-full p-2 border rounded" />
+        <input id="adminPass" type="password" placeholder="Password" class="w-full p-2 border rounded" />
+        <div class="flex justify-between items-center">
+          <button id="btnLogin" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Login</button>
+          <button id="btnDemoData" title="Load demo lessons" class="text-sm text-gray-500 underline">Load demo lessons</button>
+        </div>
+        <p id="loginError" class="text-red-600 text-sm hidden">Invalid credentials.</p>
       </div>
     </div>
   </div>
 
-  <!-- ===== SCRIPT SECTION ===== -->
+  <!-- ===== MAIN APP ===== -->
+  <div id="app" class="hidden">
+
+    <!-- NAVBAR -->
+    <header class="bg-white shadow p-4 flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <h1 class="text-xl font-bold text-blue-700">SmartKids Admin</h1>
+        <div id="stats" class="flex gap-3"></div>
+      </div>
+      <div class="flex items-center gap-4">
+        <span id="adminBadge" class="text-sm text-gray-600"></span>
+        <button id="btnLogout" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Logout</button>
+      </div>
+    </header>
+
+    <main class="container mx-auto p-6 space-y-8">
+      <!-- Dashboard cards -->
+      <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="card">
+          <div class="text-sm text-gray-500">Total Pupils</div>
+          <div id="totalPupils" class="text-2xl font-semibold mt-2">—</div>
+        </div>
+        <div class="card">
+          <div class="text-sm text-gray-500">Total Lessons</div>
+          <div id="totalLessons" class="text-2xl font-semibold mt-2">—</div>
+        </div>
+        <div class="card">
+          <div class="text-sm text-gray-500">Last Registration</div>
+          <div id="lastRegistration" class="text-sm mt-2 text-gray-700">—</div>
+        </div>
+        <div class="card">
+          <div class="text-sm text-gray-500">Last Lesson Added</div>
+          <div id="lastLesson" class="text-sm mt-2 text-gray-700">—</div>
+        </div>
+      </section>
+
+      <!-- Pupils & Lessons -->
+      <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+        <!-- PUPILS -->
+        <div class="card">
+          <div class="flex items-center justify-between mb-3">
+            <h2 class="font-semibold">Registered Pupils</h2>
+            <div class="flex gap-2">
+              <input id="pupilSearch" class="border px-2 py-1 rounded" placeholder="Search name or school" />
+              <button id="pupilSearchBtn" class="bg-green-600 text-white px-3 py-1 rounded">Search</button>
+              <button id="exportPupilsExcel" class="bg-green-400 text-white px-3 py-1 rounded">Excel</button>
+              <button id="exportPupilsPDF" class="bg-red-400 text-white px-3 py-1 rounded">PDF</button>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table id="pupilsTable" class="min-w-full text-sm">
+              <thead class="bg-gray-100">
+                <tr>
+                  <th class="p-2 text-left">Full Name</th>
+                  <th class="p-2 text-left">Email</th>
+                  <th class="p-2 text-left">Age</th>
+                  <th class="p-2 text-left">Class</th>
+                  <th class="p-2 text-left">School</th>
+                  <th class="p-2 text-left">Location</th>
+                  <th class="p-2 text-left">Country</th>
+                  <th class="p-2 text-left">Registered</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- LESSONS -->
+        <div class="card">
+          <div class="flex items-center justify-between mb-3">
+            <h2 class="font-semibold">Lesson Manager</h2>
+            <div class="flex gap-2">
+              <button id="exportLessonsExcel" class="bg-green-400 text-white px-3 py-1 rounded">Excel</button>
+              <button id="exportLessonsPDF" class="bg-red-400 text-white px-3 py-1 rounded">PDF</button>
+            </div>
+          </div>
+
+          <!-- add/edit form -->
+          <form id="lessonForm" class="space-y-3 mb-4">
+            <input type="hidden" id="lessonId" />
+            <div>
+              <label class="text-sm text-gray-700">Title</label>
+              <input id="lessonTitle" required class="w-full border px-3 py-2 rounded" />
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="text-sm text-gray-700">Class Level</label>
+                <select id="lessonClass" class="w-full border px-3 py-2 rounded">
+                  <option value="">Select Class</option>
+                  <option>Year 1</option><option>Year 2</option><option>Year 3</option>
+                  <option>Year 4</option><option>Year 5</option><option>Year 6</option>
+                  <option>Year 7</option><option>Year 8</option><option>Year 9</option>
+                  <option>Year 10</option><option>Year 11</option><option>Year 12</option>
+                </select>
+              </div>
+              <div>
+                <label class="text-sm text-gray-700">Subject</label>
+                <input id="lessonSubject" class="w-full border px-3 py-2 rounded" />
+              </div>
+            </div>
+
+            <div>
+              <label class="text-sm text-gray-700">School Name</label>
+              <input id="lessonSchool" class="w-full border px-3 py-2 rounded" />
+            </div>
+
+            <div>
+              <label class="text-sm text-gray-700">Description</label>
+              <textarea id="lessonDescription" rows="3" class="w-full border px-3 py-2 rounded"></textarea>
+            </div>
+
+            <div class="flex gap-2">
+              <button type="submit" id="saveLessonBtn" class="bg-blue-600 text-white px-4 py-2 rounded">Save Lesson</button>
+              <button type="button" id="cancelEditBtn" class="bg-gray-200 px-4 py-2 rounded">Cancel</button>
+            </div>
+          </form>
+
+          <!-- lessons table -->
+          <div class="overflow-x-auto">
+            <table id="lessonsTable" class="min-w-full text-sm">
+              <thead class="bg-gray-100">
+                <tr>
+                  <th class="p-2 text-left">Title</th>
+                  <th class="p-2 text-left">Class</th>
+                  <th class="p-2 text-left">Subject</th>
+                  <th class="p-2 text-left">School</th>
+                  <th class="p-2 text-left">Created</th>
+                  <th class="p-2 text-left">Actions</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+    </main>
+  </div>
+
+  <!-- ===== SCRIPT: DB + App Logic ===== -->
   <script>
+  /**
+   * SmartKids Admin Dashboard (self-contained)
+   * - IndexedDB "SmartKidsDB" with stores: "users" (may be created by auth.js) and "lessons"
+   * - Admin login saved in localStorage
+   * - Pupils listing from users store (if present)
+   * - Lesson manager (create/read/update/delete) in "lessons" store
+   *
+   * Ready to swap DB functions with server endpoints later.
+   */
+
+  (function () {
+    // ----- Admin credentials -----
     const ADMIN_USER = "smartkids";
     const ADMIN_PASS = "myNias9ja#";
 
-    window.addEventListener("DOMContentLoaded", () => {
-      const isLoggedIn = localStorage.getItem("isAdminLoggedIn");
-      if (isLoggedIn === "true") {
-        showDashboard();
-        openDB();
-      } else {
-        showLogin();
-      }
-    });
+    // DOM
+    const loginModal = document.getElementById("loginModal");
+    const appDiv = document.getElementById("app");
+    const btnLogin = document.getElementById("btnLogin");
+    const btnLogout = document.getElementById("btnLogout");
+    const loginError = document.getElementById("loginError");
+    const adminBadge = document.getElementById("adminBadge");
 
-    function loginAdmin() {
-      const username = document.getElementById("adminUser").value.trim();
-      const password = document.getElementById("adminPass").value.trim();
+    // Pupils elements
+    const pupilsTableBody = document.querySelector("#pupilsTable tbody");
+    const pupilSearchInput = document.getElementById("pupilSearch");
+    const pupilSearchBtn = document.getElementById("pupilSearchBtn");
 
-      if (username === ADMIN_USER && password === ADMIN_PASS) {
-        localStorage.setItem("isAdminLoggedIn", "true");
-        showDashboard();
-        openDB();
-      } else {
-        alert("Invalid admin credentials!");
-      }
+    // Lessons elements
+    const lessonForm = document.getElementById("lessonForm");
+    const lessonIdInput = document.getElementById("lessonId");
+    const lessonTitleInput = document.getElementById("lessonTitle");
+    const lessonClassInput = document.getElementById("lessonClass");
+    const lessonSubjectInput = document.getElementById("lessonSubject");
+    const lessonSchoolInput = document.getElementById("lessonSchool");
+    const lessonDescriptionInput = document.getElementById("lessonDescription");
+    const lessonsTableBody = document.querySelector("#lessonsTable tbody");
+    const cancelEditBtn = document.getElementById("cancelEditBtn");
+
+    // Stats
+    const totalPupilsEl = document.getElementById("totalPupils");
+    const totalLessonsEl = document.getElementById("totalLessons");
+    const lastRegistrationEl = document.getElementById("lastRegistration");
+    const lastLessonEl = document.getElementById("lastLesson");
+
+    // Export buttons
+    const exportPupilsExcel = document.getElementById("exportPupilsExcel");
+    const exportPupilsPDF = document.getElementById("exportPupilsPDF");
+    const exportLessonsExcel = document.getElementById("exportLessonsExcel");
+    const exportLessonsPDF = document.getElementById("exportLessonsPDF");
+
+    // Demo data load button
+    const btnDemoData = document.getElementById("btnDemoData");
+
+    // IndexedDB config
+    const DB_NAME = "SmartKidsDB";
+    const DB_VERSION = 2; // 2 so it includes lessons store; users may exist from auth.js version 2
+    const STORE_USERS = "users";
+    const STORE_LESSONS = "lessons";
+
+    let db;
+
+    // ----------------- IndexedDB helpers -----------------
+    function openDatabase(callback) {
+      const req = indexedDB.open(DB_NAME, DB_VERSION);
+      req.onupgradeneeded = (evt) => {
+        db = evt.target.result;
+        if (!db.objectStoreNames.contains(STORE_USERS)) {
+          db.createObjectStore(STORE_USERS, { keyPath: "id", autoIncrement: true });
+        }
+        if (!db.objectStoreNames.contains(STORE_LESSONS)) {
+          const store = db.createObjectStore(STORE_LESSONS, { keyPath: "id", autoIncrement: true });
+          store.createIndex("title", "title", { unique: false });
+          store.createIndex("classLevel", "classLevel", { unique: false });
+          store.createIndex("schoolName", "schoolName", { unique: false });
+          store.createIndex("createdAt", "createdAt", { unique: false });
+        }
+      };
+      req.onsuccess = (evt) => {
+        db = evt.target.result;
+        callback && callback();
+      };
+      req.onerror = (evt) => {
+        console.error("IndexedDB open error:", evt);
+        alert("Failed to open local database.");
+      };
     }
 
-    function logoutAdmin() {
-      localStorage.removeItem("isAdminLoggedIn");
-      showLogin();
+    function getAllFromStore(storeName, callback) {
+      const tx = db.transaction(storeName, "readonly");
+      const store = tx.objectStore(storeName);
+      const req = store.getAll();
+      req.onsuccess = () => callback(req.result || []);
+      req.onerror = () => callback([]);
     }
 
-    function showDashboard() {
-      document.getElementById("adminLoginModal").classList.add("hidden");
-      document.getElementById("adminDashboard").classList.remove("hidden");
+    function addToStore(storeName, value, callback) {
+      const tx = db.transaction(storeName, "readwrite");
+      const store = tx.objectStore(storeName);
+      const req = store.add(value);
+      req.onsuccess = () => callback && callback(req.result);
+      req.onerror = (e) => {
+        console.error("Add error:", e);
+        callback && callback(null, e);
+      };
+    }
+
+    function updateInStore(storeName, value, callback) {
+      const tx = db.transaction(storeName, "readwrite");
+      const store = tx.objectStore(storeName);
+      const req = store.put(value);
+      req.onsuccess = () => callback && callback(true);
+      req.onerror = (e) => {
+        console.error("Update error:", e);
+        callback && callback(false, e);
+      };
+    }
+
+    function deleteFromStore(storeName, key, callback) {
+      const tx = db.transaction(storeName, "readwrite");
+      const store = tx.objectStore(storeName);
+      const req = store.delete(key);
+      req.onsuccess = () => callback && callback(true);
+      req.onerror = (e) => {
+        console.error("Delete error:", e);
+        callback && callback(false, e);
+      };
+    }
+
+    // ----------------- UI + App logic -----------------
+    function showApp() {
+      loginModal.classList.add("hidden");
+      appDiv.classList.remove("hidden");
+      adminBadge.textContent = "Admin";
     }
 
     function showLogin() {
-      document.getElementById("adminLoginModal").classList.remove("hidden");
-      document.getElementById("adminDashboard").classList.add("hidden");
+      loginModal.classList.remove("hidden");
+      appDiv.classList.add("hidden");
     }
 
-    // ===== Simulated Database Connection =====
-    function openDB() {
-      console.log("✅ Database Connected: Ready for Admin Operations");
+    function requireLogin() {
+      const logged = localStorage.getItem("sk_admin_logged");
+      if (logged === "true") {
+        showApp();
+        // open DB then load data
+        openDatabase(loadAllData);
+      } else {
+        showLogin();
+      }
     }
+
+    // Login handler
+    btnLogin.addEventListener("click", () => {
+      const u = document.getElementById("adminUser").value.trim();
+      const p = document.getElementById("adminPass").value.trim();
+      if (u === ADMIN_USER && p === ADMIN_PASS) {
+        localStorage.setItem("sk_admin_logged", "true");
+        loginError.classList.add("hidden");
+        showApp();
+        openDatabase(loadAllData);
+      } else {
+        loginError.classList.remove("hidden");
+      }
+    });
+
+    // Logout handler
+    btnLogout.addEventListener("click", () => {
+      if (!confirm("Logout admin?")) return;
+      localStorage.removeItem("sk_admin_logged");
+      showLogin();
+    });
+
+    // Load all data: pupils & lessons, refresh UI
+    function loadAllData() {
+      // Pupils (users store)
+      getAllFromStore(STORE_USERS, (users) => {
+        renderPupils(users);
+        updatePupilStats(users);
+      });
+
+      // Lessons
+      getAllFromStore(STORE_LESSONS, (lessons) => {
+        renderLessons(lessons);
+        updateLessonStats(lessons);
+      });
+    }
+
+    // ---------- Pupils UI ----------
+    function renderPupils(users) {
+      pupilsTableBody.innerHTML = "";
+      if (!users || users.length === 0) {
+        pupilsTableBody.innerHTML = `<tr><td class="p-2 text-gray-500" colspan="8">No pupils found.</td></tr>`;
+        return;
+      }
+
+      // Sort by fullName
+      users.sort((a, b) => (a.fullName || "").localeCompare(b.fullName || ""));
+
+      for (const u of users) {
+        const tr = document.createElement("tr");
+        tr.className = "hover:bg-gray-50";
+        const registered = u.timestamp ? new Date(u.timestamp).toLocaleString() : (u.date || "-");
+        tr.innerHTML = `
+          <td class="p-2 border">${u.fullName || "-"}</td>
+          <td class="p-2 border">${u.email || "-"}</td>
+          <td class="p-2 border">${u.age || "-"}</td>
+          <td class="p-2 border">${u.class || u.className || "-"}</td>
+          <td class="p-2 border">${u.schoolName || "-"}</td>
+          <td class="p-2 border">${u.location || "-"}</td>
+          <td class="p-2 border">${u.country || "-"}</td>
+          <td class="p-2 border">${registered}</td>
+        `;
+        pupilsTableBody.appendChild(tr);
+      }
+    }
+
+    function updatePupilStats(users) {
+      totalPupilsEl.textContent = (users && users.length) ? users.length : 0;
+      if (users && users.length) {
+        const last = users.reduce((a, b) => ( (a.timestamp||a.date||0) > (b.timestamp||b.date||0) ? a : b ));
+        lastRegistrationEl.textContent = (last && (last.timestamp || last.date)) ? new Date(last.timestamp || last.date).toLocaleString() : "-";
+      } else {
+        lastRegistrationEl.textContent = "-";
+      }
+    }
+
+    // search pupils
+    pupilSearchBtn.addEventListener("click", () => {
+      const q = (pupilSearchInput.value || "").trim().toLowerCase();
+      getAllFromStore(STORE_USERS, (users) => {
+        if (!q) return renderPupils(users);
+        const filtered = (users || []).filter(u => {
+          const name = (u.fullName||"").toLowerCase();
+          const school = (u.schoolName||"").toLowerCase();
+          return name.includes(q) || school.includes(q) || (u.email||"").toLowerCase().includes(q);
+        });
+        renderPupils(filtered);
+      });
+    });
+
+    // ---------- Lessons UI ----------
+    function renderLessons(lessons) {
+      lessonsTableBody.innerHTML = "";
+      if (!lessons || lessons.length === 0) {
+        lessonsTableBody.innerHTML = `<tr><td class="p-2 text-gray-500" colspan="6">No lessons found.</td></tr>`;
+        return;
+      }
+
+      // newest first
+      lessons.sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
+
+      for (const l of lessons) {
+        const tr = document.createElement("tr");
+        tr.className = "hover:bg-gray-50";
+        const created = l.createdAt ? new Date(l.createdAt).toLocaleString() : "-";
+        tr.innerHTML = `
+          <td class="p-2 border">${l.title || "-"}</td>
+          <td class="p-2 border">${l.classLevel || "-"}</td>
+          <td class="p-2 border">${l.subject || "-"}</td>
+          <td class="p-2 border">${l.schoolName || "-"}</td>
+          <td class="p-2 border">${created}</td>
+          <td class="p-2 border">
+            <button class="edit-lesson text-sm text-blue-600 mr-2" data-id="${l.id}">Edit</button>
+            <button class="delete-lesson text-sm text-red-600" data-id="${l.id}">Delete</button>
+          </td>
+        `;
+        lessonsTableBody.appendChild(tr);
+      }
+
+      // bind edit/delete
+      lessonsTableBody.querySelectorAll(".edit-lesson").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = Number(btn.dataset.id);
+          editLessonById(id);
+        });
+      });
+      lessonsTableBody.querySelectorAll(".delete-lesson").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = Number(btn.dataset.id);
+          if (confirm("Delete this lesson?")) {
+            deleteFromStore(STORE_LESSONS, id, (ok) => {
+              if (ok) openDatabase(loadAllData);
+            });
+          }
+        });
+      });
+    }
+
+    function updateLessonStats(lessons) {
+      totalLessonsEl.textContent = (lessons && lessons.length) ? lessons.length : 0;
+      if (lessons && lessons.length) {
+        const last = lessons.reduce((a,b)=> ( (a.createdAt||0) > (b.createdAt||0) ? a : b ));
+        lastLessonEl.textContent = last && last.createdAt ? new Date(last.createdAt).toLocaleString() : "-";
+      } else {
+        lastLessonEl.textContent = "-";
+      }
+    }
+
+    // add/edit lesson
+    lessonForm.addEventListener("submit", (ev) => {
+      ev.preventDefault();
+      const idVal = lessonIdInput.value ? Number(lessonIdInput.value) : null;
+      const payload = {
+        title: lessonTitleInput.value.trim(),
+        classLevel: lessonClassInput.value,
+        subject: lessonSubjectInput.value.trim(),
+        schoolName: lessonSchoolInput.value.trim(),
+        description: lessonDescriptionInput.value.trim(),
+        createdAt: idVal ? undefined : Date.now()
+      };
+
+      if (!payload.title) { alert("Lesson title is required"); return; }
+
+      if (idVal) {
+        // update: fetch record, merge, put
+        const tx = db.transaction(STORE_LESSONS, "readwrite");
+        const store = tx.objectStore(STORE_LESSONS);
+        const req = store.get(idVal);
+        req.onsuccess = () => {
+          const item = req.result || {};
+          const updated = {
+            ...item,
+            ...payload,
+            id: idVal,
+            // keep original createdAt
+            createdAt: item.createdAt || Date.now()
+          };
+          updateInStore(STORE_LESSONS, updated, (ok) => {
+            if (ok) {
+              resetLessonForm();
+              openDatabase(loadAllData);
+            }
+          });
+        };
+      } else {
+        // add
+        const toAdd = { ...payload, createdAt: Date.now() };
+        addToStore(STORE_LESSONS, toAdd, (newId) => {
+          if (newId) {
+            resetLessonForm();
+            openDatabase(loadAllData);
+          } else {
+            alert("Failed to save lesson");
+          }
+        });
+      }
+    });
+
+    cancelEditBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      resetLessonForm();
+    });
+
+    function editLessonById(id) {
+      const tx = db.transaction(STORE_LESSONS, "readonly");
+      const store = tx.objectStore(STORE_LESSONS);
+      const req = store.get(id);
+      req.onsuccess = () => {
+        const rec = req.result;
+        if (!rec) return alert("Lesson not found");
+        lessonIdInput.value = rec.id;
+        lessonTitleInput.value = rec.title || "";
+        lessonClassInput.value = rec.classLevel || "";
+        lessonSubjectInput.value = rec.subject || "";
+        lessonSchoolInput.value = rec.schoolName || "";
+        lessonDescriptionInput.value = rec.description || "";
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      };
+    }
+
+    function resetLessonForm() {
+      lessonIdInput.value = "";
+      lessonTitleInput.value = "";
+      lessonClassInput.value = "";
+      lessonSubjectInput.value = "";
+      lessonSchoolInput.value = "";
+      lessonDescriptionInput.value = "";
+    }
+
+    // ----------------- Export helpers -----------------
+    function tableToSheetData(tableEl) {
+      // returns [headersArray, ...rowsArray]
+      const headers = Array.from(tableEl.querySelectorAll("thead th")).map(h => h.innerText.trim());
+      const rows = Array.from(tableEl.querySelectorAll("tbody tr")).map(tr =>
+        Array.from(tr.querySelectorAll("td")).map(td => td.innerText.trim())
+      );
+      return { headers, rows };
+    }
+
+    function exportTableToExcelFromArrays(headers, rows, filename) {
+      const aoa = [headers, ...rows];
+      const wb = XLSX.utils.book_new();
+      const ws = XLSX.utils.aoa_to_sheet(aoa);
+      XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+      XLSX.writeFile(wb, filename);
+    }
+
+    function exportUsersExcel() {
+      // build arrays from DB rather than DOM
+      getAllFromStore(STORE_USERS, (users) => {
+        const headers = ["Full Name", "Email", "Age", "Class", "School", "Location", "Country", "Registered"];
+        const rows = (users || []).map(u => [
+          u.fullName || "", u.email || "", u.age || "", u.class || u.className || "",
+          u.schoolName || "", u.location || "", u.country || "", (u.timestamp ? new Date(u.timestamp).toLocaleString() : (u.date || ""))
+        ]);
+        const fname = `Pupils_${(new Date()).toISOString().slice(0,19).replace(/[:T]/g,"-")}.xlsx`;
+        exportTableToExcelFromArrays(headers, rows, fname);
+      });
+    }
+
+    function exportUsersPDF() {
+      getAllFromStore(STORE_USERS, (users) => {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF('l', 'pt', 'a4');
+        doc.text("SmartKids — Registered Pupils", 40, 40);
+        const head = [["Full Name","Email","Age","Class","School","Location","Country","Registered"]];
+        const body = (users||[]).map(u => [
+          u.fullName || "", u.email || "", u.age || "", u.class || u.className || "",
+          u.schoolName || "", u.location || "", u.country || "", (u.timestamp ? new Date(u.timestamp).toLocaleString() : (u.date || ""))
+        ]);
+        doc.autoTable({ head, body, startY: 60, styles: { fontSize: 8 } });
+        const fname = `Pupils_${(new Date()).toISOString().slice(0,19).replace(/[:T]/g,"-")}.pdf`;
+        doc.save(fname);
+      });
+    }
+
+    function exportLessonsExcel() {
+      getAllFromStore(STORE_LESSONS, (lessons) => {
+        const headers = ["Title","Class","Subject","School","Description","CreatedAt"];
+        const rows = (lessons||[]).map(l => [
+          l.title || "", l.classLevel || "", l.subject || "", l.schoolName || "", (l.description || ""), (l.createdAt ? new Date(l.createdAt).toLocaleString() : "")
+        ]);
+        const fname = `Lessons_${(new Date()).toISOString().slice(0,19).replace(/[:T]/g,"-")}.xlsx`;
+        exportTableToExcelFromArrays(headers, rows, fname);
+      });
+    }
+
+    function exportLessonsPDF() {
+      getAllFromStore(STORE_LESSONS, (lessons) => {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF('l', 'pt', 'a4');
+        doc.text("SmartKids — Lessons", 40, 40);
+        const head = [["Title","Class","Subject","School","Description","CreatedAt"]];
+        const body = (lessons||[]).map(l => [
+          l.title || "", l.classLevel || "", l.subject || "", l.schoolName || "", (l.description || ""), (l.createdAt ? new Date(l.createdAt).toLocaleString() : "")
+        ]);
+        doc.autoTable({ head, body, startY: 60, styles: { fontSize: 8 } });
+        const fname = `Lessons_${(new Date()).toISOString().slice(0,19).replace(/[:T]/g,"-")}.pdf`;
+        doc.save(fname);
+      });
+    }
+
+    // wire export buttons
+    exportPupilsExcel.addEventListener("click", exportUsersExcel);
+    exportPupilsPDF.addEventListener("click", exportUsersPDF);
+    exportLessonsExcel.addEventListener("click", exportLessonsExcel);
+    exportLessonsPDF.addEventListener("click", exportLessonsPDF);
+
+    // Demo data loader (for quick testing lessons)
+    btnDemoData.addEventListener("click", () => {
+      const sampleLessons = [
+        { title: "Counting to 20", classLevel: "Year 1", subject: "Math", schoolName: "SmartKids Academy", description: "Numbers 1-20", createdAt: Date.now() - 86400000 },
+        { title: "Basic Phonics - A", classLevel: "Year 1", subject: "English", schoolName: "SmartKids Academy", description: "Letter A sounds", createdAt: Date.now() - 7200000 },
+      ];
+      // bulk add
+      let i = 0;
+      (function addNext() {
+        if (i >= sampleLessons.length) return openDatabase(loadAllData);
+        addToStore(STORE_LESSONS, sampleLessons[i++], () => addNext());
+      })();
+    });
+
+    // initial boot
+    requireLogin();
+
+    // expose a simple API in window for future server switching
+    window.SmartKidsAdmin = {
+      openDatabase,
+      getAllFromStore,
+      addToStore,
+      updateInStore,
+      deleteFromStore
+      // Later you can replace these with fetch() calls to server.js
+    };
+
+  })();
   </script>
 </body>
 </html>
