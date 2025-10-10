@@ -10,52 +10,51 @@
 
   <!-- XLSX (Excel export) -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
   <!-- jsPDF + autotable (PDF export) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
 
   <style>
-    /* small helpers */
     .card { background: #fff; border-radius: .75rem; padding: 1rem; box-shadow: 0 6px 18px rgba(0,0,0,0.06); }
-    .hidden-by-default { display: none; }
   </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
 
-  <!-- ===== LOGIN MODAL ===== -->
+  <!-- LOGIN MODAL -->
   <div id="loginModal" class="fixed inset-0 z-50 bg-black/60 flex items-center justify-center">
     <div class="bg-white rounded-xl w-full max-w-md p-6">
       <h2 class="text-2xl font-semibold text-blue-700 mb-4 text-center">Admin Login</h2>
-
       <div class="space-y-3">
         <input id="adminUser" type="text" placeholder="Username" class="w-full p-2 border rounded" />
         <input id="adminPass" type="password" placeholder="Password" class="w-full p-2 border rounded" />
         <div class="flex justify-between items-center">
           <button id="btnLogin" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Login</button>
-          <button id="btnDemoData" title="Load demo lessons" class="text-sm text-gray-500 underline">Load demo lessons</button>
+          <button id="btnLoadDemo" class="text-sm text-gray-500 underline">Load demo lessons</button>
         </div>
-        <p id="loginError" class="text-red-600 text-sm hidden">Invalid credentials.</p>
+        <p id="loginError" class="text-red-600 text-sm hidden">Invalid credentials</p>
       </div>
     </div>
   </div>
 
-  <!-- ===== MAIN APP ===== -->
+  <!-- APP -->
   <div id="app" class="hidden">
 
-    <!-- NAVBAR -->
+    <!-- NAV -->
     <header class="bg-white shadow p-4 flex items-center justify-between">
       <div class="flex items-center gap-4">
         <h1 class="text-xl font-bold text-blue-700">SmartKids Admin</h1>
-        <div id="stats" class="flex gap-3"></div>
+        <div id="cards" class="flex gap-3"></div>
       </div>
       <div class="flex items-center gap-4">
-        <span id="adminBadge" class="text-sm text-gray-600"></span>
+        <div id="adminBadge" class="text-sm text-gray-600">Admin</div>
         <button id="btnLogout" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Logout</button>
       </div>
     </header>
 
     <main class="container mx-auto p-6 space-y-8">
-      <!-- Dashboard cards -->
+
+      <!-- Stats cards -->
       <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div class="card">
           <div class="text-sm text-gray-500">Total Pupils</div>
@@ -75,14 +74,14 @@
         </div>
       </section>
 
-      <!-- Pupils & Lessons -->
+      <!-- Pupils & Lessons area -->
       <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-        <!-- PUPILS -->
+        <!-- Pupils -->
         <div class="card">
           <div class="flex items-center justify-between mb-3">
             <h2 class="font-semibold">Registered Pupils</h2>
-            <div class="flex gap-2">
+            <div class="flex gap-2 items-center">
               <input id="pupilSearch" class="border px-2 py-1 rounded" placeholder="Search name or school" />
               <button id="pupilSearchBtn" class="bg-green-600 text-white px-3 py-1 rounded">Search</button>
               <button id="exportPupilsExcel" class="bg-green-400 text-white px-3 py-1 rounded">Excel</button>
@@ -109,7 +108,7 @@
           </div>
         </div>
 
-        <!-- LESSONS -->
+        <!-- Lessons -->
         <div class="card">
           <div class="flex items-center justify-between mb-3">
             <h2 class="font-semibold">Lesson Manager</h2>
@@ -119,7 +118,6 @@
             </div>
           </div>
 
-          <!-- add/edit form -->
           <form id="lessonForm" class="space-y-3 mb-4">
             <input type="hidden" id="lessonId" />
             <div>
@@ -159,7 +157,6 @@
             </div>
           </form>
 
-          <!-- lessons table -->
           <div class="overflow-x-auto">
             <table id="lessonsTable" class="min-w-full text-sm">
               <thead class="bg-gray-100">
@@ -181,20 +178,15 @@
     </main>
   </div>
 
-  <!-- ===== SCRIPT: DB + App Logic ===== -->
   <script>
-  /**
-   * SmartKids Admin Dashboard (self-contained)
-   * - IndexedDB "SmartKidsDB" with stores: "users" (may be created by auth.js) and "lessons"
-   * - Admin login saved in localStorage
-   * - Pupils listing from users store (if present)
-   * - Lesson manager (create/read/update/delete) in "lessons" store
-   *
-   * Ready to swap DB functions with server endpoints later.
-   */
+  /* Single-file Admin Dashboard — IndexedDB wired to existing auth.js registrations store.
+     - DB: SmartKidsDB
+     - Pupils store: "registrations" (what auth.js uses)
+     - Lessons store: "lessons" (managed here)
+     - Login credentials: smartkids / myNias9ja#
+  */
 
   (function () {
-    // ----- Admin credentials -----
     const ADMIN_USER = "smartkids";
     const ADMIN_PASS = "myNias9ja#";
 
@@ -205,13 +197,14 @@
     const btnLogout = document.getElementById("btnLogout");
     const loginError = document.getElementById("loginError");
     const adminBadge = document.getElementById("adminBadge");
+    const btnLoadDemo = document.getElementById("btnLoadDemo");
 
-    // Pupils elements
+    // pupil elements
     const pupilsTableBody = document.querySelector("#pupilsTable tbody");
     const pupilSearchInput = document.getElementById("pupilSearch");
     const pupilSearchBtn = document.getElementById("pupilSearchBtn");
 
-    // Lessons elements
+    // lessons elements
     const lessonForm = document.getElementById("lessonForm");
     const lessonIdInput = document.getElementById("lessonId");
     const lessonTitleInput = document.getElementById("lessonTitle");
@@ -222,36 +215,31 @@
     const lessonsTableBody = document.querySelector("#lessonsTable tbody");
     const cancelEditBtn = document.getElementById("cancelEditBtn");
 
-    // Stats
     const totalPupilsEl = document.getElementById("totalPupils");
     const totalLessonsEl = document.getElementById("totalLessons");
     const lastRegistrationEl = document.getElementById("lastRegistration");
     const lastLessonEl = document.getElementById("lastLesson");
 
-    // Export buttons
     const exportPupilsExcel = document.getElementById("exportPupilsExcel");
     const exportPupilsPDF = document.getElementById("exportPupilsPDF");
     const exportLessonsExcel = document.getElementById("exportLessonsExcel");
     const exportLessonsPDF = document.getElementById("exportLessonsPDF");
 
-    // Demo data load button
-    const btnDemoData = document.getElementById("btnDemoData");
-
-    // IndexedDB config
+    // DB config
     const DB_NAME = "SmartKidsDB";
-    const DB_VERSION = 2; // 2 so it includes lessons store; users may exist from auth.js version 2
-    const STORE_USERS = "users";
+    const DB_VERSION = 2; // ensure lessons store available
+    const STORE_REGISTRATIONS = "registrations"; // matches your auth.js
     const STORE_LESSONS = "lessons";
 
     let db;
 
-    // ----------------- IndexedDB helpers -----------------
-    function openDatabase(callback) {
+    // ---------------- IndexedDB helpers ----------------
+    function openDatabase(cb) {
       const req = indexedDB.open(DB_NAME, DB_VERSION);
-      req.onupgradeneeded = (evt) => {
-        db = evt.target.result;
-        if (!db.objectStoreNames.contains(STORE_USERS)) {
-          db.createObjectStore(STORE_USERS, { keyPath: "id", autoIncrement: true });
+      req.onupgradeneeded = (e) => {
+        db = e.target.result;
+        if (!db.objectStoreNames.contains(STORE_REGISTRATIONS)) {
+          db.createObjectStore(STORE_REGISTRATIONS, { keyPath: "id", autoIncrement: true });
         }
         if (!db.objectStoreNames.contains(STORE_LESSONS)) {
           const store = db.createObjectStore(STORE_LESSONS, { keyPath: "id", autoIncrement: true });
@@ -261,58 +249,49 @@
           store.createIndex("createdAt", "createdAt", { unique: false });
         }
       };
-      req.onsuccess = (evt) => {
-        db = evt.target.result;
-        callback && callback();
+      req.onsuccess = (e) => {
+        db = e.target.result;
+        cb && cb();
       };
-      req.onerror = (evt) => {
-        console.error("IndexedDB open error:", evt);
+      req.onerror = (e) => {
+        console.error("IndexedDB open error", e);
         alert("Failed to open local database.");
       };
     }
 
-    function getAllFromStore(storeName, callback) {
+    function getAllFromStore(storeName, cb) {
       const tx = db.transaction(storeName, "readonly");
       const store = tx.objectStore(storeName);
-      const req = store.getAll();
-      req.onsuccess = () => callback(req.result || []);
-      req.onerror = () => callback([]);
+      const r = store.getAll();
+      r.onsuccess = () => cb(r.result || []);
+      r.onerror = () => cb([]);
     }
 
-    function addToStore(storeName, value, callback) {
+    function addToStore(storeName, value, cb) {
       const tx = db.transaction(storeName, "readwrite");
       const store = tx.objectStore(storeName);
       const req = store.add(value);
-      req.onsuccess = () => callback && callback(req.result);
-      req.onerror = (e) => {
-        console.error("Add error:", e);
-        callback && callback(null, e);
-      };
+      req.onsuccess = () => cb && cb(req.result);
+      req.onerror = (e) => { console.error("Add error", e); cb && cb(null, e); };
     }
 
-    function updateInStore(storeName, value, callback) {
+    function putToStore(storeName, value, cb) {
       const tx = db.transaction(storeName, "readwrite");
       const store = tx.objectStore(storeName);
       const req = store.put(value);
-      req.onsuccess = () => callback && callback(true);
-      req.onerror = (e) => {
-        console.error("Update error:", e);
-        callback && callback(false, e);
-      };
+      req.onsuccess = () => cb && cb(true);
+      req.onerror = (e) => { console.error("Put error", e); cb && cb(false, e); };
     }
 
-    function deleteFromStore(storeName, key, callback) {
+    function deleteFromStore(storeName, key, cb) {
       const tx = db.transaction(storeName, "readwrite");
       const store = tx.objectStore(storeName);
       const req = store.delete(key);
-      req.onsuccess = () => callback && callback(true);
-      req.onerror = (e) => {
-        console.error("Delete error:", e);
-        callback && callback(false, e);
-      };
+      req.onsuccess = () => cb && cb(true);
+      req.onerror = (e) => { console.error("Delete error", e); cb && cb(false, e); };
     }
 
-    // ----------------- UI + App logic -----------------
+    // ---------------- Login / App boot ----------------
     function showApp() {
       loginModal.classList.add("hidden");
       appDiv.classList.remove("hidden");
@@ -325,17 +304,14 @@
     }
 
     function requireLogin() {
-      const logged = localStorage.getItem("sk_admin_logged");
-      if (logged === "true") {
+      if (localStorage.getItem("sk_admin_logged") === "true") {
         showApp();
-        // open DB then load data
         openDatabase(loadAllData);
       } else {
         showLogin();
       }
     }
 
-    // Login handler
     btnLogin.addEventListener("click", () => {
       const u = document.getElementById("adminUser").value.trim();
       const p = document.getElementById("adminPass").value.trim();
@@ -349,102 +325,103 @@
       }
     });
 
-    // Logout handler
     btnLogout.addEventListener("click", () => {
       if (!confirm("Logout admin?")) return;
       localStorage.removeItem("sk_admin_logged");
       showLogin();
     });
 
-    // Load all data: pupils & lessons, refresh UI
+    // ---------------- Load & render ----------------
     function loadAllData() {
-      // Pupils (users store)
-      getAllFromStore(STORE_USERS, (users) => {
-        renderPupils(users);
-        updatePupilStats(users);
+      getAllFromStore(STORE_REGISTRATIONS, (regs) => {
+        renderPupils(regs);
+        updatePupilStats(regs);
       });
-
-      // Lessons
       getAllFromStore(STORE_LESSONS, (lessons) => {
         renderLessons(lessons);
         updateLessonStats(lessons);
       });
     }
 
-    // ---------- Pupils UI ----------
-    function renderPupils(users) {
+    // --- Pupils ---
+    function renderPupils(list) {
       pupilsTableBody.innerHTML = "";
-      if (!users || users.length === 0) {
+      if (!list || list.length === 0) {
         pupilsTableBody.innerHTML = `<tr><td class="p-2 text-gray-500" colspan="8">No pupils found.</td></tr>`;
         return;
       }
 
-      // Sort by fullName
-      users.sort((a, b) => (a.fullName || "").localeCompare(b.fullName || ""));
+      // handle possible field names: fullName or name, class or className, timestamp or date
+      list.sort((a,b) => ( (a.fullName||a.name||"").toLowerCase() ).localeCompare((b.fullName||b.name||"").toLowerCase()));
 
-      for (const u of users) {
+      for (const u of list) {
+        const name = u.fullName || u.name || "";
+        const email = u.email || "";
+        const age = u.age || "";
+        const klass = u.class || u.className || u.course || "";
+        const school = u.schoolName || u.school || "";
+        const location = u.location || "";
+        const country = u.country || "";
+        const registered = u.timestamp ? new Date(u.timestamp).toLocaleString() : (u.date || "");
         const tr = document.createElement("tr");
         tr.className = "hover:bg-gray-50";
-        const registered = u.timestamp ? new Date(u.timestamp).toLocaleString() : (u.date || "-");
         tr.innerHTML = `
-          <td class="p-2 border">${u.fullName || "-"}</td>
-          <td class="p-2 border">${u.email || "-"}</td>
-          <td class="p-2 border">${u.age || "-"}</td>
-          <td class="p-2 border">${u.class || u.className || "-"}</td>
-          <td class="p-2 border">${u.schoolName || "-"}</td>
-          <td class="p-2 border">${u.location || "-"}</td>
-          <td class="p-2 border">${u.country || "-"}</td>
-          <td class="p-2 border">${registered}</td>
+          <td class="p-2 border">${escapeHtml(name)}</td>
+          <td class="p-2 border">${escapeHtml(email)}</td>
+          <td class="p-2 border">${escapeHtml(age)}</td>
+          <td class="p-2 border">${escapeHtml(klass)}</td>
+          <td class="p-2 border">${escapeHtml(school)}</td>
+          <td class="p-2 border">${escapeHtml(location)}</td>
+          <td class="p-2 border">${escapeHtml(country)}</td>
+          <td class="p-2 border">${escapeHtml(registered)}</td>
         `;
         pupilsTableBody.appendChild(tr);
       }
     }
 
-    function updatePupilStats(users) {
-      totalPupilsEl.textContent = (users && users.length) ? users.length : 0;
-      if (users && users.length) {
-        const last = users.reduce((a, b) => ( (a.timestamp||a.date||0) > (b.timestamp||b.date||0) ? a : b ));
-        lastRegistrationEl.textContent = (last && (last.timestamp || last.date)) ? new Date(last.timestamp || last.date).toLocaleString() : "-";
-      } else {
+    function updatePupilStats(list) {
+      totalPupilsEl.textContent = list ? list.length : 0;
+      if (!list || list.length === 0) {
         lastRegistrationEl.textContent = "-";
+        return;
       }
+      // pick latest by timestamp/date
+      const last = list.reduce((a,b) => ((a.timestamp||a.date||0) > (b.timestamp||b.date||0) ? a : b));
+      lastRegistrationEl.textContent = (last && (last.timestamp || last.date)) ? new Date(last.timestamp || last.date).toLocaleString() : "-";
     }
 
-    // search pupils
     pupilSearchBtn.addEventListener("click", () => {
       const q = (pupilSearchInput.value || "").trim().toLowerCase();
-      getAllFromStore(STORE_USERS, (users) => {
-        if (!q) return renderPupils(users);
-        const filtered = (users || []).filter(u => {
-          const name = (u.fullName||"").toLowerCase();
-          const school = (u.schoolName||"").toLowerCase();
-          return name.includes(q) || school.includes(q) || (u.email||"").toLowerCase().includes(q);
+      getAllFromStore(STORE_REGISTRATIONS, (list) => {
+        if (!q) return renderPupils(list || []);
+        const filtered = (list||[]).filter(u => {
+          const name = (u.fullName||u.name||"").toLowerCase();
+          const school = (u.schoolName||u.school||"").toLowerCase();
+          const email = (u.email||"").toLowerCase();
+          return name.includes(q) || school.includes(q) || email.includes(q);
         });
         renderPupils(filtered);
       });
     });
 
-    // ---------- Lessons UI ----------
-    function renderLessons(lessons) {
+    // --- Lessons ---
+    function renderLessons(list) {
       lessonsTableBody.innerHTML = "";
-      if (!lessons || lessons.length === 0) {
+      if (!list || list.length === 0) {
         lessonsTableBody.innerHTML = `<tr><td class="p-2 text-gray-500" colspan="6">No lessons found.</td></tr>`;
         return;
       }
-
-      // newest first
-      lessons.sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
-
-      for (const l of lessons) {
+      list.sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
+      for (const l of list) {
+        const created = l.createdAt ? new Date(l.createdAt).toLocaleString() : "-";
         const tr = document.createElement("tr");
         tr.className = "hover:bg-gray-50";
-        const created = l.createdAt ? new Date(l.createdAt).toLocaleString() : "-";
         tr.innerHTML = `
-          <td class="p-2 border">${l.title || "-"}</td>
-          <td class="p-2 border">${l.classLevel || "-"}</td>
-          <td class="p-2 border">${l.subject || "-"}</td>
-          <td class="p-2 border">${l.schoolName || "-"}</td>
-          <td class="p-2 border">${created}</td>
+          <td class="p-2 border">${escapeHtml(l.title || "")}</td>
+          <td class="p-2 border">${escapeHtml(l.classLevel || "")}</td>
+          <td class="p-2 border">${escapeHtml(l.subject || "")}</td>
+          <td class="p-2 border">${escapeHtml(l.schoolName || "")}</td>
+          <td class="p-2 border">${escapeHtml(created)}</td>
           <td class="p-2 border">
             <button class="edit-lesson text-sm text-blue-600 mr-2" data-id="${l.id}">Edit</button>
             <button class="delete-lesson text-sm text-red-600" data-id="${l.id}">Delete</button>
@@ -453,96 +430,72 @@
         lessonsTableBody.appendChild(tr);
       }
 
-      // bind edit/delete
+      // bind actions
       lessonsTableBody.querySelectorAll(".edit-lesson").forEach(btn => {
-        btn.addEventListener("click", () => {
+        btn.onclick = () => {
           const id = Number(btn.dataset.id);
           editLessonById(id);
-        });
+        };
       });
       lessonsTableBody.querySelectorAll(".delete-lesson").forEach(btn => {
-        btn.addEventListener("click", () => {
+        btn.onclick = () => {
           const id = Number(btn.dataset.id);
           if (confirm("Delete this lesson?")) {
             deleteFromStore(STORE_LESSONS, id, (ok) => {
               if (ok) openDatabase(loadAllData);
             });
           }
-        });
+        };
       });
     }
 
-    function updateLessonStats(lessons) {
-      totalLessonsEl.textContent = (lessons && lessons.length) ? lessons.length : 0;
-      if (lessons && lessons.length) {
-        const last = lessons.reduce((a,b)=> ( (a.createdAt||0) > (b.createdAt||0) ? a : b ));
-        lastLessonEl.textContent = last && last.createdAt ? new Date(last.createdAt).toLocaleString() : "-";
-      } else {
-        lastLessonEl.textContent = "-";
-      }
+    function updateLessonStats(list) {
+      totalLessonsEl.textContent = list ? list.length : 0;
+      if (!list || list.length === 0) { lastLessonEl.textContent = "-"; return; }
+      const last = list.reduce((a,b) => ((a.createdAt||0) > (b.createdAt||0) ? a : b));
+      lastLessonEl.textContent = last && last.createdAt ? new Date(last.createdAt).toLocaleString() : "-";
     }
 
-    // add/edit lesson
-    lessonForm.addEventListener("submit", (ev) => {
-      ev.preventDefault();
+    lessonForm.addEventListener("submit", (e) => {
+      e.preventDefault();
       const idVal = lessonIdInput.value ? Number(lessonIdInput.value) : null;
       const payload = {
         title: lessonTitleInput.value.trim(),
         classLevel: lessonClassInput.value,
         subject: lessonSubjectInput.value.trim(),
         schoolName: lessonSchoolInput.value.trim(),
-        description: lessonDescriptionInput.value.trim(),
-        createdAt: idVal ? undefined : Date.now()
+        description: lessonDescriptionInput.value.trim()
       };
-
-      if (!payload.title) { alert("Lesson title is required"); return; }
+      if (!payload.title) return alert("Lesson title required");
 
       if (idVal) {
-        // update: fetch record, merge, put
+        // update existing
         const tx = db.transaction(STORE_LESSONS, "readwrite");
         const store = tx.objectStore(STORE_LESSONS);
-        const req = store.get(idVal);
-        req.onsuccess = () => {
-          const item = req.result || {};
-          const updated = {
-            ...item,
-            ...payload,
-            id: idVal,
-            // keep original createdAt
-            createdAt: item.createdAt || Date.now()
-          };
-          updateInStore(STORE_LESSONS, updated, (ok) => {
-            if (ok) {
-              resetLessonForm();
-              openDatabase(loadAllData);
-            }
-          });
+        const r = store.get(idVal);
+        r.onsuccess = () => {
+          const existing = r.result || {};
+          const updated = { ...existing, ...payload, id: idVal, createdAt: existing.createdAt || Date.now() };
+          putToStore(STORE_LESSONS, updated, (ok) => { if (ok) { resetLessonForm(); openDatabase(loadAllData); } });
         };
       } else {
         // add
         const toAdd = { ...payload, createdAt: Date.now() };
-        addToStore(STORE_LESSONS, toAdd, (newId) => {
-          if (newId) {
-            resetLessonForm();
-            openDatabase(loadAllData);
-          } else {
-            alert("Failed to save lesson");
-          }
+        addToStore(STORE_LESSONS, toAdd, (newId, err) => {
+          if (newId) { resetLessonForm(); openDatabase(loadAllData); }
+          else alert("Failed to save lesson");
         });
       }
     });
 
-    cancelEditBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      resetLessonForm();
-    });
+    cancelEditBtn.addEventListener("click", (e) => { e.preventDefault(); resetLessonForm(); });
 
     function editLessonById(id) {
       const tx = db.transaction(STORE_LESSONS, "readonly");
       const store = tx.objectStore(STORE_LESSONS);
-      const req = store.get(id);
-      req.onsuccess = () => {
-        const rec = req.result;
+      const r = store.get(id);
+      r.onsuccess = () => {
+        const rec = r.result;
         if (!rec) return alert("Lesson not found");
         lessonIdInput.value = rec.id;
         lessonTitleInput.value = rec.title || "";
@@ -563,17 +516,8 @@
       lessonDescriptionInput.value = "";
     }
 
-    // ----------------- Export helpers -----------------
-    function tableToSheetData(tableEl) {
-      // returns [headersArray, ...rowsArray]
-      const headers = Array.from(tableEl.querySelectorAll("thead th")).map(h => h.innerText.trim());
-      const rows = Array.from(tableEl.querySelectorAll("tbody tr")).map(tr =>
-        Array.from(tr.querySelectorAll("td")).map(td => td.innerText.trim())
-      );
-      return { headers, rows };
-    }
-
-    function exportTableToExcelFromArrays(headers, rows, filename) {
+    // ------------- Exports -------------
+    function exportArrayToExcel(headers, rows, filename) {
       const aoa = [headers, ...rows];
       const wb = XLSX.utils.book_new();
       const ws = XLSX.utils.aoa_to_sheet(aoa);
@@ -581,28 +525,27 @@
       XLSX.writeFile(wb, filename);
     }
 
-    function exportUsersExcel() {
-      // build arrays from DB rather than DOM
-      getAllFromStore(STORE_USERS, (users) => {
-        const headers = ["Full Name", "Email", "Age", "Class", "School", "Location", "Country", "Registered"];
-        const rows = (users || []).map(u => [
-          u.fullName || "", u.email || "", u.age || "", u.class || u.className || "",
-          u.schoolName || "", u.location || "", u.country || "", (u.timestamp ? new Date(u.timestamp).toLocaleString() : (u.date || ""))
+    function exportPupilsExcelFn() {
+      getAllFromStore(STORE_REGISTRATIONS, (users) => {
+        const headers = ["Full Name","Email","Age","Class","School","Location","Country","Registered"];
+        const rows = (users||[]).map(u => [
+          u.fullName || u.name || "", u.email || "", u.age || "", u.class || u.className || "",
+          u.schoolName || u.school || "", u.location || "", u.country || "", u.timestamp ? new Date(u.timestamp).toLocaleString() : (u.date || "")
         ]);
         const fname = `Pupils_${(new Date()).toISOString().slice(0,19).replace(/[:T]/g,"-")}.xlsx`;
-        exportTableToExcelFromArrays(headers, rows, fname);
+        exportArrayToExcel(headers, rows, fname);
       });
     }
 
-    function exportUsersPDF() {
-      getAllFromStore(STORE_USERS, (users) => {
+    function exportPupilsPDFfn() {
+      getAllFromStore(STORE_REGISTRATIONS, (users) => {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF('l', 'pt', 'a4');
         doc.text("SmartKids — Registered Pupils", 40, 40);
         const head = [["Full Name","Email","Age","Class","School","Location","Country","Registered"]];
         const body = (users||[]).map(u => [
-          u.fullName || "", u.email || "", u.age || "", u.class || u.className || "",
-          u.schoolName || "", u.location || "", u.country || "", (u.timestamp ? new Date(u.timestamp).toLocaleString() : (u.date || ""))
+          u.fullName || u.name || "", u.email || "", u.age || "", u.class || u.className || "",
+          u.schoolName || u.school || "", u.location || "", u.country || "", u.timestamp ? new Date(u.timestamp).toLocaleString() : (u.date || "")
         ]);
         doc.autoTable({ head, body, startY: 60, styles: { fontSize: 8 } });
         const fname = `Pupils_${(new Date()).toISOString().slice(0,19).replace(/[:T]/g,"-")}.pdf`;
@@ -610,25 +553,25 @@
       });
     }
 
-    function exportLessonsExcel() {
+    function exportLessonsExcelFn() {
       getAllFromStore(STORE_LESSONS, (lessons) => {
-        const headers = ["Title","Class","Subject","School","Description","CreatedAt"];
+        const headers = ["Title","Class","Subject","School","Description","Created"];
         const rows = (lessons||[]).map(l => [
-          l.title || "", l.classLevel || "", l.subject || "", l.schoolName || "", (l.description || ""), (l.createdAt ? new Date(l.createdAt).toLocaleString() : "")
+          l.title || "", l.classLevel || "", l.subject || "", l.schoolName || "", l.description || "", l.createdAt ? new Date(l.createdAt).toLocaleString() : ""
         ]);
         const fname = `Lessons_${(new Date()).toISOString().slice(0,19).replace(/[:T]/g,"-")}.xlsx`;
-        exportTableToExcelFromArrays(headers, rows, fname);
+        exportArrayToExcel(headers, rows, fname);
       });
     }
 
-    function exportLessonsPDF() {
+    function exportLessonsPDFfn() {
       getAllFromStore(STORE_LESSONS, (lessons) => {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF('l', 'pt', 'a4');
         doc.text("SmartKids — Lessons", 40, 40);
-        const head = [["Title","Class","Subject","School","Description","CreatedAt"]];
+        const head = [["Title","Class","Subject","School","Description","Created"]];
         const body = (lessons||[]).map(l => [
-          l.title || "", l.classLevel || "", l.subject || "", l.schoolName || "", (l.description || ""), (l.createdAt ? new Date(l.createdAt).toLocaleString() : "")
+          l.title || "", l.classLevel || "", l.subject || "", l.schoolName || "", l.description || "", l.createdAt ? new Date(l.createdAt).toLocaleString() : ""
         ]);
         doc.autoTable({ head, body, startY: 60, styles: { fontSize: 8 } });
         const fname = `Lessons_${(new Date()).toISOString().slice(0,19).replace(/[:T]/g,"-")}.pdf`;
@@ -636,38 +579,38 @@
       });
     }
 
-    // wire export buttons
-    exportPupilsExcel.addEventListener("click", exportUsersExcel);
-    exportPupilsPDF.addEventListener("click", exportUsersPDF);
-    exportLessonsExcel.addEventListener("click", exportLessonsExcel);
-    exportLessonsPDF.addEventListener("click", exportLessonsPDF);
+    exportPupilsExcel.addEventListener("click", exportPupilsExcelFn);
+    exportPupilsPDF.addEventListener("click", exportPupilsPDFfn);
+    exportLessonsExcel.addEventListener("click", exportLessonsExcelFn);
+    exportLessonsPDF.addEventListener("click", exportLessonsPDFfn);
 
-    // Demo data loader (for quick testing lessons)
-    btnDemoData.addEventListener("click", () => {
-      const sampleLessons = [
+    // Demo data for lessons (quick)
+    btnLoadDemo.addEventListener("click", () => {
+      const sample = [
         { title: "Counting to 20", classLevel: "Year 1", subject: "Math", schoolName: "SmartKids Academy", description: "Numbers 1-20", createdAt: Date.now() - 86400000 },
-        { title: "Basic Phonics - A", classLevel: "Year 1", subject: "English", schoolName: "SmartKids Academy", description: "Letter A sounds", createdAt: Date.now() - 7200000 },
+        { title: "Phonics - A", classLevel: "Year 1", subject: "English", schoolName: "SmartKids Academy", description: "Letter A sounds", createdAt: Date.now() - 3600000 }
       ];
-      // bulk add
       let i = 0;
       (function addNext() {
-        if (i >= sampleLessons.length) return openDatabase(loadAllData);
-        addToStore(STORE_LESSONS, sampleLessons[i++], () => addNext());
+        if (i >= sample.length) return openDatabase(loadAllData);
+        addToStore(STORE_LESSONS, sample[i++], () => addNext());
       })();
     });
 
-    // initial boot
+    // --- Utility: escape simple HTML (prevent accidental markup) ---
+    function escapeHtml(str) {
+      if (!str && str !== 0) return "";
+      return String(str).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+    }
+
+    // Kick off
     requireLogin();
 
-    // expose a simple API in window for future server switching
-    window.SmartKidsAdmin = {
-      openDatabase,
-      getAllFromStore,
-      addToStore,
-      updateInStore,
-      deleteFromStore
-      // Later you can replace these with fetch() calls to server.js
-    };
+    // expose helpers for future server swap
+    window.SmartKidsAdmin = { openDatabase, getAllFromStore, addToStore, putToStore, deleteFromStore };
+
+    // Auto-refresh every 30s
+    setInterval(() => { if (db) loadAllData(); }, 30000);
 
   })();
   </script>
