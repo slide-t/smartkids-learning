@@ -1,114 +1,138 @@
-// auth.js — Multi-User SmartKids Registration Manager
-// -----------------------------------------------------
-document.addEventListener("DOMContentLoaded", () => {
-  const modalContainer = document.getElementById("modalContainer") || (() => {
-    const div = document.createElement("div");
-    div.id = "modalContainer";
-    document.body.appendChild(div);
-    return div;
-  })();
+// auth.js — Enhanced SmartKids Registration Manager
+// --------------------------------------------
+const modalContainer = document.getElementById("modalContainer") || (() => {
+  const div = document.createElement("div");
+  div.id = "modalContainer";
+  document.body.appendChild(div);
+  return div;
+})();
 
+document.addEventListener("DOMContentLoaded", () => {
   const authBtn = document.getElementById("authBtn");
+  const modalContainer = document.getElementById("modalContainer");
 
   // ---------- IndexedDB Setup ----------
   let db;
-  const request = indexedDB.open("SmartKidsDB", 3); // upgraded schema
+  const request = indexedDB.open("SmartKidsDB", 2); // bump version for new schema
 
   request.onupgradeneeded = (event) => {
     db = event.target.result;
     if (!db.objectStoreNames.contains("users")) {
       const store = db.createObjectStore("users", { keyPath: "id", autoIncrement: true });
-      store.createIndex("username", "username", { unique: true });
+      store.createIndex("fullName", "fullName", { unique: false });
       store.createIndex("email", "email", { unique: false });
-      store.createIndex("schoolName", "schoolName", { unique: false });
       store.createIndex("timestamp", "timestamp", { unique: false });
     }
   };
 
   request.onsuccess = (event) => {
     db = event.target.result;
+    cleanupExpiredUsers(); // 🧹 remove old entries older than 5 days
     updateAuthButton();
+    displayUserCount(); // update total user count on page
   };
 
   request.onerror = (event) => console.error("IndexedDB error:", event.target.errorCode);
 
-  // ---------- Local Session ----------
-  function setCurrentUser(id, name) {
-    localStorage.setItem("currentUserId", id);
-    localStorage.setItem("currentUserName", name);
+  // ---------- Session Helpers ----------
+  function getCurrentUserId() {
+    return localStorage.getItem("currentUserId");
   }
 
-  function getCurrentUser() {
-    return {
-      id: localStorage.getItem("currentUserId"),
-      name: localStorage.getItem("currentUserName"),
-    };
+  function setCurrentUser(id, name) {
+    localStorage.setItem("currentUserId", id);
+    localStorage.setItem("currentUserName", name || "");
   }
 
   function clearCurrentUser() {
     localStorage.removeItem("currentUserId");
     localStorage.removeItem("currentUserName");
-    hideUserBadge();
     updateAuthButton();
   }
 
-  // ---------- Auth Button ----------
+  // ---------- Update Auth Button ----------
   function updateAuthButton() {
-    const user = getCurrentUser();
     if (!authBtn) return;
+    const id = getCurrentUserId();
+    const name = localStorage.getItem("currentUserName");
 
-    if (user.id) {
-      authBtn.textContent = "Logout";
+    if (id) {
+      authBtn.textContent = `Logout${name ? ` (${name})` : ""}`;
       authBtn.onclick = () => {
         clearCurrentUser();
         alert("👋 Logged out.");
       };
-      showUserBadge(user.name);
     } else {
       authBtn.textContent = "Sign Up";
       authBtn.onclick = () => window.toggleAuth && window.toggleAuth();
     }
   }
 
-  // ---------- User Badge ----------
-  function showUserBadge(username) {
-    if (document.getElementById("userBadge")) return;
+  // ---------- Clean Up Old Entries ----------
+  function cleanupExpiredUsers() {
+    if (!db) return;
+    const tx = db.transaction("users", "readwrite");
+    const store = tx.objectStore("users");
+    const now = Date.now();
+    const fiveDays = 5 * 24 * 60 * 60 * 1000;
 
-    const badge = document.createElement("div");
-    badge.id = "userBadge";
-    badge.className =
-      "fixed top-20 left-[-200px] bg-blue-600 text-white px-4 py-2 rounded-r-lg shadow-lg z-40 transition-all duration-700";
-    badge.textContent = `👋 Welcome, ${username}!`;
-
-    document.body.appendChild(badge);
-
-    setTimeout(() => {
-      badge.style.left = "0";
-    }, 200);
-
-    setTimeout(() => {
-      badge.style.left = "-200px";
-    }, 6000);
+    store.openCursor().onsuccess = (event) => {
+      const cursor = event.target.result;
+      if (cursor) {
+        const user = cursor.value;
+        if (now - user.timestamp > fiveDays) {
+          store.delete(cursor.primaryKey);
+        }
+        cursor.continue();
+      }
+    };
   }
 
-  function hideUserBadge() {
-    const badge = document.getElementById("userBadge");
-    if (badge) badge.remove();
+  // ---------- Display User Count (on all practice pages) ----------
+  function displayUserCount() {
+    if (!db) return;
+    const countDisplay = document.getElementById("userCount");
+    if (!countDisplay) return; // only show if placeholder exists
+    const tx = db.transaction("users", "readonly");
+    const store = tx.objectStore("users");
+    const req = store.getAll();
+
+    req.onsuccess = (event) => {
+      const allUsers = event.target.result || [];
+      const uniqueUsers = [...new Map(allUsers.map(u => [u.fullName.toLowerCase(), u])).values()];
+      countDisplay.textContent = uniqueUsers.length;
+    };
   }
 
-  // ---------- Modal Loader ----------
+  // ---------- Expose For Admin Page ----------
+  window.getAllRegisteredUsers = function (callback) {
+    if (!db) return;
+    const tx = db.transaction("users", "readonly");
+    const store = tx.objectStore("users");
+    const req = store.getAll();
+
+    req.onsuccess = (event) => {
+      const users = event.target.result || [];
+      const uniqueUsers = [...new Map(users.map(u => [u.fullName.toLowerCase(), u])).values()];
+      callback(uniqueUsers);
+    };
+  };
+
+  // ---------- Toggle Modal ----------
   window.toggleAuth = async function () {
     if (!db) {
       console.error("DB not ready yet.");
       return;
     }
 
+    // Load modal dynamically from registration.html
     if (!document.getElementById("registrationModal")) {
       try {
         const res = await fetch("registration.html");
         const html = await res.text();
         modalContainer.innerHTML = html;
-        setTimeout(() => setupRegistrationModal(), 200);
+
+        setTimeout(() => setupRegistrationModal(), 150);
       } catch (err) {
         console.error("Failed to load registration form:", err);
       }
@@ -117,87 +141,46 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // ---------- Registration Modal ----------
+  // ---------- Setup Registration Modal ----------
   function setupRegistrationModal() {
     const registrationModal = document.getElementById("registrationModal");
     const closeRegistration = document.getElementById("closeRegistration");
     const registrationForm = document.getElementById("registrationForm");
     const successMsg = document.getElementById("successMsg");
 
-    if (!registrationModal || !registrationForm) return;
+    if (!registrationModal) return;
 
     registrationModal.classList.remove("hidden");
-    closeRegistration.onclick = () => registrationModal.classList.add("hidden");
+    if (closeRegistration) closeRegistration.onclick = () => registrationModal.classList.add("hidden");
 
     registrationForm.onsubmit = (e) => {
       e.preventDefault();
       const formData = new FormData(registrationForm);
       const userData = Object.fromEntries(formData.entries());
-      userData.username = userData.name.trim();
       userData.timestamp = Date.now();
 
-      // Ensure all users share same school email domain
-      const emailDomain = userData.email.split("@")[1];
-      if (!emailDomain || !emailDomain.includes(".")) {
-        alert("Invalid school email format.");
-        return;
-      }
-
-      // Check unique username
+      // Save user in DB
       const tx = db.transaction("users", "readwrite");
       const store = tx.objectStore("users");
 
-      const idx = store.index("username");
-      const checkReq = idx.get(userData.username);
+      const addReq = store.add(userData);
+      addReq.onsuccess = (event) => {
+        const newId = event.target.result;
+        setCurrentUser(newId, userData.fullName);
+        successMsg.classList.remove("hidden");
+        updateAuthButton();
+        displayUserCount();
 
-      checkReq.onsuccess = () => {
-        if (checkReq.result) {
-          alert("⚠️ Username already exists. Please choose another.");
-        } else {
-          const addReq = store.add(userData);
-          addReq.onsuccess = (event) => {
-            const newId = event.target.result;
-            setCurrentUser(newId, userData.username);
-            successMsg.classList.remove("hidden");
-            updateAuthButton();
-            setTimeout(() => {
-              registrationModal.classList.add("hidden");
-              successMsg.classList.add("hidden");
-              registrationForm.reset();
-            }, 1500);
-          };
-        }
+        setTimeout(() => {
+          registrationModal.classList.add("hidden");
+          successMsg.classList.add("hidden");
+          registrationForm.reset();
+        }, 1500);
+      };
+
+      addReq.onerror = (err) => {
+        console.error("Error saving user:", err);
       };
     };
   }
-
-  // ---------- Export for Admin Page ----------
-  window.getAllRegisteredUsers = function (callback) {
-    const tx = db.transaction("users", "readonly");
-    const store = tx.objectStore("users");
-    const req = store.getAll();
-
-    req.onsuccess = () => callback(req.result || []);
-  };
-
-  // ---------- Future Sync Prep (Server.js) ----------
-  window.syncUsersToServer = async function () {
-    const tx = db.transaction("users", "readonly");
-    const store = tx.objectStore("users");
-    const req = store.getAll();
-
-    req.onsuccess = async () => {
-      const users = req.result || [];
-      try {
-        const res = await fetch("/api/syncUsers", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(users),
-        });
-        if (res.ok) console.log("✅ Synced users to server successfully.");
-      } catch (err) {
-        console.warn("Server sync failed (offline or unavailable).");
-      }
-    };
-  };
 });
