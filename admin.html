@@ -108,6 +108,217 @@
     </div>
   </section>
 
+<script>
+  // ====== ADMIN DASHBOARD SCRIPT FOR SMARTKIDS LEARNING ======
+  // Version: 2.0 — Includes pupil registration info + export tools
+
+  // Open SmartKidsDB database
+  function openDB() {
+    const request = indexedDB.open("SmartKidsDB", 2);
+
+    request.onupgradeneeded = (event) => {
+      const db = event.target.result;
+      if (!db.objectStoreNames.contains("students")) {
+        db.createObjectStore("students", { keyPath: "id", autoIncrement: true });
+      }
+      if (!db.objectStoreNames.contains("users")) {
+        db.createObjectStore("users", { keyPath: "id", autoIncrement: true });
+      }
+    };
+
+    request.onsuccess = (event) => {
+      const db = event.target.result;
+      fetchStudents(db);
+      fetchRegisteredUsers(db);
+    };
+
+    request.onerror = (event) => {
+      console.error("Database error:", event.target.errorCode);
+    };
+  }
+
+  // ====== FETCH STUDENTS FROM DATABASE ======
+  function fetchStudents(db) {
+    const tx = db.transaction("students", "readonly");
+    const store = tx.objectStore("students");
+    const req = store.getAll();
+
+    req.onsuccess = (e) => {
+      const students = e.target.result || [];
+      displayStudents(students);
+    };
+  }
+
+  // ====== DISPLAY STUDENTS IN TABLE ======
+  function displayStudents(students) {
+    const section = document.getElementById("studentsSection") || createSection("studentsSection", "Enrolled Students");
+    const tableId = "studentsTable";
+
+    section.innerHTML = `
+      <h2 class="text-2xl font-bold mb-4">Enrolled Students</h2>
+      ${exportButtons(tableId)}
+      <table class="w-full bg-white rounded shadow mt-4" id="${tableId}">
+        <thead class="bg-gray-200">
+          <tr>
+            <th class="p-2">Name</th>
+            <th class="p-2">Class</th>
+            <th class="p-2">Age</th>
+            <th class="p-2">Date Added</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    `;
+
+    const tbody = section.querySelector("tbody");
+    tbody.innerHTML = "";
+
+    if (students.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="4" class="p-3 text-center text-gray-500">No students found</td></tr>`;
+      return;
+    }
+
+    students.forEach((s) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td class="p-2">${s.name || "-"}</td>
+        <td class="p-2">${s.className || "-"}</td>
+        <td class="p-2">${s.age || "-"}</td>
+        <td class="p-2">${new Date(s.date || Date.now()).toLocaleString()}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  // ====== FETCH REGISTERED USERS (from auth.js) ======
+  function fetchRegisteredUsers(db) {
+    const tx = db.transaction("users", "readonly");
+    const store = tx.objectStore("users");
+    const req = store.getAll();
+
+    req.onsuccess = (e) => {
+      const users = e.target.result || [];
+      displayRegisteredUsers(users);
+    };
+  }
+
+  // ====== DISPLAY REGISTERED USERS ======
+  function displayRegisteredUsers(users) {
+    const section = document.getElementById("registeredUsersSection") || createSection("registeredUsersSection", "Registered Pupils / Kids");
+    const tableId = "registeredUsersTable";
+
+    section.innerHTML = `
+      <h2 class="text-2xl font-bold mb-4">Registered Pupils / Kids</h2>
+      ${exportButtons(tableId)}
+      <table class="w-full bg-white rounded shadow mt-4" id="${tableId}">
+        <thead class="bg-gray-200">
+          <tr>
+            <th class="p-2">Full Name</th>
+            <th class="p-2">Email</th>
+            <th class="p-2">Date Registered</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    `;
+
+    const tbody = section.querySelector("tbody");
+    tbody.innerHTML = "";
+
+    if (users.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="3" class="p-3 text-center text-gray-500">No registrations found</td></tr>`;
+      return;
+    }
+
+    users
+      .sort((a, b) => a.fullName.localeCompare(b.fullName))
+      .forEach((u) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td class="p-2">${u.fullName || "-"}</td>
+          <td class="p-2">${u.email || "-"}</td>
+          <td class="p-2">${new Date(u.timestamp || Date.now()).toLocaleString()}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+  }
+
+  // ====== CREATE SECTION HELPER ======
+  function createSection(id, title) {
+    const section = document.createElement("section");
+    section.id = id;
+    section.className = "container mx-auto p-6 mt-10 bg-gray-50 rounded";
+    document.body.appendChild(section);
+    return section;
+  }
+
+  // ====== EXPORT BUTTONS HTML ======
+  function exportButtons(tableId) {
+    return `
+      <div class="flex justify-end mb-2 gap-2">
+        <button onclick="exportToExcel('${tableId}')" class="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600">Export Excel</button>
+        <button onclick="exportToPDF('${tableId}')" class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">Export PDF</button>
+      </div>
+    `;
+  }
+
+  // ====== EXPORT TO EXCEL ======
+  function exportToExcel(tableId) {
+    const table = document.getElementById(tableId);
+    if (!table) return alert("Table not found");
+
+    let csv = [];
+    const rows = table.querySelectorAll("tr");
+    for (let row of rows) {
+      const cols = row.querySelectorAll("td, th");
+      const rowData = Array.from(cols).map(col => `"${col.innerText}"`);
+      csv.push(rowData.join(","));
+    }
+
+    const blob = new Blob([csv.join("\n")], { type: "text/csv" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = tableId + ".csv";
+    link.click();
+  }
+
+  // ====== EXPORT TO PDF ======
+  function exportToPDF(tableId) {
+    const table = document.getElementById(tableId);
+    if (!table) return alert("Table not found");
+
+    const win = window.open("");
+    win.document.write("<html><head><title>Export PDF</title>");
+    win.document.write('<style>table {width:100%;border-collapse:collapse;} th,td{border:1px solid #ccc;padding:8px;text-align:left;}</style>');
+    win.document.write("</head><body>");
+    win.document.write("<h2>SmartKids Learning Data</h2>");
+    win.document.write(table.outerHTML);
+    win.document.write("</body></html>");
+    win.document.close();
+    win.print();
+  }
+
+  // ====== ADMIN LOGIN CHECK ======
+  function loginAdmin() {
+    const username = document.getElementById("adminUser").value.trim();
+    const password = document.getElementById("adminPass").value.trim();
+
+    if (username === "smartkids" && password === "myNias9ja#") {
+      document.getElementById("loginModal").classList.add("hidden");
+      openDB();
+    } else {
+      alert("Invalid admin credentials!");
+    }
+  }
+
+  // ====== AUTO FOCUS LOGIN INPUT ======
+  window.onload = () => {
+    const input = document.getElementById("adminUser");
+    if (input) input.focus();
+  };
+</script>
+
+  <!--
   <script>
     let db;
     const DB_NAME = "SmartKidsDB";
@@ -251,6 +462,6 @@
         document.getElementById("loginError").classList.remove("hidden");
       }
     });
-  </script>
+  </script>-->
 </body>
 </html>
