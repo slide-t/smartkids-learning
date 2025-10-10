@@ -1,212 +1,120 @@
-// auth.js — Enhanced SmartKids Registration Manager
-// --------------------------------------------
-const modalContainer = document.getElementById("modalContainer") || (() => {
-  const div = document.createElement("div");
-  div.id = "modalContainer";
-  document.body.appendChild(div);
-  return div;
-})();
+/* ========= AUTH.JS (Updated and Conflict-Safe) ========= */
 
-document.addEventListener("DOMContentLoaded", () => {
-  const authBtn = document.getElementById("authBtn");
-  const modalContainer = document.getElementById("modalContainer");
+// IndexedDB setup for multiple users
+let db;
+const dbName = "SmartKidsDB";
+const storeName = "users";
 
-  // ---------- IndexedDB Setup ----------
-  let db;
-  const request = indexedDB.open("SmartKidsDB", 2); // bump version for new schema
+const openDB = indexedDB.open(dbName, 1);
+openDB.onupgradeneeded = (event) => {
+  const db = event.target.result;
+  if (!db.objectStoreNames.contains(storeName)) {
+    const store = db.createObjectStore(storeName, { keyPath: "username" });
+    store.createIndex("email", "email", { unique: true });
+    store.createIndex("schoolName", "schoolName", { unique: false });
+  }
+};
+openDB.onsuccess = (event) => (db = event.target.result);
+openDB.onerror = (event) => console.error("IndexedDB error:", event.target.errorCode);
 
-  request.onupgradeneeded = (event) => {
-    db = event.target.result;
-    if (!db.objectStoreNames.contains("users")) {
-      const store = db.createObjectStore("users", { keyPath: "id", autoIncrement: true });
-      store.createIndex("fullName", "fullName", { unique: false });
-      store.createIndex("email", "email", { unique: false });
-      store.createIndex("timestamp", "timestamp", { unique: false });
-    }
-  };
+// ✅ Utility for adding or updating user
+function saveUser(user) {
+  const tx = db.transaction(storeName, "readwrite");
+  const store = tx.objectStore(storeName);
+  store.put(user);
+}
 
-  request.onsuccess = (event) => {
-    db = event.target.result;
-    cleanupExpiredUsers(); // 🧹 remove old entries older than 5 days
-    updateAuthButton();
-    displayUserCount(); // update total user count on page
-  };
+// ✅ Utility for getting a user
+function getUser(username, callback) {
+  const tx = db.transaction(storeName, "readonly");
+  const store = tx.objectStore(storeName);
+  const req = store.get(username);
+  req.onsuccess = () => callback(req.result);
+}
 
-  request.onerror = (event) => console.error("IndexedDB error:", event.target.errorCode);
+// ✅ Registration
+document.getElementById("registerBtn")?.addEventListener("click", () => {
+  const username = document.getElementById("regUsername").value.trim();
+  const email = document.getElementById("regEmail").value.trim();
+  const password = document.getElementById("regPassword").value.trim();
+  const schoolName = document.getElementById("regSchoolName").value.trim();
 
-  // ---------- Session Helpers ----------
-  function getCurrentUserId() {
-    return localStorage.getItem("currentUserId");
+  if (!username || !email || !password || !schoolName)
+    return alert("Please fill all fields.");
+
+  if (!email.includes("@") || !email.includes(".")) {
+    return alert("Enter a valid school email address.");
   }
 
-  function setCurrentUser(id, name) {
-    localStorage.setItem("currentUserId", id);
-    localStorage.setItem("currentUserName", name || "");
-  }
+  const user = { username, email, password, schoolName, createdAt: new Date().toISOString() };
+  saveUser(user);
+  localStorage.setItem("activeUser", JSON.stringify(user));
+  showUserBadge(username, schoolName);
+  closeModal("registrationModal");
 
-  function clearCurrentUser() {
-    localStorage.removeItem("currentUserId");
-    localStorage.removeItem("currentUserName");
-    updateAuthButton();
-  }
-
-  // ---------- Update Auth Button ----------
-  function updateAuthButton() {
-    if (!authBtn) return;
-    const id = getCurrentUserId();
-    const name = localStorage.getItem("currentUserName");
-
-    // clear previous blink intervals
-    if (window.nameBlinkInterval) clearInterval(window.nameBlinkInterval);
-
-    // remove any old label beside button
-    const oldLabel = document.getElementById("usernameLabel");
-    if (oldLabel) oldLabel.remove();
-
-    if (id) {
-      // show logout text
-      authBtn.textContent = "Logout";
-      authBtn.onclick = () => {
-        clearCurrentUser();
-        alert("👋 Logged out.");
-      };
-
-      // create blinking username beside Logout
-      const nameSpan = document.createElement("span");
-      nameSpan.id = "usernameLabel";
-      nameSpan.textContent = ` ${name || ""}`;
-      nameSpan.style.marginLeft = "6px";
-      nameSpan.style.fontWeight = "600";
-      nameSpan.style.color = "#0078D7";
-      nameSpan.style.transition = "opacity 0.3s ease-in-out";
-
-      // insert after button
-      authBtn.insertAdjacentElement("afterend", nameSpan);
-
-      // gentle blink every 5s
-      window.nameBlinkInterval = setInterval(() => {
-        nameSpan.style.opacity = "0";
-        setTimeout(() => (nameSpan.style.opacity = "1"), 500);
-      }, 5000);
-    } else {
-      authBtn.textContent = "Sign Up";
-      authBtn.onclick = () => window.toggleAuth && window.toggleAuth();
-    }
-  }
-
-  // ---------- Clean Up Old Entries ----------
-  function cleanupExpiredUsers() {
-    if (!db) return;
-    const tx = db.transaction("users", "readwrite");
-    const store = tx.objectStore("users");
-    const now = Date.now();
-    const fiveDays = 5 * 24 * 60 * 60 * 1000;
-
-    store.openCursor().onsuccess = (event) => {
-      const cursor = event.target.result;
-      if (cursor) {
-        const user = cursor.value;
-        if (now - user.timestamp > fiveDays) {
-          store.delete(cursor.primaryKey);
-        }
-        cursor.continue();
-      }
-    };
-  }
-
-  // ---------- Display User Count (on all practice pages) ----------
-  function displayUserCount() {
-    if (!db) return;
-    const countDisplay = document.getElementById("userCount");
-    if (!countDisplay) return; // only show if placeholder exists
-    const tx = db.transaction("users", "readonly");
-    const store = tx.objectStore("users");
-    const req = store.getAll();
-
-    req.onsuccess = (event) => {
-      const allUsers = event.target.result || [];
-      const uniqueUsers = [...new Map(allUsers.map(u => [u.fullName.toLowerCase(), u])).values()];
-      countDisplay.textContent = uniqueUsers.length;
-    };
-  }
-
-  // ---------- Expose For Admin Page ----------
-  window.getAllRegisteredUsers = function (callback) {
-    if (!db) return;
-    const tx = db.transaction("users", "readonly");
-    const store = tx.objectStore("users");
-    const req = store.getAll();
-
-    req.onsuccess = (event) => {
-      const users = event.target.result || [];
-      const uniqueUsers = [...new Map(users.map(u => [u.fullName.toLowerCase(), u])).values()];
-      callback(uniqueUsers);
-    };
-  };
-
-  // ---------- Toggle Modal ----------
-  window.toggleAuth = async function () {
-    if (!db) {
-      console.error("DB not ready yet.");
-      return;
-    }
-
-    // Load modal dynamically from registration.html
-    if (!document.getElementById("registrationModal")) {
-      try {
-        const res = await fetch("registration.html");
-        const html = await res.text();
-        modalContainer.innerHTML = html;
-
-        setTimeout(() => setupRegistrationModal(), 150);
-      } catch (err) {
-        console.error("Failed to load registration form:", err);
-      }
-    } else {
-      document.getElementById("registrationModal").classList.remove("hidden");
-    }
-  };
-
-  // ---------- Setup Registration Modal ----------
-  function setupRegistrationModal() {
-    const registrationModal = document.getElementById("registrationModal");
-    const closeRegistration = document.getElementById("closeRegistration");
-    const registrationForm = document.getElementById("registrationForm");
-    const successMsg = document.getElementById("successMsg");
-
-    if (!registrationModal) return;
-
-    registrationModal.classList.remove("hidden");
-    if (closeRegistration) closeRegistration.onclick = () => registrationModal.classList.add("hidden");
-
-    registrationForm.onsubmit = (e) => {
-      e.preventDefault();
-      const formData = new FormData(registrationForm);
-      const userData = Object.fromEntries(formData.entries());
-      userData.timestamp = Date.now();
-
-      // Save user in DB
-      const tx = db.transaction("users", "readwrite");
-      const store = tx.objectStore("users");
-
-      const addReq = store.add(userData);
-      addReq.onsuccess = (event) => {
-        const newId = event.target.result;
-        setCurrentUser(newId, userData.fullName);
-        successMsg.classList.remove("hidden");
-        updateAuthButton();
-        displayUserCount();
-
-        setTimeout(() => {
-          registrationModal.classList.add("hidden");
-          successMsg.classList.add("hidden");
-          registrationForm.reset();
-        }, 1500);
-      };
-
-      addReq.onerror = (err) => {
-        console.error("Error saving user:", err);
-      };
-    };
-  }
+  // Placeholder for future server sync
+  syncToServer(user);
 });
+
+// ✅ Login
+document.getElementById("loginBtn")?.addEventListener("click", () => {
+  const username = document.getElementById("loginUsername").value.trim();
+  const password = document.getElementById("loginPassword").value.trim();
+
+  if (!username || !password)
+    return alert("Please enter username and password.");
+
+  getUser(username, (user) => {
+    if (!user || user.password !== password)
+      return alert("Invalid username or password.");
+
+    localStorage.setItem("activeUser", JSON.stringify(user));
+    showUserBadge(user.username, user.schoolName);
+    closeModal("loginModal");
+  });
+});
+
+// ✅ Logout
+document.getElementById("logoutBtn")?.addEventListener("click", () => {
+  localStorage.removeItem("activeUser");
+  hideUserBadge();
+});
+
+// ✅ Auto show badge if logged in
+window.addEventListener("load", () => {
+  const activeUser = JSON.parse(localStorage.getItem("activeUser"));
+  if (activeUser) showUserBadge(activeUser.username, activeUser.schoolName);
+});
+
+// ✅ Slide-in badge
+function showUserBadge(username, schoolName) {
+  let badge = document.getElementById("userBadge");
+  if (!badge) {
+    badge = document.createElement("div");
+    badge.id = "userBadge";
+    badge.className = "fixed top-20 left-0 bg-blue-600 text-white px-4 py-2 rounded-r-2xl shadow-lg transform -translate-x-full transition-transform duration-500 z-50";
+    document.body.appendChild(badge);
+  }
+
+  badge.innerHTML = `<strong>${username}</strong><br><small>${schoolName}</small>`;
+  setTimeout(() => badge.classList.remove("-translate-x-full"), 100);
+  setTimeout(() => hideUserBadge(), 6000);
+}
+
+function hideUserBadge() {
+  const badge = document.getElementById("userBadge");
+  if (badge) badge.classList.add("-translate-x-full");
+}
+
+// ✅ Helper to close modal
+function closeModal(id) {
+  const modal = document.getElementById(id);
+  if (modal) modal.classList.add("hidden");
+}
+
+// ✅ Placeholder for syncing data to server.js (later)
+function syncToServer(user) {
+  // Future expansion point:
+  // fetch('/api/register', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(user) });
+  console.log("Prepared for server sync:", user);
+}
