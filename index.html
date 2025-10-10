@@ -178,51 +178,6 @@
     </a>
   </div>
 </div>
-  
-<!-- Hero Banner --
-<div class="relative mt-16">
-  <!-- Desktop Images (3 rotating) --
-  <div class="hidden lg:block relative">
-    <img src="https://raw.githubusercontent.com/slide-t/smartkids-learning/main/Image/smartkids_coding.jpg" 
-         alt="SmartKids Coding"
-         class="hero-image absolute w-full h-[420px] object-cover opacity-100 transition-opacity duration-1000" />
-    <img src="https://raw.githubusercontent.com/slide-t/smartkids-learning/main/Image/smartkids_2.jpg" 
-         alt="SmartKids Learning"
-         class="hero-image absolute w-full h-[420px] object-cover opacity-0 transition-opacity duration-1000" />
-    <img src="https://raw.githubusercontent.com/slide-t/smartkids-learning/main/Image/smartkids_1.jpg" 
-         alt="SmartKids Team"
-         class="hero-image absolute w-full h-[420px] object-cover opacity-0 transition-opacity duration-1000" />
-  </div>
-  <!-- Mobile: Single static image --
-  <div class="lg:hidden">
-    <img src="https://raw.githubusercontent.com/slide-t/smartkids-learning/main/Image/smartkids_2.jpg"
-         alt="SmartKids Learning Mobile"
-         class="w-full h-[300px] object-cover shadow-md" />
-  </div>
-  <!-- Overlay Content --
-  <div class="absolute inset-0 bg-gradient-to-r from-blue-900/60 to-sky-700/30 flex flex-col justify-center items-start px-6 lg:px-24">
-    <h1 class="text-3xl lg:text-5xl font-extrabold text-white mb-6 drop-shadow-lg">
-      Welcome to SmartKids Learning
-    </h1>
-    <!-- Rotating Captions --
-    <div class="text-lg lg:text-xl font-semibold h-8 relative overflow-hidden">
-      <span class="caption-text absolute text-blue-200 opacity-100 transition-opacity duration-1000">
-        Inspiring young minds through fun computer literacy and coding lessons.
-      </span>
-      <span class="caption-text absolute text-yellow-200 opacity-0 transition-opacity duration-1000">
-        Test of Knowledge and Fun Learning for Future Innovators.
-      </span>
-      <span class="caption-text absolute text-pink-200 opacity-0 transition-opacity duration-1000">
-        Building Tech Skills and Confidence for the Digital World.
-      </span>
-    </div>
-    <a href="lessons.html" 
-       class="mt-8 lg:mt-10 inline-block bg-white text-blue-600 font-semibold px-6 py-3 rounded-full hover:bg-blue-50 transition shadow-lg">
-      🚀 Start Learning Now
-    </a>
-  </div>
-</div>
-
 <!-- Fade Script -->
 <script>
   document.addEventListener("DOMContentLoaded", () => {
@@ -248,15 +203,12 @@
       const nextCaption = captions[(index + 1) % captions.length];
       const currentImage = images[index];
       const nextImage = images[(index + 1) % images.length];
-
       currentCaption.style.opacity = 0;
       currentImage.style.opacity = 0;
-
       setTimeout(() => {
         nextCaption.style.opacity = 1;
         nextImage.style.opacity = 1;
       }, fadeDuration / 2);
-
       index = (index + 1) % captions.length;
     }, fadeDuration + displayDuration);
   });
@@ -265,7 +217,6 @@
   <main class="pt-28">
     <!-- Keep your hero and other sections as before -->
   </main>
-<!-- About Smart Learning Kids Section -->
   <!--<section class="mt-24 py-12 px-6 max-w-5xl mx-auto" id="about">-->
   <section class="mt-10 sm:mt-14 md:mt-16 lg:mt-20 xl:mt-24 py-12 px-6 max-w-5xl mx-auto relative z-10" id="about">
   <h2 class="text-3xl md:text-4xl font-bold text-center mb-6">About SmartKids Learning</h2>
@@ -302,7 +253,6 @@
         understand its role in daily life, and can use it to solve problems creatively.
       </div>
     </div>
-
     <!-- Mission -->
     <div class="border rounded-2xl shadow-md overflow-hidden">
       <button class="w-full flex justify-between items-center px-6 py-4 bg-blue-50 hover:bg-blue-100 transition-all accordion-btn">
@@ -317,8 +267,7 @@
       </div>
     </div>
   </div>
-</section>
-
+  </section>
 <!-- navigation buttons for tutor-->
 <div class="tutor-buttons">
   <a href="https://slide-t.github.io/smartkids-learning/classes.html">Keyboard Drill</a>
@@ -343,7 +292,6 @@
     });
   });
 </script>
-  
   <!-- Footer -->
   <footer class="border-t bg-white/70 mt-16">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row justify-between gap-6">
