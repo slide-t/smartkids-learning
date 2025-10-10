@@ -1,5 +1,5 @@
-// auth.js — Enhanced SmartKids Registration Manager
-// --------------------------------------------
+// auth.js — SmartKids Enhanced Auth with Multi-User Support + Welcome Banner
+// -------------------------------------------------------------------------
 const modalContainer = document.getElementById("modalContainer") || (() => {
   const div = document.createElement("div");
   div.id = "modalContainer";
@@ -9,17 +9,17 @@ const modalContainer = document.getElementById("modalContainer") || (() => {
 
 document.addEventListener("DOMContentLoaded", () => {
   const authBtn = document.getElementById("authBtn");
-  const modalContainer = document.getElementById("modalContainer");
+  let db;
 
   // ---------- IndexedDB Setup ----------
-  let db;
-  const request = indexedDB.open("SmartKidsDB", 2); // bump version for new schema
+  const request = indexedDB.open("SmartKidsDB", 3);
 
   request.onupgradeneeded = (event) => {
     db = event.target.result;
     if (!db.objectStoreNames.contains("users")) {
       const store = db.createObjectStore("users", { keyPath: "id", autoIncrement: true });
       store.createIndex("fullName", "fullName", { unique: false });
+      store.createIndex("schoolName", "schoolName", { unique: false });
       store.createIndex("email", "email", { unique: false });
       store.createIndex("timestamp", "timestamp", { unique: false });
     }
@@ -27,9 +27,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   request.onsuccess = (event) => {
     db = event.target.result;
-    cleanupExpiredUsers(); // 🧹 remove old entries older than 5 days
+    cleanupExpiredUsers();
     updateAuthButton();
-    displayUserCount(); // update total user count on page
+    displayUserCount();
+
+    // Auto-show welcome banner if returning user
+    const currentName = localStorage.getItem("currentUserName");
+    const school = localStorage.getItem("currentUserSchool");
+    if (currentName && school) showWelcomeBanner(currentName, school);
   };
 
   request.onerror = (event) => console.error("IndexedDB error:", event.target.errorCode);
@@ -39,55 +44,53 @@ document.addEventListener("DOMContentLoaded", () => {
     return localStorage.getItem("currentUserId");
   }
 
-  function setCurrentUser(id, name) {
+  function setCurrentUser(id, name, school) {
     localStorage.setItem("currentUserId", id);
     localStorage.setItem("currentUserName", name || "");
+    localStorage.setItem("currentUserSchool", school || "");
   }
 
   function clearCurrentUser() {
     localStorage.removeItem("currentUserId");
     localStorage.removeItem("currentUserName");
+    localStorage.removeItem("currentUserSchool");
     updateAuthButton();
+  }
+
+  // ---------- Welcome Banner ----------
+  function showWelcomeBanner(name, school) {
+    const oldBanner = document.getElementById("welcomeBanner");
+    if (oldBanner) oldBanner.remove();
+
+    const banner = document.createElement("div");
+    banner.id = "welcomeBanner";
+    banner.className =
+      "fixed top-20 left-[-400px] bg-blue-600 text-white px-6 py-3 rounded-r-lg shadow-lg z-50 transition-all duration-700 ease-in-out";
+    banner.textContent = `👋 Welcome, ${name} from ${school}!`;
+
+    document.body.appendChild(banner);
+
+    // Slide in
+    setTimeout(() => (banner.style.left = "10px"), 100);
+
+    // Slide out after 5s
+    setTimeout(() => {
+      banner.style.left = "-400px";
+      setTimeout(() => banner.remove(), 700);
+    }, 5000);
   }
 
   // ---------- Update Auth Button ----------
   function updateAuthButton() {
     if (!authBtn) return;
     const id = getCurrentUserId();
-    const name = localStorage.getItem("currentUserName");
-
-    // clear previous blink intervals
-    if (window.nameBlinkInterval) clearInterval(window.nameBlinkInterval);
-
-    // remove any old label beside button
-    const oldLabel = document.getElementById("usernameLabel");
-    if (oldLabel) oldLabel.remove();
 
     if (id) {
-      // show logout text
       authBtn.textContent = "Logout";
       authBtn.onclick = () => {
         clearCurrentUser();
         alert("👋 Logged out.");
       };
-
-      // create blinking username beside Logout
-      const nameSpan = document.createElement("span");
-      nameSpan.id = "usernameLabel";
-      nameSpan.textContent = ` ${name || ""}`;
-      nameSpan.style.marginLeft = "6px";
-      nameSpan.style.fontWeight = "600";
-      nameSpan.style.color = "#0078D7";
-      nameSpan.style.transition = "opacity 0.3s ease-in-out";
-
-      // insert after button
-      authBtn.insertAdjacentElement("afterend", nameSpan);
-
-      // gentle blink every 5s
-      window.nameBlinkInterval = setInterval(() => {
-        nameSpan.style.opacity = "0";
-        setTimeout(() => (nameSpan.style.opacity = "1"), 500);
-      }, 5000);
     } else {
       authBtn.textContent = "Sign Up";
       authBtn.onclick = () => window.toggleAuth && window.toggleAuth();
@@ -114,23 +117,24 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  // ---------- Display User Count (on all practice pages) ----------
+  // ---------- Display User Count ----------
   function displayUserCount() {
     if (!db) return;
     const countDisplay = document.getElementById("userCount");
-    if (!countDisplay) return; // only show if placeholder exists
+    if (!countDisplay) return;
+
     const tx = db.transaction("users", "readonly");
     const store = tx.objectStore("users");
     const req = store.getAll();
 
     req.onsuccess = (event) => {
-      const allUsers = event.target.result || [];
-      const uniqueUsers = [...new Map(allUsers.map(u => [u.fullName.toLowerCase(), u])).values()];
-      countDisplay.textContent = uniqueUsers.length;
+      const users = event.target.result || [];
+      const unique = [...new Map(users.map(u => [`${u.fullName.toLowerCase()}-${u.schoolName.toLowerCase()}`, u])).values()];
+      countDisplay.textContent = unique.length;
     };
   }
 
-  // ---------- Expose For Admin Page ----------
+  // ---------- Admin Access ----------
   window.getAllRegisteredUsers = function (callback) {
     if (!db) return;
     const tx = db.transaction("users", "readonly");
@@ -139,19 +143,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     req.onsuccess = (event) => {
       const users = event.target.result || [];
-      const uniqueUsers = [...new Map(users.map(u => [u.fullName.toLowerCase(), u])).values()];
-      callback(uniqueUsers);
+      const unique = [...new Map(users.map(u => [`${u.fullName.toLowerCase()}-${u.schoolName.toLowerCase()}`, u])).values()];
+      callback(unique);
     };
   };
 
   // ---------- Toggle Modal ----------
   window.toggleAuth = async function () {
-    if (!db) {
-      console.error("DB not ready yet.");
-      return;
-    }
+    if (!db) return;
 
-    // Load modal dynamically from registration.html
     if (!document.getElementById("registrationModal")) {
       try {
         const res = await fetch("registration.html");
@@ -175,7 +175,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const successMsg = document.getElementById("successMsg");
 
     if (!registrationModal) return;
-
     registrationModal.classList.remove("hidden");
     if (closeRegistration) closeRegistration.onclick = () => registrationModal.classList.add("hidden");
 
@@ -185,28 +184,69 @@ document.addEventListener("DOMContentLoaded", () => {
       const userData = Object.fromEntries(formData.entries());
       userData.timestamp = Date.now();
 
-      // Save user in DB
-      const tx = db.transaction("users", "readwrite");
+      const tx = db.transaction("users", "readonly");
       const store = tx.objectStore("users");
+      const req = store.getAll();
 
-      const addReq = store.add(userData);
-      addReq.onsuccess = (event) => {
-        const newId = event.target.result;
-        setCurrentUser(newId, userData.fullName);
-        successMsg.classList.remove("hidden");
-        updateAuthButton();
-        displayUserCount();
+      req.onsuccess = () => {
+        const users = req.result || [];
+        const duplicate = users.find(
+          (u) =>
+            u.fullName.toLowerCase() === userData.name.toLowerCase() &&
+            u.schoolName.toLowerCase() === userData.schoolName.toLowerCase()
+        );
 
-        setTimeout(() => {
-          registrationModal.classList.add("hidden");
-          successMsg.classList.add("hidden");
-          registrationForm.reset();
-        }, 1500);
-      };
+        if (duplicate) {
+          alert("⚠️ This pupil already exists for this school!");
+          return;
+        }
 
-      addReq.onerror = (err) => {
-        console.error("Error saving user:", err);
+        // Enforce same school email rule
+        const sameSchool = users.find(
+          (u) => u.schoolName.toLowerCase() === userData.schoolName.toLowerCase()
+        );
+        if (sameSchool && sameSchool.email.toLowerCase() !== userData.email.toLowerCase()) {
+          alert("⚠️ Use your school's registered email address.");
+          return;
+        }
+
+        // Save new pupil
+        const tx2 = db.transaction("users", "readwrite");
+        const store2 = tx2.objectStore("users");
+        const addReq = store2.add(userData);
+
+        addReq.onsuccess = (event) => {
+          const newId = event.target.result;
+          setCurrentUser(newId, userData.name, userData.schoolName);
+          successMsg.classList.remove("hidden");
+          updateAuthButton();
+          displayUserCount();
+          showWelcomeBanner(userData.name, userData.schoolName);
+
+          syncWithServer(userData); // prepare for express.js
+
+          setTimeout(() => {
+            registrationModal.classList.add("hidden");
+            successMsg.classList.add("hidden");
+            registrationForm.reset();
+          }, 1500);
+        };
+
+        addReq.onerror = (err) => console.error("Error saving user:", err);
       };
     };
+  }
+
+  // ---------- Server Sync Placeholder ----------
+  async function syncWithServer(userData) {
+    try {
+      await fetch("/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userData),
+      });
+    } catch (err) {
+      console.warn("Server sync skipped (no connection).");
+    }
   }
 });
