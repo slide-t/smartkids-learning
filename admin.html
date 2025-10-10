@@ -39,8 +39,12 @@
         <li><a href="https://slide-t.github.io/smartkids-learning/index.html" class="hover:underline">Home</a></li>
         <li><a href="#" class="hover:underline">Records</a></li>
         <li><a href="#" class="hover:underline">Export</a></li>
+     <li>
+  <button id="logoutBtn" class="bg-red-500 px-3 py-1 rounded hover:bg-red-600 hidden">Logout</button>
+     </li>
       </ul>
     </div>
+    
   </nav>
 
   <!-- Student Records -->
@@ -297,8 +301,38 @@
     win.document.close();
     win.print();
   }
+// ====== ADMIN LOGIN CHECK ======
+function loginAdmin() {
+  const username = document.getElementById("adminUser").value.trim();
+  const password = document.getElementById("adminPass").value.trim();
 
-  // ====== ADMIN LOGIN CHECK ======
+  if (username === "smartkids" && password === "myNias9ja#") {
+    document.getElementById("loginModal").classList.add("hidden");
+    document.getElementById("logoutBtn").classList.remove("hidden"); // show logout
+    openDB();
+  } else {
+    alert("Invalid admin credentials!");
+  }
+}
+
+// ====== ADMIN LOGOUT ======
+document.getElementById("logoutBtn").addEventListener("click", () => {
+  if (confirm("Are you sure you want to logout?")) {
+    // Clear any sensitive dashboard data if needed
+    document.querySelector("#recordsTable tbody").innerHTML = "";
+    const usersSection = document.getElementById("registeredUsersSection");
+    if (usersSection) usersSection.remove();
+
+    // Hide logout and reopen login modal
+    document.getElementById("logoutBtn").classList.add("hidden");
+    document.getElementById("loginModal").classList.remove("hidden");
+
+    // Optionally reset form fields
+    document.getElementById("adminUser").value = "";
+    document.getElementById("adminPass").value = "";
+  }
+});
+ /* // ====== ADMIN LOGIN CHECK ======
   function loginAdmin() {
     const username = document.getElementById("adminUser").value.trim();
     const password = document.getElementById("adminPass").value.trim();
@@ -315,7 +349,7 @@
   window.onload = () => {
     const input = document.getElementById("adminUser");
     if (input) input.focus();
-  };
+  };*/
 </script>
 
   <!--
