@@ -1,9 +1,12 @@
-// ===================== IndexedDB Setup =====================
+// ===================== SmartKids Auth.js =====================
+
+// IndexedDB Setup
 const DB_NAME = "SmartKidsDB";
 const DB_VERSION = 1;
 const STORE_NAME = "users";
 let db;
 
+// ---------- Initialize IndexedDB ----------
 function initDB() {
   return new Promise((resolve, reject) => {
     const request = indexedDB.open(DB_NAME, DB_VERSION);
@@ -24,6 +27,7 @@ function initDB() {
   });
 }
 
+// ---------- IndexedDB CRUD ----------
 async function addUser(user) {
   const database = await initDB();
   const tx = database.transaction(STORE_NAME, "readwrite");
@@ -42,7 +46,7 @@ async function getUserByEmail(email) {
   });
 }
 
-// ===================== Auth Helpers =====================
+// ---------- Local Session Helpers ----------
 function getCurrentUser() {
   return JSON.parse(localStorage.getItem("currentUser"));
 }
@@ -55,8 +59,10 @@ function clearCurrentUser() {
   localStorage.removeItem("currentUser");
 }
 
-// ===================== Registration =====================
-async function registerUser(name, email, password) {
+// ---------- Registration ----------
+async function registerUser(formData) {
+  const { name, email, password, ...rest } = formData;
+
   try {
     const existing = await getUserByEmail(email);
     if (existing) {
@@ -64,20 +70,41 @@ async function registerUser(name, email, password) {
       return;
     }
 
-    const user = { name, email, password };
+    const user = { name, email, password, ...rest, registeredAt: new Date().toISOString() };
+
+    // ✅ Save locally
     await addUser(user);
+    // ✅ Save on server
+    await fetch("http://localhost:3000/api/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(user),
+    }).catch((err) => console.warn("⚠️ Server not reachable:", err.message));
+
+    // ✅ Update session
     setCurrentUser(user);
     updateAuthUI();
 
-    alert("Registration successful!");
-    closeModal();
+    // ✅ Show success message
+    const successMsg = document.getElementById("successMsg");
+    if (successMsg) {
+      successMsg.classList.remove("hidden");
+      successMsg.textContent = "✅ Registration successful!";
+    }
+
+    // ✅ Close modal after 2s
+    setTimeout(() => {
+      closeModal();
+      if (successMsg) successMsg.classList.add("hidden");
+    }, 2000);
+
   } catch (err) {
     console.error("Registration error:", err);
-    alert("Registration failed. Try again.");
+    alert("Registration failed. Please try again.");
   }
 }
 
-// ===================== Login =====================
+// ---------- Login ----------
 async function loginUser(email, password) {
   try {
     const user = await getUserByEmail(email);
@@ -92,12 +119,14 @@ async function loginUser(email, password) {
   }
 }
 
+// ---------- Logout ----------
 function logoutUser() {
   clearCurrentUser();
   updateAuthUI();
+  alert("👋 Logged out successfully!");
 }
 
-// ===================== UI Updates =====================
+// ---------- UI Updates ----------
 function updateAuthUI() {
   const btn = document.getElementById("authBtn");
   const user = getCurrentUser();
@@ -113,18 +142,30 @@ function updateAuthUI() {
   }
 }
 
-// ===================== Modal =====================
+// ---------- Modal Control ----------
 function toggleAuth() {
   const modal = document.getElementById("registrationModal");
-  if (modal) modal.style.display = "block";
+  if (modal) modal.classList.remove("hidden");
 }
 
 function closeModal() {
   const modal = document.getElementById("registrationModal");
-  if (modal) modal.style.display = "none";
+  if (modal) modal.classList.add("hidden");
 }
 
-// ===================== Init =====================
+// ---------- Event Listener ----------
 window.addEventListener("DOMContentLoaded", () => {
   updateAuthUI();
+
+  const form = document.getElementById("registrationForm");
+  if (form) {
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const formData = Object.fromEntries(new FormData(form).entries());
+      registerUser(formData);
+    });
+  }
+
+  const closeBtn = document.getElementById("closeRegistration");
+  if (closeBtn) closeBtn.onclick = closeModal;
 });
