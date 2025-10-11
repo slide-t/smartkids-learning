@@ -1,177 +1,186 @@
-// ===================== IndexedDB Setup =====================
-const DB_NAME = "SmartKidsDB";
-const DB_VERSION = 1;
-const STORE_NAME = "users";
-let db;
+// auth.js — Enhanced SmartKids Registration Manager
+// --------------------------------------------
+const modalContainer = document.getElementById("modalContainer") || (() => {
+  const div = document.createElement("div");
+  div.id = "modalContainer";
+  document.body.appendChild(div);
+  return div;
+})();
 
-function initDB() {
-  return new Promise((resolve, reject) => {
-    const request = indexedDB.open(DB_NAME, DB_VERSION);
-    request.onerror = (e) => reject(e.target.error);
-    request.onsuccess = (e) => {
-      db = e.target.result;
-      resolve(db);
-    };
-    request.onupgradeneeded = (e) => {
-      const db = e.target.result;
-      if (!db.objectStoreNames.contains(STORE_NAME)) {
-        db.createObjectStore(STORE_NAME, { keyPath: "username" });
-      }
-    };
-  });
-}
-
-function addUser(user) {
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, "readwrite");
-    const store = tx.objectStore(STORE_NAME);
-    const request = store.add(user);
-    request.onsuccess = () => resolve(true);
-    request.onerror = (e) => reject(e.target.error);
-  });
-}
-
-function getUser(username) {
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, "readonly");
-    const store = tx.objectStore(STORE_NAME);
-    const request = store.get(username);
-    request.onsuccess = () => resolve(request.result);
-    request.onerror = (e) => reject(e.target.error);
-  });
-}
-
-// ===================== UI Handling =====================
-document.addEventListener("DOMContentLoaded", async () => {
-  await initDB();
-
-  const form = document.getElementById("registrationForm");
-  const successMsg = document.getElementById("successMsg");
-  const modal = document.getElementById("registrationModal");
+document.addEventListener("DOMContentLoaded", () => {
   const authBtn = document.getElementById("authBtn");
-  const closeModal = document.getElementById("closeRegistration");
+  const modalContainer = document.getElementById("modalContainer");
 
-  if (!form || !authBtn) return;
+  // ---------- IndexedDB Setup ----------
+  let db;
+  const request = indexedDB.open("SmartKidsDB", 2); // bump version for new schema
 
-  // Inject username display BELOW navbar
-  let nameDisplay = document.getElementById("usernameDisplay");
-  if (!nameDisplay) {
-    nameDisplay = document.createElement("div");
-    nameDisplay.id = "usernameDisplay";
-    nameDisplay.className =
-      "fixed top-[70px] left-[-220px] bg-blue-600 text-white px-4 py-2 rounded-r-lg shadow-lg transition-all duration-500 z-40";
-    document.body.appendChild(nameDisplay);
+  request.onupgradeneeded = (event) => {
+    db = event.target.result;
+    if (!db.objectStoreNames.contains("users")) {
+      const store = db.createObjectStore("users", { keyPath: "id", autoIncrement: true });
+      store.createIndex("fullName", "fullName", { unique: false });
+      store.createIndex("email", "email", { unique: false });
+      store.createIndex("timestamp", "timestamp", { unique: false });
+    }
+  };
+
+  request.onsuccess = (event) => {
+    db = event.target.result;
+    cleanupExpiredUsers(); // 🧹 remove old entries older than 5 days
+    updateAuthButton();
+    displayUserCount(); // update total user count on page
+  };
+
+  request.onerror = (event) => console.error("IndexedDB error:", event.target.errorCode);
+
+  // ---------- Session Helpers ----------
+  function getCurrentUserId() {
+    return localStorage.getItem("currentUserId");
   }
 
-  // Add toggle link (Sign Up / Login)
-  const toggleLink = document.createElement("p");
-  toggleLink.className =
-    "text-sm text-center mt-3 text-blue-600 cursor-pointer hover:underline";
-  toggleLink.textContent = "Already have an account? Login";
-  form.appendChild(toggleLink);
+  function setCurrentUser(id, name) {
+    localStorage.setItem("currentUserId", id);
+    localStorage.setItem("currentUserName", name || "");
+  }
 
-  let isLoginMode = false;
+  function clearCurrentUser() {
+    localStorage.removeItem("currentUserId");
+    localStorage.removeItem("currentUserName");
+    updateAuthButton();
+  }
 
-  // Check for existing session
-  const currentUser = localStorage.getItem("loggedInUser");
-  if (currentUser) updateAuthUI(currentUser);
+  // ---------- Update Auth Button ----------
+  function updateAuthButton() {
+    if (!authBtn) return;
+    const id = getCurrentUserId();
+    const name = localStorage.getItem("currentUserName");
 
-  // Handle Sign Up / Login submit
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const formData = new FormData(form);
-    const user = Object.fromEntries(formData.entries());
-    const username = user.username?.trim();
+    if (id) {
+      authBtn.textContent = `Logout${name ? ` (${name})` : ""}`;
+      authBtn.onclick = () => {
+        clearCurrentUser();
+        alert("👋 Logged out.");
+      };
+    } else {
+      authBtn.textContent = "Sign Up";
+      authBtn.onclick = () => window.toggleAuth && window.toggleAuth();
+    }
+  }
 
-    if (!username) {
-      alert("Please enter your username.");
+  // ---------- Clean Up Old Entries ----------
+  function cleanupExpiredUsers() {
+    if (!db) return;
+    const tx = db.transaction("users", "readwrite");
+    const store = tx.objectStore("users");
+    const now = Date.now();
+    const fiveDays = 5 * 24 * 60 * 60 * 1000;
+
+    store.openCursor().onsuccess = (event) => {
+      const cursor = event.target.result;
+      if (cursor) {
+        const user = cursor.value;
+        if (now - user.timestamp > fiveDays) {
+          store.delete(cursor.primaryKey);
+        }
+        cursor.continue();
+      }
+    };
+  }
+
+  // ---------- Display User Count (on all practice pages) ----------
+  function displayUserCount() {
+    if (!db) return;
+    const countDisplay = document.getElementById("userCount");
+    if (!countDisplay) return; // only show if placeholder exists
+    const tx = db.transaction("users", "readonly");
+    const store = tx.objectStore("users");
+    const req = store.getAll();
+
+    req.onsuccess = (event) => {
+      const allUsers = event.target.result || [];
+      const uniqueUsers = [...new Map(allUsers.map(u => [u.fullName.toLowerCase(), u])).values()];
+      countDisplay.textContent = uniqueUsers.length;
+    };
+  }
+
+  // ---------- Expose For Admin Page ----------
+  window.getAllRegisteredUsers = function (callback) {
+    if (!db) return;
+    const tx = db.transaction("users", "readonly");
+    const store = tx.objectStore("users");
+    const req = store.getAll();
+
+    req.onsuccess = (event) => {
+      const users = event.target.result || [];
+      const uniqueUsers = [...new Map(users.map(u => [u.fullName.toLowerCase(), u])).values()];
+      callback(uniqueUsers);
+    };
+  };
+
+  // ---------- Toggle Modal ----------
+  window.toggleAuth = async function () {
+    if (!db) {
+      console.error("DB not ready yet.");
       return;
     }
 
-    if (isLoginMode) {
-      const existing = await getUser(username);
-      if (!existing) {
-        alert("⚠️ No such user found. Please sign up first.");
-        return;
-      }
+    // Load modal dynamically from registration.html
+    if (!document.getElementById("registrationModal")) {
+      try {
+        const res = await fetch("registration.html");
+        const html = await res.text();
+        modalContainer.innerHTML = html;
 
-      if (existing.password !== user.password) {
-        alert("❌ Incorrect password.");
-        return;
+        setTimeout(() => setupRegistrationModal(), 150);
+      } catch (err) {
+        console.error("Failed to load registration form:", err);
       }
-
-      localStorage.setItem("loggedInUser", existing.username);
-      updateAuthUI(existing.username);
-      modal.classList.add("hidden");
-      alert(`✅ Welcome back, ${existing.username}!`);
     } else {
-      const existing = await getUser(username);
-      if (existing) {
-        alert("⚠️ Username already exists. Try login instead.");
-        return;
-      }
-
-      // fix email rule
-      if (!user.email.includes("@")) {
-        alert("❌ Please use a valid email address.");
-        return;
-      }
-
-      await addUser(user);
-      successMsg.classList.remove("hidden");
-      setTimeout(() => successMsg.classList.add("hidden"), 2000);
-
-      localStorage.setItem("loggedInUser", user.username);
-      updateAuthUI(user.username);
-      modal.classList.add("hidden");
+      document.getElementById("registrationModal").classList.remove("hidden");
     }
-  });
+  };
 
-  // Toggle between Sign Up and Login
-  toggleLink.addEventListener("click", () => {
-    isLoginMode = !isLoginMode;
-    const title = modal.querySelector("h2");
-    const submitBtn = form.querySelector('button[type="submit"]');
-    if (isLoginMode) {
-      title.textContent = "Login";
-      submitBtn.textContent = "Login";
-      toggleLink.textContent = "Don’t have an account? Sign Up";
-    } else {
-      title.textContent = "Sign Up";
-      submitBtn.textContent = "Register";
-      toggleLink.textContent = "Already have an account? Login";
-    }
-  });
+  // ---------- Setup Registration Modal ----------
+  function setupRegistrationModal() {
+    const registrationModal = document.getElementById("registrationModal");
+    const closeRegistration = document.getElementById("closeRegistration");
+    const registrationForm = document.getElementById("registrationForm");
+    const successMsg = document.getElementById("successMsg");
 
-  // Sign Up / Logout button click
-  authBtn.addEventListener("click", () => {
-    const loggedIn = localStorage.getItem("loggedInUser");
-    if (loggedIn) {
-      localStorage.removeItem("loggedInUser");
-      updateAuthUI(null);
-      alert("✅ You’ve logged out successfully.");
-    } else {
-      modal.classList.remove("hidden");
-    }
-  });
+    if (!registrationModal) return;
 
-  // Close modal button
-  closeModal.addEventListener("click", () => {
-    modal.classList.add("hidden");
-  });
-});
+    registrationModal.classList.remove("hidden");
+    if (closeRegistration) closeRegistration.onclick = () => registrationModal.classList.add("hidden");
 
-// ===================== Helper Function =====================
-function updateAuthUI(username) {
-  const authBtn = document.getElementById("authBtn");
-  const nameDisplay = document.getElementById("usernameDisplay");
+    registrationForm.onsubmit = (e) => {
+      e.preventDefault();
+      const formData = new FormData(registrationForm);
+      const userData = Object.fromEntries(formData.entries());
+      userData.timestamp = Date.now();
 
-  if (username) {
-    authBtn.textContent = "Logout";
-    nameDisplay.textContent = `👋 Welcome, ${username}`;
-    nameDisplay.style.left = "0px"; // Slide in
-  } else {
-    authBtn.textContent = "Sign Up";
-    nameDisplay.style.left = "-220px"; // Slide out
+      // Save user in DB
+      const tx = db.transaction("users", "readwrite");
+      const store = tx.objectStore("users");
+
+      const addReq = store.add(userData);
+      addReq.onsuccess = (event) => {
+        const newId = event.target.result;
+        setCurrentUser(newId, userData.fullName);
+        successMsg.classList.remove("hidden");
+        updateAuthButton();
+        displayUserCount();
+
+        setTimeout(() => {
+          registrationModal.classList.add("hidden");
+          successMsg.classList.add("hidden");
+          registrationForm.reset();
+        }, 1500);
+      };
+
+      addReq.onerror = (err) => {
+        console.error("Error saving user:", err);
+      };
+    };
   }
-}
+});
