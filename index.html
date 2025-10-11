@@ -317,7 +317,6 @@
       </div>
     </div>
   </footer>
-  <!--
   <script>
     // Mobile menu toggle
     document.addEventListener("DOMContentLoaded", () => {
@@ -435,28 +434,5 @@
 }
 </style>
 
-<script>
-  // Modal toggle logic
-  const registrationModal = document.getElementById('registrationModal');
-  const authBtn = document.getElementById('authBtn');
-  const closeRegistration = document.getElementById('closeRegistration');
-
-  // Show modal when Sign Up is clicked
-  function toggleAuth() {
-    registrationModal.classList.remove('hidden');
-  }
-
-  // Hide modal on close
-  closeRegistration.addEventListener('click', () => {
-    registrationModal.classList.add('hidden');
-  });
-
-  // Hide modal if clicked outside form
-  window.addEventListener('click', (e) => {
-    if (e.target === registrationModal) {
-      registrationModal.classList.add('hidden');
-    }
-  });
-</script>
 </body>
 </html>
