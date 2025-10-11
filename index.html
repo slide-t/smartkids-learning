@@ -520,7 +520,136 @@
     </p>
   </div>
 </div>
-  
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const authBtn = document.getElementById("authBtn");
+  const modal = document.getElementById("registrationModal");
+  const closeBtn = document.getElementById("closeRegistration");
+  const form = document.getElementById("registrationForm");
+  const successMsg = document.getElementById("successMsg");
+
+  // ===== IndexedDB Setup =====
+  const DB_NAME = "SmartKidsDB";
+  const DB_VERSION = 1;
+  const STORE_NAME = "users";
+  let db;
+
+  function initDB() {
+    return new Promise((resolve, reject) => {
+      const request = indexedDB.open(DB_NAME, DB_VERSION);
+      request.onerror = (e) => reject(e.target.error);
+      request.onsuccess = (e) => {
+        db = e.target.result;
+        resolve(db);
+      };
+      request.onupgradeneeded = (e) => {
+        const db = e.target.result;
+        if (!db.objectStoreNames.contains(STORE_NAME)) {
+          db.createObjectStore(STORE_NAME, { keyPath: "id", autoIncrement: true });
+        }
+      };
+    });
+  }
+
+  async function saveUserToIndexedDB(user) {
+    await initDB();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(STORE_NAME, "readwrite");
+      tx.objectStore(STORE_NAME).add(user);
+      tx.oncomplete = () => resolve(true);
+      tx.onerror = (e) => reject(e.target.error);
+    });
+  }
+
+  // ===== UI Helpers =====
+  function getUser() {
+    return {
+      id: localStorage.getItem("currentUserId"),
+      name: localStorage.getItem("currentUserName"),
+    };
+  }
+
+  function updateAuthButton() {
+    const { id, name } = getUser();
+    if (id && name) {
+      authBtn.innerHTML = `Logout <span class="ml-2 font-semibold text-gray-700">(${name})</span>`;
+      authBtn.onclick = logoutUser;
+    } else {
+      authBtn.innerHTML = "Sign Up";
+      authBtn.onclick = toggleAuth;
+    }
+  }
+
+  function toggleAuth() {
+    modal.classList.remove("hidden");
+  }
+
+  closeBtn.addEventListener("click", () => modal.classList.add("hidden"));
+  window.addEventListener("click", (e) => {
+    if (e.target === modal) modal.classList.add("hidden");
+  });
+
+  async function logoutUser() {
+    localStorage.removeItem("currentUserId");
+    localStorage.removeItem("currentUserName");
+    updateAuthButton();
+    alert("You have logged out successfully!");
+  }
+
+  // ===== Registration =====
+  async function registerUser(data) {
+    try {
+      // Save locally
+      await saveUserToIndexedDB(data);
+
+      // Send to server
+      const res = await fetch("http://localhost:5000/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || "Server registration failed");
+      }
+
+      const result = await res.json();
+      const user = result.user || data; // fallback to local data if server skips user obj
+
+      // Save session
+      localStorage.setItem("currentUserName", user.name);
+      localStorage.setItem("currentUserId", user.id || Date.now());
+
+      successMsg.classList.remove("hidden");
+      updateAuthButton();
+
+      // Close modal after short delay
+      setTimeout(() => {
+        successMsg.classList.add("hidden");
+        modal.classList.add("hidden");
+        form.reset();
+      }, 1200);
+    } catch (err) {
+      alert("Registration failed: " + err.message);
+      console.error(err);
+    }
+  }
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const formData = new FormData(form);
+    const userData = Object.fromEntries(formData.entries());
+    await registerUser(userData);
+  });
+
+  // ===== Initialize =====
+  initDB().then(updateAuthButton);
+});
+</script>
+
+
+  <!--
   <script>
   // ---- Auth Button Control ----
   document.addEventListener("DOMContentLoaded", () => {
@@ -576,6 +705,6 @@
     });
   });
 </script>
-
+-->
 </body>
 </html>
