@@ -7,13 +7,11 @@ let db;
 function initDB() {
   return new Promise((resolve, reject) => {
     const request = indexedDB.open(DB_NAME, DB_VERSION);
-
     request.onerror = (e) => reject(e.target.error);
     request.onsuccess = (e) => {
       db = e.target.result;
       resolve(db);
     };
-
     request.onupgradeneeded = (e) => {
       const db = e.target.result;
       if (!db.objectStoreNames.contains(STORE_NAME)) {
@@ -53,13 +51,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   const authBtn = document.getElementById("authBtn");
   const closeModal = document.getElementById("closeRegistration");
 
+  if (!form || !authBtn) return;
+
   // Inject username display BELOW navbar
   let nameDisplay = document.getElementById("usernameDisplay");
   if (!nameDisplay) {
     nameDisplay = document.createElement("div");
     nameDisplay.id = "usernameDisplay";
     nameDisplay.className =
-      "fixed top-[70px] left-[-200px] bg-blue-600 text-white px-4 py-2 rounded-r-lg shadow-lg transition-all duration-500 z-40";
+      "fixed top-[70px] left-[-220px] bg-blue-600 text-white px-4 py-2 rounded-r-lg shadow-lg transition-all duration-500 z-40";
     document.body.appendChild(nameDisplay);
   }
 
@@ -89,10 +89,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     if (isLoginMode) {
-      // LOGIN
       const existing = await getUser(username);
       if (!existing) {
-        alert("⚠️ No such user found. Please sign up.");
+        alert("⚠️ No such user found. Please sign up first.");
         return;
       }
 
@@ -106,15 +105,15 @@ document.addEventListener("DOMContentLoaded", async () => {
       modal.classList.add("hidden");
       alert(`✅ Welcome back, ${existing.username}!`);
     } else {
-      // SIGN UP
       const existing = await getUser(username);
       if (existing) {
         alert("⚠️ Username already exists. Try login instead.");
         return;
       }
 
-      if (!user.email.endsWith("@school.edu.ng")) {
-        alert("❌ Use your school email address only.");
+      // fix email rule
+      if (!user.email.includes("@")) {
+        alert("❌ Please use a valid email address.");
         return;
       }
 
@@ -133,7 +132,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     isLoginMode = !isLoginMode;
     const title = modal.querySelector("h2");
     const submitBtn = form.querySelector('button[type="submit"]');
-
     if (isLoginMode) {
       title.textContent = "Login";
       submitBtn.textContent = "Login";
@@ -171,9 +169,9 @@ function updateAuthUI(username) {
   if (username) {
     authBtn.textContent = "Logout";
     nameDisplay.textContent = `👋 Welcome, ${username}`;
-    nameDisplay.style.left = "0px"; // Slide in from left
+    nameDisplay.style.left = "0px"; // Slide in
   } else {
     authBtn.textContent = "Sign Up";
-    nameDisplay.style.left = "-200px"; // Slide out
+    nameDisplay.style.left = "-220px"; // Slide out
   }
 }
