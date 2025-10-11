@@ -1,152 +1,202 @@
-// ================================
-// SmartKids Auth Manager (v3.0)
-// ================================
+// auth.js — Enhanced SmartKids Registration Manager
+// --------------------------------------------
+const modalContainer = document.getElementById("modalContainer") || (() => {
+  const div = document.createElement("div");
+  div.id = "modalContainer";
+  document.body.appendChild(div);
+  return div;
+})();
 
 document.addEventListener("DOMContentLoaded", () => {
   const authBtn = document.getElementById("authBtn");
-  const modalContainer = document.getElementById("modalContainer") || (() => {
-    const div = document.createElement("div");
-    div.id = "modalContainer";
-    document.body.appendChild(div);
-    return div;
-  })();
+  const modalContainer = document.getElementById("modalContainer");
 
-  // Floating username banner below navbar
-  const userBanner = document.createElement("div");
-  userBanner.id = "userBanner";
-  userBanner.className =
-    "fixed top-[70px] left-[-200px] bg-blue-600 text-white px-4 py-2 rounded-r-lg shadow-md transition-all duration-700 z-40";
-  document.body.appendChild(userBanner);
-
-  // ======= IndexedDB Setup =======
+  // ---------- IndexedDB Setup ----------
   let db;
-  const request = indexedDB.open("SmartKidsDB", 3);
+  const request = indexedDB.open("SmartKidsDB", 2); // bump version for new schema
 
   request.onupgradeneeded = (event) => {
     db = event.target.result;
     if (!db.objectStoreNames.contains("users")) {
-      const store = db.createObjectStore("users", { keyPath: "username" });
+      const store = db.createObjectStore("users", { keyPath: "id", autoIncrement: true });
+      store.createIndex("fullName", "fullName", { unique: false });
       store.createIndex("email", "email", { unique: false });
-      store.createIndex("schoolName", "schoolName", { unique: false });
       store.createIndex("timestamp", "timestamp", { unique: false });
     }
   };
 
   request.onsuccess = (event) => {
     db = event.target.result;
-    updateAuthState();
+    cleanupExpiredUsers(); // 🧹 remove old entries older than 5 days
+    updateAuthButton();
+    displayUserCount(); // update total user count on page
   };
 
-  request.onerror = (event) => console.error("IndexedDB Error:", event.target.error);
+  request.onerror = (event) => console.error("IndexedDB error:", event.target.errorCode);
 
-  // ======= Helpers =======
-  function setCurrentUser(username, fullName) {
-    localStorage.setItem("currentUser", username);
-    localStorage.setItem("currentFullName", fullName);
-    showUserBanner(fullName);
-    updateAuthButton();
+  // ---------- Session Helpers ----------
+  function getCurrentUserId() {
+    return localStorage.getItem("currentUserId");
   }
 
-  function getCurrentUser() {
-    return localStorage.getItem("currentUser");
+  function setCurrentUser(id, name) {
+    localStorage.setItem("currentUserId", id);
+    localStorage.setItem("currentUserName", name || "");
   }
 
   function clearCurrentUser() {
-    localStorage.removeItem("currentUser");
-    localStorage.removeItem("currentFullName");
-    hideUserBanner();
+    localStorage.removeItem("currentUserId");
+    localStorage.removeItem("currentUserName");
     updateAuthButton();
   }
 
-  function showUserBanner(name) {
-    userBanner.textContent = `👋 Hi, ${name}!`;
-    userBanner.style.left = "0px";
-    setTimeout(() => {
-      userBanner.style.left = "-200px";
-    }, 6000);
-  }
-
-  function hideUserBanner() {
-    userBanner.style.left = "-200px";
-  }
-
-  // ======= Auth Button Update =======
+  // ---------- Update Auth Button ----------
   function updateAuthButton() {
     if (!authBtn) return;
-    const user = getCurrentUser();
+    const id = getCurrentUserId();
+    const name = localStorage.getItem("currentUserName");
 
-    if (user) {
+    // clear previous blink intervals
+    if (window.nameBlinkInterval) clearInterval(window.nameBlinkInterval);
+
+    // remove any old label beside button
+    const oldLabel = document.getElementById("usernameLabel");
+    if (oldLabel) oldLabel.remove();
+
+    if (id) {
+      // show logout text
       authBtn.textContent = "Logout";
       authBtn.onclick = () => {
         clearCurrentUser();
-        alert("Logged out successfully!");
+        alert("👋 Logged out.");
       };
+
+      // create blinking username beside Logout
+      const nameSpan = document.createElement("span");
+      nameSpan.id = "usernameLabel";
+      nameSpan.textContent = ` ${name || ""}`;
+      nameSpan.style.marginLeft = "6px";
+      nameSpan.style.fontWeight = "600";
+      nameSpan.style.color = "#0078D7";
+      nameSpan.style.transition = "opacity 0.3s ease-in-out";
+
+      // insert after button
+      authBtn.insertAdjacentElement("afterend", nameSpan);
+
+      // gentle blink every 5s
+      window.nameBlinkInterval = setInterval(() => {
+        nameSpan.style.opacity = "0";
+        setTimeout(() => (nameSpan.style.opacity = "1"), 500);
+      }, 5000);
     } else {
       authBtn.textContent = "Sign Up";
-      authBtn.onclick = toggleAuthModal;
+      authBtn.onclick = () => window.toggleAuth && window.toggleAuth();
     }
   }
 
-  function updateAuthState() {
-    const name = localStorage.getItem("currentFullName");
-    if (name) showUserBanner(name);
-    updateAuthButton();
+  // ---------- Clean Up Old Entries ----------
+  function cleanupExpiredUsers() {
+    if (!db) return;
+    const tx = db.transaction("users", "readwrite");
+    const store = tx.objectStore("users");
+    const now = Date.now();
+    const fiveDays = 5 * 24 * 60 * 60 * 1000;
+
+    store.openCursor().onsuccess = (event) => {
+      const cursor = event.target.result;
+      if (cursor) {
+        const user = cursor.value;
+        if (now - user.timestamp > fiveDays) {
+          store.delete(cursor.primaryKey);
+        }
+        cursor.continue();
+      }
+    };
   }
 
-  // ======= Modal Toggle =======
-  async function toggleAuthModal() {
+  // ---------- Display User Count (on all practice pages) ----------
+  function displayUserCount() {
+    if (!db) return;
+    const countDisplay = document.getElementById("userCount");
+    if (!countDisplay) return; // only show if placeholder exists
+    const tx = db.transaction("users", "readonly");
+    const store = tx.objectStore("users");
+    const req = store.getAll();
+
+    req.onsuccess = (event) => {
+      const allUsers = event.target.result || [];
+      const uniqueUsers = [...new Map(allUsers.map(u => [u.fullName.toLowerCase(), u])).values()];
+      countDisplay.textContent = uniqueUsers.length;
+    };
+  }
+
+  // ---------- Expose For Admin Page ----------
+  window.getAllRegisteredUsers = function (callback) {
+    if (!db) return;
+    const tx = db.transaction("users", "readonly");
+    const store = tx.objectStore("users");
+    const req = store.getAll();
+
+    req.onsuccess = (event) => {
+      const users = event.target.result || [];
+      const uniqueUsers = [...new Map(users.map(u => [u.fullName.toLowerCase(), u])).values()];
+      callback(uniqueUsers);
+    };
+  };
+
+  // ---------- Toggle Modal ----------
+  window.toggleAuth = async function () {
+    if (!db) {
+      console.error("DB not ready yet.");
+      return;
+    }
+
+    // Load modal dynamically from registration.html
     if (!document.getElementById("registrationModal")) {
-      const res = await fetch("registration.html");
-      const html = await res.text();
-      modalContainer.innerHTML = html;
-      setupRegistrationForm();
+      try {
+        const res = await fetch("registration.html");
+        const html = await res.text();
+        modalContainer.innerHTML = html;
+
+        setTimeout(() => setupRegistrationModal(), 150);
+      } catch (err) {
+        console.error("Failed to load registration form:", err);
+      }
     } else {
       document.getElementById("registrationModal").classList.remove("hidden");
     }
-  }
+  };
 
-  // ======= Registration Form Logic =======
-  function setupRegistrationForm() {
+  // ---------- Setup Registration Modal ----------
+  function setupRegistrationModal() {
     const registrationModal = document.getElementById("registrationModal");
+    const closeRegistration = document.getElementById("closeRegistration");
     const registrationForm = document.getElementById("registrationForm");
-    const closeBtn = document.getElementById("closeRegistration");
     const successMsg = document.getElementById("successMsg");
 
-    closeBtn.onclick = () => registrationModal.classList.add("hidden");
+    if (!registrationModal) return;
 
-    registrationForm.onsubmit = async (e) => {
+    registrationModal.classList.remove("hidden");
+    if (closeRegistration) closeRegistration.onclick = () => registrationModal.classList.add("hidden");
+
+    registrationForm.onsubmit = (e) => {
       e.preventDefault();
       const formData = new FormData(registrationForm);
-      const user = Object.fromEntries(formData.entries());
-      user.username = user.email.split("@")[0].toLowerCase(); // simple unique base
-      user.timestamp = Date.now();
+      const userData = Object.fromEntries(formData.entries());
+      userData.timestamp = Date.now();
 
-      if (!user.email.includes("school") && !user.email.endsWith(".edu")) {
-        alert("Email must be a valid school email address.");
-        return;
-      }
-
-      // Add to IndexedDB
+      // Save user in DB
       const tx = db.transaction("users", "readwrite");
       const store = tx.objectStore("users");
-      const req = store.add(user);
 
-      req.onsuccess = async () => {
-        // Save to local storage session
-        setCurrentUser(user.username, user.name);
-
-        // Also send to backend server (Express.js)
-        try {
-          await fetch("http://localhost:5000/register", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(user),
-          });
-        } catch (err) {
-          console.warn("Server not reachable — using local data only.");
-        }
-
+      const addReq = store.add(userData);
+      addReq.onsuccess = (event) => {
+        const newId = event.target.result;
+        setCurrentUser(newId, userData.fullName);
         successMsg.classList.remove("hidden");
+        updateAuthButton();
+        displayUserCount();
+
         setTimeout(() => {
           registrationModal.classList.add("hidden");
           successMsg.classList.add("hidden");
@@ -154,13 +204,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 1500);
       };
 
-      req.onerror = (err) => {
-        console.error("IndexedDB add error:", err);
-        alert("Username already exists or storage issue.");
+      addReq.onerror = (err) => {
+        console.error("Error saving user:", err);
       };
     };
   }
-
-  // Expose toggleAuth globally
-  window.toggleAuth = toggleAuthModal;
 });
