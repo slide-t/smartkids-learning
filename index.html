@@ -864,6 +864,15 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 </script>-->
-
+<script src="auth.js"></script>
+<script>
+document.getElementById("registrationForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+  await registerUser(name, email, password);
+});
+</script>
 </body>
 </html>
