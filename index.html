@@ -521,45 +521,59 @@
     </p>
   </div>
 </div>
+  
   <script>
+  // ---- Auth Button Control ----
   document.addEventListener("DOMContentLoaded", () => {
-    const registrationModal = document.getElementById("registrationModal");
     const authBtn = document.getElementById("authBtn");
-    const closeRegistration = document.getElementById("closeRegistration");
     const form = document.getElementById("registrationForm");
     const successMsg = document.getElementById("successMsg");
 
-    // Show modal
-    window.toggleAuth = () => {
-      registrationModal.classList.remove("hidden");
-      registrationModal.classList.add("flex");
-    };
+    // --- Helpers ---
+    function getUser() {
+      return {
+        id: localStorage.getItem("currentUserId"),
+        name: localStorage.getItem("currentUserName"),
+      };
+    }
 
-    // Close modal
-    const closeModal = () => {
-      registrationModal.classList.add("hidden");
-      registrationModal.classList.remove("flex");
-    };
+    function updateAuthButton() {
+      const { id, name } = getUser();
+      if (id && name) {
+        authBtn.innerHTML = `Logout <span class="ml-2 font-semibold text-gray-700">(${name})</span>`;
+        authBtn.onclick = () => {
+          localStorage.removeItem("currentUserId");
+          localStorage.removeItem("currentUserName");
+          updateAuthButton();
+        };
+      } else {
+        authBtn.textContent = "Sign Up";
+        authBtn.onclick = () => window.toggleAuth();
+      }
+    }
 
-    closeRegistration.addEventListener("click", closeModal);
+    // --- Init on load ---
+    updateAuthButton();
 
-    // Click outside modal closes it
-    window.addEventListener("click", (e) => {
-      if (e.target === registrationModal) closeModal();
-    });
-
-    // Form submission (IndexedDB or fetch can be attached here)
-    form.addEventListener("submit", async (e) => {
+    // --- Hook into form submission success ---
+    form.addEventListener("submit", (e) => {
       e.preventDefault();
-      successMsg.classList.remove("hidden");
-      successMsg.textContent = "✅ Registration successful!";
-      form.reset();
 
-      // Optional: auto-close modal after success
+      // Get name from form
+      const name = form.querySelector('input[name="name"]').value.trim();
+      const fakeId = Date.now(); // temporary ID for demo before IndexedDB
+
+      localStorage.setItem("currentUserId", fakeId);
+      localStorage.setItem("currentUserName", name);
+
+      successMsg.classList.remove("hidden");
+      updateAuthButton();
+
       setTimeout(() => {
         successMsg.classList.add("hidden");
-        closeModal();
-      }, 1500);
+        document.getElementById("registrationModal").classList.add("hidden");
+        form.reset();
+      }, 1200);
     });
   });
 </script>
