@@ -521,28 +521,62 @@
     </p>
   </div>
 </div>
-<script>
-  // Modal toggle logic
-  const registrationModal = document.getElementById('registrationModal');
-  const authBtn = document.getElementById('authBtn');
-  const closeRegistration = document.getElementById('closeRegistration');
+  
+  <script>
+  // ---- Auth Button Control ----
+  document.addEventListener("DOMContentLoaded", () => {
+    const authBtn = document.getElementById("authBtn");
+    const form = document.getElementById("registrationForm");
+    const successMsg = document.getElementById("successMsg");
 
-  // Show modal when Sign Up is clicked
-  function toggleAuth() {
-    registrationModal.classList.remove('hidden');
-  }
-
-  // Hide modal on close
-  closeRegistration.addEventListener('click', () => {
-    registrationModal.classList.add('hidden');
-  });
-
-  // Hide modal if clicked outside form
-  window.addEventListener('click', (e) => {
-    if (e.target === registrationModal) {
-      registrationModal.classList.add('hidden');
+    // --- Helpers ---
+    function getUser() {
+      return {
+        id: localStorage.getItem("currentUserId"),
+        name: localStorage.getItem("currentUserName"),
+      };
     }
+
+    function updateAuthButton() {
+      const { id, name } = getUser();
+      if (id && name) {
+        authBtn.innerHTML = `Logout <span class="ml-2 font-semibold text-gray-700">(${name})</span>`;
+        authBtn.onclick = () => {
+          localStorage.removeItem("currentUserId");
+          localStorage.removeItem("currentUserName");
+          updateAuthButton();
+        };
+      } else {
+        authBtn.textContent = "Sign Up";
+        authBtn.onclick = () => window.toggleAuth();
+      }
+    }
+
+    // --- Init on load ---
+    updateAuthButton();
+
+    // --- Hook into form submission success ---
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      // Get name from form
+      const name = form.querySelector('input[name="name"]').value.trim();
+      const fakeId = Date.now(); // temporary ID for demo before IndexedDB
+
+      localStorage.setItem("currentUserId", fakeId);
+      localStorage.setItem("currentUserName", name);
+
+      successMsg.classList.remove("hidden");
+      updateAuthButton();
+
+      setTimeout(() => {
+        successMsg.classList.add("hidden");
+        document.getElementById("registrationModal").classList.add("hidden");
+        form.reset();
+      }, 1200);
+    });
   });
 </script>
+
 </body>
 </html>
