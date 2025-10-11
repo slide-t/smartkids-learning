@@ -4,7 +4,6 @@ const DB_VERSION = 1;
 const STORE_NAME = "users";
 let db;
 
-// Initialize database
 function initDB() {
   return new Promise((resolve, reject) => {
     const request = indexedDB.open(DB_NAME, DB_VERSION);
@@ -25,16 +24,13 @@ function initDB() {
   });
 }
 
-// Add or update a user
 async function addUser(user) {
   const database = await initDB();
   const tx = database.transaction(STORE_NAME, "readwrite");
-  const store = tx.objectStore(STORE_NAME);
-  store.put(user);
+  tx.objectStore(STORE_NAME).put(user);
   return tx.complete;
 }
 
-// Get user by email
 async function getUserByEmail(email) {
   const database = await initDB();
   return new Promise((resolve, reject) => {
@@ -46,7 +42,7 @@ async function getUserByEmail(email) {
   });
 }
 
-// ===================== Auth Functions =====================
+// ===================== Auth Helpers =====================
 function getCurrentUser() {
   return JSON.parse(localStorage.getItem("currentUser"));
 }
@@ -59,22 +55,41 @@ function clearCurrentUser() {
   localStorage.removeItem("currentUser");
 }
 
+// ===================== Registration =====================
 async function registerUser(name, email, password) {
-  const existingUser = await getUserByEmail(email);
-  if (existingUser) throw new Error("Email already registered!");
-  const user = { name, email, password };
-  await addUser(user);
-  setCurrentUser(user);
-  updateAuthUI();
-  return user;
+  try {
+    const existing = await getUserByEmail(email);
+    if (existing) {
+      alert("Email already registered!");
+      return;
+    }
+
+    const user = { name, email, password };
+    await addUser(user);
+    setCurrentUser(user);
+    updateAuthUI();
+
+    alert("Registration successful!");
+    closeModal();
+  } catch (err) {
+    console.error("Registration error:", err);
+    alert("Registration failed. Try again.");
+  }
 }
 
+// ===================== Login =====================
 async function loginUser(email, password) {
-  const user = await getUserByEmail(email);
-  if (!user || user.password !== password) throw new Error("Invalid login!");
-  setCurrentUser(user);
-  updateAuthUI();
-  return user;
+  try {
+    const user = await getUserByEmail(email);
+    if (!user || user.password !== password) {
+      alert("Invalid login!");
+      return;
+    }
+    setCurrentUser(user);
+    updateAuthUI();
+  } catch (err) {
+    console.error("Login error:", err);
+  }
 }
 
 function logoutUser() {
@@ -82,10 +97,12 @@ function logoutUser() {
   updateAuthUI();
 }
 
-// ===================== UI Functions =====================
+// ===================== UI Updates =====================
 function updateAuthUI() {
   const btn = document.getElementById("authBtn");
   const user = getCurrentUser();
+
+  if (!btn) return;
 
   if (user) {
     btn.textContent = `Logout (${user.name})`;
@@ -96,11 +113,15 @@ function updateAuthUI() {
   }
 }
 
-// ===================== Modal Toggle =====================
+// ===================== Modal =====================
 function toggleAuth() {
   const modal = document.getElementById("registrationModal");
-  if (!modal) return;
-  modal.style.display = "block";
+  if (modal) modal.style.display = "block";
+}
+
+function closeModal() {
+  const modal = document.getElementById("registrationModal");
+  if (modal) modal.style.display = "none";
 }
 
 // ===================== Init =====================
