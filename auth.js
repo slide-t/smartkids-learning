@@ -85,17 +85,17 @@ async function registerUser(formData) {
     setCurrentUser(user);
     updateAuthUI();
 
-    // ✅ Show success message
-    const successMsg = document.getElementById("successMsg");
-    if (successMsg) {
-      successMsg.classList.remove("hidden");
-      successMsg.textContent = "✅ Registration successful!";
+    // ✅ Success message
+    const msg = document.getElementById("successMsg");
+    if (msg) {
+      msg.textContent = "✅ Registration successful!";
+      msg.classList.remove("hidden");
     }
 
-    // ✅ Close modal after 2s
+    // ✅ Close after short delay
     setTimeout(() => {
-      closeModal();
-      if (successMsg) successMsg.classList.add("hidden");
+      closeModal("registrationModal");
+      if (msg) msg.classList.add("hidden");
     }, 2000);
 
   } catch (err) {
@@ -109,13 +109,18 @@ async function loginUser(email, password) {
   try {
     const user = await getUserByEmail(email);
     if (!user || user.password !== password) {
-      alert("Invalid login!");
+      alert("Invalid credentials!");
       return;
     }
+
     setCurrentUser(user);
     updateAuthUI();
+    closeModal("loginModal");
+    alert(`👋 Welcome back, ${user.name}!`);
+
   } catch (err) {
     console.error("Login error:", err);
+    alert("Login failed.");
   }
 }
 
@@ -137,35 +142,59 @@ function updateAuthUI() {
     btn.textContent = `Logout (${user.name})`;
     btn.onclick = logoutUser;
   } else {
-    btn.textContent = "Sign Up";
-    btn.onclick = toggleAuth;
+    btn.textContent = "Sign In / Register";
+    btn.onclick = openLoginModal;
   }
 }
 
-// ---------- Modal Control ----------
-function toggleAuth() {
-  const modal = document.getElementById("registrationModal");
-  if (modal) modal.classList.remove("hidden");
+// ---------- Modal Controls ----------
+function openLoginModal() {
+  document.getElementById("loginModal")?.classList.remove("hidden");
 }
 
-function closeModal() {
-  const modal = document.getElementById("registrationModal");
-  if (modal) modal.classList.add("hidden");
+function openRegistrationModal() {
+  document.getElementById("registrationModal")?.classList.remove("hidden");
 }
 
-// ---------- Event Listener ----------
+function closeModal(id) {
+  document.getElementById(id)?.classList.add("hidden");
+}
+
+// ---------- Init ----------
 window.addEventListener("DOMContentLoaded", () => {
   updateAuthUI();
 
-  const form = document.getElementById("registrationForm");
-  if (form) {
-    form.addEventListener("submit", (e) => {
+  // Registration
+  const regForm = document.getElementById("registrationForm");
+  if (regForm) {
+    regForm.addEventListener("submit", (e) => {
       e.preventDefault();
-      const formData = Object.fromEntries(new FormData(form).entries());
-      registerUser(formData);
+      const data = Object.fromEntries(new FormData(regForm).entries());
+      registerUser(data);
     });
   }
 
-  const closeBtn = document.getElementById("closeRegistration");
-  if (closeBtn) closeBtn.onclick = closeModal;
+  // Login
+  const loginForm = document.getElementById("loginForm");
+  if (loginForm) {
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const { email, password } = Object.fromEntries(new FormData(loginForm).entries());
+      loginUser(email, password);
+    });
+  }
+
+  // Close buttons
+  document.querySelectorAll(".closeModal").forEach((btn) =>
+    btn.addEventListener("click", (e) => {
+      const modal = e.target.closest(".modal");
+      if (modal) modal.classList.add("hidden");
+    })
+  );
+
+  // Switch between modals
+  const switchToLogin = document.getElementById("switchToLogin");
+  const switchToRegister = document.getElementById("switchToRegister");
+  if (switchToLogin) switchToLogin.onclick = () => { closeModal("registrationModal"); openLoginModal(); };
+  if (switchToRegister) switchToRegister.onclick = () => { closeModal("loginModal"); openRegistrationModal(); };
 });
