@@ -521,28 +521,48 @@
     </p>
   </div>
 </div>
-<script>
-  // Modal toggle logic
-  const registrationModal = document.getElementById('registrationModal');
-  const authBtn = document.getElementById('authBtn');
-  const closeRegistration = document.getElementById('closeRegistration');
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const registrationModal = document.getElementById("registrationModal");
+    const authBtn = document.getElementById("authBtn");
+    const closeRegistration = document.getElementById("closeRegistration");
+    const form = document.getElementById("registrationForm");
+    const successMsg = document.getElementById("successMsg");
 
-  // Show modal when Sign Up is clicked
-  function toggleAuth() {
-    registrationModal.classList.remove('hidden');
-  }
+    // Show modal
+    window.toggleAuth = () => {
+      registrationModal.classList.remove("hidden");
+      registrationModal.classList.add("flex");
+    };
 
-  // Hide modal on close
-  closeRegistration.addEventListener('click', () => {
-    registrationModal.classList.add('hidden');
-  });
+    // Close modal
+    const closeModal = () => {
+      registrationModal.classList.add("hidden");
+      registrationModal.classList.remove("flex");
+    };
 
-  // Hide modal if clicked outside form
-  window.addEventListener('click', (e) => {
-    if (e.target === registrationModal) {
-      registrationModal.classList.add('hidden');
-    }
+    closeRegistration.addEventListener("click", closeModal);
+
+    // Click outside modal closes it
+    window.addEventListener("click", (e) => {
+      if (e.target === registrationModal) closeModal();
+    });
+
+    // Form submission (IndexedDB or fetch can be attached here)
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      successMsg.classList.remove("hidden");
+      successMsg.textContent = "✅ Registration successful!";
+      form.reset();
+
+      // Optional: auto-close modal after success
+      setTimeout(() => {
+        successMsg.classList.add("hidden");
+        closeModal();
+      }, 1500);
+    });
   });
 </script>
+
 </body>
 </html>
