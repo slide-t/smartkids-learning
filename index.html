@@ -95,13 +95,11 @@
           <h1 class="text-lg font-semibold">SmartKids Learning</h1>
           <p class="text-xs text-slate-500">Coding, Computer Literacy & Test of Knowledge</p>
         </div>
-
 <!-- Auth Button -->
 <button id="authBtn"
   class="ml-4 px-4 py-1.5 border border-blue-600 rounded-full text-blue-600 text-sm font-medium bg-white transition duration-200 ease-in-out hover:bg-blue-50 active:scale-95 active:shadow-[0_0_10px_rgba(59,130,246,0.7)]">
   Sign In / Register
-</button>
-      
+</button>     
 <!-- Blinking Features Button -->
 <a href="features.html" class="blinking-button">Features</a>      
   </div>
@@ -616,244 +614,101 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
   -->
-
-  <script>
+<script>
 document.addEventListener("DOMContentLoaded", () => {
-  // Elements (flexible lookups to match multiple naming variations)
+  // --- Element References ---
   const authBtn = document.getElementById("authBtn");
-  const authModal = document.getElementById("authModal") || document.getElementById("registrationModal") || document.getElementById("modalContainer");
-  const closeAuthModal = document.getElementById("closeAuthModal") || document.getElementById("closeRegistration") || null;
-
-  // login / register form elements (support either id)
+  const authModal = document.getElementById("authModal");
+  const closeModal = document.getElementById("closeAuthModal");
   const loginForm = document.getElementById("loginForm");
-  const regForm = document.getElementById("registrationForm") || document.getElementById("registerForm");
+  const regForm = document.getElementById("registrationForm");
+  const showLogin = document.getElementById("showLogin");
+  const showRegister = document.getElementById("showRegister");
+  const successMsg = document.getElementById("successMsg");
 
-  // success / error message elements (support multiple ids)
-  const registerSuccess = document.getElementById("registerSuccess") || document.getElementById("successMsg") || document.getElementById("authSuccessMsg");
-  const loginError = document.getElementById("loginError") || document.getElementById("loginErrorMsg");
-
-  // tab buttons (support multiple ids)
-  const showLoginBtn = document.getElementById("showLogin") || document.getElementById("tabLogin") || document.getElementById("tabLoginBtn");
-  const showRegisterBtn = document.getElementById("showRegister") || document.getElementById("tabRegister") || document.getElementById("tabRegisterBtn");
-
-  // Utility: get currently stored user (localStorage)
-  function getStoredUser() {
-    try {
-      return JSON.parse(localStorage.getItem("currentUser")) || null;
-    } catch {
-      return null;
-    }
-  }
-
-  // Utility: set current user session info
-  function setCurrentUser(user) {
-    // store full user object (for matching on login)
-    localStorage.setItem("currentUser", JSON.stringify(user));
-    // store session short fields for quick checks
-    if (user && (user.name || user.username)) {
-      localStorage.setItem("currentUserName", user.name || user.username);
-    }
-    localStorage.setItem("currentUserId", user.id || Date.now());
-  }
-
-  // Utility: clear session
-  function clearCurrentUser() {
-    localStorage.removeItem("currentUser");
-    localStorage.removeItem("currentUserName");
-    localStorage.removeItem("currentUserId");
-  }
-
-  // Update the auth button display: Sign In / Register or Logout (name)
+  // --- Helper: Update Button Text ---
   function updateAuthButton() {
-    if (!authBtn) return;
-    const name = localStorage.getItem("currentUserName");
-    if (name) {
-      authBtn.innerHTML = `Logout <span class="ml-2 font-semibold text-gray-700">(${escapeHtml(name)})</span>`;
-      authBtn.onclick = () => {
-        clearCurrentUser();
-        updateAuthButton();
-        alert("👋 Logged out successfully!");
-      };
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    if (currentUser) {
+      authBtn.innerHTML = `Logout <span class="ml-2 font-semibold text-gray-700">(${currentUser.username})</span>`;
     } else {
       authBtn.textContent = "Sign In / Register";
-      authBtn.onclick = () => openModal();
     }
   }
 
-  // Escaping helper for safe innerHTML usage
-  function escapeHtml(str = "") {
-    return String(str)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;");
-  }
+  // --- Initial Load ---
+  updateAuthButton();
 
-  // Modal open/close
-  function openModal() {
-    if (!authModal) return console.warn("Auth modal not found.");
-    authModal.classList.remove("hidden");
-    // add flex or block class if needed for centering
-    if (!authModal.classList.contains("flex")) authModal.classList.add("flex");
-    // ensure register view shown by default if both forms exist
-    if (regForm && loginForm) {
-      regForm.classList.remove("hidden");
-      loginForm.classList.add("hidden");
+  // --- Open / Logout Logic ---
+  authBtn.addEventListener("click", () => {
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    if (currentUser) {
+      // Logout
+      localStorage.removeItem("currentUser");
+      alert("👋 Logged out successfully!");
+      updateAuthButton();
+    } else {
+      // Open Modal
+      authModal.classList.remove("hidden");
     }
-  }
-  function closeModal() {
-    if (!authModal) return;
-    authModal.classList.add("hidden");
-    authModal.classList.remove("flex");
-  }
+  });
 
-  // close via close button or outside click
-  if (closeAuthModal) {
-    closeAuthModal.addEventListener("click", () => closeModal());
-  }
-  if (authModal) {
-    window.addEventListener("click", (e) => {
-      if (e.target === authModal) closeModal();
-    });
-  }
+  // --- Close Modal ---
+  closeModal.addEventListener("click", () => authModal.classList.add("hidden"));
+  window.addEventListener("click", (e) => {
+    if (e.target === authModal) authModal.classList.add("hidden");
+  });
 
-  // Tab switching (safe guards: only attach if buttons/forms exist)
-  if (showLoginBtn && showRegisterBtn && loginForm && regForm) {
-    showLoginBtn.addEventListener("click", (e) => {
-      e.preventDefault();
+  // --- Switch Tabs ---
+  if (showLogin && showRegister) {
+    showLogin.addEventListener("click", () => {
       loginForm.classList.remove("hidden");
       regForm.classList.add("hidden");
-      showLoginBtn.classList.add("text-blue-600", "border-b-2", "border-blue-600");
-      showRegisterBtn.classList.remove("text-blue-600", "border-b-2", "border-blue-600");
+      showLogin.classList.add("text-blue-600", "border-b-2", "border-blue-600");
+      showRegister.classList.remove("text-blue-600", "border-b-2", "border-blue-600");
     });
-    showRegisterBtn.addEventListener("click", (e) => {
-      e.preventDefault();
+
+    showRegister.addEventListener("click", () => {
       regForm.classList.remove("hidden");
       loginForm.classList.add("hidden");
-      showRegisterBtn.classList.add("text-blue-600", "border-b-2", "border-blue-600");
-      showLoginBtn.classList.remove("text-blue-600", "border-b-2", "border-blue-600");
+      showRegister.classList.add("text-blue-600", "border-b-2", "border-blue-600");
+      showLogin.classList.remove("text-blue-600", "border-b-2", "border-blue-600");
     });
   }
 
-  // Registration handler
-  if (regForm) {
-    regForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const formData = Object.fromEntries(new FormData(regForm).entries());
-      // normalize keys: try to have name/username/email/password, add id
-      const user = {
-        id: Date.now(),
-        name: formData.name || formData.fullName || formData.username || "",
-        username: formData.username || formData.email?.split("@")?.[0] || "",
-        email: formData.email || "",
-        password: formData.password || "",
-        age: formData.age || "",
-        schoolName: formData.schoolName || "",
-        location: formData.location || "",
-        country: formData.country || "",
-        registeredAt: new Date().toISOString(),
-      };
+  // --- Registration ---
+  regForm?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(regForm).entries());
+    localStorage.setItem("currentUser", JSON.stringify(data));
 
-      // Try to register with server if available, otherwise fallback to local
-      try {
-        // try server registration if endpoint exists (non-blocking if fails)
-        const res = await fetch("/api/register", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(user),
-        });
+    successMsg.classList.remove("hidden");
+    updateAuthButton();
 
-        if (res.ok) {
-          const body = await res.json().catch(() => ({}));
-          // prefer server id/name if returned
-          const idFromServer = body.id || body._id || null;
-          if (idFromServer) user.id = idFromServer;
-        } else {
-          // server responded with error - fallback to local saving (no throw)
-          console.warn("Server registration responded with status", res.status);
-        }
-      } catch (err) {
-        // network/server not reachable -> fallback to local saving
-        console.warn("Server not reachable; saved locally. Error:", err && err.message);
-      }
+    setTimeout(() => {
+      successMsg.classList.add("hidden");
+      authModal.classList.add("hidden");
+      regForm.reset();
+    }, 1200);
+  });
 
-      // Save session locally (simple offline-first approach)
-      setCurrentUser(user);
+  // --- Login ---
+  loginForm?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(loginForm).entries());
+    const savedUser = JSON.parse(localStorage.getItem("currentUser"));
 
-      // Optionally show success message
-      if (registerSuccess) {
-        registerSuccess.classList.remove("hidden");
-      }
-
+    if (savedUser && savedUser.email === data.email) {
+      alert(`👋 Welcome back, ${savedUser.username}!`);
       updateAuthButton();
-
-      // small delay then close modal + reset form
-      setTimeout(() => {
-        if (registerSuccess) registerSuccess.classList.add("hidden");
-        closeModal();
-        regForm.reset();
-      }, 1100);
-    });
-  }
-
-  // Login handler
-  if (loginForm) {
-    loginForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const formData = Object.fromEntries(new FormData(loginForm).entries());
-      const usernameOrEmail = formData.username || formData.email || "";
-      const password = formData.password || "";
-
-      // Try server login first
-      try {
-        const res = await fetch("/api/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username: formData.username, email: formData.email, password }),
-        });
-
-        if (res.ok) {
-          const body = await res.json().catch(() => ({}));
-          const loggedName = body.name || body.username || usernameOrEmail;
-          const id = body.id || body._id || Date.now();
-          // set session from server response
-          setCurrentUser({ id, name: loggedName, username: body.username || usernameOrEmail, email: body.email || formData.email });
-          if (loginError) loginError.classList.add("hidden");
-          updateAuthButton();
-          closeModal();
-          if (typeof window.onAuthSuccess === "function") window.onAuthSuccess();
-          return;
-        } else {
-          // server responded but credentials invalid - we'll try local fallback
-          console.warn("Server login failed with status", res.status);
-        }
-      } catch (err) {
-        console.warn("Server login unreachable, trying local fallback", err && err.message);
-      }
-
-      // Local fallback: check stored user in localStorage
-      const stored = getStoredUser();
-      const match =
-        stored &&
-        ((stored.username && stored.username === usernameOrEmail) ||
-          (stored.email && stored.email === usernameOrEmail)) &&
-        (stored.password === password);
-
-      if (match) {
-        setCurrentUser(stored);
-        if (loginError) loginError.classList.add("hidden");
-        updateAuthButton();
-        closeModal();
-        return;
-      } else {
-        if (loginError) loginError.classList.remove("hidden");
-        else alert("Invalid login credentials.");
-      }
-    });
-  }
-
-  // Initialize button display and behavior
-  updateAuthButton();
+      authModal.classList.add("hidden");
+    } else {
+      alert("Invalid login details!");
+    }
+  });
 });
 </script>
+  
+  
 </body>
 </html>
