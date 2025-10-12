@@ -730,6 +730,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 <!-- Enhanced Script -->
 <script>
+  /*
 document.addEventListener("DOMContentLoaded", () => {
   const authBtn = document.getElementById("authBtn");
   const authModal = document.getElementById("authModal");
@@ -853,7 +854,110 @@ document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("online", () => {
     alert("✅ Connection restored!");
   });
+});*/
+  // ==================== IndexedDB Setup ====================
+let db;
+const request = indexedDB.open("SmartKidsDB", 1);
+
+request.onupgradeneeded = function (event) {
+  db = event.target.result;
+  const store = db.createObjectStore("users", { keyPath: "username" });
+  store.createIndex("password", "password", { unique: false });
+};
+
+request.onsuccess = function (event) {
+  db = event.target.result;
+  updateAuthUI(); // Check login state when DB is ready
+};
+
+request.onerror = function (event) {
+  console.error("IndexedDB error:", event.target.error);
+};
+
+// ==================== Registration ====================
+document.getElementById("registerForm").addEventListener("submit", function (e) {
+  e.preventDefault();
+  const username = document.getElementById("regUsername").value.trim();
+  const password = document.getElementById("regPassword").value.trim();
+
+  const tx = db.transaction("users", "readwrite");
+  const store = tx.objectStore("users");
+  const getReq = store.get(username);
+
+  getReq.onsuccess = function () {
+    if (getReq.result) {
+      alert("Username already exists!");
+    } else {
+      store.add({ username, password });
+      alert("Registration successful!");
+      localStorage.setItem("loggedInUser", username);
+      closeAuthModal();
+      updateAuthUI();
+    }
+  };
 });
+
+// ==================== Login ====================
+document.getElementById("loginForm").addEventListener("submit", function (e) {
+  e.preventDefault();
+  const username = document.getElementById("loginUsername").value.trim();
+  const password = document.getElementById("loginPassword").value.trim();
+
+  const tx = db.transaction("users", "readonly");
+  const store = tx.objectStore("users");
+  const getReq = store.get(username);
+
+  getReq.onsuccess = function () {
+    const user = getReq.result;
+    if (user && user.password === password) {
+      alert("Login successful!");
+      localStorage.setItem("loggedInUser", username);
+      closeAuthModal();
+      updateAuthUI();
+    } else {
+      alert("Invalid username or password.");
+    }
+  };
+});
+
+// ==================== Logout ====================
+function logoutUser() {
+  localStorage.removeItem("loggedInUser");
+  updateAuthUI();
+  alert("You have logged out.");
+}
+
+// ==================== UI Update ====================
+function updateAuthUI() {
+  const loggedInUser = localStorage.getItem("loggedInUser");
+  const signupBtn = document.getElementById("signupBtn");
+  const userGreeting = document.getElementById("userGreeting");
+
+  if (loggedInUser) {
+    signupBtn.textContent = "Logout";
+    signupBtn.onclick = logoutUser;
+
+    if (userGreeting) {
+      userGreeting.innerHTML = `<p class="text-center text-gray-700 text-sm mt-2">Welcome, <b>${loggedInUser}</b> 👋</p>`;
+    }
+  } else {
+    signupBtn.textContent = "Sign Up";
+    signupBtn.onclick = openAuthModal;
+
+    if (userGreeting) {
+      userGreeting.innerHTML = "";
+    }
+  }
+}
+
+// ==================== Modal Controls ====================
+function openAuthModal() {
+  document.getElementById("authModal").classList.remove("hidden");
+}
+
+function closeAuthModal() {
+  document.getElementById("authModal").classList.add("hidden");
+}
 </script>
 </body>
 </html>
