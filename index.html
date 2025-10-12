@@ -814,7 +814,91 @@ document.addEventListener("DOMContentLoaded", () => {
     </p>
   </div>
 </div>
-  <script>
+ <script>
+document.addEventListener("DOMContentLoaded", () => {
+  const authBtn = document.getElementById("authBtn");
+  const authModal = document.getElementById("authModal");
+  const closeModal = document.getElementById("closeAuthModal");
+  const loginForm = document.getElementById("loginForm");
+  const regForm = document.getElementById("registrationForm");
+  const showLogin = document.getElementById("showLogin");
+  const showRegister = document.getElementById("showRegister");
+  const successMsg = document.getElementById("successMsg");
+
+  // ---- Open Modal ----
+  authBtn.addEventListener("click", () => {
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    if (currentUser) {
+      localStorage.removeItem("currentUser");
+      authBtn.textContent = "Sign In / Register";
+      alert("👋 Logged out successfully!");
+    } else {
+      authModal.classList.remove("hidden");
+    }
+  });
+
+  // ---- Close Modal ----
+  closeModal.addEventListener("click", () => authModal.classList.add("hidden"));
+  window.addEventListener("click", (e) => {
+    if (e.target === authModal) authModal.classList.add("hidden");
+  });
+
+  // ---- Switch Tabs ----
+  showLogin.addEventListener("click", () => {
+    loginForm.classList.remove("hidden");
+    regForm.classList.add("hidden");
+    showLogin.classList.add("text-blue-600", "border-b-2", "border-blue-600");
+    showRegister.classList.remove("text-blue-600", "border-b-2", "border-blue-600");
+  });
+
+  showRegister.addEventListener("click", () => {
+    regForm.classList.remove("hidden");
+    loginForm.classList.add("hidden");
+    showRegister.classList.add("text-blue-600", "border-b-2", "border-blue-600");
+    showLogin.classList.remove("text-blue-600", "border-b-2", "border-blue-600");
+  });
+
+  // ---- Registration ----
+  regForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(regForm).entries());
+
+    // Add password to registration data
+    if (!data.password || data.password.length < 4) {
+      alert("Password must be at least 4 characters!");
+      return;
+    }
+
+    localStorage.setItem("currentUser", JSON.stringify(data));
+
+    successMsg.classList.remove("hidden");
+    authBtn.innerHTML = `Logout <span class="ml-2 font-semibold text-gray-700">(${data.username})</span>`;
+
+    setTimeout(() => {
+      successMsg.classList.add("hidden");
+      authModal.classList.add("hidden");
+      regForm.reset();
+    }, 1200);
+  });
+
+  // ---- Login ----
+  loginForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(loginForm).entries());
+    const savedUser = JSON.parse(localStorage.getItem("currentUser"));
+
+    if (savedUser && savedUser.email === data.email && savedUser.password === data.password) {
+      authBtn.innerHTML = `Logout <span class="ml-2 font-semibold text-gray-700">(${savedUser.username})</span>`;
+      authModal.classList.add("hidden");
+      alert(`👋 Welcome back, ${savedUser.username}!`);
+    } else {
+      alert("❌ Invalid email or password!");
+    }
+  });
+});
+</script>
+  
+  <!--<script>
 document.addEventListener("DOMContentLoaded", () => {
   const authBtn = document.getElementById("authBtn");
   const authModal = document.getElementById("authModal");
@@ -905,6 +989,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
-</script>
+</script>-->
 </body>
 </html>
