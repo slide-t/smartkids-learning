@@ -433,11 +433,194 @@
   }
 }
 </style>
-<!-- Registration Modal -->
+
+<!-- 🔹 AUTH MODAL (Combined Registration + Login) -->
+<div id="authModal" class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-50">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 relative overflow-y-auto max-h-[90vh]">
+
+    <!-- Close Button -->
+    <button id="closeAuthModal" 
+      class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-xl font-bold">
+      ×
+    </button>
+
+    <!-- Tabs -->
+    <div class="flex justify-center mb-4 border-b">
+      <button id="registerTab" class="px-4 py-2 font-semibold border-b-2 border-blue-600 text-blue-600">Sign Up</button>
+      <button id="loginTab" class="px-4 py-2 font-semibold text-gray-600 hover:text-blue-600">Login</button>
+    </div>
+
+    <!-- ✅ REGISTRATION FORM -->
+    <form id="registrationForm" class="space-y-3">
+      <h2 class="text-lg font-semibold text-center">Create Account</h2>
+
+      <input type="text" name="name" required placeholder="Full Name"
+        class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+
+      <input type="email" name="email" required placeholder="School Email"
+        class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+
+      <input type="text" name="username" required placeholder="Username"
+        class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+
+      <input type="number" name="age" required placeholder="Age"
+        class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+
+      <select name="class" required
+        class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+        <option value="">Select Class</option>
+        <option value="Year 1">Year 1</option>
+        <option value="Year 2">Year 2</option>
+        <option value="Year 3">Year 3</option>
+        <option value="Year 4">Year 4</option>
+        <option value="Year 5">Year 5</option>
+        <option value="Year 6">Year 6</option>
+        <option value="Year 7">Year 7</option>
+        <option value="Year 8">Year 8</option>
+        <option value="Year 9">Year 9</option>
+        <option value="Year 10">Year 10</option>
+        <option value="Year 11">Year 11</option>
+        <option value="Year 12">Year 12</option>
+      </select>
+
+      <input type="text" name="schoolName" required placeholder="School Name"
+        class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+
+      <input type="text" name="location" required placeholder="Location (State)"
+        class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+
+      <input type="text" name="country" required placeholder="Country"
+        class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+
+      <button type="submit" 
+        class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
+        Register
+      </button>
+    </form>
+
+    <!-- ✅ LOGIN FORM -->
+    <form id="loginForm" class="space-y-4 hidden">
+      <h2 class="text-lg font-semibold text-center">Welcome Back</h2>
+
+      <input type="text" name="username" required placeholder="Username"
+        class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+
+      <input type="email" name="email" required placeholder="Email"
+        class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+
+      <button type="submit" 
+        class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition">
+        Login
+      </button>
+    </form>
+
+    <p id="authSuccessMsg" class="hidden text-green-600 mt-4 text-center font-medium">
+      ✅ Success!
+    </p>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const authBtn = document.getElementById("authBtn");
+  const modal = document.getElementById("authModal");
+  const closeModal = document.getElementById("closeAuthModal");
+  const registerForm = document.getElementById("registrationForm");
+  const loginForm = document.getElementById("loginForm");
+  const registerTab = document.getElementById("registerTab");
+  const loginTab = document.getElementById("loginTab");
+  const authMsg = document.getElementById("authSuccessMsg");
+
+  // Helpers
+  function getUser() {
+    return {
+      id: localStorage.getItem("currentUserId"),
+      name: localStorage.getItem("currentUserName"),
+    };
+  }
+
+  function updateAuthButton() {
+    const { id, name } = getUser();
+    if (id && name) {
+      authBtn.innerHTML = `Logout <span class="ml-2 font-semibold text-gray-700">(${name})</span>`;
+      authBtn.onclick = logoutUser;
+    } else {
+      authBtn.textContent = "Sign Up / Login";
+      authBtn.onclick = () => modal.classList.remove("hidden");
+    }
+  }
+
+  function logoutUser() {
+    localStorage.removeItem("currentUserId");
+    localStorage.removeItem("currentUserName");
+    updateAuthButton();
+    alert("You have logged out successfully!");
+  }
+
+  // Modal controls
+  closeModal.addEventListener("click", () => modal.classList.add("hidden"));
+  window.addEventListener("click", (e) => {
+    if (e.target === modal) modal.classList.add("hidden");
+  });
+
+  // Tab switch
+  registerTab.addEventListener("click", () => {
+    registerForm.classList.remove("hidden");
+    loginForm.classList.add("hidden");
+    registerTab.classList.add("text-blue-600", "border-b-2", "border-blue-600");
+    loginTab.classList.remove("text-blue-600", "border-b-2", "border-blue-600");
+  });
+
+  loginTab.addEventListener("click", () => {
+    loginForm.classList.remove("hidden");
+    registerForm.classList.add("hidden");
+    loginTab.classList.add("text-blue-600", "border-b-2", "border-blue-600");
+    registerTab.classList.remove("text-blue-600", "border-b-2", "border-blue-600");
+  });
+
+  // Registration
+  registerForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const name = registerForm.querySelector('input[name="name"]').value.trim();
+    const fakeId = Date.now();
+    localStorage.setItem("currentUserId", fakeId);
+    localStorage.setItem("currentUserName", name);
+    authMsg.textContent = "✅ Registration successful!";
+    authMsg.classList.remove("hidden");
+    updateAuthButton();
+    setTimeout(() => {
+      authMsg.classList.add("hidden");
+      modal.classList.add("hidden");
+      registerForm.reset();
+    }, 1200);
+  });
+
+  // Login
+  loginForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const username = loginForm.querySelector('input[name="username"]').value.trim();
+    const fakeId = Date.now();
+    localStorage.setItem("currentUserId", fakeId);
+    localStorage.setItem("currentUserName", username);
+    authMsg.textContent = "✅ Login successful!";
+    authMsg.classList.remove("hidden");
+    updateAuthButton();
+    setTimeout(() => {
+      authMsg.classList.add("hidden");
+      modal.classList.add("hidden");
+      loginForm.reset();
+    }, 1000);
+  });
+
+  updateAuthButton();
+});
+</script>
+  
+<!-- Registration Modal --
 <div id="registrationModal" class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-50">
   <div class="bg-white rounded-lg shadow-xl w-full max-w-md p-6 relative">
     
-    <!-- Close Button -->
+    <!-- Close Button --
     <button id="closeRegistration" 
       class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-xl font-bold">
       ×
@@ -508,14 +691,14 @@
           class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
       </div>
 
-      <!-- Submit Button -->
+      <!-- Submit Button --
       <button type="submit" 
         class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
         Register
       </button>
     </form>
 
-    <!-- ✅ Success Message -->
+    <!-- ✅ Success Message --
     <p id="successMsg" class="hidden text-green-600 mt-4 text-center font-medium">
       ✅ Registration successful!
     </p>
@@ -576,7 +759,7 @@
       }, 1200);
     });
   });
-</script>
+</script>-->
 
 </body>
 </html>
