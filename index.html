@@ -533,7 +533,7 @@
 
   </div>
 </div>
-  <!-- Perfect working -->
+  <!-- Perfect working --
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const authBtn = document.getElementById("authBtn");
@@ -607,6 +607,164 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       alert("Invalid login details!");
     }
+  });
+});
+</script>
+  -->
+<script>
+// ===================== IndexedDB Setup =====================
+const DB_NAME = "SmartKidsDB";
+const DB_VERSION = 1;
+const STORE_NAME = "users";
+let db;
+
+function initDB() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(DB_NAME, DB_VERSION);
+    request.onerror = (e) => reject(e.target.error);
+    request.onsuccess = (e) => {
+      db = e.target.result;
+      resolve(db);
+    };
+    request.onupgradeneeded = (e) => {
+      db = e.target.result;
+      if (!db.objectStoreNames.contains(STORE_NAME)) {
+        db.createObjectStore(STORE_NAME, { keyPath: "username" });
+      }
+    };
+  });
+}
+
+function addUser(user) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, "readwrite");
+    const store = tx.objectStore(STORE_NAME);
+    const req = store.add(user);
+    req.onsuccess = () => resolve(true);
+    req.onerror = (e) => reject(e.target.error);
+  });
+}
+
+function getUser(username) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, "readonly");
+    const store = tx.objectStore(STORE_NAME);
+    const req = store.get(username);
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = (e) => reject(e.target.error);
+  });
+}
+
+// ===================== Modal Logic =====================
+document.addEventListener("DOMContentLoaded", async () => {
+  await initDB();
+
+  const authBtn = document.getElementById("authBtn");
+  const authModal = document.getElementById("authModal");
+  const closeModal = document.getElementById("closeAuthModal");
+  const loginForm = document.getElementById("loginForm");
+  const regForm = document.getElementById("registrationForm");
+  const showLogin = document.getElementById("showLogin");
+  const showRegister = document.getElementById("showRegister");
+  const successMsg = document.getElementById("successMsg");
+
+  // ---- Open Modal ----
+  authBtn.addEventListener("click", () => {
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    if (currentUser) {
+      localStorage.removeItem("currentUser");
+      authBtn.textContent = "Sign In / Register";
+      alert("👋 Logged out successfully!");
+    } else {
+      authModal.classList.remove("hidden");
+    }
+  });
+
+  // ---- Close Modal ----
+  closeModal.addEventListener("click", () => authModal.classList.add("hidden"));
+  window.addEventListener("click", (e) => {
+    if (e.target === authModal) authModal.classList.add("hidden");
+  });
+
+  // ---- Switch Tabs ----
+  showLogin.addEventListener("click", () => {
+    loginForm.classList.remove("hidden");
+    regForm.classList.add("hidden");
+    showLogin.classList.add("text-blue-600", "border-b-2", "border-blue-600");
+    showRegister.classList.remove("text-blue-600", "border-b-2", "border-blue-600");
+  });
+
+  showRegister.addEventListener("click", () => {
+    regForm.classList.remove("hidden");
+    loginForm.classList.add("hidden");
+    showRegister.classList.add("text-blue-600", "border-b-2", "border-blue-600");
+    showLogin.classList.remove("text-blue-600", "border-b-2", "border-blue-600");
+  });
+
+  // ---- Registration ----
+  regForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(regForm).entries());
+
+    // Add password requirement
+    if (!data.password || data.password.length < 4) {
+      alert("Password must be at least 4 characters.");
+      return;
+    }
+
+    // Check for duplicate username
+    const existing = await getUser(data.username);
+    if (existing) {
+      alert("⚠️ Username already exists! Choose another one.");
+      return;
+    }
+
+    try {
+      await addUser(data);
+      localStorage.setItem("currentUser", JSON.stringify(data));
+      successMsg.classList.remove("hidden");
+      authBtn.innerHTML = `Logout <span class="ml-2 font-semibold text-gray-700">(${data.username})</span>`;
+
+      setTimeout(() => {
+        successMsg.classList.add("hidden");
+        authModal.classList.add("hidden");
+        regForm.reset();
+      }, 1200);
+    } catch (err) {
+      console.error("Registration failed:", err);
+      alert("❌ Registration failed!");
+    }
+  });
+
+  // ---- Login ----
+  loginForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const { email, password } = Object.fromEntries(new FormData(loginForm).entries());
+
+    // Try matching by username OR email
+    let user = null;
+    const tx = db.transaction(STORE_NAME, "readonly");
+    const store = tx.objectStore(STORE_NAME);
+    const request = store.openCursor();
+
+    request.onsuccess = (event) => {
+      const cursor = event.target.result;
+      if (cursor) {
+        if ((cursor.value.email === email || cursor.value.username === email) &&
+            cursor.value.password === password) {
+          user = cursor.value;
+          localStorage.setItem("currentUser", JSON.stringify(user));
+          authBtn.innerHTML = `Logout <span class="ml-2 font-semibold text-gray-700">(${user.username})</span>`;
+          authModal.classList.add("hidden");
+          alert(`👋 Welcome back, ${user.username}!`);
+          loginForm.reset();
+          return;
+        }
+        cursor.continue();
+      } else if (!user) {
+        alert("❌ Invalid login details!");
+      }
+    };
   });
 });
 </script>
