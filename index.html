@@ -87,6 +87,65 @@
   transform: translate(-50%, -50%);
   position: absolute;
 }
+  /* additional css for modal*/
+/* === Modal Layout Fix === */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+/* Modal content box */
+.modal-content {
+  background: #fff;
+  width: 90%;
+  max-width: 450px;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  animation: slideIn 0.3s ease-out;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* Close button */
+.modal-content .closeModal {
+  position: absolute;
+  top: 10px;
+  right: 16px;
+  font-size: 1.4rem;
+  color: #555;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.modal-content .closeModal:hover {
+  color: #000;
+}
+
+/* Smooth open animation */
+@keyframes slideIn {
+  from {
+    transform: translateY(-30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .modal-content {
+    padding: 1.2rem;
+    max-width: 95%;
+  }
+}
+  
 </style>
 
 </head>
