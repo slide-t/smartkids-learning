@@ -88,7 +88,7 @@
   position: absolute;
 }
   /* additional css for modal*/
-/* === Modal Layout Fix === */
+/* === Modal Layout Fix === 
 .modal {
   position: fixed;
   inset: 0;
@@ -99,7 +99,7 @@
   z-index: 50;
 }
 
-/* Modal content box */
+/* Modal content box 
 .modal-content {
   background: #fff;
   width: 90%;
@@ -112,7 +112,7 @@
   overflow-y: auto;
 }
 
-/* Close button */
+/* Close button 
 .modal-content .closeModal {
   position: absolute;
   top: 10px;
@@ -126,7 +126,7 @@
   color: #000;
 }
 
-/* Smooth open animation */
+/* Smooth open animation 
 @keyframes slideIn {
   from {
     transform: translateY(-30px);
@@ -138,13 +138,13 @@
   }
 }
 
-/* Responsive */
+/* Responsive 
 @media (max-width: 600px) {
   .modal-content {
     padding: 1.2rem;
     max-width: 95%;
   }
-}
+}*/
   
 </style>
 
@@ -497,9 +497,13 @@
 }
 </style>
 
-<!-- Registration Modal -->
-<div id="registrationModal" class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-50">
-  <div class="bg-white rounded-lg shadow-xl w-full max-w-md p-6 relative">
+<!-- =========================
+      Registration Modal
+========================= -->
+<div id="registrationModal" 
+  class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-50 overflow-y-auto py-10 transition-opacity duration-300 opacity-0">
+  
+  <div class="bg-white rounded-lg shadow-xl w-full max-w-md p-6 relative transform transition-all duration-300 scale-95 max-h-[90vh] overflow-y-auto">
     
     <!-- Close Button -->
     <button id="closeRegistration" 
@@ -539,18 +543,10 @@
         <select name="class" id="class" required
           class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
           <option value="">Select Class</option>
-          <option>Year 1</option>
-          <option>Year 2</option>
-          <option>Year 3</option>
-          <option>Year 4</option>
-          <option>Year 5</option>
-          <option>Year 6</option>
-          <option>Year 7</option>
-          <option>Year 8</option>
-          <option>Year 9</option>
-          <option>Year 10</option>
-          <option>Year 11</option>
-          <option>Year 12</option>
+          <option>Year 1</option><option>Year 2</option><option>Year 3</option>
+          <option>Year 4</option><option>Year 5</option><option>Year 6</option>
+          <option>Year 7</option><option>Year 8</option><option>Year 9</option>
+          <option>Year 10</option><option>Year 11</option><option>Year 12</option>
         </select>
       </div>
 
@@ -585,9 +581,14 @@
     </p>
   </div>
 </div>
-<<!-- Login Modal -->
-<div id="loginModal" class="modal fixed inset-0 bg-black/50 flex items-center justify-center hidden z-50">
-  <div class="bg-white rounded-lg shadow-xl w-full max-w-md p-6 relative">
+<!-- =========================
+          Login Modal
+========================= -->
+<div id="loginModal" 
+  class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-50 overflow-y-auto py-10 transition-opacity duration-300 opacity-0">
+  
+  <div class="bg-white rounded-lg shadow-xl w-full max-w-md p-6 relative transform transition-all duration-300 scale-95 max-h-[90vh] overflow-y-auto">
+    
     <button class="closeModal absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-xl font-bold">×</button>
     <h2 class="text-xl font-semibold mb-4 text-center">Sign In</h2>
 
@@ -612,7 +613,7 @@
       <a href="#" id="switchToRegister" class="text-blue-600 font-medium hover:underline">Register</a>
     </p>
   </div>
-</div>
+</div>      
 <!-- ========= Registration Script (place before </body>) ========= -->
 <script src="auth.js"></script>
 <script>
@@ -849,6 +850,22 @@ window.addEventListener("DOMContentLoaded", () => {
 
   initDB().then(updateAuthButton);
 });
+
+function openModal(modalId) {
+  const modal = document.getElementById(modalId);
+  modal.classList.remove('hidden');
+  setTimeout(() => {
+    modal.classList.remove('opacity-0', 'scale-95');
+    modal.classList.add('opacity-100', 'scale-100');
+  }, 10);
+}
+
+function closeModal(modalId) {
+  const modal = document.getElementById(modalId);
+  modal.classList.add('opacity-0', 'scale-95');
+  setTimeout(() => modal.classList.add('hidden'), 300);
+}
+  
 </script>
 </body>
 </html>
