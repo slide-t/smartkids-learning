@@ -105,13 +105,7 @@
           <p class="text-xs text-slate-500">Coding, Computer Literacy & Test of Knowledge</p>
         </div>
       </div>
-      <!-- Auth Button -->
-<button id="authBtn"
-  class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
-  Sign In / Register
-</button>
-
-        <!-- Features Button -->
+       <!-- Features Button -->
         <a href="features.html" class="blinking-button">Features</a>
       </div>
 
@@ -133,13 +127,13 @@
   </div>
 </header>
 
-<!-- Registration Modal -->
+<!-- Registration Modal --
 <div id="registrationModal"
   class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-50 transition-opacity duration-300 opacity-0">
   <div
     class="bg-white rounded-xl shadow-2xl w-full max-w-md p-6 relative transform transition-all duration-300 scale-95 max-h-[80vh] overflow-y-auto">
     
-    <!-- Close -->
+    <!-- Close --
     <button id="closeRegistration"
       class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-2xl font-bold">×</button>
     
@@ -196,7 +190,7 @@
   </div>
 </div>
 
-  <!-- Login Modal -->
+  <!-- Login Modal --
 <div id="loginModal"
   class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-50 transition-opacity duration-300 opacity-0">
   <div
@@ -546,6 +540,7 @@
 </style>
 <!-- ========= Registration Script (place before </body>) ========= -->
 <script src="auth.js"></script>
+  <!--
 <script>
 document.getElementById("registrationForm").addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -796,6 +791,136 @@ function closeModal(modalId) {
   setTimeout(() => modal.classList.add('hidden'), 300);
 }
   
+</script>-->
+
+  <!-- Combined Auth Modal -->
+<div id="authModal"
+  class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-50 transition-opacity duration-300 opacity-0">
+  <div
+    class="bg-white rounded-xl shadow-2xl w-full max-w-md p-6 relative transform transition-all duration-300 scale-95 max-h-[85vh] overflow-y-auto">
+    
+    <!-- Close -->
+    <button id="closeAuth"
+      class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-2xl font-bold">×</button>
+
+    <!-- Registration Form -->
+    <div id="registerView">
+      <h2 class="text-xl font-semibold mb-4 text-center">Create Your Account</h2>
+      <form id="registrationForm" class="space-y-3">
+        <input type="text" name="name" placeholder="Full Name" required
+          class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+        <input type="email" name="email" placeholder="School Email" required
+          class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+        <input type="text" name="username" placeholder="Username" required
+          class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+        <input type="number" name="age" placeholder="Age" required
+          class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+        <select name="class" required
+          class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+          <option value="">Select Class</option>
+          <option>Year 1</option>
+          <option>Year 2</option>
+          <option>Year 3</option>
+          <option>Year 4</option>
+          <option>Year 5</option>
+          <option>Year 6</option>
+          <option>Year 7</option>
+          <option>Year 8</option>
+          <option>Year 9</option>
+          <option>Year 10</option>
+          <option>Year 11</option>
+          <option>Year 12</option>
+        </select>
+        <input type="text" name="schoolName" placeholder="School Name" required
+          class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+        <input type="text" name="location" placeholder="State" required
+          class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+        <input type="text" name="country" placeholder="Country" required
+          class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+
+        <button type="submit"
+          class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
+          Register
+        </button>
+      </form>
+
+      <p class="mt-4 text-sm text-center text-gray-600">
+        Already have an account?
+        <a href="#" id="showLogin" class="text-blue-600 font-medium hover:underline">
+          Login here
+        </a>
+      </p>
+      <p id="successMsg" class="hidden text-green-600 mt-3 text-center font-medium">
+        ✅ Registration successful!
+      </p>
+    </div>
+
+    <!-- Login Form -->
+    <div id="loginView" class="hidden">
+      <h2 class="text-xl font-semibold mb-4 text-center">Welcome Back!</h2>
+      <form id="loginForm" class="space-y-4">
+        <input type="email" name="email" placeholder="Email" required
+          class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+        <input type="password" name="password" placeholder="Password" required
+          class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+        <button type="submit"
+          class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
+          Login
+        </button>
+      </form>
+
+      <p class="mt-4 text-sm text-center text-gray-600">
+        Don’t have an account?
+        <a href="#" id="showRegister" class="text-blue-600 font-medium hover:underline">
+          Register here
+        </a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+  const authModal = document.getElementById("authModal");
+  const authBtn = document.getElementById("authBtn");
+  const closeAuth = document.getElementById("closeAuth");
+  const registerView = document.getElementById("registerView");
+  const loginView = document.getElementById("loginView");
+  const showLogin = document.getElementById("showLogin");
+  const showRegister = document.getElementById("showRegister");
+
+  // Open modal
+  authBtn.addEventListener("click", () => {
+    authModal.classList.remove("hidden");
+    setTimeout(() => authModal.classList.add("opacity-100", "scale-100"));
+  });
+
+  // Close modal
+  closeAuth.addEventListener("click", () => {
+    authModal.classList.remove("opacity-100");
+    setTimeout(() => authModal.classList.add("hidden"), 200);
+  });
+
+  // Outside click closes modal
+  window.addEventListener("click", (e) => {
+    if (e.target === authModal) {
+      authModal.classList.remove("opacity-100");
+      setTimeout(() => authModal.classList.add("hidden"), 200);
+    }
+  });
+
+  // Switch to login
+  showLogin.addEventListener("click", (e) => {
+    e.preventDefault();
+    registerView.classList.add("hidden");
+    loginView.classList.remove("hidden");
+  });
+
+  // Switch to register
+  showRegister.addEventListener("click", (e) => {
+    e.preventDefault();
+    loginView.classList.add("hidden");
+    registerView.classList.remove("hidden");
+  });
 </script>
 </body>
 </html>
