@@ -423,15 +423,15 @@
   }
 }
 </style>
-<!-- Combined Auth Modal --
+<!-- Combined Auth Modal -->
 <div id="authModal" class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-50">
   <div class="bg-white rounded-lg shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto p-6 relative">
 
-    <!-- Close Button --
+    <!-- Close Button -->
     <button id="closeAuthModal"
       class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-2xl font-bold">&times;</button>
 
-    <!-- Tabs --
+    <!-- Tabs -->
     <div class="flex justify-around mb-6 border-b">
       <button id="showLogin" class="py-2 font-semibold text-blue-600 border-b-2 border-blue-600 w-1/2">
         Login
@@ -441,7 +441,7 @@
       </button>
     </div>
 
-    <!-- Login Form --
+    <!-- Login Form -->
     <form id="loginForm" class="space-y-4">
       <h2 class="text-lg font-semibold text-center">Welcome Back!</h2>
 
@@ -463,7 +463,7 @@
       </button>
     </form>
 
-    <!-- Registration Form --
+    <!-- Registration Form -->
     <form id="registrationForm" class="space-y-3 hidden">
       <h2 class="text-lg font-semibold text-center">Create an Account</h2>
 
@@ -532,8 +532,8 @@
     </form>
 
   </div>
-</div>-->
-  <!-- Perfect working --
+</div>
+  <!-- Perfect working -->
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const authBtn = document.getElementById("authBtn");
@@ -610,104 +610,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 </script>
-  -->
   
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  // --- Element References ---
-  const authBtn = document.getElementById("authBtn");
-  const authModal = document.getElementById("authModal");
-  const closeModal = document.getElementById("closeAuthModal");
-  const loginForm = document.getElementById("loginForm");
-  const regForm = document.getElementById("registrationForm");
-  const showLogin = document.getElementById("showLogin");
-  const showRegister = document.getElementById("showRegister");
-  const successMsg = document.getElementById("successMsg");
-
-  // --- Helper: Update Button Text ---
-  function updateAuthButton() {
-    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    if (currentUser) {
-      authBtn.innerHTML = `Logout <span class="ml-2 font-semibold text-gray-700">(${currentUser.username})</span>`;
-    } else {
-      authBtn.textContent = "Sign In / Register";
-    }
-  }
-
-  // --- Initial Load ---
-  updateAuthButton();
-
-  // --- Open / Logout Logic ---
-  authBtn.addEventListener("click", () => {
-    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    if (currentUser) {
-      // Logout
-      localStorage.removeItem("currentUser");
-      alert("👋 Logged out successfully!");
-      updateAuthButton();
-    } else {
-      // Open Modal
-      authModal.classList.remove("hidden");
-    }
-  });
-
-  // --- Close Modal ---
-  closeModal.addEventListener("click", () => authModal.classList.add("hidden"));
-  window.addEventListener("click", (e) => {
-    if (e.target === authModal) authModal.classList.add("hidden");
-  });
-
-  // --- Switch Tabs ---
-  if (showLogin && showRegister) {
-    showLogin.addEventListener("click", () => {
-      loginForm.classList.remove("hidden");
-      regForm.classList.add("hidden");
-      showLogin.classList.add("text-blue-600", "border-b-2", "border-blue-600");
-      showRegister.classList.remove("text-blue-600", "border-b-2", "border-blue-600");
-    });
-
-    showRegister.addEventListener("click", () => {
-      regForm.classList.remove("hidden");
-      loginForm.classList.add("hidden");
-      showRegister.classList.add("text-blue-600", "border-b-2", "border-blue-600");
-      showLogin.classList.remove("text-blue-600", "border-b-2", "border-blue-600");
-    });
-  }
-
-  // --- Registration ---
-  regForm?.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const data = Object.fromEntries(new FormData(regForm).entries());
-    localStorage.setItem("currentUser", JSON.stringify(data));
-
-    successMsg.classList.remove("hidden");
-    updateAuthButton();
-
-    setTimeout(() => {
-      successMsg.classList.add("hidden");
-      authModal.classList.add("hidden");
-      regForm.reset();
-    }, 1200);
-  });
-
-  // --- Login ---
-  loginForm?.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const data = Object.fromEntries(new FormData(loginForm).entries());
-    const savedUser = JSON.parse(localStorage.getItem("currentUser"));
-
-    if (savedUser && savedUser.email === data.email) {
-      alert(`👋 Welcome back, ${savedUser.username}!`);
-      updateAuthButton();
-      authModal.classList.add("hidden");
-    } else {
-      alert("Invalid login details!");
-    }
-  });
-});
-</script>
-
-  
-
 </body>
 </html>
