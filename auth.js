@@ -74,12 +74,29 @@ async function registerUser(formData) {
 
     // ✅ Save locally
     await addUser(user);
-    // ✅ Save on server
-    await fetch("http://localhost:3000/api/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(user),
-    }).catch((err) => console.warn("⚠️ Server not reachable:", err.message));
+
+    // ✅ Save on server and handle response properly
+    try {
+      const res = await fetch("http://localhost:3000/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(user),
+      });
+
+      const result = await res.json();
+      console.log("📡 Server response:", result);
+
+      if (!res.ok) {
+        alert(`❌ Server error: ${result.message || "Unknown issue."}`);
+        return;
+      }
+
+      console.log("✅ Server registration success");
+      alert("🎉 Registration successful! Welcome to SmartKids!");
+    } catch (err) {
+      console.warn("⚠️ Server not reachable:", err.message);
+      alert("Registration saved locally. Server temporarily unreachable.");
+    }
 
     // ✅ Update session
     setCurrentUser(user);
