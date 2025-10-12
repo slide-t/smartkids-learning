@@ -423,15 +423,15 @@
   }
 }
 </style>
-<!-- Combined Auth Modal -->
+<!-- Combined Auth Modal --
 <div id="authModal" class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-50">
   <div class="bg-white rounded-lg shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto p-6 relative">
 
-    <!-- Close Button -->
+    <!-- Close Button --
     <button id="closeAuthModal"
       class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-2xl font-bold">&times;</button>
 
-    <!-- Tabs -->
+    <!-- Tabs --
     <div class="flex justify-around mb-6 border-b">
       <button id="showLogin" class="py-2 font-semibold text-blue-600 border-b-2 border-blue-600 w-1/2">
         Login
@@ -441,7 +441,7 @@
       </button>
     </div>
 
-    <!-- Login Form -->
+    <!-- Login Form --
     <form id="loginForm" class="space-y-4">
       <h2 class="text-lg font-semibold text-center">Welcome Back!</h2>
 
@@ -463,7 +463,7 @@
       </button>
     </form>
 
-    <!-- Registration Form -->
+    <!-- Registration Form --
     <form id="registrationForm" class="space-y-3 hidden">
       <h2 class="text-lg font-semibold text-center">Create an Account</h2>
 
@@ -533,7 +533,7 @@
 
   </div>
 </div>
-  <!-- Perfect working -->
+  <!-- Perfect working --
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const authBtn = document.getElementById("authBtn");
@@ -609,7 +609,251 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
-</script>
+</script>-->
   
+  <!-- Combined Auth Modal -->
+<div id="authModal" class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-50">
+  <div class="bg-white rounded-lg shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto p-6 relative">
+
+    <!-- Close Button -->
+    <button id="closeAuthModal"
+      class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-2xl font-bold">&times;</button>
+
+    <!-- Tabs -->
+    <div class="flex justify-around mb-6 border-b">
+      <button id="showLogin" class="py-2 font-semibold text-blue-600 border-b-2 border-blue-600 w-1/2">
+        Login
+      </button>
+      <button id="showRegister" class="py-2 font-semibold text-gray-500 hover:text-blue-600 w-1/2">
+        Register
+      </button>
+    </div>
+
+    <!-- Login Form -->
+    <form id="loginForm" class="space-y-4">
+      <h2 class="text-lg font-semibold text-center">Welcome Back!</h2>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Username</label>
+        <input type="text" name="username" required placeholder="Enter your username"
+          class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Password</label>
+        <input type="password" name="password" required
+          class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <button type="submit"
+        class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
+        Login
+      </button>
+    </form>
+
+    <!-- Registration Form -->
+    <form id="registrationForm" class="space-y-3 hidden">
+      <h2 class="text-lg font-semibold text-center">Create an Account</h2>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Full Name</label>
+        <input type="text" name="name" required
+          class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">School Email</label>
+        <input type="email" name="email" required placeholder="e.g. pupil@school.edu"
+          class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Username</label>
+        <input type="text" name="username" required placeholder="Unique username"
+          class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Password</label>
+        <input type="password" name="password" required placeholder="Create a password"
+          class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Age</label>
+        <input type="number" name="age" required
+          class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Class</label>
+        <select name="class" required
+          class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+          <option value="">Select Class</option>
+          <option>Year 1</option><option>Year 2</option><option>Year 3</option>
+          <option>Year 4</option><option>Year 5</option><option>Year 6</option>
+          <option>Year 7</option><option>Year 8</option><option>Year 9</option>
+          <option>Year 10</option><option>Year 11</option><option>Year 12</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">School Name</label>
+        <input type="text" name="schoolName" required
+          class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Location (State)</label>
+        <input type="text" name="location" required
+          class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Country</label>
+        <input type="text" name="country" required
+          class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <button type="submit"
+        class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition">
+        Register
+      </button>
+
+      <p id="successMsg" class="hidden text-green-600 mt-4 text-center font-medium">
+        ✅ Registration successful!
+      </p>
+    </form>
+
+  </div>
+</div>
+
+<!-- Enhanced Script -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const authBtn = document.getElementById("authBtn");
+  const authModal = document.getElementById("authModal");
+  const closeModal = document.getElementById("closeAuthModal");
+  const loginForm = document.getElementById("loginForm");
+  const regForm = document.getElementById("registrationForm");
+  const showLogin = document.getElementById("showLogin");
+  const showRegister = document.getElementById("showRegister");
+  const successMsg = document.getElementById("successMsg");
+
+  // Initialize IndexedDB
+  let db;
+  const request = indexedDB.open("SmartKidsDB", 1);
+  request.onupgradeneeded = (event) => {
+    db = event.target.result;
+    if (!db.objectStoreNames.contains("users")) {
+      db.createObjectStore("users", { keyPath: "username" });
+    }
+  };
+  request.onsuccess = (event) => { db = event.target.result; };
+  request.onerror = () => alert("⚠️ Error opening local database.");
+
+  // ---- Modal Controls ----
+  authBtn.addEventListener("click", () => {
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    if (currentUser) {
+      localStorage.removeItem("currentUser");
+      authBtn.textContent = "Sign In / Register";
+      alert("👋 Logged out successfully!");
+    } else {
+      authModal.classList.remove("hidden");
+    }
+  });
+
+  closeModal.addEventListener("click", () => authModal.classList.add("hidden"));
+  window.addEventListener("click", (e) => {
+    if (e.target === authModal) authModal.classList.add("hidden");
+  });
+
+  // ---- Tab Switch ----
+  showLogin.addEventListener("click", () => {
+    loginForm.classList.remove("hidden");
+    regForm.classList.add("hidden");
+    showLogin.classList.add("text-blue-600", "border-b-2", "border-blue-600");
+    showRegister.classList.remove("text-blue-600", "border-b-2", "border-blue-600");
+  });
+  showRegister.addEventListener("click", () => {
+    regForm.classList.remove("hidden");
+    loginForm.classList.add("hidden");
+    showRegister.classList.add("text-blue-600", "border-b-2", "border-blue-600");
+    showLogin.classList.remove("text-blue-600", "border-b-2", "border-blue-600");
+  });
+
+  // ---- Registration ----
+  regForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(regForm).entries());
+
+    if (!db) {
+      // Fallback to localStorage if IndexedDB fails
+      localStorage.setItem("currentUser", JSON.stringify(data));
+      alert("Saved locally (offline mode).");
+    } else {
+      const tx = db.transaction("users", "readwrite");
+      const store = tx.objectStore("users");
+      store.put(data);
+      tx.oncomplete = () => {
+        successMsg.classList.remove("hidden");
+        localStorage.setItem("currentUser", JSON.stringify(data));
+        authBtn.innerHTML = `Logout <span class="ml-2 font-semibold text-gray-700">(${data.username})</span>`;
+        setTimeout(() => {
+          successMsg.classList.add("hidden");
+          authModal.classList.add("hidden");
+          regForm.reset();
+        }, 1200);
+      };
+      tx.onerror = () => alert("Error saving user to database.");
+    }
+  });
+
+  // ---- Login ----
+  loginForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(loginForm).entries());
+
+    if (!db) {
+      const savedUser = JSON.parse(localStorage.getItem("currentUser"));
+      if (savedUser && savedUser.username === data.username && savedUser.password === data.password) {
+        loginSuccess(savedUser);
+      } else {
+        alert("Invalid login or offline mode data not found.");
+      }
+      return;
+    }
+
+    const tx = db.transaction("users", "readonly");
+    const store = tx.objectStore("users");
+    const request = store.get(data.username);
+    request.onsuccess = (event) => {
+      const user = event.target.result;
+      if (user && user.password === data.password) {
+        loginSuccess(user);
+      } else {
+        alert("❌ Invalid username or password!");
+      }
+    };
+    request.onerror = () => alert("⚠️ Error accessing user database.");
+  });
+
+  function loginSuccess(user) {
+    authBtn.innerHTML = `Logout <span class="ml-2 font-semibold text-gray-700">(${user.username})</span>`;
+    localStorage.setItem("currentUser", JSON.stringify(user));
+    authModal.classList.add("hidden");
+    alert(`👋 Welcome back, ${user.username}!`);
+  }
+
+  // ---- Offline/Online Feedback ----
+  window.addEventListener("offline", () => {
+    alert("⚠️ You are offline. Data will be stored locally.");
+  });
+  window.addEventListener("online", () => {
+    alert("✅ Connection restored!");
+  });
+});
+</script>
 </body>
 </html>
