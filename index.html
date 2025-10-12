@@ -575,7 +575,160 @@
   </div>
 </div>
 
-<!-- Enhanced Script -->
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+  const authBtn = document.getElementById("authBtn");
+  const authModal = document.getElementById("authModal");
+  const closeModal = document.getElementById("closeAuthModal");
+  const loginForm = document.getElementById("loginForm");
+  const regForm = document.getElementById("registrationForm");
+  const showLogin = document.getElementById("showLogin");
+  const showRegister = document.getElementById("showRegister");
+  const successMsg = document.getElementById("successMsg");
+
+  const userGreeting = document.getElementById("userGreeting");
+  const greetName = document.getElementById("greetName");
+
+  // ----- IndexedDB setup -----
+  let db;
+  const request = indexedDB.open("SmartKidsDB", 1);
+  request.onupgradeneeded = (event) => {
+    db = event.target.result;
+    if (!db.objectStoreNames.contains("users")) {
+      db.createObjectStore("users", { keyPath: "username" });
+    }
+  };
+  request.onsuccess = (event) => { db = event.target.result; };
+  request.onerror = () => alert("⚠️ Unable to open IndexedDB.");
+
+  // ----- Modal controls -----
+  authBtn.addEventListener("click", () => {
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    if (currentUser) {
+      // Logout
+      localStorage.removeItem("currentUser");
+      authBtn.textContent = "Sign Up";
+      userGreeting.classList.add("hidden");
+      alert("👋 Logged out successfully!");
+    } else {
+      authModal.classList.remove("hidden");
+      authModal.classList.add("opacity-100");
+    }
+  });
+
+  closeModal.addEventListener("click", hideModal);
+  window.addEventListener("click", (e) => {
+    if (e.target === authModal) hideModal();
+  });
+
+  function hideModal() {
+    authModal.classList.add("opacity-0", "scale-95");
+    setTimeout(() => authModal.classList.add("hidden"), 300);
+  }
+
+  // ----- Switch forms -----
+  showLogin.addEventListener("click", () => {
+    loginForm.classList.remove("hidden");
+    regForm.classList.add("hidden");
+  });
+
+  showRegister.addEventListener("click", () => {
+    regForm.classList.remove("hidden");
+    loginForm.classList.add("hidden");
+  });
+
+  // ----- Register -----
+  regForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(regForm).entries());
+
+    // Store password properly
+    const user = {
+      username: data.username,
+      email: data.email,
+      password: data.password
+    };
+
+    const tx = db.transaction("users", "readwrite");
+    const store = tx.objectStore("users");
+    const addReq = store.put(user);
+
+    addReq.onsuccess = () => {
+      successMsg.classList.remove("hidden");
+      localStorage.setItem("currentUser", JSON.stringify(user));
+      authBtn.textContent = "Logout";
+      greetUser(user.username);
+      syncToServer(user);
+      setTimeout(() => {
+        successMsg.classList.add("hidden");
+        hideModal();
+        regForm.reset();
+      }, 1200);
+    };
+
+    addReq.onerror = () => alert("❌ Error saving user. Try again!");
+  });
+
+  // ----- Login -----
+  loginForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(loginForm).entries());
+    const tx = db.transaction("users", "readonly");
+    const store = tx.objectStore("users");
+    const req = store.get(data.username);
+
+    req.onsuccess = (event) => {
+      const user = event.target.result;
+      if (user && user.password === data.password) {
+        localStorage.setItem("currentUser", JSON.stringify(user));
+        authBtn.textContent = "Logout";
+        greetUser(user.username);
+        hideModal();
+      } else {
+        alert("❌ Invalid username or password!");
+      }
+    };
+  });
+
+  // ----- Greet user below navbar -----
+  function greetUser(name) {
+    greetName.textContent = name;
+    userGreeting.classList.remove("hidden");
+    userGreeting.classList.remove("-translate-x-full");
+    userGreeting.classList.add("translate-x-0");
+
+    // Slide out after 5s
+    setTimeout(() => {
+      userGreeting.classList.add("-translate-x-full");
+    }, 5000);
+  }
+
+  // ----- Sync local data to server -----
+  function syncToServer(user) {
+    if (navigator.onLine) {
+      fetch("/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(user)
+      })
+        .then((res) => res.json())
+        .then((msg) => console.log("Server sync:", msg))
+        .catch(() => console.warn("Server offline; will sync later."));
+    } else {
+      console.warn("Offline — server sync postponed.");
+    }
+  }
+
+  // ----- Restore user on reload -----
+  const savedUser = JSON.parse(localStorage.getItem("currentUser"));
+  if (savedUser) {
+    authBtn.textContent = "Logout";
+    greetUser(savedUser.username);
+  }
+});
+</script>
+
+<!-- Enhanced Script --
 <script>
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -702,6 +855,6 @@ document.addEventListener("DOMContentLoaded", () => {
     alert("✅ Connection restored!");
   });
 });
-</script>
+</script>-->
 </body>
 </html>
