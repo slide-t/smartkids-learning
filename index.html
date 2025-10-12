@@ -96,7 +96,7 @@
           <p class="text-xs text-slate-500">Coding, Computer Literacy & Test of Knowledge</p>
         </div>
 <!-- Auth Button -->
-<button id="signupBtn"
+<button id="authBtn"
   class="ml-4 px-4 py-1.5 border border-blue-600 rounded-full text-blue-600 text-sm font-medium bg-white transition duration-200 ease-in-out hover:bg-blue-50 active:scale-95 active:shadow-[0_0_10px_rgba(59,130,246,0.7)]">
   Sign In / Register
 </button>     
@@ -423,15 +423,15 @@
   }
 }
 </style>
-  <!-- Combined Auth Modal --
+  <!-- Combined Auth Modal -->
 <div id="authModal" class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-50">
   <div class="bg-white rounded-lg shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto p-6 relative">
 
-    <!-- Close Button --
+    <!-- Close Button -->
     <button id="closeAuthModal"
       class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-2xl font-bold">&times;</button>
 
-    <!-- Tabs --
+    <!-- Tabs -->
     <div class="flex justify-around mb-6 border-b">
       <button id="showLogin" class="py-2 font-semibold text-blue-600 border-b-2 border-blue-600 w-1/2">
         Login
@@ -441,7 +441,7 @@
       </button>
     </div>
 
-    <!-- Login Form --
+    <!-- Login Form -->
     <form id="loginForm" class="space-y-4">
       <h2 class="text-lg font-semibold text-center">Welcome Back!</h2>
 
@@ -463,7 +463,7 @@
       </button>
     </form>
 
-    <!-- Registration Form --
+    <!-- Registration Form -->
     <form id="registrationForm" class="space-y-3 hidden">
       <h2 class="text-lg font-semibold text-center">Create an Account</h2>
 
@@ -539,18 +539,18 @@
 
   </div>
 </div>
-  <!-- User Greeting (shows username after login/signup) --
+  <!-- User Greeting (shows username after login/signup) -->
 <div id="userGreeting" class="hidden fixed top-[72px] left-0 bg-blue-600 text-white px-4 py-2 rounded-r-lg shadow-lg transform -translate-x-full transition-transform duration-500 ease-in-out z-50">
   Welcome, <span id="greetName"></span> 🎉
 </div>
 
-<!-- Auth Modal --
+<!-- Auth Modal -->
 <div id="authModal" class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-50">
   <div class="bg-white rounded-lg shadow-2xl w-full max-w-md p-6 relative">
-    <!-- Close Button --
+    <!-- Close Button -->
     <button id="closeAuthModal" class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-lg">&times;</button>
 
-    <!-- Registration Form --
+    <!-- Registration Form -->
     <form id="registerForm" class="space-y-4">
       <h2 class="text-2xl font-semibold text-center text-blue-700 mb-4">Create Account</h2>
       <input type="text" id="regUsername" placeholder="Username" required class="w-full p-2 border rounded focus:ring focus:ring-blue-200">
@@ -562,7 +562,7 @@
       </p>
     </form>
 
-    <!-- Login Form --
+    <!-- Login Form -->
     <form id="loginForm" class="space-y-4 hidden">
       <h2 class="text-2xl font-semibold text-center text-blue-700 mb-4">Welcome Back</h2>
       <input type="text" id="loginUsername" placeholder="Username" required class="w-full p-2 border rounded focus:ring focus:ring-blue-200">
@@ -575,7 +575,7 @@
   </div>
 </div>
 
-<!-- Enhanced Script --
+<!-- Enhanced Script -->
 <script>
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -702,149 +702,6 @@ document.addEventListener("DOMContentLoaded", () => {
     alert("✅ Connection restored!");
   });
 });
-</script>-->
-
-<!-- User Greeting (shows username after login/signup) -->
-<div id="userGreeting" class="hidden fixed top-[72px] left-0 bg-blue-600 text-white px-4 py-2 rounded-r-lg shadow-lg transform -translate-x-full transition-transform duration-500 ease-in-out z-50">
-  Welcome, <span id="greetName"></span> 🎉
-</div>
-
-<!-- Auth Modal -->
-<div id="authModal" class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-50">
-  <div class="bg-white rounded-lg shadow-2xl w-full max-w-md p-6 relative">
-    <!-- Close Button -->
-    <button id="closeAuthModal" class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-lg">&times;</button>
-
-    <!-- Registration Form -->
-    <form id="registerForm" class="space-y-4">
-      <h2 class="text-2xl font-semibold text-center text-blue-700 mb-4">Create Account</h2>
-      <input type="text" id="regUsername" placeholder="Username" required class="w-full p-2 border rounded focus:ring focus:ring-blue-200">
-      <input type="email" id="regEmail" placeholder="School Email (e.g. yourname@school.edu)" required class="w-full p-2 border rounded focus:ring focus:ring-blue-200">
-      <input type="password" id="regPassword" placeholder="Password" required class="w-full p-2 border rounded focus:ring focus:ring-blue-200">
-      <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">Sign Up</button>
-      <p class="text-center text-sm text-gray-600">Already have an account? 
-        <a href="#" id="showLogin" class="text-blue-600 underline">Login</a>
-      </p>
-    </form>
-
-    <!-- Login Form -->
-    <form id="loginForm" class="space-y-4 hidden">
-      <h2 class="text-2xl font-semibold text-center text-blue-700 mb-4">Welcome Back</h2>
-      <input type="text" id="loginUsername" placeholder="Username" required class="w-full p-2 border rounded focus:ring focus:ring-blue-200">
-      <input type="password" id="loginPassword" placeholder="Password" required class="w-full p-2 border rounded focus:ring focus:ring-blue-200">
-      <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">Login</button>
-      <p class="text-center text-sm text-gray-600">New here? 
-        <a href="#" id="showRegister" class="text-blue-600 underline">Sign Up</a>
-      </p>
-    </form>
-  </div>
-</div>
-  
-  <script>
-// ==================== IndexedDB Setup ====================
-let db;
-const request = indexedDB.open("SmartKidsDB", 1);
-
-request.onupgradeneeded = function (event) {
-  db = event.target.result;
-  const store = db.createObjectStore("users", { keyPath: "username" });
-  store.createIndex("password", "password", { unique: false });
-};
-
-request.onsuccess = function (event) {
-  db = event.target.result;
-  updateAuthUI(); // Check login state when DB is ready
-};
-
-request.onerror = function (event) {
-  console.error("IndexedDB error:", event.target.error);
-};
-
-// ==================== Registration ====================
-document.getElementById("registerForm").addEventListener("submit", function (e) {
-  e.preventDefault();
-  const username = document.getElementById("regUsername").value.trim();
-  const password = document.getElementById("regPassword").value.trim();
-
-  const tx = db.transaction("users", "readwrite");
-  const store = tx.objectStore("users");
-  const getReq = store.get(username);
-
-  getReq.onsuccess = function () {
-    if (getReq.result) {
-      alert("Username already exists!");
-    } else {
-      store.add({ username, password });
-      alert("Registration successful!");
-      localStorage.setItem("loggedInUser", username);
-      closeAuthModal();
-      updateAuthUI();
-    }
-  };
-});
-
-// ==================== Login ====================
-document.getElementById("loginForm").addEventListener("submit", function (e) {
-  e.preventDefault();
-  const username = document.getElementById("loginUsername").value.trim();
-  const password = document.getElementById("loginPassword").value.trim();
-
-  const tx = db.transaction("users", "readonly");
-  const store = tx.objectStore("users");
-  const getReq = store.get(username);
-
-  getReq.onsuccess = function () {
-    const user = getReq.result;
-    if (user && user.password === password) {
-      alert("Login successful!");
-      localStorage.setItem("loggedInUser", username);
-      closeAuthModal();
-      updateAuthUI();
-    } else {
-      alert("Invalid username or password.");
-    }
-  };
-});
-
-// ==================== Logout ====================
-function logoutUser() {
-  localStorage.removeItem("loggedInUser");
-  updateAuthUI();
-  alert("You have logged out.");
-}
-
-// ==================== UI Update ====================
-function updateAuthUI() {
-  const loggedInUser = localStorage.getItem("loggedInUser");
-  const signupBtn = document.getElementById("signupBtn");
-  const userGreeting = document.getElementById("userGreeting");
-
-  if (loggedInUser) {
-    signupBtn.textContent = "Logout";
-    signupBtn.onclick = logoutUser;
-
-    if (userGreeting) {
-      userGreeting.innerHTML = `<p class="text-center text-gray-700 text-sm mt-2">Welcome, <b>${loggedInUser}</b> 👋</p>`;
-    }
-  } else {
-    signupBtn.textContent = "Sign Up";
-    signupBtn.onclick = openAuthModal;
-
-    if (userGreeting) {
-      userGreeting.innerHTML = "";
-    }
-  }
-}
-
-// ==================== Modal Controls ====================
-function openAuthModal() {
-  document.getElementById("authModal").classList.remove("hidden");
-}
-
-function closeAuthModal() {
-  document.getElementById("authModal").classList.add("hidden");
-}
-    
-  </script>
+</script>
 </body>
 </html>
