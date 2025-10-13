@@ -611,20 +611,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 1200);
   });
 
-  // ---- Login ----
   loginForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const data = Object.fromEntries(new FormData(loginForm).entries());
-    const savedUser = JSON.parse(localStorage.getItem("currentUser"));
+  e.preventDefault();
+  const formData = new FormData(loginForm);
+  const email = formData.get("email");
+  const username = formData.get("username");
+  const rememberMe = formData.get("rememberMe") === "on";
 
-    if (savedUser && savedUser.email === data.email) {
-      authBtn.innerHTML = `Logout <span class="ml-2 font-semibold text-gray-700">(${savedUser.username})</span>`;
-      authModal.classList.add("hidden");
-      alert(`👋 Welcome back, ${savedUser.username}!`);
-    } else {
-      alert("Invalid login details!");
-    }
-  });
+  loginUser(email, username, rememberMe);
 });
 </script>
 </body>
