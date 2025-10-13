@@ -617,6 +617,157 @@ document.addEventListener("DOMContentLoaded", () => {
     showLogin.classList.remove("text-blue-600", "border-b-2", "border-blue-600");
   }
 
+  // ===== IndexedDB Setup (Safe Mode) =====
+  let db;
+  try {
+    const request = indexedDB.open("SmartKidsDB", 1);
+
+    request.onupgradeneeded = (e) => {
+      db = e.target.result;
+      if (!db.objectStoreNames.contains("users")) {
+        const store = db.createObjectStore("users", { keyPath: "username" });
+        store.createIndex("email", "email", { unique: true });
+      }
+    };
+
+    request.onsuccess = (e) => {
+      db = e.target.result;
+      console.log("✅ IndexedDB connected successfully");
+    };
+
+    request.onerror = (e) => {
+      console.warn("⚠️ IndexedDB unavailable:", e.target.error?.message);
+    };
+  } catch (err) {
+    console.warn("⚠️ IndexedDB init failed:", err.message);
+  }
+
+  // ===== Helper: Add User =====
+  function addUser(user) {
+    if (!db) {
+      console.warn("⚠️ IndexedDB not ready — user will be stored when online");
+      return;
+    }
+    const tx = db.transaction("users", "readwrite");
+    tx.objectStore("users").add(user);
+    tx.oncomplete = () => console.log("✅ User saved offline!");
+  }
+
+  // ===== Helper: Find User =====
+  function findUser(email, username, password, callback) {
+    if (!db) return callback(null);
+    const tx = db.transaction("users", "readonly");
+    const store = tx.objectStore("users");
+    const req = store.get(username);
+    req.onsuccess = () => {
+      const user = req.result;
+      callback(user && user.email === email && user.password === password ? user : null);
+    };
+  }
+
+  // ===== Registration =====
+  regForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(regForm).entries());
+
+    // Validate password: 6–8 chars, letters + numbers
+    const pass = data.password || "";
+    if (!/^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d]{6,8}$/.test(pass)) {
+      alert("❌ Password must be 6–8 characters with letters and numbers.");
+      return;
+    }
+
+    addUser(data);
+    localStorage.setItem("currentUser", JSON.stringify(data));
+    successMsg.classList.remove("hidden");
+    authBtn.innerHTML = `Logout <span class="ml-2 font-semibold text-gray-700">(${data.username})</span>`;
+
+    setTimeout(() => {
+      successMsg.classList.add("hidden");
+      closeAuthModal();
+      regForm.reset();
+    }, 1200);
+  });
+
+  // ===== Login =====
+  loginForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const formData = new FormData(loginForm);
+    const email = formData.get("email");
+    const username = formData.get("username");
+    const password = formData.get("password");
+    const rememberMe = formData.get("rememberMe") === "on";
+
+    findUser(email, username, password, (user) => {
+      if (user) {
+        if (rememberMe) localStorage.setItem("currentUser", JSON.stringify(user));
+        else sessionStorage.setItem("currentUser", JSON.stringify(user));
+
+        authBtn.innerHTML = `Logout <span class="ml-2 font-semibold text-gray-700">(${user.username})</span>`;
+        alert("✅ Login successful!");
+        closeAuthModal();
+      } else {
+        alert("❌ Invalid login credentials!");
+      }
+    });
+  });
+});
+</script>
+
+
+ <!-- 
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const authBtn = document.getElementById("authBtn");
+  const authModal = document.getElementById("authModal");
+  const closeModal = document.getElementById("closeAuthModal");
+  const loginForm = document.getElementById("loginForm");
+  const regForm = document.getElementById("registrationForm");
+  const showLogin = document.getElementById("showLogin");
+  const showRegister = document.getElementById("showRegister");
+  const successMsg = document.getElementById("successMsg");
+
+  // ===== Open Modal =====
+  authBtn.addEventListener("click", () => {
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    if (currentUser) {
+      localStorage.removeItem("currentUser");
+      authBtn.textContent = "Sign In / Register";
+      alert("👋 Logged out successfully!");
+    } else {
+      authModal.classList.remove("hidden");
+      showLoginForm(); // default tab
+    }
+  });
+
+  // ===== Close Modal =====
+  closeModal.addEventListener("click", closeAuthModal);
+  window.addEventListener("click", (e) => {
+    if (e.target === authModal) closeAuthModal();
+  });
+
+  function closeAuthModal() {
+    authModal.classList.add("hidden");
+  }
+
+  // ===== Tab Switching =====
+  showLogin.addEventListener("click", showLoginForm);
+  showRegister.addEventListener("click", showRegisterForm);
+
+  function showLoginForm() {
+    loginForm.classList.remove("hidden");
+    regForm.classList.add("hidden");
+    showLogin.classList.add("text-blue-600", "border-b-2", "border-blue-600");
+    showRegister.classList.remove("text-blue-600", "border-b-2", "border-blue-600");
+  }
+
+  function showRegisterForm() {
+    regForm.classList.remove("hidden");
+    loginForm.classList.add("hidden");
+    showRegister.classList.add("text-blue-600", "border-b-2", "border-blue-600");
+    showLogin.classList.remove("text-blue-600", "border-b-2", "border-blue-600");
+  }
+
   // ===== IndexedDB Setup =====
   let db;
   const request = indexedDB.open("SmartKidsDB", 1);
