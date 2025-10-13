@@ -85,31 +85,37 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // ---- Login ----
-  loginForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const data = Object.fromEntries(new FormData(loginForm).entries());
+// ---------- Login ----------
+async function loginUser(email, username, rememberMe) {
+  try {
+    const res = await fetch("http://localhost:3000/api/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, username }),
+    });
 
-    try {
-      const res = await fetch("/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-      });
-      const result = await res.json();
+    const result = await res.json();
 
-      if (res.ok) {
-        localStorage.setItem("currentUser", JSON.stringify(result.user));
-        authBtn.innerHTML = `Logout <span class="ml-2 font-semibold text-gray-700">(${result.user.username})</span>`;
-        hideModal();
-        alert(`👋 Welcome back, ${result.user.username}!`);
-      } else {
-        alert(result.message || "Invalid login details!");
-      }
-    } catch (err) {
-      alert("❌ Unable to connect to server. Check if server.js is running.");
-      console.error(err);
+    if (!res.ok) {
+      alert(result.message || "Login failed!");
+      return;
     }
-  });
-});
+
+    const user = result.user;
+
+    // ✅ If Remember Me is checked, save in localStorage; else, session only
+    if (rememberMe) {
+      localStorage.setItem("currentUser", JSON.stringify(user));
+    } else {
+      sessionStorage.setItem("currentUser", JSON.stringify(user));
+    }
+
+    updateAuthUI();
+    closeModal("authModal");
+    alert(`👋 Welcome back, ${user.username}!`);
+  } catch (err) {
+    console.error("Login error:", err);
+    alert("Login failed. Please try again.");
+  }
+}
 </script>
