@@ -447,33 +447,37 @@
     </div>
 
     <!-- Login Form -->
-    <form id="loginForm" class="space-y-4">
-      <h2 class="text-lg font-semibold text-center">Welcome Back!</h2>
+<form id="loginForm" class="space-y-4">
+  <h2 class="text-lg font-semibold text-center">Welcome Back!</h2>
 
-      <div>
-        <label class="block text-sm font-medium text-gray-700">Username</label>
-        <input type="text" name="username" required
-          class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
-      </div>
+  <div>
+    <label class="block text-sm font-medium text-gray-700">School Email</label>
+    <input type="email" name="email" required
+      class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+  </div>
 
-      <div>
-        <label class="block text-sm font-medium text-gray-700">Password</label>
-        <input type="password" name="password" required minlength="6" maxlength="8"
-          pattern="^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,8}$"
-          class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500"
-          placeholder="6-8 letters and numbers">
-      </div>
+  <div>
+    <label class="block text-sm font-medium text-gray-700">Username</label>
+    <input type="text" name="username" required
+      class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+  </div>
 
-      <div class="flex items-center">
-        <input id="rememberMe" name="rememberMe" type="checkbox" class="h-4 w-4 text-blue-600 border-gray-300 rounded">
-        <label for="rememberMe" class="ml-2 block text-sm text-gray-700">Remember me</label>
-      </div>
+  <div>
+    <label class="block text-sm font-medium text-gray-700">Password</label>
+    <input type="password" name="password" required placeholder="Your password"
+      class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+  </div>
 
-      <button type="submit"
-        class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
-        Login
-      </button>
-    </form>
+  <div class="flex items-center">
+    <input id="rememberMe" name="rememberMe" type="checkbox" class="h-4 w-4 text-blue-600 border-gray-300 rounded">
+    <label for="rememberMe" class="ml-2 block text-sm text-gray-700">Remember me</label>
+  </div>
+
+  <button type="submit"
+    class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
+    Login
+  </button>
+</form>
 
     <!-- Registration Form -->
     <form id="registrationForm" class="space-y-3 hidden">
@@ -697,26 +701,31 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // ===== Login =====
-  loginForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const formData = new FormData(loginForm);
-    const email = formData.get("email");
-    const username = formData.get("username");
-    const password = formData.get("password");
-    const rememberMe = formData.get("rememberMe") === "on";
+loginForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const formData = new FormData(loginForm);
+  const email = formData.get("email").trim();
+  const username = formData.get("username").trim();
+  const password = formData.get("password").trim();
+  const rememberMe = formData.get("rememberMe") === "on";
 
-    findUser(email, username, password, (user) => {
-      if (user) {
-        if (rememberMe) localStorage.setItem("currentUser", JSON.stringify(user));
-        else sessionStorage.setItem("currentUser", JSON.stringify(user));
+  // Same password rule
+  if (!/^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d]{6,8}$/.test(password)) {
+    alert("❌ Password must be 6–8 characters with letters and numbers.");
+    return;
+  }
 
-        authBtn.innerHTML = `Logout <span class="ml-2 font-semibold text-gray-700">(${user.username})</span>`;
-        alert("✅ Login successful!");
-        closeAuthModal();
-      } else {
-        alert("❌ Invalid login credentials!");
-      }
-    });
+  findUser(email, username, password, (user) => {
+    if (user) {
+      if (rememberMe) localStorage.setItem("currentUser", JSON.stringify(user));
+      else sessionStorage.setItem("currentUser", JSON.stringify(user));
+
+      authBtn.innerHTML = `Logout <span class="ml-2 font-semibold text-gray-700">(${user.username})</span>`;
+      alert("✅ Login successful!");
+      closeAuthModal();
+    } else {
+      alert("❌ Invalid email, username, or password!");
+    }
   });
 });
 </script>
