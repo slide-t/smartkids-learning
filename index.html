@@ -544,7 +544,150 @@
 
   </div>
 </div>
-  <script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const authBtn = document.getElementById("authBtn");
+  const authModal = document.getElementById("authModal");
+  const closeModal = document.getElementById("closeAuthModal");
+  const loginForm = document.getElementById("loginForm");
+  const regForm = document.getElementById("registrationForm");
+  const showLogin = document.getElementById("showLogin");
+  const showRegister = document.getElementById("showRegister");
+  const successMsg = document.getElementById("successMsg");
+
+  // Load local users
+  const localUsers = JSON.parse(localStorage.getItem("localUsers")) || [];
+
+  // ---- Open Modal ----
+  authBtn.addEventListener("click", () => {
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    if (currentUser) {
+      localStorage.removeItem("currentUser");
+      authBtn.textContent = "Sign In / Register";
+      alert("👋 Logged out successfully!");
+    } else {
+      authModal.classList.remove("hidden");
+    }
+  });
+
+  // ---- Close Modal ----
+  closeModal.addEventListener("click", () => authModal.classList.add("hidden"));
+  window.addEventListener("click", (e) => {
+    if (e.target === authModal) authModal.classList.add("hidden");
+  });
+
+  // ---- Switch Tabs ----
+  showLogin.addEventListener("click", () => {
+    loginForm.classList.remove("hidden");
+    regForm.classList.add("hidden");
+    showLogin.classList.add("text-blue-600", "border-b-2", "border-blue-600");
+    showRegister.classList.remove("text-blue-600", "border-b-2", "border-blue-600");
+  });
+
+  showRegister.addEventListener("click", () => {
+    regForm.classList.remove("hidden");
+    loginForm.classList.add("hidden");
+    showRegister.classList.add("text-blue-600", "border-b-2", "border-blue-600");
+    showLogin.classList.remove("text-blue-600", "border-b-2", "border-blue-600");
+  });
+
+  // ---- Registration ----
+  regForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(regForm).entries());
+    const users = JSON.parse(localStorage.getItem("localUsers")) || [];
+
+    // Prevent duplicate username locally
+    if (users.some(u => u.username === data.username)) {
+      return alert("⚠️ Username already exists locally.");
+    }
+
+    try {
+      const res = await fetch("/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+
+      if (res.ok) {
+        const result = await res.json();
+        users.push(result.user);
+        localStorage.setItem("localUsers", JSON.stringify(users));
+        localStorage.setItem("currentUser", JSON.stringify(result.user));
+        successUI(result.user);
+      } else {
+        throw new Error("Network or API error");
+      }
+    } catch {
+      // Offline fallback
+      data.id = Date.now();
+      data.offline = true;
+      users.push(data);
+      localStorage.setItem("localUsers", JSON.stringify(users));
+      localStorage.setItem("currentUser", JSON.stringify(data));
+      successUI(data);
+      alert("⚠️ Saved offline. Will sync when online.");
+    }
+  });
+
+  // ---- Login ----
+  loginForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const formData = new FormData(loginForm);
+    const username = formData.get("username");
+    const password = formData.get("password");
+
+    if (!username || !password) return alert("Please enter username and password.");
+
+    try {
+      const res = await fetch("/api/users");
+      const serverUsers = await res.json();
+      const user = serverUsers.find(u => u.username === username && u.password === password);
+
+      if (user) {
+        localStorage.setItem("currentUser", JSON.stringify(user));
+        successUI(user);
+        return;
+      } else {
+        alert("❌ Invalid username or password.");
+      }
+    } catch {
+      // Offline login check (local fallback)
+      const localUsers = JSON.parse(localStorage.getItem("localUsers")) || [];
+      const user = localUsers.find(u => u.username === username && u.password === password);
+      if (user) {
+        localStorage.setItem("currentUser", JSON.stringify(user));
+        successUI(user);
+      } else {
+        alert("❌ Invalid username or password (offline).");
+      }
+    }
+  });
+
+  // ---- Helper UI ----
+  function successUI(user) {
+    successMsg.classList.remove("hidden");
+    authBtn.innerHTML = `Logout <span class="ml-2 font-semibold text-gray-700">(${user.username})</span>`;
+    setTimeout(() => {
+      successMsg.classList.add("hidden");
+      authModal.classList.add("hidden");
+      regForm.reset();
+      loginForm.reset();
+    }, 1200);
+  }
+
+  // ---- Auto cleanup old offline users (after 5 days) ----
+  const expiry = 5 * 24 * 60 * 60 * 1000;
+  const cleaned = localUsers.filter(u => !u.offline || (Date.now() - u.id) < expiry);
+  localStorage.setItem("localUsers", JSON.stringify(cleaned));
+});
+</script>
+
+
+
+
+  
+  <!--<script>
 document.addEventListener("DOMContentLoaded", () => {
   const authBtn = document.getElementById("authBtn");
   const authModal = document.getElementById("authModal");
@@ -719,6 +862,6 @@ document.addEventListener("DOMContentLoaded", () => {
     sessionStorage.removeItem("currentUser");
   }
 });
-</script>
+</script>-->
 </body>
 </html>
