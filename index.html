@@ -617,7 +617,33 @@ document.addEventListener("DOMContentLoaded", () => {
     showLogin.classList.remove("text-blue-600", "border-b-2", "border-blue-600");
   }
 
-  // ===== IndexedDB Setup =====
+  // ===================== IndexedDB Safe Setup =====================
+let db;
+
+function initDB() {
+  const request = indexedDB.open("SmartKidsDB", 1);
+
+  request.onupgradeneeded = (e) => {
+    const db = e.target.result;
+    if (!db.objectStoreNames.contains("users")) {
+      db.createObjectStore("users", { keyPath: "email" });
+    }
+  };
+
+  request.onsuccess = (e) => {
+    db = e.target.result;
+    console.log("✅ IndexedDB ready for offline storage");
+  };
+
+  request.onerror = (e) => {
+    console.warn("⚠️ Unable to open IndexedDB:", e.target.error);
+    alert("⚠️ IndexedDB not available. Some offline features may not work.");
+  };
+}
+
+document.addEventListener("DOMContentLoaded", initDB);
+
+ /* // ===== IndexedDB Setup =====
   let db;
   const request = indexedDB.open("SmartKidsDB", 1);
   request.onupgradeneeded = (e) => {
@@ -649,7 +675,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const user = req.result;
       callback(user && user.email === email && user.password === password ? user : null);
     };
-  }
+  }*/
 
   // ===== Registration =====
   regForm.addEventListener("submit", (e) => {
