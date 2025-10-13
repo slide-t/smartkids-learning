@@ -555,143 +555,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const showRegister = document.getElementById("showRegister");
   const successMsg = document.getElementById("successMsg");
 
-  // ---- Check login state ----
+  // ---- Restore Logged-in Session ----
   const currentUser = getCurrentUser();
   if (currentUser) {
     authBtn.innerHTML = `Logout <span class="ml-2 font-semibold text-gray-700">(${currentUser.username})</span>`;
   }
 
-  // ---- Open/Close Modal ----
+  // ---- Open / Logout ----
   authBtn.addEventListener("click", () => {
     const user = getCurrentUser();
     if (user) {
       clearCurrentUser();
-      authBtn.textContent = "Sign In / Register";
-      alert("👋 Logged out successfully!");
-    } else {
-      authModal.classList.remove("hidden");
-    }
-  });
-
-  closeModal.addEventListener("click", () => authModal.classList.add("hidden"));
-  window.addEventListener("click", (e) => {
-    if (e.target === authModal) authModal.classList.add("hidden");
-  });
-
-  // ---- Switch Tabs ----
-  showLogin.addEventListener("click", () => {
-    loginForm.classList.remove("hidden");
-    regForm.classList.add("hidden");
-    showLogin.classList.add("text-blue-600", "border-b-2", "border-blue-600");
-    showRegister.classList.remove("text-blue-600", "border-b-2", "border-blue-600");
-  });
-
-  showRegister.addEventListener("click", () => {
-    regForm.classList.remove("hidden");
-    loginForm.classList.add("hidden");
-    showRegister.classList.add("text-blue-600", "border-b-2", "border-blue-600");
-    showLogin.classList.remove("text-blue-600", "border-b-2", "border-blue-600");
-  });
-
-  // ---- Registration ----
-  regForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const data = Object.fromEntries(new FormData(regForm).entries());
-
-    try {
-      const res = await fetch("/api/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-
-      if (res.ok) {
-        const user = await res.json();
-        localStorage.setItem("currentUser", JSON.stringify(user));
-
-        successMsg.classList.remove("hidden");
-        authBtn.innerHTML = `Logout <span class="ml-2 font-semibold text-gray-700">(${user.username})</span>`;
-
-        setTimeout(() => {
-          successMsg.classList.add("hidden");
-          authModal.classList.add("hidden");
-          regForm.reset();
-        }, 1200);
-      } else {
-        const error = await res.json();
-        alert(error.message || "Registration failed. Try again.");
-      }
-    } catch (err) {
-      alert("⚠️ Network error during registration.");
-    }
-  });
-
-  // ---- Login ----
-  loginForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const formData = new FormData(loginForm);
-    const credentials = Object.fromEntries(formData.entries());
-    const rememberMe = formData.get("rememberMe") === "on";
-
-    try {
-      const res = await fetch("/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(credentials),
-      });
-
-      if (res.ok) {
-        const user = await res.json();
-
-        if (rememberMe) {
-          localStorage.setItem("currentUser", JSON.stringify(user));
-        } else {
-          sessionStorage.setItem("currentUser", JSON.stringify(user));
-        }
-
-        authBtn.innerHTML = `Logout <span class="ml-2 font-semibold text-gray-700">(${user.username})</span>`;
-        authModal.classList.add("hidden");
-        loginForm.reset();
-      } else {
-        const error = await res.json();
-        alert(error.message || "Invalid credentials.");
-      }
-    } catch (err) {
-      alert("⚠️ Unable to connect to server.");
-    }
-  });
-
-  // ---- Helper Functions ----
-  function getCurrentUser() {
-    const user = localStorage.getItem("currentUser") || sessionStorage.getItem("currentUser");
-    return user ? JSON.parse(user) : null;
-  }
-
-  function clearCurrentUser() {
-    localStorage.removeItem("currentUser");
-    sessionStorage.removeItem("currentUser");
-  }
-});
-</script>
-
-  
-  
-  <!--<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const authBtn = document.getElementById("authBtn");
-  const authModal = document.getElementById("authModal");
-  const closeModal = document.getElementById("closeAuthModal");
-  const loginForm = document.getElementById("loginForm");
-  const regForm = document.getElementById("registrationForm");
-  const showLogin = document.getElementById("showLogin");
-  const showRegister = document.getElementById("showRegister");
-  const successMsg = document.getElementById("successMsg");
-
-  // ---- Open Modal ----
-  authBtn.addEventListener("click", () => {
-    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    if (currentUser) {
-      localStorage.removeItem("currentUser");
       authBtn.textContent = "Sign In / Register";
       alert("👋 Logged out successfully!");
     } else {
@@ -706,45 +580,145 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // ---- Switch Tabs ----
-  showLogin.addEventListener("click", () => {
-    loginForm.classList.remove("hidden");
-    regForm.classList.add("hidden");
-    showLogin.classList.add("text-blue-600", "border-b-2", "border-blue-600");
-    showRegister.classList.remove("text-blue-600", "border-b-2", "border-blue-600");
-  });
+  showLogin.addEventListener("click", () => switchTab("login"));
+  showRegister.addEventListener("click", () => switchTab("register"));
 
-  showRegister.addEventListener("click", () => {
-    regForm.classList.remove("hidden");
-    loginForm.classList.add("hidden");
-    showRegister.classList.add("text-blue-600", "border-b-2", "border-blue-600");
-    showLogin.classList.remove("text-blue-600", "border-b-2", "border-blue-600");
-  });
+  function switchTab(tab) {
+    if (tab === "login") {
+      loginForm.classList.remove("hidden");
+      regForm.classList.add("hidden");
+      showLogin.classList.add("text-blue-600", "border-b-2", "border-blue-600");
+      showRegister.classList.remove("text-blue-600", "border-b-2", "border-blue-600");
+    } else {
+      regForm.classList.remove("hidden");
+      loginForm.classList.add("hidden");
+      showRegister.classList.add("text-blue-600", "border-b-2", "border-blue-600");
+      showLogin.classList.remove("text-blue-600", "border-b-2", "border-blue-600");
+    }
+  }
 
-  // ---- Registration ----
-  regForm.addEventListener("submit", (e) => {
+  // ✅ Registration (with offline fallback)
+  regForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     const data = Object.fromEntries(new FormData(regForm).entries());
-    localStorage.setItem("currentUser", JSON.stringify(data));
+    data.timestamp = Date.now();
 
+    try {
+      const res = await fetch("/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+
+      if (!res.ok) throw new Error("Server offline");
+      const result = await res.json();
+      localStorage.setItem("currentUser", JSON.stringify(result.user));
+      successFeedback(result.user.username);
+    } catch (err) {
+      console.warn("Offline registration saved locally", err);
+      saveOfflineUser(data);
+      localStorage.setItem("currentUser", JSON.stringify(data));
+      successFeedback(data.username, "📴 Offline: Will sync when connected");
+    }
+  });
+
+  // ✅ Login (with offline fallback)
+  loginForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(loginForm).entries());
+    const { email, username, password } = data;
+
+    try {
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, username, password })
+      });
+
+      if (!res.ok) throw new Error("Server offline");
+      const result = await res.json();
+      localStorage.setItem("currentUser", JSON.stringify(result.user));
+      successFeedback(result.user.username);
+    } catch (err) {
+      console.warn("Offline login attempt", err);
+      // fallback: check saved offline users
+      const offlineUsers = JSON.parse(localStorage.getItem("offlineRegistrations")) || [];
+      const match = offlineUsers.find(u =>
+        (u.email === email || u.username === username)
+      );
+      if (match) {
+        localStorage.setItem("currentUser", JSON.stringify(match));
+        successFeedback(match.username, "📴 Offline login successful");
+      } else {
+        alert("❌ No saved offline user found for this account.");
+      }
+    }
+  });
+
+  // ---- Show success & close modal ----
+  function successFeedback(name, message = "Welcome!") {
+    successMsg.textContent = message;
     successMsg.classList.remove("hidden");
-    authBtn.innerHTML = `Logout <span class="ml-2 font-semibold text-gray-700">(${data.username})</span>`;
-
+    authBtn.innerHTML = `Logout <span class="ml-2 font-semibold text-gray-700">(${name})</span>`;
     setTimeout(() => {
       successMsg.classList.add("hidden");
       authModal.classList.add("hidden");
       regForm.reset();
+      loginForm.reset();
     }, 1200);
-  });
+  }
 
-  loginForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const formData = new FormData(loginForm);
-  const email = formData.get("email");
-  const username = formData.get("username");
-  const rememberMe = formData.get("rememberMe") === "on";
+  // ---- Save offline registrations ----
+  function saveOfflineUser(userData) {
+    const pending = JSON.parse(localStorage.getItem("offlineRegistrations")) || [];
+    pending.push(userData);
+    localStorage.setItem("offlineRegistrations", JSON.stringify(pending));
+  }
 
-  loginUser(email, username, rememberMe);
+  // ---- Sync offline users when online ----
+  async function syncOfflineUsers() {
+    const pending = JSON.parse(localStorage.getItem("offlineRegistrations")) || [];
+    if (pending.length === 0) return;
+
+    const now = Date.now();
+    const stillPending = [];
+
+    for (const user of pending) {
+      const ageDays = (now - user.timestamp) / (1000 * 60 * 60 * 24);
+      if (ageDays > 3) continue; // discard after 3 days
+
+      try {
+        const res = await fetch("/api/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(user)
+        });
+
+        if (!res.ok) throw new Error("Server unavailable");
+        console.log(`✅ Synced ${user.username}`);
+      } catch {
+        stillPending.push(user);
+      }
+    }
+    localStorage.setItem("offlineRegistrations", JSON.stringify(stillPending));
+  }
+
+  // ---- Try sync every 30s when online ----
+  setInterval(() => {
+    if (navigator.onLine) syncOfflineUsers();
+  }, 30000);
+
+  // ---- Helper functions ----
+  function getCurrentUser() {
+    const user = localStorage.getItem("currentUser") || sessionStorage.getItem("currentUser");
+    return user ? JSON.parse(user) : null;
+  }
+
+  function clearCurrentUser() {
+    localStorage.removeItem("currentUser");
+    sessionStorage.removeItem("currentUser");
+  }
 });
-</script>-->
+</script>
 </body>
 </html>
