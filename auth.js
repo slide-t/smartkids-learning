@@ -9,17 +9,34 @@ document.addEventListener("DOMContentLoaded", () => {
   const showRegister = document.getElementById("showRegister");
   const successMsg = document.getElementById("successMsg");
 
-  // Restore session
-  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  // =============================
+  // ✅ SESSION HELPERS
+  // =============================
+  function getCurrentUser() {
+    const user = localStorage.getItem("currentUser") || sessionStorage.getItem("currentUser");
+    return user ? JSON.parse(user) : null;
+  }
+
+  function clearCurrentUser() {
+    localStorage.removeItem("currentUser");
+    sessionStorage.removeItem("currentUser");
+  }
+
+  // =============================
+  // ✅ RESTORE SESSION ON LOAD
+  // =============================
+  const currentUser = getCurrentUser();
   if (currentUser) {
     authBtn.innerHTML = `Logout <span class="ml-2 font-semibold text-gray-700">(${currentUser.username})</span>`;
   }
 
-  // ---- Open Modal ----
+  // =============================
+  // ✅ AUTH BUTTON CLICK (Login / Logout)
+  // =============================
   authBtn.addEventListener("click", () => {
-    const user = JSON.parse(localStorage.getItem("currentUser"));
+    const user = getCurrentUser();
     if (user) {
-      localStorage.removeItem("currentUser");
+      clearCurrentUser();
       authBtn.textContent = "Sign In / Register";
       alert("👋 Logged out successfully!");
     } else {
@@ -28,7 +45,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // ---- Close Modal ----
+  // =============================
+  // ✅ MODAL CONTROL
+  // =============================
   closeModal.addEventListener("click", () => hideModal());
   window.addEventListener("click", (e) => {
     if (e.target === authModal) hideModal();
@@ -39,7 +58,9 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => authModal.classList.add("hidden"), 200);
   }
 
-  // ---- Switch Tabs ----
+  // =============================
+  // ✅ SWITCH TABS
+  // =============================
   showLogin.addEventListener("click", () => {
     loginForm.classList.remove("hidden");
     regForm.classList.add("hidden");
@@ -54,7 +75,9 @@ document.addEventListener("DOMContentLoaded", () => {
     showLogin.classList.remove("text-blue-600", "border-b-2", "border-blue-600");
   });
 
-  // ---- Registration ----
+  // =============================
+  // ✅ REGISTRATION HANDLER
+  // =============================
   regForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     const data = Object.fromEntries(new FormData(regForm).entries());
@@ -85,37 +108,44 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-// ---------- Login ----------
-async function loginUser(email, username, rememberMe) {
-  try {
-    const res = await fetch("http://localhost:3000/api/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, username }),
-    });
+  // =============================
+  // ✅ LOGIN HANDLER
+  // =============================
+  loginForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-    const result = await res.json();
+    const data = Object.fromEntries(new FormData(loginForm).entries());
+    const rememberMe = document.getElementById("rememberMe")?.checked || false;
 
-    if (!res.ok) {
-      alert(result.message || "Login failed!");
-      return;
+    try {
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+
+      const result = await res.json();
+
+      if (!res.ok) {
+        alert(result.message || "Login failed!");
+        return;
+      }
+
+      const user = result.user;
+
+      if (rememberMe) {
+        localStorage.setItem("currentUser", JSON.stringify(user));
+      } else {
+        sessionStorage.setItem("currentUser", JSON.stringify(user));
+      }
+
+      authBtn.innerHTML = `Logout <span class="ml-2 font-semibold text-gray-700">(${user.username})</span>`;
+      hideModal();
+      alert(`👋 Welcome back, ${user.username}!`);
+    } catch (err) {
+      console.error("Login error:", err);
+      alert("❌ Login failed. Please try again.");
     }
-
-    const user = result.user;
-
-    // ✅ If Remember Me is checked, save in localStorage; else, session only
-    if (rememberMe) {
-      localStorage.setItem("currentUser", JSON.stringify(user));
-    } else {
-      sessionStorage.setItem("currentUser", JSON.stringify(user));
-    }
-
-    updateAuthUI();
-    closeModal("authModal");
-    alert(`👋 Welcome back, ${user.username}!`);
-  } catch (err) {
-    console.error("Login error:", err);
-    alert("Login failed. Please try again.");
-  }
-}
+  });
+});
 </script>
