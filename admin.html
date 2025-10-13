@@ -5,20 +5,64 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SmartKids Admin Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
   <style>
     body {
       background-color: #f9fafb;
       font-family: 'Inter', sans-serif;
     }
+    .modal-bg {
+      background: rgba(0, 0, 0, 0.5);
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col items-center p-6">
-  <h1 class="text-2xl font-bold text-blue-700 mb-6">SmartKids Registered Users</h1>
+
+  <!-- Access Modal -->
+  <div id="accessModal" class="fixed inset-0 hidden modal-bg flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-sm p-6 text-center">
+      <h2 class="text-xl font-semibold text-blue-700 mb-4">Admin Access Required</h2>
+      <form id="accessForm" class="flex flex-col gap-3">
+        <input type="text" id="adminUser" placeholder="Username" required class="border p-2 rounded-md w-full">
+        <input type="password" id="adminPass" placeholder="Password" required class="border p-2 rounded-md w-full">
+        <button type="submit" class="bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700">Access Dashboard</button>
+      </form>
+      <p id="accessError" class="text-red-600 text-sm mt-3 hidden">❌ Invalid access credentials!</p>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="w-full max-w-6xl flex justify-between items-center mb-6">
+    <a href="index.html" class="flex items-center gap-2 text-blue-700 hover:underline font-semibold">
+      🏠 Home
+    </a>
+    <h1 class="text-2xl font-bold text-blue-700">SmartKids Admin Dashboard</h1>
+    <div class="flex gap-2">
+      <button id="exportExcel" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 text-sm">Export Excel</button>
+      <button id="exportPDF" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 text-sm">Export PDF</button>
+    </div>
+  </header>
+
+  <!-- Filters -->
+  <div class="w-full max-w-6xl flex flex-wrap gap-3 justify-between mb-4">
+    <div class="flex gap-2 items-center">
+      <label for="schoolFilter" class="text-gray-700 font-semibold">Filter by School:</label>
+      <input type="text" id="schoolFilter" placeholder="Enter school name" class="border p-2 rounded-md">
+    </div>
+    <div class="flex gap-2 items-center">
+      <label for="locationFilter" class="text-gray-700 font-semibold">Filter by Location:</label>
+      <input type="text" id="locationFilter" placeholder="Enter location" class="border p-2 rounded-md">
+    </div>
+    <button id="clearFilter" class="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700">Clear</button>
+  </div>
 
   <div id="status" class="text-gray-600 mb-4"></div>
 
-  <div class="w-full max-w-4xl overflow-x-auto bg-white rounded-xl shadow-lg">
-    <table class="w-full text-sm text-left text-gray-600">
+  <!-- User Table -->
+  <div class="w-full max-w-6xl overflow-x-auto bg-white rounded-xl shadow-lg">
+    <table id="userTable" class="w-full text-sm text-left text-gray-600 border-collapse">
       <thead class="bg-blue-100 text-gray-700 uppercase text-xs">
         <tr>
           <th class="px-4 py-3">#</th>
@@ -26,17 +70,47 @@
           <th class="px-4 py-3">Username</th>
           <th class="px-4 py-3">Email</th>
           <th class="px-4 py-3">Class</th>
+          <th class="px-4 py-3">School</th>
+          <th class="px-4 py-3">Location</th>
           <th class="px-4 py-3">Registered At</th>
         </tr>
       </thead>
-      <tbody id="userTable" class="divide-y divide-gray-200"></tbody>
+      <tbody id="userBody" class="divide-y divide-gray-200"></tbody>
     </table>
   </div>
 
   <script>
+    const ACCESS_USER = "smartkids";
+    const ACCESS_PASS = "myNias9ja#";
+
+    const accessModal = document.getElementById("accessModal");
+    const accessForm = document.getElementById("accessForm");
+    const accessError = document.getElementById("accessError");
+
+    // === Show Access Modal ===
+    window.addEventListener("DOMContentLoaded", () => {
+      accessModal.classList.remove("hidden");
+    });
+
+    accessForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const user = document.getElementById("adminUser").value.trim();
+      const pass = document.getElementById("adminPass").value.trim();
+
+      if (user === ACCESS_USER && pass === ACCESS_PASS) {
+        accessModal.classList.add("hidden");
+        loadUsers();
+      } else {
+        accessError.classList.remove("hidden");
+      }
+    });
+
+    // ===== Main Logic =====
+    let usersData = [];
+
     async function loadUsers() {
       const status = document.getElementById("status");
-      const table = document.getElementById("userTable");
+      const table = document.getElementById("userBody");
 
       try {
         status.textContent = "Loading users...";
@@ -44,34 +118,85 @@
         if (!res.ok) throw new Error("Unable to fetch users.");
 
         const users = await res.json();
+        usersData = users;
+        renderTable(users);
         status.textContent = `✅ ${users.length} user(s) found`;
-
-        if (users.length === 0) {
-          table.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-gray-500">No users registered yet.</td></tr>`;
-          return;
-        }
-
-        table.innerHTML = users
-          .map(
-            (u, i) => `
-              <tr class="hover:bg-blue-50 transition">
-                <td class="px-4 py-3">${i + 1}</td>
-                <td class="px-4 py-3 font-medium">${u.name || "-"}</td>
-                <td class="px-4 py-3">${u.username || "-"}</td>
-                <td class="px-4 py-3">${u.email || "-"}</td>
-                <td class="px-4 py-3">${u.class || "-"}</td>
-                <td class="px-4 py-3">${new Date(u.registeredAt).toLocaleString()}</td>
-              </tr>
-            `
-          )
-          .join("");
       } catch (err) {
         console.error(err);
-        status.textContent = "⚠️ Failed to load users. Make sure server.js is running.";
+        status.textContent = "⚠️ Failed to load users. Ensure server.js is running.";
       }
     }
 
-    loadUsers();
+    function renderTable(users) {
+      const table = document.getElementById("userBody");
+      if (users.length === 0) {
+        table.innerHTML = `<tr><td colspan="8" class="text-center py-4 text-gray-500">No users found.</td></tr>`;
+        return;
+      }
+
+      table.innerHTML = users
+        .map(
+          (u, i) => `
+            <tr class="hover:bg-blue-50 transition">
+              <td class="px-4 py-3">${i + 1}</td>
+              <td class="px-4 py-3 font-medium">${u.name || "-"}</td>
+              <td class="px-4 py-3">${u.username || "-"}</td>
+              <td class="px-4 py-3">${u.email || "-"}</td>
+              <td class="px-4 py-3">${u.class || "-"}</td>
+              <td class="px-4 py-3">${u.schoolName || "-"}</td>
+              <td class="px-4 py-3">${u.location || "-"}</td>
+              <td class="px-4 py-3">${new Date(u.registeredAt).toLocaleString()}</td>
+            </tr>
+          `
+        )
+        .join("");
+    }
+
+    // ===== Filters =====
+    document.getElementById("schoolFilter").addEventListener("input", applyFilters);
+    document.getElementById("locationFilter").addEventListener("input", applyFilters);
+    document.getElementById("clearFilter").addEventListener("click", () => {
+      document.getElementById("schoolFilter").value = "";
+      document.getElementById("locationFilter").value = "";
+      renderTable(usersData);
+    });
+
+    function applyFilters() {
+      const schoolVal = document.getElementById("schoolFilter").value.toLowerCase();
+      const locVal = document.getElementById("locationFilter").value.toLowerCase();
+
+      const filtered = usersData.filter(u => 
+        (!schoolVal || (u.schoolName && u.schoolName.toLowerCase().includes(schoolVal))) &&
+        (!locVal || (u.location && u.location.toLowerCase().includes(locVal)))
+      );
+
+      renderTable(filtered);
+    }
+
+    // ===== Export Excel =====
+    document.getElementById("exportExcel").addEventListener("click", () => {
+      if (usersData.length === 0) return alert("No users to export.");
+      const ws = XLSX.utils.json_to_sheet(usersData);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Users");
+      XLSX.writeFile(wb, "SmartKids_Users.xlsx");
+    });
+
+    // ===== Export PDF =====
+    document.getElementById("exportPDF").addEventListener("click", async () => {
+      if (usersData.length === 0) return alert("No users to export.");
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.setFontSize(14);
+      doc.text("SmartKids Registered Users", 10, 10);
+      let y = 20;
+      usersData.forEach((u, i) => {
+        doc.text(`${i + 1}. ${u.name || "-"} (${u.username || "-"}) - ${u.email || "-"} - ${u.schoolName || "-"} - ${u.location || "-"}`, 10, y);
+        y += 8;
+        if (y > 270) { doc.addPage(); y = 20; }
+      });
+      doc.save("SmartKids_Users.pdf");
+    });
   </script>
 </body>
 </html>
