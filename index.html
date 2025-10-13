@@ -555,35 +555,168 @@
 </div>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
+  // ===== DOM Elements =====
+  const authBtn = document.getElementById("authBtn");
   const authModal = document.getElementById("authModal");
-  const closeBtn = document.getElementById("closeAuthModal");
-  const showLoginTab = document.getElementById("showLogin");
-  const showRegisterTab = document.getElementById("showRegister");
+  const closeModal = document.getElementById("closeAuthModal");
+  const loginForm = document.getElementById("loginForm");
+  const regForm = document.getElementById("registrationForm");
+  const showLogin = document.getElementById("showLogin");
+  const showRegister = document.getElementById("showRegister");
+  const successMsg = document.getElementById("successMsg");
 
-  // 🟢 Buttons that open modal (use your existing IDs or class)
-  const openButtons = document.querySelectorAll('[data-open-auth]');
-  // Example: <button data-open-auth>Sign In / Register</button>
+  // ===== Modal Open & Close =====
+  const openModal = () => {
+    authModal.classList.remove("hidden");
+    setTimeout(() => authModal.classList.add("opacity-100"), 10);
+  };
+  const closeAuthModal = () => {
+    authModal.classList.remove("opacity-100");
+    setTimeout(() => authModal.classList.add("hidden"), 250);
+  };
 
-  // Open modal smoothly
-  openButtons.forEach(btn => {
-    btn.addEventListener("click", () => {
-      authModal.classList.remove("hidden");
-      setTimeout(() => authModal.classList.add("opacity-100"), 10);
+  // Ensure modal has smooth transition
+  authModal.classList.add("transition-opacity", "duration-300", "opacity-0");
+
+  // Open on click
+  if (authBtn) {
+    authBtn.addEventListener("click", () => {
+      const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+      if (currentUser) {
+        localStorage.removeItem("currentUser");
+        authBtn.textContent = "Sign In / Register";
+        alert("👋 Logged out successfully!");
+      } else {
+        openModal();
+      }
+    });
+  }
+
+  // Close modal
+  closeModal.addEventListener("click", closeAuthModal);
+  window.addEventListener("click", (e) => {
+    if (e.target === authModal) closeAuthModal();
+  });
+
+  // ===== Switch Tabs =====
+  showLogin.addEventListener("click", () => {
+    loginForm.classList.remove("hidden");
+    regForm.classList.add("hidden");
+    showLogin.classList.add("text-blue-600", "border-b-2", "border-blue-600");
+    showRegister.classList.remove("text-blue-600", "border-b-2", "border-blue-600");
+  });
+
+  showRegister.addEventListener("click", () => {
+    regForm.classList.remove("hidden");
+    loginForm.classList.add("hidden");
+    showRegister.classList.add("text-blue-600", "border-b-2", "border-blue-600");
+    showLogin.classList.remove("text-blue-600", "border-b-2", "border-blue-600");
+  });
+
+  // ===== IndexedDB Setup =====
+  let db;
+  const request = indexedDB.open("SmartKidsAuthDB", 1);
+
+  request.onerror = () => {
+    console.warn("⚠️ IndexedDB unavailable, fallback to localStorage");
+  };
+
+  request.onsuccess = (event) => {
+    db = event.target.result;
+  };
+
+  request.onupgradeneeded = (event) => {
+    db = event.target.result;
+    const store = db.createObjectStore("users", { keyPath: "email" });
+    store.createIndex("username", "username", { unique: true });
+  };
+
+  // ===== Helper: Add user =====
+  function addUser(user) {
+    if (!db) {
+      const fallback = JSON.parse(localStorage.getItem("offlineUsers") || "[]");
+      fallback.push(user);
+      localStorage.setItem("offlineUsers", JSON.stringify(fallback));
+      return;
+    }
+    const tx = db.transaction("users", "readwrite");
+    const store = tx.objectStore("users");
+    store.add(user);
+  }
+
+  // ===== Helper: Find user =====
+  function findUser(email, username, password, callback) {
+    if (!db) {
+      const fallback = JSON.parse(localStorage.getItem("offlineUsers") || "[]");
+      const user = fallback.find(
+        u => u.email === email && u.username === username && u.password === password
+      );
+      return callback(user);
+    }
+    const tx = db.transaction("users", "readonly");
+    const store = tx.objectStore("users");
+    const request = store.get(email);
+    request.onsuccess = () => {
+      const user = request.result;
+      if (user && user.username === username && user.password === password) callback(user);
+      else callback(null);
+    };
+    request.onerror = () => callback(null);
+  }
+
+  // ===== Registration =====
+  regForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(regForm).entries());
+
+    // Validate password: 6–8 chars, letters + numbers
+    const pass = data.password || "";
+    if (!/^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d]{6,8}$/.test(pass)) {
+      alert("❌ Password must be 6–8 characters with letters and numbers.");
+      return;
+    }
+
+    addUser(data);
+
+    localStorage.setItem("currentUser", JSON.stringify(data));
+    successMsg.classList.remove("hidden");
+    authBtn.innerHTML = `Logout <span class="ml-2 font-semibold text-gray-700">(${data.username})</span>`;
+
+    setTimeout(() => {
+      successMsg.classList.add("hidden");
+      closeAuthModal();
+      regForm.reset();
+    }, 1200);
+  });
+
+  // ===== Login =====
+  loginForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const formData = new FormData(loginForm);
+    const email = formData.get("email");
+    const username = formData.get("username");
+    const password = formData.get("password");
+    const rememberMe = formData.get("rememberMe") === "on";
+
+    findUser(email, username, password, (user) => {
+      if (user) {
+        if (rememberMe) localStorage.setItem("currentUser", JSON.stringify(user));
+        else sessionStorage.setItem("currentUser", JSON.stringify(user));
+
+        authBtn.innerHTML = `Logout <span class="ml-2 font-semibold text-gray-700">(${user.username})</span>`;
+        alert("✅ Login successful!");
+        closeAuthModal();
+      } else {
+        alert("❌ Invalid login credentials!");
+      }
     });
   });
-
-  // Smooth close animation
-  closeBtn.addEventListener("click", () => {
-    authModal.classList.remove("opacity-100");
-    setTimeout(() => authModal.classList.add("hidden"), 300);
-  });
-
-  // Default opacity transition
-  authModal.classList.add("transition-opacity", "duration-300", "opacity-0");
 });
 </script>
   
-  <script>
+  
+  
+  <!--<script>
 document.addEventListener("DOMContentLoaded", () => {
   const authModal = document.getElementById("authModal");
   const closeBtn = document.getElementById("closeAuthModal");
@@ -676,6 +809,6 @@ document.addEventListener("DOMContentLoaded", () => {
     requestGet.onerror = () => alert("❌ Error accessing user data.");
   });
 });
-</script>
+</script>-->
 </body>
 </html>
