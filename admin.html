@@ -1,621 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>SmartKids — Admin Dashboard</title>
-
-  <!-- Tailwind CSS -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmartKids Admin Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- XLSX (Excel export) -->
-  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
-
-  <!-- jsPDF + autotable (PDF export) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
-
   <style>
-    .card { background: #fff; border-radius: .75rem; padding: 1rem; box-shadow: 0 6px 18px rgba(0,0,0,0.06); }
+    body {
+      background-color: #f9fafb;
+      font-family: 'Inter', sans-serif;
+    }
   </style>
 </head>
-<body class="bg-gray-100 min-h-screen">
+<body class="min-h-screen flex flex-col items-center p-6">
+  <h1 class="text-2xl font-bold text-blue-700 mb-6">SmartKids Registered Users</h1>
 
-  <!-- LOGIN MODAL -->
-  <div id="loginModal" class="fixed inset-0 z-50 bg-black/60 flex items-center justify-center">
-    <div class="bg-white rounded-xl w-full max-w-md p-6">
-      <h2 class="text-2xl font-semibold text-blue-700 mb-4 text-center">Admin Login</h2>
-      <div class="space-y-3">
-        <input id="adminUser" type="text" placeholder="Username" class="w-full p-2 border rounded" />
-        <input id="adminPass" type="password" placeholder="Password" class="w-full p-2 border rounded" />
-        <div class="flex justify-between items-center">
-  <button id="btnLogin" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-    Login
-  </button>
-  <a href="https://slide-t.github.io/smartkids-learning/index.html" 
-     class="text-sm text-gray-600 underline hover:text-blue-600">
-    🏠 Home
-  </a>
-</div>
-    </div>
-  </div>
+  <div id="status" class="text-gray-600 mb-4"></div>
 
-  <!-- APP -->
-  <div id="app" class="hidden">
-
-    <!-- NAV -->
-    <header class="bg-white shadow p-4 flex items-center justify-between">
-      <div class="flex items-center gap-4">
-        <h1 class="text-xl font-bold text-blue-700">SmartKids Admin</h1>
-        <div id="cards" class="flex gap-3"></div>
-      </div>
-      <div class="flex items-center gap-4">
-        <div id="adminBadge" class="text-sm text-gray-600">Admin</div>
-        <button id="btnLogout" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Logout</button>
-      </div>
-    </header>
-
-    <main class="container mx-auto p-6 space-y-8">
-
-      <!-- Stats cards -->
-      <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div class="card">
-          <div class="text-sm text-gray-500">Total Pupils</div>
-          <div id="totalPupils" class="text-2xl font-semibold mt-2">—</div>
-        </div>
-        <div class="card">
-          <div class="text-sm text-gray-500">Total Lessons</div>
-          <div id="totalLessons" class="text-2xl font-semibold mt-2">—</div>
-        </div>
-        <div class="card">
-          <div class="text-sm text-gray-500">Last Registration</div>
-          <div id="lastRegistration" class="text-sm mt-2 text-gray-700">—</div>
-        </div>
-        <div class="card">
-          <div class="text-sm text-gray-500">Last Lesson Added</div>
-          <div id="lastLesson" class="text-sm mt-2 text-gray-700">—</div>
-        </div>
-      </section>
-
-      <!-- Pupils & Lessons area -->
-      <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-        <!-- Pupils -->
-        <div class="card">
-          <div class="flex items-center justify-between mb-3">
-            <h2 class="font-semibold">Registered Pupils</h2>
-            <div class="flex gap-2 items-center">
-              <input id="pupilSearch" class="border px-2 py-1 rounded" placeholder="Search name or school" />
-              <button id="pupilSearchBtn" class="bg-green-600 text-white px-3 py-1 rounded">Search</button>
-              <button id="exportPupilsExcel" class="bg-green-400 text-white px-3 py-1 rounded">Excel</button>
-              <button id="exportPupilsPDF" class="bg-red-400 text-white px-3 py-1 rounded">PDF</button>
-            </div>
-          </div>
-
-          <div class="overflow-x-auto">
-            <table id="pupilsTable" class="min-w-full text-sm">
-              <thead class="bg-gray-100">
-                <tr>
-                  <th class="p-2 text-left">Full Name</th>
-                  <th class="p-2 text-left">Email</th>
-                  <th class="p-2 text-left">Age</th>
-                  <th class="p-2 text-left">Class</th>
-                  <th class="p-2 text-left">School</th>
-                  <th class="p-2 text-left">Location</th>
-                  <th class="p-2 text-left">Country</th>
-                  <th class="p-2 text-left">Registered</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- Lessons -->
-        <div class="card">
-          <div class="flex items-center justify-between mb-3">
-            <h2 class="font-semibold">Lesson Manager</h2>
-            <div class="flex gap-2">
-              <button id="exportLessonsExcel" class="bg-green-400 text-white px-3 py-1 rounded">Excel</button>
-              <button id="exportLessonsPDF" class="bg-red-400 text-white px-3 py-1 rounded">PDF</button>
-            </div>
-          </div>
-
-          <form id="lessonForm" class="space-y-3 mb-4">
-            <input type="hidden" id="lessonId" />
-            <div>
-              <label class="text-sm text-gray-700">Title</label>
-              <input id="lessonTitle" required class="w-full border px-3 py-2 rounded" />
-            </div>
-            <div class="grid grid-cols-2 gap-2">
-              <div>
-                <label class="text-sm text-gray-700">Class Level</label>
-                <select id="lessonClass" class="w-full border px-3 py-2 rounded">
-                  <option value="">Select Class</option>
-                  <option>Year 1</option><option>Year 2</option><option>Year 3</option>
-                  <option>Year 4</option><option>Year 5</option><option>Year 6</option>
-                  <option>Year 7</option><option>Year 8</option><option>Year 9</option>
-                  <option>Year 10</option><option>Year 11</option><option>Year 12</option>
-                </select>
-              </div>
-              <div>
-                <label class="text-sm text-gray-700">Subject</label>
-                <input id="lessonSubject" class="w-full border px-3 py-2 rounded" />
-              </div>
-            </div>
-
-            <div>
-              <label class="text-sm text-gray-700">School Name</label>
-              <input id="lessonSchool" class="w-full border px-3 py-2 rounded" />
-            </div>
-
-            <div>
-              <label class="text-sm text-gray-700">Description</label>
-              <textarea id="lessonDescription" rows="3" class="w-full border px-3 py-2 rounded"></textarea>
-            </div>
-
-            <div class="flex gap-2">
-              <button type="submit" id="saveLessonBtn" class="bg-blue-600 text-white px-4 py-2 rounded">Save Lesson</button>
-              <button type="button" id="cancelEditBtn" class="bg-gray-200 px-4 py-2 rounded">Cancel</button>
-            </div>
-          </form>
-
-          <div class="overflow-x-auto">
-            <table id="lessonsTable" class="min-w-full text-sm">
-              <thead class="bg-gray-100">
-                <tr>
-                  <th class="p-2 text-left">Title</th>
-                  <th class="p-2 text-left">Class</th>
-                  <th class="p-2 text-left">Subject</th>
-                  <th class="p-2 text-left">School</th>
-                  <th class="p-2 text-left">Created</th>
-                  <th class="p-2 text-left">Actions</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </div>
-        </div>
-
-      </section>
-    </main>
+  <div class="w-full max-w-4xl overflow-x-auto bg-white rounded-xl shadow-lg">
+    <table class="w-full text-sm text-left text-gray-600">
+      <thead class="bg-blue-100 text-gray-700 uppercase text-xs">
+        <tr>
+          <th class="px-4 py-3">#</th>
+          <th class="px-4 py-3">Full Name</th>
+          <th class="px-4 py-3">Username</th>
+          <th class="px-4 py-3">Email</th>
+          <th class="px-4 py-3">Class</th>
+          <th class="px-4 py-3">Registered At</th>
+        </tr>
+      </thead>
+      <tbody id="userTable" class="divide-y divide-gray-200"></tbody>
+    </table>
   </div>
 
   <script>
-  /* Single-file Admin Dashboard — IndexedDB wired to existing auth.js registrations store.
-     - DB: SmartKidsDB
-     - Pupils store: "registrations" (what auth.js uses)
-     - Lessons store: "lessons" (managed here)
-     - Login credentials: smartkids / myNias9ja#
-  */
+    async function loadUsers() {
+      const status = document.getElementById("status");
+      const table = document.getElementById("userTable");
 
-  (function () {
-    const ADMIN_USER = "smartkids";
-    const ADMIN_PASS = "myNias9ja#";
+      try {
+        status.textContent = "Loading users...";
+        const res = await fetch("http://localhost:3000/api/users");
+        if (!res.ok) throw new Error("Unable to fetch users.");
 
-    // DOM
-    const loginModal = document.getElementById("loginModal");
-    const appDiv = document.getElementById("app");
-    const btnLogin = document.getElementById("btnLogin");
-    const btnLogout = document.getElementById("btnLogout");
-    const loginError = document.getElementById("loginError");
-    const adminBadge = document.getElementById("adminBadge");
-    const btnLoadDemo = document.getElementById("btnLoadDemo");
+        const users = await res.json();
+        status.textContent = `✅ ${users.length} user(s) found`;
 
-    // pupil elements
-    const pupilsTableBody = document.querySelector("#pupilsTable tbody");
-    const pupilSearchInput = document.getElementById("pupilSearch");
-    const pupilSearchBtn = document.getElementById("pupilSearchBtn");
-
-    // lessons elements
-    const lessonForm = document.getElementById("lessonForm");
-    const lessonIdInput = document.getElementById("lessonId");
-    const lessonTitleInput = document.getElementById("lessonTitle");
-    const lessonClassInput = document.getElementById("lessonClass");
-    const lessonSubjectInput = document.getElementById("lessonSubject");
-    const lessonSchoolInput = document.getElementById("lessonSchool");
-    const lessonDescriptionInput = document.getElementById("lessonDescription");
-    const lessonsTableBody = document.querySelector("#lessonsTable tbody");
-    const cancelEditBtn = document.getElementById("cancelEditBtn");
-
-    const totalPupilsEl = document.getElementById("totalPupils");
-    const totalLessonsEl = document.getElementById("totalLessons");
-    const lastRegistrationEl = document.getElementById("lastRegistration");
-    const lastLessonEl = document.getElementById("lastLesson");
-
-    const exportPupilsExcel = document.getElementById("exportPupilsExcel");
-    const exportPupilsPDF = document.getElementById("exportPupilsPDF");
-    const exportLessonsExcel = document.getElementById("exportLessonsExcel");
-    const exportLessonsPDF = document.getElementById("exportLessonsPDF");
-
-    // DB config
-    const DB_NAME = "SmartKidsDB";
-    const DB_VERSION = 2; // ensure lessons store available
-    const STORE_REGISTRATIONS = "registrations"; // matches your auth.js
-    const STORE_LESSONS = "lessons";
-
-    let db;
-
-    // ---------------- IndexedDB helpers ----------------
-    function openDatabase(cb) {
-      const req = indexedDB.open(DB_NAME, DB_VERSION);
-      req.onupgradeneeded = (e) => {
-        db = e.target.result;
-        if (!db.objectStoreNames.contains(STORE_REGISTRATIONS)) {
-          db.createObjectStore(STORE_REGISTRATIONS, { keyPath: "id", autoIncrement: true });
+        if (users.length === 0) {
+          table.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-gray-500">No users registered yet.</td></tr>`;
+          return;
         }
-        if (!db.objectStoreNames.contains(STORE_LESSONS)) {
-          const store = db.createObjectStore(STORE_LESSONS, { keyPath: "id", autoIncrement: true });
-          store.createIndex("title", "title", { unique: false });
-          store.createIndex("classLevel", "classLevel", { unique: false });
-          store.createIndex("schoolName", "schoolName", { unique: false });
-          store.createIndex("createdAt", "createdAt", { unique: false });
-        }
-      };
-      req.onsuccess = (e) => {
-        db = e.target.result;
-        cb && cb();
-      };
-      req.onerror = (e) => {
-        console.error("IndexedDB open error", e);
-        alert("Failed to open local database.");
-      };
-    }
 
-    function getAllFromStore(storeName, cb) {
-      const tx = db.transaction(storeName, "readonly");
-      const store = tx.objectStore(storeName);
-      const r = store.getAll();
-      r.onsuccess = () => cb(r.result || []);
-      r.onerror = () => cb([]);
-    }
-
-    function addToStore(storeName, value, cb) {
-      const tx = db.transaction(storeName, "readwrite");
-      const store = tx.objectStore(storeName);
-      const req = store.add(value);
-      req.onsuccess = () => cb && cb(req.result);
-      req.onerror = (e) => { console.error("Add error", e); cb && cb(null, e); };
-    }
-
-    function putToStore(storeName, value, cb) {
-      const tx = db.transaction(storeName, "readwrite");
-      const store = tx.objectStore(storeName);
-      const req = store.put(value);
-      req.onsuccess = () => cb && cb(true);
-      req.onerror = (e) => { console.error("Put error", e); cb && cb(false, e); };
-    }
-
-    function deleteFromStore(storeName, key, cb) {
-      const tx = db.transaction(storeName, "readwrite");
-      const store = tx.objectStore(storeName);
-      const req = store.delete(key);
-      req.onsuccess = () => cb && cb(true);
-      req.onerror = (e) => { console.error("Delete error", e); cb && cb(false, e); };
-    }
-
-    // ---------------- Login / App boot ----------------
-    function showApp() {
-      loginModal.classList.add("hidden");
-      appDiv.classList.remove("hidden");
-      adminBadge.textContent = "Admin";
-    }
-
-    function showLogin() {
-      loginModal.classList.remove("hidden");
-      appDiv.classList.add("hidden");
-    }
-
-    function requireLogin() {
-      if (localStorage.getItem("sk_admin_logged") === "true") {
-        showApp();
-        openDatabase(loadAllData);
-      } else {
-        showLogin();
+        table.innerHTML = users
+          .map(
+            (u, i) => `
+              <tr class="hover:bg-blue-50 transition">
+                <td class="px-4 py-3">${i + 1}</td>
+                <td class="px-4 py-3 font-medium">${u.name || "-"}</td>
+                <td class="px-4 py-3">${u.username || "-"}</td>
+                <td class="px-4 py-3">${u.email || "-"}</td>
+                <td class="px-4 py-3">${u.class || "-"}</td>
+                <td class="px-4 py-3">${new Date(u.registeredAt).toLocaleString()}</td>
+              </tr>
+            `
+          )
+          .join("");
+      } catch (err) {
+        console.error(err);
+        status.textContent = "⚠️ Failed to load users. Make sure server.js is running.";
       }
     }
 
-    btnLogin.addEventListener("click", () => {
-      const u = document.getElementById("adminUser").value.trim();
-      const p = document.getElementById("adminPass").value.trim();
-      if (u === ADMIN_USER && p === ADMIN_PASS) {
-        localStorage.setItem("sk_admin_logged", "true");
-        loginError.classList.add("hidden");
-        showApp();
-        openDatabase(loadAllData);
-      } else {
-        loginError.classList.remove("hidden");
-      }
-    });
-
-    btnLogout.addEventListener("click", () => {
-      if (!confirm("Logout admin?")) return;
-      localStorage.removeItem("sk_admin_logged");
-      showLogin();
-    });
-
-    // ---------------- Load & render ----------------
-    function loadAllData() {
-      getAllFromStore(STORE_REGISTRATIONS, (regs) => {
-        renderPupils(regs);
-        updatePupilStats(regs);
-      });
-      getAllFromStore(STORE_LESSONS, (lessons) => {
-        renderLessons(lessons);
-        updateLessonStats(lessons);
-      });
-    }
-
-    // --- Pupils ---
-    function renderPupils(list) {
-      pupilsTableBody.innerHTML = "";
-      if (!list || list.length === 0) {
-        pupilsTableBody.innerHTML = `<tr><td class="p-2 text-gray-500" colspan="8">No pupils found.</td></tr>`;
-        return;
-      }
-
-      // handle possible field names: fullName or name, class or className, timestamp or date
-      list.sort((a,b) => ( (a.fullName||a.name||"").toLowerCase() ).localeCompare((b.fullName||b.name||"").toLowerCase()));
-
-      for (const u of list) {
-        const name = u.fullName || u.name || "";
-        const email = u.email || "";
-        const age = u.age || "";
-        const klass = u.class || u.className || u.course || "";
-        const school = u.schoolName || u.school || "";
-        const location = u.location || "";
-        const country = u.country || "";
-        const registered = u.timestamp ? new Date(u.timestamp).toLocaleString() : (u.date || "");
-        const tr = document.createElement("tr");
-        tr.className = "hover:bg-gray-50";
-        tr.innerHTML = `
-          <td class="p-2 border">${escapeHtml(name)}</td>
-          <td class="p-2 border">${escapeHtml(email)}</td>
-          <td class="p-2 border">${escapeHtml(age)}</td>
-          <td class="p-2 border">${escapeHtml(klass)}</td>
-          <td class="p-2 border">${escapeHtml(school)}</td>
-          <td class="p-2 border">${escapeHtml(location)}</td>
-          <td class="p-2 border">${escapeHtml(country)}</td>
-          <td class="p-2 border">${escapeHtml(registered)}</td>
-        `;
-        pupilsTableBody.appendChild(tr);
-      }
-    }
-
-    function updatePupilStats(list) {
-      totalPupilsEl.textContent = list ? list.length : 0;
-      if (!list || list.length === 0) {
-        lastRegistrationEl.textContent = "-";
-        return;
-      }
-      // pick latest by timestamp/date
-      const last = list.reduce((a,b) => ((a.timestamp||a.date||0) > (b.timestamp||b.date||0) ? a : b));
-      lastRegistrationEl.textContent = (last && (last.timestamp || last.date)) ? new Date(last.timestamp || last.date).toLocaleString() : "-";
-    }
-
-    pupilSearchBtn.addEventListener("click", () => {
-      const q = (pupilSearchInput.value || "").trim().toLowerCase();
-      getAllFromStore(STORE_REGISTRATIONS, (list) => {
-        if (!q) return renderPupils(list || []);
-        const filtered = (list||[]).filter(u => {
-          const name = (u.fullName||u.name||"").toLowerCase();
-          const school = (u.schoolName||u.school||"").toLowerCase();
-          const email = (u.email||"").toLowerCase();
-          return name.includes(q) || school.includes(q) || email.includes(q);
-        });
-        renderPupils(filtered);
-      });
-    });
-
-    // --- Lessons ---
-    function renderLessons(list) {
-      lessonsTableBody.innerHTML = "";
-      if (!list || list.length === 0) {
-        lessonsTableBody.innerHTML = `<tr><td class="p-2 text-gray-500" colspan="6">No lessons found.</td></tr>`;
-        return;
-      }
-      list.sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
-      for (const l of list) {
-        const created = l.createdAt ? new Date(l.createdAt).toLocaleString() : "-";
-        const tr = document.createElement("tr");
-        tr.className = "hover:bg-gray-50";
-        tr.innerHTML = `
-          <td class="p-2 border">${escapeHtml(l.title || "")}</td>
-          <td class="p-2 border">${escapeHtml(l.classLevel || "")}</td>
-          <td class="p-2 border">${escapeHtml(l.subject || "")}</td>
-          <td class="p-2 border">${escapeHtml(l.schoolName || "")}</td>
-          <td class="p-2 border">${escapeHtml(created)}</td>
-          <td class="p-2 border">
-            <button class="edit-lesson text-sm text-blue-600 mr-2" data-id="${l.id}">Edit</button>
-            <button class="delete-lesson text-sm text-red-600" data-id="${l.id}">Delete</button>
-          </td>
-        `;
-        lessonsTableBody.appendChild(tr);
-      }
-
-      // bind actions
-      lessonsTableBody.querySelectorAll(".edit-lesson").forEach(btn => {
-        btn.onclick = () => {
-          const id = Number(btn.dataset.id);
-          editLessonById(id);
-        };
-      });
-      lessonsTableBody.querySelectorAll(".delete-lesson").forEach(btn => {
-        btn.onclick = () => {
-          const id = Number(btn.dataset.id);
-          if (confirm("Delete this lesson?")) {
-            deleteFromStore(STORE_LESSONS, id, (ok) => {
-              if (ok) openDatabase(loadAllData);
-            });
-          }
-        };
-      });
-    }
-
-    function updateLessonStats(list) {
-      totalLessonsEl.textContent = list ? list.length : 0;
-      if (!list || list.length === 0) { lastLessonEl.textContent = "-"; return; }
-      const last = list.reduce((a,b) => ((a.createdAt||0) > (b.createdAt||0) ? a : b));
-      lastLessonEl.textContent = last && last.createdAt ? new Date(last.createdAt).toLocaleString() : "-";
-    }
-
-    lessonForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const idVal = lessonIdInput.value ? Number(lessonIdInput.value) : null;
-      const payload = {
-        title: lessonTitleInput.value.trim(),
-        classLevel: lessonClassInput.value,
-        subject: lessonSubjectInput.value.trim(),
-        schoolName: lessonSchoolInput.value.trim(),
-        description: lessonDescriptionInput.value.trim()
-      };
-      if (!payload.title) return alert("Lesson title required");
-
-      if (idVal) {
-        // update existing
-        const tx = db.transaction(STORE_LESSONS, "readwrite");
-        const store = tx.objectStore(STORE_LESSONS);
-        const r = store.get(idVal);
-        r.onsuccess = () => {
-          const existing = r.result || {};
-          const updated = { ...existing, ...payload, id: idVal, createdAt: existing.createdAt || Date.now() };
-          putToStore(STORE_LESSONS, updated, (ok) => { if (ok) { resetLessonForm(); openDatabase(loadAllData); } });
-        };
-      } else {
-        // add
-        const toAdd = { ...payload, createdAt: Date.now() };
-        addToStore(STORE_LESSONS, toAdd, (newId, err) => {
-          if (newId) { resetLessonForm(); openDatabase(loadAllData); }
-          else alert("Failed to save lesson");
-        });
-      }
-    });
-
-    cancelEditBtn.addEventListener("click", (e) => { e.preventDefault(); resetLessonForm(); });
-
-    function editLessonById(id) {
-      const tx = db.transaction(STORE_LESSONS, "readonly");
-      const store = tx.objectStore(STORE_LESSONS);
-      const r = store.get(id);
-      r.onsuccess = () => {
-        const rec = r.result;
-        if (!rec) return alert("Lesson not found");
-        lessonIdInput.value = rec.id;
-        lessonTitleInput.value = rec.title || "";
-        lessonClassInput.value = rec.classLevel || "";
-        lessonSubjectInput.value = rec.subject || "";
-        lessonSchoolInput.value = rec.schoolName || "";
-        lessonDescriptionInput.value = rec.description || "";
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      };
-    }
-
-    function resetLessonForm() {
-      lessonIdInput.value = "";
-      lessonTitleInput.value = "";
-      lessonClassInput.value = "";
-      lessonSubjectInput.value = "";
-      lessonSchoolInput.value = "";
-      lessonDescriptionInput.value = "";
-    }
-
-    // ------------- Exports -------------
-    function exportArrayToExcel(headers, rows, filename) {
-      const aoa = [headers, ...rows];
-      const wb = XLSX.utils.book_new();
-      const ws = XLSX.utils.aoa_to_sheet(aoa);
-      XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-      XLSX.writeFile(wb, filename);
-    }
-
-    function exportPupilsExcelFn() {
-      getAllFromStore(STORE_REGISTRATIONS, (users) => {
-        const headers = ["Full Name","Email","Age","Class","School","Location","Country","Registered"];
-        const rows = (users||[]).map(u => [
-          u.fullName || u.name || "", u.email || "", u.age || "", u.class || u.className || "",
-          u.schoolName || u.school || "", u.location || "", u.country || "", u.timestamp ? new Date(u.timestamp).toLocaleString() : (u.date || "")
-        ]);
-        const fname = `Pupils_${(new Date()).toISOString().slice(0,19).replace(/[:T]/g,"-")}.xlsx`;
-        exportArrayToExcel(headers, rows, fname);
-      });
-    }
-
-    function exportPupilsPDFfn() {
-      getAllFromStore(STORE_REGISTRATIONS, (users) => {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF('l', 'pt', 'a4');
-        doc.text("SmartKids — Registered Pupils", 40, 40);
-        const head = [["Full Name","Email","Age","Class","School","Location","Country","Registered"]];
-        const body = (users||[]).map(u => [
-          u.fullName || u.name || "", u.email || "", u.age || "", u.class || u.className || "",
-          u.schoolName || u.school || "", u.location || "", u.country || "", u.timestamp ? new Date(u.timestamp).toLocaleString() : (u.date || "")
-        ]);
-        doc.autoTable({ head, body, startY: 60, styles: { fontSize: 8 } });
-        const fname = `Pupils_${(new Date()).toISOString().slice(0,19).replace(/[:T]/g,"-")}.pdf`;
-        doc.save(fname);
-      });
-    }
-
-    function exportLessonsExcelFn() {
-      getAllFromStore(STORE_LESSONS, (lessons) => {
-        const headers = ["Title","Class","Subject","School","Description","Created"];
-        const rows = (lessons||[]).map(l => [
-          l.title || "", l.classLevel || "", l.subject || "", l.schoolName || "", l.description || "", l.createdAt ? new Date(l.createdAt).toLocaleString() : ""
-        ]);
-        const fname = `Lessons_${(new Date()).toISOString().slice(0,19).replace(/[:T]/g,"-")}.xlsx`;
-        exportArrayToExcel(headers, rows, fname);
-      });
-    }
-
-    function exportLessonsPDFfn() {
-      getAllFromStore(STORE_LESSONS, (lessons) => {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF('l', 'pt', 'a4');
-        doc.text("SmartKids — Lessons", 40, 40);
-        const head = [["Title","Class","Subject","School","Description","Created"]];
-        const body = (lessons||[]).map(l => [
-          l.title || "", l.classLevel || "", l.subject || "", l.schoolName || "", l.description || "", l.createdAt ? new Date(l.createdAt).toLocaleString() : ""
-        ]);
-        doc.autoTable({ head, body, startY: 60, styles: { fontSize: 8 } });
-        const fname = `Lessons_${(new Date()).toISOString().slice(0,19).replace(/[:T]/g,"-")}.pdf`;
-        doc.save(fname);
-      });
-    }
-
-    exportPupilsExcel.addEventListener("click", exportPupilsExcelFn);
-    exportPupilsPDF.addEventListener("click", exportPupilsPDFfn);
-    exportLessonsExcel.addEventListener("click", exportLessonsExcelFn);
-    exportLessonsPDF.addEventListener("click", exportLessonsPDFfn);
-
-    // Demo data for lessons (quick)
-    btnLoadDemo.addEventListener("click", () => {
-      const sample = [
-        { title: "Counting to 20", classLevel: "Year 1", subject: "Math", schoolName: "SmartKids Academy", description: "Numbers 1-20", createdAt: Date.now() - 86400000 },
-        { title: "Phonics - A", classLevel: "Year 1", subject: "English", schoolName: "SmartKids Academy", description: "Letter A sounds", createdAt: Date.now() - 3600000 }
-      ];
-      let i = 0;
-      (function addNext() {
-        if (i >= sample.length) return openDatabase(loadAllData);
-        addToStore(STORE_LESSONS, sample[i++], () => addNext());
-      })();
-    });
-
-    // --- Utility: escape simple HTML (prevent accidental markup) ---
-    function escapeHtml(str) {
-      if (!str && str !== 0) return "";
-      return String(str).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
-    }
-
-    // Kick off
-    requireLogin();
-
-    // expose helpers for future server swap
-    window.SmartKidsAdmin = { openDatabase, getAllFromStore, addToStore, putToStore, deleteFromStore };
-
-    // Auto-refresh every 30s
-    setInterval(() => { if (db) loadAllData(); }, 30000);
-
-  })();
+    loadUsers();
   </script>
 </body>
 </html>
