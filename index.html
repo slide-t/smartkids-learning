@@ -567,6 +567,200 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
+  // ====== MODAL SETUP ======
+  const authModal = document.getElementById("authModal");
+  const openBtns = document.querySelectorAll("#authBtn, .open-auth");
+  const closeBtns = document.querySelectorAll(".close-auth, #closeAuth");
+  const regForm = document.getElementById("regForm");
+  const loginForm = document.getElementById("loginForm");
+  const successMsg = document.getElementById("successMsg");
+  const authBtn = document.getElementById("authBtn");
+
+  // ====== SAFE INDEXEDDB SETUP ======
+  let db = null;
+  let dbAvailable = true;
+  const request = indexedDB.open("SmartKidsDB", 1);
+
+  request.onerror = () => {
+    console.warn("⚠️ IndexedDB not available — using localStorage fallback.");
+    dbAvailable = false;
+  };
+
+  request.onsuccess = (e) => { db = e.target.result; };
+  request.onupgradeneeded = (e) => {
+    db = e.target.result;
+    if (!db.objectStoreNames.contains("users")) {
+      db.createObjectStore("users", { keyPath: "email" });
+    }
+    if (!db.objectStoreNames.contains("pendingUsers")) {
+      db.createObjectStore("pendingUsers", { keyPath: "email" });
+    }
+  };
+
+  // ====== STORAGE HELPERS ======
+  function addUser(user) {
+    if (dbAvailable && db) {
+      const tx = db.transaction("users", "readwrite");
+      tx.objectStore("users").put(user);
+    } else {
+      let users = JSON.parse(localStorage.getItem("users") || "[]");
+      users = users.filter(u => u.email !== user.email);
+      users.push(user);
+      localStorage.setItem("users", JSON.stringify(users));
+    }
+  }
+
+  function findUser(email, username, password, callback) {
+    if (dbAvailable && db) {
+      const tx = db.transaction("users", "readonly");
+      const req = tx.objectStore("users").get(email);
+      req.onsuccess = () => {
+        const user = req.result;
+        callback(user && user.username === username && user.password === password ? user : null);
+      };
+    } else {
+      const users = JSON.parse(localStorage.getItem("users") || "[]");
+      const user = users.find(u => u.email === email && u.username === username && u.password === password);
+      callback(user || null);
+    }
+  }
+
+  function savePendingUser(user) {
+    if (dbAvailable && db) {
+      const tx = db.transaction("pendingUsers", "readwrite");
+      tx.objectStore("pendingUsers").put({ ...user, date: Date.now() });
+    } else {
+      let pend = JSON.parse(localStorage.getItem("pendingUsers") || "[]");
+      pend.push({ ...user, date: Date.now() });
+      localStorage.setItem("pendingUsers", JSON.stringify(pend));
+    }
+  }
+
+  function clearOldPendingUsers() {
+    const now = Date.now();
+    if (dbAvailable && db) {
+      const tx = db.transaction("pendingUsers", "readwrite");
+      const store = tx.objectStore("pendingUsers");
+      store.getAll().onsuccess = (e) => {
+        e.target.result.forEach((user) => {
+          if (now - user.date > 5 * 24 * 60 * 60 * 1000) store.delete(user.email);
+        });
+      };
+    } else {
+      let pend = JSON.parse(localStorage.getItem("pendingUsers") || "[]");
+      pend = pend.filter(u => now - u.date <= 5 * 24 * 60 * 60 * 1000);
+      localStorage.setItem("pendingUsers", JSON.stringify(pend));
+    }
+  }
+
+  // ====== AUTH HELPERS ======
+  function getCurrentUser() {
+    const user = localStorage.getItem("currentUser") || sessionStorage.getItem("currentUser");
+    return user ? JSON.parse(user) : null;
+  }
+
+  function clearCurrentUser() {
+    localStorage.removeItem("currentUser");
+    sessionStorage.removeItem("currentUser");
+  }
+
+  // ====== MODAL OPEN/CLOSE ======
+  openBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      authModal.classList.remove("hidden");
+    });
+  });
+  closeBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      authModal.classList.add("hidden");
+    });
+  });
+
+  // ====== REGISTRATION ======
+  regForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(regForm).entries());
+    const pass = data.password || "";
+
+    // ✅ same password rule for both register/login
+    if (!/^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d]{6,8}$/.test(pass)) {
+      alert("❌ Password must be 6–8 characters with letters and numbers.");
+      return;
+    }
+
+    fetch("/api/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    })
+      .then(res => {
+        if (!res.ok) throw new Error("Network error");
+        return res.json();
+      })
+      .then(() => {
+        addUser(data);
+        localStorage.setItem("currentUser", JSON.stringify(data));
+        successMsg.classList.remove("hidden");
+        authBtn.innerHTML = `Logout <span class="ml-2 font-semibold text-gray-700">(${data.username})</span>`;
+        setTimeout(() => {
+          successMsg.classList.add("hidden");
+          authModal.classList.add("hidden");
+          regForm.reset();
+        }, 1200);
+      })
+      .catch(() => {
+        alert("⚠️ Network issue — registration saved offline.");
+        savePendingUser(data);
+        addUser(data);
+      });
+  });
+
+  // ====== LOGIN ======
+  loginForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const fd = new FormData(loginForm);
+    const email = fd.get("email");
+    const username = fd.get("username");
+    const password = fd.get("password");
+    const rememberMe = fd.get("rememberMe") === "on";
+
+    findUser(email, username, password, (user) => {
+      if (user) {
+        if (rememberMe) localStorage.setItem("currentUser", JSON.stringify(user));
+        else sessionStorage.setItem("currentUser", JSON.stringify(user));
+
+        authBtn.innerHTML = `Logout <span class="ml-2 font-semibold text-gray-700">(${user.username})</span>`;
+        alert("✅ Login successful!");
+        authModal.classList.add("hidden");
+      } else {
+        alert("❌ Invalid credentials!");
+      }
+    });
+  });
+
+  // ====== LOGOUT ======
+  const currentUser = getCurrentUser();
+  if (currentUser) {
+    authBtn.innerHTML = `Logout <span class="ml-2 font-semibold text-gray-700">(${currentUser.username})</span>`;
+  }
+
+  authBtn.addEventListener("click", () => {
+    if (getCurrentUser()) {
+      clearCurrentUser();
+      alert("✅ Logged out successfully!");
+      authBtn.textContent = "Login / Register";
+    } else {
+      authModal.classList.remove("hidden");
+    }
+  });
+
+  // ====== CLEANUP ======
+  clearOldPendingUsers();
+});
+</script>
+  
+  <!--<script>
+document.addEventListener("DOMContentLoaded", () => {
   const authModal = document.getElementById("authModal");
   const openBtns = document.querySelectorAll(".open-auth");
   const closeBtns = document.querySelectorAll(".close-auth");
