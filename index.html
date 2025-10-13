@@ -553,6 +553,36 @@
 
   </div>
 </div>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const authModal = document.getElementById("authModal");
+  const closeBtn = document.getElementById("closeAuthModal");
+  const showLoginTab = document.getElementById("showLogin");
+  const showRegisterTab = document.getElementById("showRegister");
+
+  // 🟢 Buttons that open modal (use your existing IDs or class)
+  const openButtons = document.querySelectorAll('[data-open-auth]');
+  // Example: <button data-open-auth>Sign In / Register</button>
+
+  // Open modal smoothly
+  openButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      authModal.classList.remove("hidden");
+      setTimeout(() => authModal.classList.add("opacity-100"), 10);
+    });
+  });
+
+  // Smooth close animation
+  closeBtn.addEventListener("click", () => {
+    authModal.classList.remove("opacity-100");
+    setTimeout(() => authModal.classList.add("hidden"), 300);
+  });
+
+  // Default opacity transition
+  authModal.classList.add("transition-opacity", "duration-300", "opacity-0");
+});
+</script>
+  
   <script>
 document.addEventListener("DOMContentLoaded", () => {
   const authModal = document.getElementById("authModal");
@@ -647,8 +677,5 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 </script>
-    
-  
-
 </body>
 </html>
