@@ -564,6 +564,161 @@
 
   </div>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const authModal = document.getElementById("authModal");
+  const openBtns = document.querySelectorAll(".open-auth");
+  const closeBtns = document.querySelectorAll(".close-auth");
+  const regForm = document.getElementById("regForm");
+  const loginForm = document.getElementById("loginForm");
+  const successMsg = document.getElementById("successMsg");
+  const authBtn = document.getElementById("authBtn");
+
+  // === IndexedDB Setup ===
+  let db;
+  const request = indexedDB.open("SmartKidsDB", 1);
+  request.onerror = () => alert("⚠️ Unable to open IndexedDB. Some features may not work offline.");
+  request.onsuccess = (e) => { db = e.target.result; };
+  request.onupgradeneeded = (e) => {
+    db = e.target.result;
+    if (!db.objectStoreNames.contains("users")) {
+      db.createObjectStore("users", { keyPath: "email" });
+    }
+    if (!db.objectStoreNames.contains("pendingUsers")) {
+      db.createObjectStore("pendingUsers", { keyPath: "email" });
+    }
+  };
+
+  // === Utility Functions ===
+  function addUser(user) {
+    const tx = db.transaction("users", "readwrite");
+    tx.objectStore("users").put(user);
+  }
+
+  function findUser(email, username, password, callback) {
+    const tx = db.transaction("users", "readonly");
+    const store = tx.objectStore("users");
+    const request = store.get(email);
+    request.onsuccess = () => {
+      const user = request.result;
+      callback(user && user.username === username && user.password === password ? user : null);
+    };
+  }
+
+  function savePendingUser(user) {
+    const tx = db.transaction("pendingUsers", "readwrite");
+    tx.objectStore("pendingUsers").put({ ...user, date: Date.now() });
+  }
+
+  function clearOldPendingUsers() {
+    const tx = db.transaction("pendingUsers", "readwrite");
+    const store = tx.objectStore("pendingUsers");
+    store.getAll().onsuccess = (e) => {
+      e.target.result.forEach((user) => {
+        if (Date.now() - user.date > 5 * 24 * 60 * 60 * 1000) { // 5 days
+          store.delete(user.email);
+        }
+      });
+    };
+  }
+
+  function getCurrentUser() {
+    const user = localStorage.getItem("currentUser") || sessionStorage.getItem("currentUser");
+    return user ? JSON.parse(user) : null;
+  }
+
+  function clearCurrentUser() {
+    localStorage.removeItem("currentUser");
+    sessionStorage.removeItem("currentUser");
+  }
+
+  // === Modal Controls ===
+  openBtns.forEach(btn => btn.addEventListener("click", () => authModal.classList.remove("hidden")));
+  closeBtns.forEach(btn => btn.addEventListener("click", () => authModal.classList.add("hidden")));
+
+  // === Registration ===
+  regForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(regForm).entries());
+
+    // Password: must be 6–8 characters, include letters + numbers
+    const pass = data.password || "";
+    if (!/^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d]{6,8}$/.test(pass)) {
+      alert("❌ Password must be 6–8 characters with letters and numbers.");
+      return;
+    }
+
+    // Try server API first
+    fetch("/api/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    })
+      .then(res => {
+        if (!res.ok) throw new Error("Network error");
+        return res.json();
+      })
+      .then(() => {
+        addUser(data);
+        localStorage.setItem("currentUser", JSON.stringify(data));
+        successMsg.classList.remove("hidden");
+        authBtn.innerHTML = `Logout <span class="ml-2 font-semibold text-gray-700">(${data.username})</span>`;
+        setTimeout(() => {
+          successMsg.classList.add("hidden");
+          authModal.classList.add("hidden");
+          regForm.reset();
+        }, 1200);
+      })
+      .catch(() => {
+        alert("⚠️ Network issue — registration saved offline.");
+        savePendingUser(data);
+        addUser(data);
+      });
+  });
+
+  // === Login ===
+  loginForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const formData = new FormData(loginForm);
+    const email = formData.get("email");
+    const username = formData.get("username");
+    const password = formData.get("password");
+    const rememberMe = formData.get("rememberMe") === "on";
+
+    findUser(email, username, password, (user) => {
+      if (user) {
+        if (rememberMe) localStorage.setItem("currentUser", JSON.stringify(user));
+        else sessionStorage.setItem("currentUser", JSON.stringify(user));
+        authBtn.innerHTML = `Logout <span class="ml-2 font-semibold text-gray-700">(${user.username})</span>`;
+        alert("✅ Login successful!");
+        authModal.classList.add("hidden");
+      } else {
+        alert("❌ Invalid credentials! Use your registered email, username, and password.");
+      }
+    });
+  });
+
+  // === Auto Login & Cleanup ===
+  const currentUser = getCurrentUser();
+  if (currentUser) {
+    authBtn.innerHTML = `Logout <span class="ml-2 font-semibold text-gray-700">(${currentUser.username})</span>`;
+  }
+
+  authBtn.addEventListener("click", () => {
+    if (getCurrentUser()) {
+      clearCurrentUser();
+      alert("✅ Logged out successfully!");
+      authBtn.textContent = "Login / Register";
+    } else {
+      authModal.classList.remove("hidden");
+    }
+  });
+
+  clearOldPendingUsers();
+});
+</script>
+        <!--
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   // ===== DOM Elements =====
