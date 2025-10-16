@@ -83,12 +83,84 @@
 
 </head>
 <body class="bg-gradient-to-b from-sky-50 via-white to-sky-100 text-slate-900 font-sans">
+
+<!-- HEADER -->
+<header class="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md shadow-md z-50 transition-all duration-500">
+  <div class="max-w-6xl mx-auto px-5 sm:px-8">
+    <div class="flex items-center justify-between h-16">
+      <!-- Logo -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-blue-600 to-sky-400 flex items-center justify-center text-white font-bold shadow-md">SKL</div>
+        <div>
+          <h1 class="text-lg font-semibold">SmartKids Learning</h1>
+          <p class="text-xs text-slate-500">Coding & Digital Literacy</p>
+        </div>
+      </div>
+
+      <!-- Desktop Menu -->
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium">
+        <a href="https://slide-t.github.io/smartkids-learning/admin.html" class="hover:text-blue-600 transition">Admin Only</a>
+        <a href="#about" class="hover:text-blue-600 transition">About</a>
+        <a href="features.html" class="hover:text-blue-600 transition">Features</a>
+        <a href="quiz.html" class="inline-block bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 shadow transition">Ability Test</a>
+      </nav>
+
+      <!-- Mobile Hamburger -->
+      <button id="menu-toggle" class="md:hidden relative w-8 h-8 flex flex-col justify-between items-center group">
+        <span class="block w-6 h-[2px] bg-slate-800 rounded transition-transform duration-300 group-[.open]:rotate-45 group-[.open]:translate-y-[10px]"></span>
+        <span class="block w-6 h-[2px] bg-slate-800 rounded transition-opacity duration-300 group-[.open]:opacity-0"></span>
+        <span class="block w-6 h-[2px] bg-slate-800 rounded transition-transform duration-300 group-[.open]:-rotate-45 group-[.open]:-translate-y-[10px]"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <nav id="mobile-nav" class="hidden flex-col space-y-4 px-6 py-6 bg-white shadow-lg rounded-b-2xl transform transition-all duration-500 ease-out opacity-0 scale-y-0 origin-top">
+    <a href="quiz.html" class="block text-center py-3 rounded-xl border border-gray-300 bg-gray-50 hover:bg-blue-600 hover:text-white active:scale-95 transition-all duration-300 shadow-sm">Ability Test</a>
+    <a href="#about" class="block text-center py-3 rounded-xl border border-gray-300 bg-gray-50 hover:bg-blue-600 hover:text-white active:scale-95 transition-all duration-300 shadow-sm">About</a>
+    <a href="features.html" class="block text-center py-3 rounded-xl border border-gray-300 bg-gray-50 hover:bg-blue-600 hover:text-white active:scale-95 transition-all duration-300 shadow-sm">Features</a>
+    <a href="admin.html" class="block text-center py-3 rounded-xl border border-gray-300 bg-gray-50 hover:bg-blue-600 hover:text-white active:scale-95 transition-all duration-300 shadow-sm">Admin Only</a>
+  </nav>
+</header>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const menuBtn = document.getElementById("menu-toggle");
+  const mobileNav = document.getElementById("mobile-nav");
+
+  menuBtn.addEventListener("click", () => {
+    const isOpen = menuBtn.classList.toggle("open");
+    if (isOpen) {
+      mobileNav.classList.remove("hidden");
+      setTimeout(() => {
+        mobileNav.classList.add("scale-y-100", "opacity-100");
+        mobileNav.classList.remove("opacity-0", "scale-y-0");
+      }, 10);
+    } else {
+      mobileNav.classList.add("opacity-0", "scale-y-0");
+      mobileNav.classList.remove("opacity-100", "scale-y-100");
+      setTimeout(() => {
+        mobileNav.classList.add("hidden");
+      }, 400);
+    }
+  });
+
+  // Close menu on link click
+  mobileNav.querySelectorAll("a").forEach(link => {
+    link.addEventListener("click", () => {
+      menuBtn.classList.remove("open");
+      mobileNav.classList.add("opacity-0", "scale-y-0");
+      setTimeout(() => mobileNav.classList.add("hidden"), 400);
+    });
+  });
+});
+</script>
   
-<!-- Header -->
+<!-- Header --
 <header class="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-sm shadow-md z-40">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-16">
-      <!-- Logo + Title + Sign Up -->
+      <!-- Logo + Title + Sign Up --
       <div class="flex items-center space-x-4">
         <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-500 to-sky-400 flex items-center justify-center text-white font-bold">SKL</div>
         <div class="hidden sm:block">
@@ -96,33 +168,33 @@
           <p class="text-xs text-slate-500">Coding, Computer Literacy & Test of Knowledge</p>
         </div>
 
-<!-- Auth Button -->
+<!-- Auth Button --
 <button id="authBtn"
   class="ml-4 px-4 py-1.5 border border-blue-600 rounded-full text-blue-600 text-sm font-medium bg-white transition duration-200 ease-in-out hover:bg-blue-50 active:scale-95 active:shadow-[0_0_10px_rgba(59,130,246,0.7)]">
   Sign In / Register
 </button>
-<!-- Blinking Features Button -->
+<!-- Blinking Features Button --
 <a href="features.html" class="blinking-button">Features</a>      
   </div>
-      <!-- Desktop Menu -->
+      <!-- Desktop Menu --
       <nav class="hidden md:flex items-center gap-6 text-sm">
         <a href="https://slide-t.github.io/smartkids-learning/admin.html" class="block">Admin Only</a>
         <a href="#about" class="hover:underline">About</a>
       </nav>
-      <!-- Right side -->
+      <!-- Right side --
       <div class="flex items-center gap-3">
-        <!-- Hamburger (mobile only) -->
+        <!-- Hamburger (mobile only) --
         <button id="menu-btn" class="md:hidden flex flex-col gap-1.5 px-3 py-2 border rounded-lg">
           <span class="block w-5 h-0.5 bg-slate-800"></span>
           <span class="block w-5 h-0.5 bg-slate-800"></span>
           <span class="block w-5 h-0.5 bg-slate-800"></span>
         </button>
-        <!-- Start Learning -->
+        <!-- Start Learning --
         <a href="https://slide-t.github.io/smartkids-learning/quiz.html" class="inline-block px-4 py-2 rounded-full bg-indigo-600 text-white text-sm shadow-sm hover:bg-indigo-700">Ability Test</a>
       </div>
     </div>
   </div>
-  <!-- <!-- Mobile Menu -->
+  <!-- Mobile Menu --
 <div id="mobile-menu"
   class="hidden flex-col space-y-4 px-6 py-6 bg-white shadow-lg rounded-b-2xl 
          transform transition-all duration-500 ease-in-out origin-top scale-y-0">
@@ -183,7 +255,7 @@
     </a>
   </div>
 </div>
-<!-- Fade Script -->
+<!-- Fade Script --
 <script>
   document.addEventListener("DOMContentLoaded", () => {
     const captions = document.querySelectorAll(".caption-text");
