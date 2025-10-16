@@ -1,3 +1,271 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmartKids Lessons</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: "Poppins", system-ui, sans-serif;
+      background: linear-gradient(180deg, #eef7ff 0%, #f7fbff 100%);
+      margin: 0;
+      padding: 100px 20px 50px;
+      min-height: 100vh;
+    }
+
+    header.app-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 70px;
+      background: linear-gradient(90deg, #3b82f6, #2563eb);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: #fff;
+      font-size: 1.4rem;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+      z-index: 50;
+    }
+
+    /* Search Section */
+    .search-container {
+      max-width: 650px;
+      margin: 0 auto 40px;
+    }
+    .search-pill {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      border-radius: 9999px;
+      padding: 12px 16px;
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.1);
+      border: 1px solid rgba(37, 99, 235, 0.15);
+      transition: all 0.3s ease;
+    }
+    .search-pill.focused {
+      transform: scale(1.03);
+      box-shadow: 0 10px 28px rgba(37, 99, 235, 0.18);
+      border-color: rgba(37, 99, 235, 0.25);
+    }
+    #searchInput {
+      border: none;
+      outline: none;
+      width: 100%;
+      font-size: 1rem;
+      background: transparent;
+      color: #0f172a;
+    }
+
+    /* Lesson Cards */
+    .lessons-grid {
+      display: grid;
+      gap: 22px;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      margin-top: 20px;
+    }
+
+    .lesson-card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 8px 22px rgba(2, 132, 199, 0.08);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    .lesson-card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(120deg, rgba(37,99,235,0.05), rgba(255,255,255,0));
+      z-index: 0;
+    }
+    .lesson-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 28px rgba(2, 132, 199, 0.12);
+    }
+    .lesson-title {
+      color: #0f172a;
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .read-more {
+      display: inline-block;
+      background: #2563eb;
+      color: #fff;
+      padding: 8px 14px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: background 0.2s ease, transform 0.2s ease;
+      position: relative;
+      z-index: 1;
+    }
+    .read-more:hover {
+      background: #1e40af;
+      transform: translateY(-2px);
+    }
+
+    /* Empty or loading message */
+    .status {
+      text-align: center;
+      padding: 24px;
+      background: #fff;
+      border-radius: 14px;
+      color: #0f172a;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+    }
+
+    /* Footer Buttons */
+    .actions {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 50px;
+    }
+    .actions a {
+      padding: 10px 18px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 700;
+      color: #fff;
+      transition: all 0.25s ease;
+    }
+    .btn-cyber {
+      background: linear-gradient(90deg, #fb923c, #f97316);
+    }
+    .btn-features {
+      background: linear-gradient(90deg, #64748b, #475569);
+    }
+    .actions a:hover {
+      transform: translateY(-3px);
+      filter: brightness(0.95);
+    }
+  </style>
+</head>
+
+<body>
+  <header class="app-header">🌟 SmartKids Learning — Lessons</header>
+
+  <div class="search-container mt-6">
+    <div id="searchPill" class="search-pill">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <path d="M21 21l-4.35-4.35" stroke="#2563eb" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="11" cy="11" r="6.2" stroke="#2563eb" stroke-width="1.6"/>
+      </svg>
+      <input id="searchInput" placeholder="Search lessons or topics..." />
+    </div>
+  </div>
+
+  <main class="max-w-6xl mx-auto">
+    <h2 class="text-center text-2xl font-bold text-[#0b2545] mb-6">
+      Choose a topic to explore
+    </h2>
+
+    <div id="lessonsArea" class="lessons-grid">
+      <div class="status">Loading lessons…</div>
+    </div>
+
+    <div class="actions">
+      <a class="btn-cyber" href="features/cyber-security.html">🔒 Cyber Security</a>
+      <a class="btn-features" href="https://slide-t.github.io/smartkids-learning/features.html">✨ Features</a>
+    </div>
+  </main>
+
+  <script>
+  (function(){
+    const jsonPaths = ['data/lessons.json','./data/lessons.json','lessons.json','./lessons.json','/data/lessons.json'];
+    const lessonsArea=document.getElementById('lessonsArea');
+    const searchInput=document.getElementById('searchInput');
+    const searchPill=document.getElementById('searchPill');
+    let allCategories=[];
+
+    async function fetchFirstSuccess(paths){
+      for(const p of paths){
+        try{
+          const r=await fetch(p,{cache:"no-store"});
+          if(!r.ok) continue;
+          return await r.json();
+        }catch(e){}
+      }return null;
+    }
+
+    function normalizeData(data){
+      if(!data) return [];
+      if(Array.isArray(data)) return data;
+      if(Array.isArray(data.categories)) return data.categories;
+      if(Array.isArray(data.items)) return data.items;
+      return [];
+    }
+
+    function getTopics(cat){return cat.topics||cat.lessons||[];}
+    function renderEmpty(msg){lessonsArea.innerHTML=`<div class='status'>${msg}</div>`;}
+    function escapeHtml(s){return s.replace(/[&<>"']/g,m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;' }[m]));}
+
+    function renderGrid(categories,filter=''){
+      const q=filter.trim().toLowerCase();
+      const out=[];
+      categories.forEach(cat=>{
+        getTopics(cat).forEach(topic=>{
+          const title=(topic.title||topic.name||'').toString();
+          if(!q||title.toLowerCase().includes(q)) out.push({
+            id:topic.id,
+            title,
+            categoryId: cat.id
+          });
+        });
+      });
+      if(!out.length) return renderEmpty('No topics found.');
+
+      lessonsArea.innerHTML='';
+      out.forEach(item=>{
+        const card=document.createElement('div');
+        card.className='lesson-card';
+        card.innerHTML=`
+          <div class='lesson-title'>${escapeHtml(item.title)}</div>
+          <a class='read-more' href="detail-notes.html?category=${encodeURIComponent(item.categoryId)}&id=${encodeURIComponent(item.id)}">Read More →</a>
+        `;
+        lessonsArea.appendChild(card);
+      });
+    }
+
+    (async()=>{
+      const json=await fetchFirstSuccess(jsonPaths);
+      const cats=normalizeData(json);
+      if(!cats.length) return renderEmpty('lessons.json not valid.');
+      allCategories=cats;
+      renderGrid(allCategories);
+
+      searchInput.addEventListener('input',e=>renderGrid(allCategories,e.target.value));
+      searchInput.addEventListener('focus',()=>searchPill.classList.add('focused'));
+      searchInput.addEventListener('blur',()=>searchPill.classList.remove('focused'));
+    })();
+  })();
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+<!--
 <!DOCTYPE html>
 <html lang="en">
 <head>
