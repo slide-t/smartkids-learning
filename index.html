@@ -101,13 +101,6 @@
   class="ml-4 px-4 py-1.5 border border-blue-600 rounded-full text-blue-600 text-sm font-medium bg-white transition duration-200 ease-in-out hover:bg-blue-50 active:scale-95 active:shadow-[0_0_10px_rgba(59,130,246,0.7)]">
   Sign In / Register
 </button>
-        
-<!-- Auth Button --
-"
-  class="ml-4 px-4 py-1.5 border border-blue-600 rounded-full text-blue-600 text-sm font-medium bg-white transition duration-200 ease-in-out hover:bg-blue-50 active:scale-95 active:shadow-[0_0_10px_rgba(59,130,246,0.7)]">
-  Sign In / Register
-</button>-->
-
 <!-- Blinking Features Button -->
 <a href="features.html" class="blinking-button">Features</a>      
   </div>
@@ -115,9 +108,7 @@
       <nav class="hidden md:flex items-center gap-6 text-sm">
         <a href="https://slide-t.github.io/smartkids-learning/admin.html" class="block">Admin Only</a>
         <a href="#about" class="hover:underline">About</a>
-        
       </nav>
-
       <!-- Right side -->
       <div class="flex items-center gap-3">
         <!-- Hamburger (mobile only) -->
@@ -153,7 +144,6 @@
   </a>
 </div>
 </header>
-
 <!-- Hero Banner -->
 <div class="relative mt-16">
   <!-- Responsive Hero Images -->
@@ -175,7 +165,6 @@
     <h1 class="text-3xl lg:text-5xl font-extrabold text-white mb-6 drop-shadow-lg">
       Welcome to SmartKids Learning
     </h1>
-
     <!-- Rotating Captions -->
     <div class="text-lg lg:text-xl font-semibold h-8 relative overflow-hidden">
       <span class="caption-text absolute text-blue-200 opacity-100 transition-opacity duration-1000">
@@ -188,7 +177,6 @@
         Building Tech Skills and Confidence for the Digital World.
       </span>
     </div>
-
     <a href="lessons.html" 
        class="mt-8 lg:mt-10 inline-block bg-white text-blue-600 font-semibold px-6 py-3 rounded-full hover:bg-blue-50 transition shadow-lg">
       🚀 Start Learning Now
@@ -351,7 +339,6 @@
     });
   });
 </script>
-
 <!-- Refresh update button (hidden by default) -->
 <button id="update-app" style="
   display:none;
@@ -429,12 +416,10 @@
   animation: borderBlink 1.2s infinite;
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
-
 .blinking-button:hover {
   transform: scale(1.05);
   box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
 }
-
 /* Border flashing animation */
 @keyframes borderBlink {
   0%, 100% {
@@ -450,11 +435,9 @@
     <!-- Combined Auth Modal -->
 <div id="authModal" class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-50">
   <div class="bg-white rounded-lg shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto p-6 relative">
-
     <!-- Close Button -->
     <button id="closeAuthModal"
       class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-2xl font-bold">&times;</button>
-
     <!-- Tabs -->
     <div class="flex justify-around mb-6 border-b">
       <button id="showLogin" class="py-2 font-semibold text-blue-600 border-b-2 border-blue-600 w-1/2">
@@ -464,56 +447,46 @@
         Register
       </button>
     </div>
-
     <!-- Login Form -->
 <form id="loginForm" class="space-y-4">
   <h2 class="text-lg font-semibold text-center">Welcome Back!</h2>
-
   <div>
     <label class="block text-sm font-medium text-gray-700">School Email</label>
     <input type="email" name="email" required
       class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
   </div>
-
   <div>
     <label class="block text-sm font-medium text-gray-700">Username</label>
     <input type="text" name="username" required
       class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
   </div>
-
   <div>
     <label class="block text-sm font-medium text-gray-700">Password</label>
     <input type="password" name="password" required placeholder="Your password"
       class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
   </div>
-
   <div class="flex items-center">
     <input id="rememberMe" name="rememberMe" type="checkbox" class="h-4 w-4 text-blue-600 border-gray-300 rounded">
     <label for="rememberMe" class="ml-2 block text-sm text-gray-700">Remember me</label>
   </div>
-
   <button type="submit"
     class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
     Login
   </button>
 </form>
-
     <!-- Registration Form -->
     <form id="registrationForm" class="space-y-3 hidden">
       <h2 class="text-lg font-semibold text-center">Create an Account</h2>
-
       <div>
         <label class="block text-sm font-medium text-gray-700">Full Name</label>
         <input type="text" name="name" required
           class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
       </div>
-
       <div>
         <label class="block text-sm font-medium text-gray-700">School Email</label>
         <input type="email" name="email" required placeholder="e.g. pupil@school.edu"
           class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
       </div>
-
       <div>
         <label class="block text-sm font-medium text-gray-700">Username</label>
         <input type="text" name="username" required placeholder="Unique username"
@@ -524,23 +497,11 @@
   <input type="password" name="password" required placeholder="6–8 characters"
     class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
 </div>
-      
-
-      <!--<div>
-        <label class="block text-sm font-medium text-gray-700">Password</label>
-        <input type="password" name="password" required minlength="6" maxlength="8"
-          pattern="^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,8}$"
-          placeholder="6-8 letters and numbers"
-          class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
-      </div>
-      -->
-
       <div>
         <label class="block text-sm font-medium text-gray-700">Age</label>
         <input type="number" name="age" required
           class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
       </div>
-
       <div>
         <label class="block text-sm font-medium text-gray-700">Class</label>
         <select name="class" required
@@ -552,38 +513,31 @@
           <option>Year 10</option><option>Year 11</option><option>Year 12</option>
         </select>
       </div>
-
       <div>
         <label class="block text-sm font-medium text-gray-700">School Name</label>
         <input type="text" name="schoolName" required
           class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
       </div>
-
       <div>
         <label class="block text-sm font-medium text-gray-700">Location (State)</label>
         <input type="text" name="location" required
           class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
       </div>
-
       <div>
         <label class="block text-sm font-medium text-gray-700">Country</label>
         <input type="text" name="country" required
           class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
       </div>
-
       <button type="submit"
         class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition">
         Register
       </button>
-
       <p id="successMsg" class="hidden text-green-600 mt-4 text-center font-medium">
         ✅ Registration successful!
       </p>
     </form>
-
   </div>
 </div>
-
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const authBtn = document.getElementById("authBtn");
@@ -790,9 +744,7 @@ window.addEventListener("load", () => {
   if (navigator.onLine) {
     syncOfflineUsers();
   }
-});
-  
-</script>
- 
+});  
+</script> 
 </body>
 </html>
