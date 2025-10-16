@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -97,12 +96,11 @@
           <p class="text-xs text-slate-500">Coding, Computer Literacy & Test of Knowledge</p>
         </div>
 
-<!-- Sign Up Button beside Logo -->
-<button id="authBtn" 
-  onclick="toggleAuth()"
+<!-- Auth Button -->
+<button id="authBtn"
   class="ml-4 px-4 py-1.5 border border-blue-600 rounded-full text-blue-600 text-sm font-medium bg-white transition duration-200 ease-in-out hover:bg-blue-50 active:scale-95 active:shadow-[0_0_10px_rgba(59,130,246,0.7)]">
-  Sign Up
-</button>  
+  Sign In / Register
+</button>
 <!-- Blinking Features Button -->
 <a href="features.html" class="blinking-button">Features</a>      
   </div>
@@ -110,9 +108,7 @@
       <nav class="hidden md:flex items-center gap-6 text-sm">
         <a href="https://slide-t.github.io/smartkids-learning/admin.html" class="block">Admin Only</a>
         <a href="#about" class="hover:underline">About</a>
-        
       </nav>
-
       <!-- Right side -->
       <div class="flex items-center gap-3">
         <!-- Hamburger (mobile only) -->
@@ -126,15 +122,28 @@
       </div>
     </div>
   </div>
-  <!-- Mobile Menu -->
-  <div id="mobile-menu" class="hidden flex-col space-y-3 px-6 py-4 bg-white shadow-md transition-all ease-in-out duration-300">
-    <a href="quiz.html" class="block">Ability Test</a>
-    <a href="#about" class="block">About</a>
-    <a href="admin.html" class="block">Admin Only</a>
-    <a href="lessons.html" class="block">Start Lessons</a>
-  </div>
+  <!-- <!-- Mobile Menu -->
+<div id="mobile-menu"
+  class="hidden flex-col space-y-4 px-6 py-6 bg-white shadow-lg rounded-b-2xl 
+         transform transition-all duration-500 ease-in-out origin-top scale-y-0">
+  <a href="quiz.html"
+     class="block text-center py-3 rounded-xl border border-gray-300 bg-gray-50 hover:bg-blue-600 hover:text-white active:scale-95 transition-all duration-300 shadow-sm">
+    Ability Test
+  </a>
+  <a href="#about"
+     class="block text-center py-3 rounded-xl border border-gray-300 bg-gray-50 hover:bg-blue-600 hover:text-white active:scale-95 transition-all duration-300 shadow-sm">
+    About
+  </a>
+  <a href="admin.html"
+     class="block text-center py-3 rounded-xl border border-gray-300 bg-gray-50 hover:bg-blue-600 hover:text-white active:scale-95 transition-all duration-300 shadow-sm">
+    Admin Only
+  </a>
+  <a href="lessons.html"
+     class="block text-center py-3 rounded-xl border border-gray-300 bg-gray-50 hover:bg-blue-600 hover:text-white active:scale-95 transition-all duration-300 shadow-sm">
+    Start Lessons
+  </a>
+</div>
 </header>
-
 <!-- Hero Banner -->
 <div class="relative mt-16">
   <!-- Responsive Hero Images -->
@@ -148,17 +157,14 @@
     <img src="https://raw.githubusercontent.com/slide-t/smartkids-learning/main/Image/smartkids_1.jpg"
          alt="SmartKids Team"
          class="hero-image absolute w-full h-full object-cover opacity-0 transition-opacity duration-1000" />
-    
     <!-- Set height dynamically -->
     <div class="aspect-[16/9] sm:aspect-[5/2] md:aspect-[3/1] lg:aspect-[21/9]"></div>
   </div>
-
   <!-- Overlay Content -->
   <div class="absolute inset-0 bg-gradient-to-r from-blue-900/60 to-sky-700/30 flex flex-col justify-center items-start px-6 lg:px-24">
     <h1 class="text-3xl lg:text-5xl font-extrabold text-white mb-6 drop-shadow-lg">
       Welcome to SmartKids Learning
     </h1>
-
     <!-- Rotating Captions -->
     <div class="text-lg lg:text-xl font-semibold h-8 relative overflow-hidden">
       <span class="caption-text absolute text-blue-200 opacity-100 transition-opacity duration-1000">
@@ -171,7 +177,6 @@
         Building Tech Skills and Confidence for the Digital World.
       </span>
     </div>
-
     <a href="lessons.html" 
        class="mt-8 lg:mt-10 inline-block bg-white text-blue-600 font-semibold px-6 py-3 rounded-full hover:bg-blue-50 transition shadow-lg">
       🚀 Start Learning Now
@@ -273,12 +278,6 @@
   <a href="https://slide-t.github.io/smartkids-learning/classes.html">Keyboard Drill</a>
   <a href="https://slide-t.github.io/smartkids-learning/mouse.html">Mouse Practice</a>
 </div>
-<!-- Registration Modal Placeholder -->
-<div id="modalContainer"></div>
-
-<!-- Shared Auth Script -->
-<script src="auth.js"></script> 
-
 <style>
 .btn-hover:hover {
   border: 2px solid white;
@@ -318,24 +317,28 @@
     </div>
   </footer>
   <script>
-    // Mobile menu toggle
-    document.addEventListener("DOMContentLoaded", () => {
-      const btn = document.getElementById("menu-btn");
-      const menu = document.getElementById("mobile-menu");
+  // Mobile menu toggle
+  document.addEventListener("DOMContentLoaded", () => {
+    const btn = document.getElementById("menu-btn");
+    const menu = document.getElementById("mobile-menu");
 
-      btn.addEventListener("click", () => {
-        menu.classList.toggle("hidden");
-      });
+    btn.addEventListener("click", () => {
+      // Toggle visibility with transition
+      menu.classList.toggle("hidden");
+      menu.classList.toggle("scale-y-0");
+      menu.classList.toggle("scale-y-100");
+    });
 
-      // Close menu when clicking a link
-      menu.querySelectorAll("a").forEach(link => {
-        link.addEventListener("click", () => {
-          menu.classList.add("hidden");
-        });
+    // Close menu when clicking a link
+    menu.querySelectorAll("a").forEach(link => {
+      link.addEventListener("click", () => {
+        menu.classList.add("hidden");
+        menu.classList.remove("scale-y-100");
+        menu.classList.add("scale-y-0");
       });
     });
-  </script>
-
+  });
+</script>
 <!-- Refresh update button (hidden by default) -->
 <button id="update-app" style="
   display:none;
@@ -354,7 +357,6 @@
 ">
   🔄 Refresh to update
 </button>
-
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
@@ -398,7 +400,6 @@
     });
   }
 </script>
-
 <style>
 .blinking-button {
   display: inline-block;
@@ -415,12 +416,10 @@
   animation: borderBlink 1.2s infinite;
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
-
 .blinking-button:hover {
   transform: scale(1.05);
   box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
 }
-
 /* Border flashing animation */
 @keyframes borderBlink {
   0%, 100% {
@@ -433,150 +432,319 @@
   }
 }
 </style>
-<!-- Registration Modal -->
-<div id="registrationModal" class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-50">
-  <div class="bg-white rounded-lg shadow-xl w-full max-w-md p-6 relative">
-    
+    <!-- Combined Auth Modal -->
+<div id="authModal" class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-50">
+  <div class="bg-white rounded-lg shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto p-6 relative">
     <!-- Close Button -->
-    <button id="closeRegistration" 
-      class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-xl font-bold">
-      ×
-    </button>
-
-    <h2 class="text-xl font-semibold mb-4 text-center">Sign Up</h2>
-
-    <form id="registrationForm" class="space-y-3">
+    <button id="closeAuthModal"
+      class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-2xl font-bold">&times;</button>
+    <!-- Tabs -->
+    <div class="flex justify-around mb-6 border-b">
+      <button id="showLogin" class="py-2 font-semibold text-blue-600 border-b-2 border-blue-600 w-1/2">
+        Login
+      </button>
+      <button id="showRegister" class="py-2 font-semibold text-gray-500 hover:text-blue-600 w-1/2">
+        Register
+      </button>
+    </div>
+    <!-- Login Form -->
+<form id="loginForm" class="space-y-4">
+  <h2 class="text-lg font-semibold text-center">Welcome Back!</h2>
+  <div>
+    <label class="block text-sm font-medium text-gray-700">School Email</label>
+    <input type="email" name="email" required
+      class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+  </div>
+  <div>
+    <label class="block text-sm font-medium text-gray-700">Username</label>
+    <input type="text" name="username" required
+      class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+  </div>
+  <div>
+    <label class="block text-sm font-medium text-gray-700">Password</label>
+    <input type="password" name="password" required placeholder="Your password"
+      class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+  </div>
+  <div class="flex items-center">
+    <input id="rememberMe" name="rememberMe" type="checkbox" class="h-4 w-4 text-blue-600 border-gray-300 rounded">
+    <label for="rememberMe" class="ml-2 block text-sm text-gray-700">Remember me</label>
+  </div>
+  <button type="submit"
+    class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
+    Login
+  </button>
+</form>
+    <!-- Registration Form -->
+    <form id="registrationForm" class="space-y-3 hidden">
+      <h2 class="text-lg font-semibold text-center">Create an Account</h2>
       <div>
         <label class="block text-sm font-medium text-gray-700">Full Name</label>
         <input type="text" name="name" required
           class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
       </div>
-
       <div>
         <label class="block text-sm font-medium text-gray-700">School Email</label>
-        <input type="email" name="email" required placeholder="e.g. pupil@schoolname.edu"
+        <input type="email" name="email" required placeholder="e.g. pupil@school.edu"
           class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
       </div>
-
       <div>
         <label class="block text-sm font-medium text-gray-700">Username</label>
         <input type="text" name="username" required placeholder="Unique username"
           class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
       </div>
-
+<div>
+  <label class="block text-sm font-medium text-gray-700">Password</label>
+  <input type="password" name="password" required placeholder="6–8 characters"
+    class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+</div>
       <div>
         <label class="block text-sm font-medium text-gray-700">Age</label>
         <input type="number" name="age" required
           class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
       </div>
-
       <div>
         <label class="block text-sm font-medium text-gray-700">Class</label>
         <select name="class" required
           class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
           <option value="">Select Class</option>
-          <option value="Year 1">Year 1</option>
-          <option value="Year 2">Year 2</option>
-          <option value="Year 3">Year 3</option>
-          <option value="Year 4">Year 4</option>
-          <option value="Year 5">Year 5</option>
-          <option value="Year 6">Year 6</option>
-          <option value="Year 7">Year 7</option>
-          <option value="Year 8">Year 8</option>
-          <option value="Year 9">Year 9</option>
-          <option value="Year 10">Year 10</option>
-          <option value="Year 11">Year 11</option>
-          <option value="Year 12">Year 12</option>
+          <option>Year 1</option><option>Year 2</option><option>Year 3</option>
+          <option>Year 4</option><option>Year 5</option><option>Year 6</option>
+          <option>Year 7</option><option>Year 8</option><option>Year 9</option>
+          <option>Year 10</option><option>Year 11</option><option>Year 12</option>
         </select>
       </div>
-
       <div>
         <label class="block text-sm font-medium text-gray-700">School Name</label>
         <input type="text" name="schoolName" required
           class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
       </div>
-
       <div>
         <label class="block text-sm font-medium text-gray-700">Location (State)</label>
         <input type="text" name="location" required
           class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
       </div>
-
       <div>
         <label class="block text-sm font-medium text-gray-700">Country</label>
         <input type="text" name="country" required
           class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
       </div>
-
-      <!-- Submit Button -->
-      <button type="submit" 
-        class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
+      <button type="submit"
+        class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition">
         Register
       </button>
+      <p id="successMsg" class="hidden text-green-600 mt-4 text-center font-medium">
+        ✅ Registration successful!
+      </p>
     </form>
-
-    <!-- ✅ Success Message -->
-    <p id="successMsg" class="hidden text-green-600 mt-4 text-center font-medium">
-      ✅ Registration successful!
-    </p>
   </div>
 </div>
-  
-  <script>
-  // ---- Auth Button Control ----
-  document.addEventListener("DOMContentLoaded", () => {
-    const authBtn = document.getElementById("authBtn");
-    const form = document.getElementById("registrationForm");
-    const successMsg = document.getElementById("successMsg");
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const authBtn = document.getElementById("authBtn");
+  const authModal = document.getElementById("authModal");
+  const closeModal = document.getElementById("closeAuthModal");
+  const loginForm = document.getElementById("loginForm");
+  const regForm = document.getElementById("registrationForm");
+  const showLogin = document.getElementById("showLogin");
+  const showRegister = document.getElementById("showRegister");
+  const successMsg = document.getElementById("successMsg");
 
-    // --- Helpers ---
-    function getUser() {
-      return {
-        id: localStorage.getItem("currentUserId"),
-        name: localStorage.getItem("currentUserName"),
-      };
+  // ===== Open Modal =====
+  authBtn.addEventListener("click", () => {
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    if (currentUser) {
+      localStorage.removeItem("currentUser");
+      authBtn.textContent = "Sign In / Register";
+      alert("👋 Logged out successfully!");
+    } else {
+      authModal.classList.remove("hidden");
+      showLoginForm(); // default tab
     }
+  });
 
-    function updateAuthButton() {
-      const { id, name } = getUser();
-      if (id && name) {
-        authBtn.innerHTML = `Logout <span class="ml-2 font-semibold text-gray-700">(${name})</span>`;
-        authBtn.onclick = () => {
-          localStorage.removeItem("currentUserId");
-          localStorage.removeItem("currentUserName");
-          updateAuthButton();
-        };
-      } else {
-        authBtn.textContent = "Sign Up";
-        authBtn.onclick = () => window.toggleAuth();
+  // ===== Close Modal =====
+  closeModal.addEventListener("click", closeAuthModal);
+  window.addEventListener("click", (e) => {
+    if (e.target === authModal) closeAuthModal();
+  });
+
+  function closeAuthModal() {
+    authModal.classList.add("hidden");
+  }
+
+  // ===== Tab Switching =====
+  showLogin.addEventListener("click", showLoginForm);
+  showRegister.addEventListener("click", showRegisterForm);
+
+  function showLoginForm() {
+    loginForm.classList.remove("hidden");
+    regForm.classList.add("hidden");
+    showLogin.classList.add("text-blue-600", "border-b-2", "border-blue-600");
+    showRegister.classList.remove("text-blue-600", "border-b-2", "border-blue-600");
+  }
+
+  function showRegisterForm() {
+    regForm.classList.remove("hidden");
+    loginForm.classList.add("hidden");
+    showRegister.classList.add("text-blue-600", "border-b-2", "border-blue-600");
+    showLogin.classList.remove("text-blue-600", "border-b-2", "border-blue-600");
+  }
+
+  // ===== IndexedDB Setup (Safe Mode) =====
+  let db;
+  try {
+    const request = indexedDB.open("SmartKidsDB", 1);
+
+    request.onupgradeneeded = (e) => {
+      db = e.target.result;
+      if (!db.objectStoreNames.contains("users")) {
+        const store = db.createObjectStore("users", { keyPath: "username" });
+        store.createIndex("email", "email", { unique: true });
       }
+    };
+
+    request.onsuccess = (e) => {
+      db = e.target.result;
+      console.log("✅ IndexedDB connected successfully");
+    };
+
+    request.onerror = (e) => {
+      console.warn("⚠️ IndexedDB unavailable:", e.target.error?.message);
+    };
+  } catch (err) {
+    console.warn("⚠️ IndexedDB init failed:", err.message);
+  }
+
+  // ===== Helper: Add User =====
+  function addUser(user) {
+    if (!db) {
+      console.warn("⚠️ IndexedDB not ready — user will be stored when online");
+      return;
+    }
+    const tx = db.transaction("users", "readwrite");
+    tx.objectStore("users").add(user);
+    tx.oncomplete = () => console.log("✅ User saved offline!");
+  }
+
+  // ===== Helper: Find User =====
+  function findUser(email, username, password, callback) {
+    if (!db) return callback(null);
+    const tx = db.transaction("users", "readonly");
+    const store = tx.objectStore("users");
+    const req = store.get(username);
+    req.onsuccess = () => {
+      const user = req.result;
+      callback(user && user.email === email && user.password === password ? user : null);
+    };
+  }
+
+  // ===== Registration =====
+  regForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(regForm).entries());
+
+    // Validate password: 6–8 chars, letters + numbers
+    const pass = data.password || "";
+    if (!/^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d]{6,8}$/.test(pass)) {
+      alert("❌ Password must be 6–8 characters with letters and numbers.");
+      return;
     }
 
-    // --- Init on load ---
-    updateAuthButton();
+    addUser(data);
+    localStorage.setItem("currentUser", JSON.stringify(data));
+    successMsg.classList.remove("hidden");
+    authBtn.innerHTML = `Logout <span class="ml-2 font-semibold text-gray-700">(${data.username})</span>`;
 
-    // --- Hook into form submission success ---
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
+    setTimeout(() => {
+      successMsg.classList.add("hidden");
+      closeAuthModal();
+      regForm.reset();
+    }, 1200);
+  });
 
-      // Get name from form
-      const name = form.querySelector('input[name="name"]').value.trim();
-      const fakeId = Date.now(); // temporary ID for demo before IndexedDB
+  // ===== Login =====
+  loginForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const formData = new FormData(loginForm);
+    const email = formData.get("email");
+    const username = formData.get("username");
+    const password = formData.get("password");
+    const rememberMe = formData.get("rememberMe") === "on";
 
-      localStorage.setItem("currentUserId", fakeId);
-      localStorage.setItem("currentUserName", name);
+    findUser(email, username, password, (user) => {
+      if (user) {
+        if (rememberMe) localStorage.setItem("currentUser", JSON.stringify(user));
+        else sessionStorage.setItem("currentUser", JSON.stringify(user));
 
-      successMsg.classList.remove("hidden");
-      updateAuthButton();
-
-      setTimeout(() => {
-        successMsg.classList.add("hidden");
-        document.getElementById("registrationModal").classList.add("hidden");
-        form.reset();
-      }, 1200);
+        authBtn.innerHTML = `Logout <span class="ml-2 font-semibold text-gray-700">(${user.username})</span>`;
+        alert("✅ Login successful!");
+        closeAuthModal();
+      } else {
+        alert("❌ Invalid login credentials!");
+      }
     });
   });
-</script>
+});
+  
+// --- AUTO SYNC OFFLINE USERS WHEN ONLINE ---
 
+// Function to sync IndexedDB users to the server
+async function syncOfflineUsers() {
+  try {
+    const dbRequest = indexedDB.open("SmartKidsDB", 1);
+
+    dbRequest.onsuccess = async (event) => {
+      const db = event.target.result;
+      const tx = db.transaction("users", "readonly");
+      const store = tx.objectStore("users");
+
+      const getAllRequest = store.getAll();
+      getAllRequest.onsuccess = async () => {
+        const offlineUsers = getAllRequest.result || [];
+
+        if (offlineUsers.length === 0) {
+          console.log("✅ No offline users to sync");
+          return;
+        }
+
+        console.log("🔄 Syncing offline users:", offlineUsers);
+
+        // Send offline users to server
+        const response = await fetch("http://localhost:3000/sync", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ offlineUsers }),
+        });
+
+        const data = await response.json();
+        console.log("✅ Sync result:", data);
+
+        // If successful, clear synced users
+        if (response.ok) {
+          const txClear = db.transaction("users", "readwrite");
+          const storeClear = txClear.objectStore("users");
+          storeClear.clear();
+          console.log("🗑️ Cleared synced users from IndexedDB");
+        }
+      };
+    };
+  } catch (error) {
+    console.error("❌ Sync error:", error);
+  }
+}
+
+// Listen for network status changes
+window.addEventListener("online", () => {
+  console.log("🌐 Back online — syncing pending users...");
+  syncOfflineUsers();
+});
+
+// Optional: Try syncing immediately on page load if online
+window.addEventListener("load", () => {
+  if (navigator.onLine) {
+    syncOfflineUsers();
+  }
+});  
+</script> 
 </body>
 </html>
