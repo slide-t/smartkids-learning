@@ -315,23 +315,24 @@
     </div>
   </footer>
   <script>
-    // Mobile menu toggle
-    document.addEventListener("DOMContentLoaded", () => {
-      const btn = document.getElementById("menu-btn");
-      const menu = document.getElementById("mobile-menu");
+  // Mobile menu toggle
+  document.addEventListener("DOMContentLoaded", () => {
+    const btn = document.getElementById("menu-btn");
+    const menu = document.getElementById("mobile-menu");
 
-      btn.addEtListener("click", () => {
-        menu.classList.toggle("hidden");
-      });
+    // ✅ Corrected 'addEtListener' to 'addEventListener'
+    btn.addEventListener("click", () => {
+      menu.classList.toggle("hidden");
+    });
 
-      // Close menu when clicking a link
-      menu.querySelectorAll("a").forEach(link => {
-        link.addEventListener("click", () => {
-          menu.classList.add("hidden");
-        });
+    // Close menu when clicking a link
+    menu.querySelectorAll("a").forEach(link => {
+      link.addEventListener("click", () => {
+        menu.classList.add("hidden");
       });
     });
-  </script>
+  });
+</script>
 
 <!-- Refresh update button (hidden by default) -->
 <button id="update-app" style="
