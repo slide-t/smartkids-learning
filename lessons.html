@@ -330,20 +330,27 @@ header.app-header {
     })();
   })();
   </script>
-
-
   <script>
 document.addEventListener("click", (e) => {
-  if (e.target.classList.contains("zoomable-image") || e.target.classList.contains("zoom-btn")) {
+  const modal = document.getElementById("imageModal");
+  const modalImg = document.getElementById("modalImg");
+
+  if (e.target.closest(".zoom-btn") || e.target.classList.contains("zoomable-image")) {
     const img = e.target.closest(".zoom-container").querySelector("img");
-    document.getElementById("modalImg").src = img.src;
-    document.getElementById("imageModal").style.display = "flex";
+    modalImg.src = img.src;
+    modal.style.display = "flex";
   } 
-  else if (e.target.id === "imageModal") {
-    e.target.style.display = "none";
+  else if (e.target === modal) {
+    modal.style.display = "none";
   }
 });
-  </script>
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    document.getElementById("imageModal").style.display = "none";
+  }
+});
+</script>
 </body>
 </html>
 
