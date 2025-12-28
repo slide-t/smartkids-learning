@@ -197,6 +197,48 @@ header.app-header {
       transform: translateY(-3px);
       filter: brightness(0.95);
     }
+.zoom-container {
+  position: relative;
+  display: inline-block;
+  margin-top: 8px;
+}
+
+.zoomable-image {
+  width: 16rem;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.zoom-btn {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  font-size: 18px;
+  cursor: pointer;
+}
+    .image-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.image-modal img {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 12px;
+}
+    
   </style>
 </head>
 
@@ -230,7 +272,10 @@ header.app-header {
       <a class="btn-features" href="https://slide-t.github.io/smartkids-learning/features.html">✨ Features</a>
     </div>
   </main>
-
+<div id="imageModal" class="image-modal">
+  <img id="modalImg" alt="Zoomed image">
+</div>
+  
   <script>
   (function(){
     const jsonPaths = ['data/lessons.json','./data/lessons.json','lessons.json','./lessons.json','/data/lessons.json'];
@@ -300,6 +345,20 @@ header.app-header {
       searchInput.addEventListener('blur',()=>searchPill.classList.remove('focused'));
     })();
   })();
+  </script>
+
+
+  <script>
+document.addEventListener("click", (e) => {
+  if (e.target.classList.contains("zoomable-image") || e.target.classList.contains("zoom-btn")) {
+    const img = e.target.closest(".zoom-container").querySelector("img");
+    document.getElementById("modalImg").src = img.src;
+    document.getElementById("imageModal").style.display = "flex";
+  } 
+  else if (e.target.id === "imageModal") {
+    e.target.style.display = "none";
+  }
+});
   </script>
 </body>
 </html>
