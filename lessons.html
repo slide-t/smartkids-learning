@@ -15,7 +15,7 @@
       min-height: 100vh;
     }
 
-    header.app-header {
+    /*header.app-header {
       position: fixed;
       top: 0;
       left: 0;
@@ -30,8 +30,50 @@
       font-size: 1.4rem;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
       z-index: 50;
-    }
+    }*/
+header.app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  background: linear-gradient(90deg, #3b82f6, #2563eb);
+  display: flex;
+  align-items: center;
+  justify-content: center; /* keeps title centered */
+  font-weight: 700;
+  color: #fff;
+  font-size: 1.4rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  z-index: 50;
+}
 
+/* Header title */
+.header-title {
+  pointer-events: none;
+}
+
+/* Home button */
+.home-btn {
+  position: absolute;
+  left: 16px;
+  text-decoration: none;
+  background: #ffffff;
+  color: #2563eb;
+  padding: 6px 14px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.home-btn:hover {
+  background: #e0e7ff;
+  transform: scale(1.05);
+}
+
+    
     /* Search Section */
     .search-container {
       max-width: 650px;
@@ -159,8 +201,11 @@
 </head>
 
 <body>
-  <header class="app-header">🌟 SmartKids Learning — Lessons</header>
-
+ <!-- <header class="app-header">🌟 SmartKids Learning — Lessons</header>-->
+<header class="app-header">
+  <a href="index.html" class="home-btn">🏠 Home</a>
+  <span class="title">🌟 SmartKids Learning — Lessons</span>
+</header>
   <div class="search-container mt-6">
     <div id="searchPill" class="search-pill">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
