@@ -204,6 +204,10 @@ header.app-header {
   font-size: 18px;
   cursor: pointer;
 }
+    .zoom-btn:hover {
+  transform: scale(1.1);
+  background: #1e40af;
+    }
     .image-modal {
   display: none;
   position: fixed;
@@ -213,21 +217,20 @@ header.app-header {
   align-items: center;
   z-index: 1000;
 }
-
-.image-modal img {
-  max-width: 90%;
-  max-height: 90%;
+    .image-modal img {
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
   border-radius: 12px;
-}
+    }
     
   </style>
 </head>
 
 <body>
- <!-- <header class="app-header">🌟 SmartKids Learning — Lessons</header>-->
 <header class="app-header">
   <a href="index.html" class="home-btn">🏠 Home</a>
-  <span class="title">🌟 SmartKids Learning — Lessons</span>
+  <span class="header-title">🌟 SmartKids Learning — Lessons</span>
 </header>
   <div class="search-container mt-6">
     <div id="searchPill" class="search-pill">
