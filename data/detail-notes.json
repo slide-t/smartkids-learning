@@ -34,12 +34,13 @@
     {
       "id": "home_end_keys",
       "title": "Home and End Keys",
-      "content": "The <b>Home</b> and <b>End</b> keys help you move quickly through text and pages.<br><br><b>What they do:</b><br>• <b>Home</b> – Moves the cursor to the <b>start</b> of the current line.<br>• <b>End</b> – Moves the cursor to the <b>end</b> of the current line.<br><br><b>When used with Ctrl:</b><br>• <b>Ctrl + Home</b> – Jump to the <b>beginning</b> of the document or page.<br>• <b>Ctrl + End</b> – Jump to the <b>end</b> of the document or page.<br><br>These keys save time when you edit long documents."
+      "content": "The <b>Home</b> and <b>End</b> keys help you move quickly through text and pages when typing or reading.\n\n<b>What these keys do:</b>\n• <b>Home</b> – Moves the cursor to the <b>start</b> of the current line.\n• <b>End</b> – Moves the cursor to the <b>end</b> of the current line.\n\n<b>When used with the Ctrl key:</b>\n• <b>Ctrl + Home</b> – Jumps to the <b>beginning</b> of the document or page.\n• <b>Ctrl + End</b> – Jumps to the <b>end</b> of the document or page.\n\nThese keys are very useful and save time when you are editing long documents.\n\n<b>Look at the picture below to find the Home and End keys on a keyboard:</b>\n<div class='zoom-container'>\n  <img src='images/home_end_keys.png' alt='Home and End Keys on Keyboard' class='zoomable-image'>\n  <button class='zoom-btn' aria-label='Zoom image'>🔍</button>\n</div>"
     },
     {
       "id": "arrow_keys",
       "title": "Arrow Keys",
       "content": "The <b>Arrow Keys</b> let you move the cursor or selection without using the mouse.<br><br><b>How they work:</b><br>• <b>Up (↑)</b> – move up<br>• <b>Down (↓)</b> – move down<br>• <b>Left (←)</b> – move left<br>• <b>Right (→)</b> – move right<br><br><b>Common uses:</b><br>• Move through text, navigate menus, move a character in games, or move between spreadsheet cells.<br><br><b>Tip:</b> Hold <b>Shift</b> + arrow keys to <b>select</b> text or items."
+   
     },
     {
       "id": "control_keys",
