@@ -39,8 +39,7 @@
     {
       "id": "arrow_keys",
       "title": "Arrow Keys",
-      "content": "The <b>Arrow Keys</b> let you move the cursor or selection without using the mouse.<br><br><b>How they work:</b><br>• <b>Up (↑)</b> – move up<br>• <b>Down (↓)</b> – move down<br>• <b>Left (←)</b> – move left<br>• <b>Right (→)</b> – move right<br><br><b>Common uses:</b><br>• Move through text, navigate menus, move a character in games, or move between spreadsheet cells.<br><br><b>Tip:</b> Hold <b>Shift</b> + arrow keys to <b>select</b> text or items."
-   
+      "content": "The <b>Arrow Keys</b>, <b>Page Up</b>, and <b>Page Down</b> keys help you move around on the screen without using the mouse.\n\n<b>Arrow Keys – How they work:</b>\n• <b>Up (↑)</b> – move up\n• <b>Down (↓)</b> – move down\n• <b>Left (←)</b> – move left\n• <b>Right (→)</b> – move right\n\n<b>Page Keys – How they work:</b>\n• <b>Page Up (PgUp)</b> – move <b>up one screen</b> or page at a time\n• <b>Page Down (PgDn)</b> – move <b>down one screen</b> or page at a time\n\n<b>Common uses:</b>\n• Move through text\n• Scroll through web pages or documents\n• Move between cells in spreadsheets\n• Control characters in games\n\n<b>Tip:</b> Hold <b>Shift</b> + arrow keys to <b>select</b> text or items.\n\n<b>Look at the picture below to see the Arrow, Page Up, and Page Down keys:</b>\n<div class='zoom-container'>\n  <img src='images/arrow_pgup_pgdn_keys.png' alt='Arrow Keys, Page Up and Page Down on Keyboard' class='zoomable-image'>\n  <button class='zoom-btn' aria-label='Zoom image'>🔍</button>\n</div>"
     },
     {
       "id": "control_keys",
