@@ -871,5 +871,85 @@ window.addEventListener("load", () => {
   }
 });  
 </script> 
+
+  <script>
+
+    /* ===================================================== SMARTKIDS TECH SKILLS – TERM CONTROL & ACCESS SYSTEM Features included:
+
+1. Term notice modal (shows ONCE per term)
+
+
+2. Term expiry lock
+
+
+3. Admin bypass (secret key)
+
+
+4. School whitelist (full-session access)
+
+
+5. Disable right-click & hotkeys
+
+
+6. DevTools detection (basic) Paste before </body> in index.html ===================================================== */
+
+
+
+/******************** 1️⃣ CONFIG ********************/ const SMARTKIDS_TERM = { termId: "2026_TERM_2", expiryDate: new Date("2026-04-04T23:59:00"),
+
+// 🔑 ADMIN SECRET (CHANGE & KEEP PRIVATE) adminKey: "sk-admin-2025",
+
+// 🏫 FULL-SESSION SCHOOLS (exact names) schoolWhitelist: [ "Bright Future School", "SmartKids Academy", "Royal Stars College" ] };
+
+/******************** 2️⃣ HELPER CHECKS ********************/ function isAdminBypass() { const params = new URLSearchParams(window.location.search); return params.get("admin") === SMARTKIDS_TERM.adminKey; }
+
+function isWhitelistedSchool() { const savedSchool = localStorage.getItem("sk_school_name"); if (!savedSchool) return false;
+
+return SMARTKIDS_TERM.schoolWhitelist .map(s => s.toLowerCase()) .includes(savedSchool.toLowerCase()); }
+
+/******************** 3️⃣ TERM NOTICE (ONCE PER TERM) ********************/ (function showTermNoticeOnce() { const key = sk_notice_seen_${SMARTKIDS_TERM.termId}; if (localStorage.getItem(key)) return;
+
+const overlay = document.createElement("div"); overlay.style.cssText = position:fixed; inset:0; background:rgba(0,0,0,0.65); display:flex; align-items:center; justify-content:center; z-index:10000;;
+
+const modal = document.createElement("div"); modal.style.cssText = background:#fff; max-width:420px; width:90%; padding:24px; border-radius:10px; text-align:center; font-family:system-ui,sans-serif;;
+
+modal.innerHTML = <h2 style="font-size:18px;margin-bottom:12px;">📢 Important Notice</h2> <p style="font-size:15px;line-height:1.6;"> Please, make use of your time with <b>SmartKids Tech Skills</b> web applications.<br><br> This website <b>closes as the term ends</b>.<br><br> Thank you. </p> <button id="skNoticeBtn" style=" margin-top:18px; background:#2563eb; color:#fff; border:none; padding:10px 18px; border-radius:6px; cursor:pointer;"> I Understand </button>;
+
+overlay.appendChild(modal); document.body.appendChild(overlay);
+
+document.getElementById("skNoticeBtn").onclick = () => { localStorage.setItem(key, "yes"); overlay.remove(); }; })();
+
+/******************** 4️⃣ TERM EXPIRY LOCK (WITH BYPASS) ********************/ (function termExpiryLock() { if (isAdminBypass()) return; if (isWhitelistedSchool()) return; if (new Date() < SMARTKIDS_TERM.expiryDate) return;
+
+document.body.innerHTML = <div style=" display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; text-align:center; font-family:system-ui,sans-serif; background:#f8fafc; "> <h1 style="font-size:24px;">🔒 Term Access Closed</h1> <p style="max-width:420px; line-height:1.6; font-size:15px;"> This SmartKids Tech Skills application has been closed because the academic term has ended.<br><br> Please contact your school administrator. </p> </div>; })();
+
+/******************** 5️⃣ DISABLE RIGHT-CLICK & HOTKEYS ********************/ document.addEventListener("contextmenu", e => e.preventDefault());
+
+document.addEventListener("keydown", e => { if ((e.ctrlKey || e.metaKey) && ["u","s","c","x","v","p"].includes(e.key.toLowerCase())) e.preventDefault(); if (e.key === "F12") e.preventDefault(); if ((e.ctrlKey || e.metaKey) && e.shiftKey && ["i","j","c"].includes(e.key.toLowerCase())) e.preventDefault(); });
+
+/******************** 6️⃣ DEVTOOLS DETECTION ********************/ (function detectDevTools() { let open = false; const threshold = 160;
+
+setInterval(() => { const widthDiff = window.outerWidth - window.innerWidth; const heightDiff = window.outerHeight - window.innerHeight;
+
+if (widthDiff > threshold || heightDiff > threshold) {
+  if (!open) {
+    open = true;
+    document.body.innerHTML = `
+      <div style="
+        display:flex; align-items:center; justify-content:center;
+        height:100vh; background:#000; color:#fff;
+        font-family:system-ui,sans-serif; text-align:center;
+      ">
+        <div>
+          <h2>⚠️ Developer Tools Detected</h2>
+          <p>For security reasons, this application is locked.</p>
+        </div>
+      </div>
+    `;
+  }
+}
+
+}, 1000); })();
+  </script>
 </body>
 </html>
